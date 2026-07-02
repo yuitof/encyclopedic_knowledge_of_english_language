@@ -1,0 +1,1 @@
+squiggly lines are drawn or written in a careless way with curves and waves in them

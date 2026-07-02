@@ -1,0 +1,3 @@
+[qwq urban dictionary](https://www.urbandictionary.com/define.php?term=qwq)
+
+A typed emoticon (face) expressing crying, often in a [semi](https://www.urbandictionary.com/define.php?term=semi)-serious or comical sense. The Q's are the eyes with [tears](https://www.urbandictionary.com/define.php?term=tears) streaming out and the W is a [[squiggly]] mouth. It's related to other crying faces that use Q's for eyes, such as Q.Q q.q or simply [QQ](https://www.urbandictionary.com/define.php?term=QQ). It is used both with capitals (QwQ or QWQ) and without (qwq) to mean the same thing.

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Welcome.md",
+                "file": "squiggly.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Welcome"
+              "title": "squiggly"
             }
           }
         ]
@@ -199,9 +199,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "73b4ed150a23e357",
+  "active": "6f718a062797b72d",
   "lastOpenFiles": [
-    "Untitled",
-    "Welcome.md"
+    "qwq.md",
+    "Welcome.md",
+    "squiggly.md",
+    "Untitled"
   ]
 }
