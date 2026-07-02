@@ -13,28 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "squiggly.md",
+                "file": "grate on.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "squiggly"
-            }
-          }
-        ]
-      },
-      {
-        "id": "494dc6c75a1da2ae",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "72615482cb5963b3",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "title": "grate on"
             }
           }
         ]
@@ -202,6 +186,10 @@
   "active": "6f718a062797b72d",
   "lastOpenFiles": [
     "qwq.md",
+    "jarring.md",
+    "grate on.md",
+    "jarrring.md",
+    "flashbang.md",
     "Welcome.md",
     "squiggly.md",
     "Untitled"
