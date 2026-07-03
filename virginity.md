@@ -1,0 +1,1 @@
+- He lost his virginity (= had sex for the first time) when he was 18.

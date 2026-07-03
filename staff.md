@@ -1,0 +1,2 @@
+NAmE /stæf/
+BrE /stɑːf/
