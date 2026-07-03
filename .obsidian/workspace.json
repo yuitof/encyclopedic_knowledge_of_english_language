@@ -32,20 +32,6 @@
             }
           },
           {
-            "id": "1e370bfca157bcad",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Untitled.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Untitled"
-            }
-          },
-          {
             "id": "a1e8991b51cb5e0a",
             "type": "leaf",
             "state": {
@@ -121,12 +107,50 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "starting age.md",
+                "file": "virginity.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "starting age"
+              "title": "virginity"
+            }
+          },
+          {
+            "id": "e4d6a1aa604094ec",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          },
+          {
+            "id": "f904f19b84776983",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "I was a day off..md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "I was a day off."
+            }
+          },
+          {
+            "id": "6ca63406eeb94ea6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "JJ CHIKADA.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "JJ CHIKADA"
             }
           },
           {
@@ -172,7 +196,7 @@
             }
           }
         ],
-        "currentTab": 8
+        "currentTab": 10
       }
     ],
     "direction": "vertical"
@@ -334,22 +358,27 @@
       "bases:Create new base": false
     }
   },
-  "active": "91edd0e73c1ad6d2",
+  "active": "6ca63406eeb94ea6",
   "lastOpenFiles": [
+    "Serial Experiments Lain.md",
+    "JJ CHIKADA.md",
+    "I was a day off..md",
+    "hangover.md",
+    "to each his own.md",
+    "get off.md",
+    "別れの挨拶.md",
+    "nice to see you again.md",
+    "virginity.md",
+    "smack-dab in the middle.md",
+    "the 比較級.md",
+    "starting age.md",
     "Untitled.base",
     "staff.md",
-    "starting age.md",
-    "the 比較級.md",
-    "to each his own.md",
-    "I was a day off..md",
-    "nice to see you again.md",
     "energetic.md",
     "speak weeb.md",
-    "Untitled.md",
     "tickle.md",
     "Untitled",
     "get along with someone.md",
-    "virginity.md",
     "flashbang.md",
     "numb.md",
     "Ace Taffy Ch..md",
@@ -358,11 +387,7 @@
     "grate on.md",
     "anesthesia.md",
     "DPS (Dynamic Penetration System).md",
-    "hangover.md",
     "jarring.md",
-    "Untitled.canvas",
-    "squiggly.md",
-    "qwq.md",
-    "Payday video game series.md"
+    "Untitled.canvas"
   ]
 }
