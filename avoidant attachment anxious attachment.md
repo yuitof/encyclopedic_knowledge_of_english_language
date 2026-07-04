@@ -1,0 +1,2 @@
+avoidant attachment 傷つくのが嫌で離れる
+anxious attachment 好きで追いかける
