@@ -466,9 +466,163 @@
               "icon": "lucide-file",
               "title": "myocardial infarction"
             }
+          },
+          {
+            "id": "32b83f4a32334cdb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "syringe.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "syringe"
+            }
+          },
+          {
+            "id": "34e6e236e087febc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "stall.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "stall"
+            }
+          },
+          {
+            "id": "aeddcabf09f00324",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "double standard.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "double standard"
+            }
+          },
+          {
+            "id": "ff642854b4a7bdd0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "pity shame.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "pity shame"
+            }
+          },
+          {
+            "id": "2d02590e31cc602f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "catfish.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "catfish"
+            }
+          },
+          {
+            "id": "7a3b6add2f4b7635",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "sunfish.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "sunfish"
+            }
+          },
+          {
+            "id": "aa18abcb2ab513a6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "scoot over.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "scoot over"
+            }
+          },
+          {
+            "id": "5d382a0bef785903",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "epiphany.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "epiphany"
+            }
+          },
+          {
+            "id": "7bd20fa34c265462",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "gumbus.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "gumbus"
+            }
+          },
+          {
+            "id": "0eea8025b85645a0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "英語圏の論文の始め方のパターン.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "英語圏の論文の始め方のパターン"
+            }
+          },
+          {
+            "id": "87e6abde72c39661",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "signpost.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "signpost"
+            }
           }
         ],
-        "currentTab": 33
+        "currentTab": 44
       }
     ],
     "direction": "vertical"
@@ -630,13 +784,25 @@
       "bases:Create new base": false
     }
   },
-  "active": "e17a681cab3ca598",
+  "active": "87e6abde72c39661",
   "lastOpenFiles": [
-    "broken heart syndrome.md",
+    "speak weeb.md",
+    "spasm.md",
+    "signpost.md",
+    "英語圏の論文の始め方のパターン.md",
+    "gumbus.md",
+    "epiphany.md",
+    "scoot over.md",
+    "sunfish.md",
+    "catfish.md",
+    "pity shame.md",
+    "double standard.md",
+    "stall.md",
+    "syringe.md",
     "myocardial infarction.md",
+    "broken heart syndrome.md",
     "biyelgee.md",
     "homie.md",
-    "spasm.md",
     "palpitation.md",
     "fluttering.md",
     "scotch whiskey.md",
@@ -646,19 +812,7 @@
     "language laddering.md",
     "independence day.md",
     "migrate off.md",
-    "canteen.md",
-    "are you also in to computer?.md",
-    "sorry, what did you say?.md",
-    "Untitled 1.md",
     "Untitled.canvas",
-    "puddle.md",
-    "Payday video game series.md",
-    "squiggly.md",
-    "flying fish.md",
-    "flashbang.md",
-    "fan.md",
-    "fall off, fall out.md",
-    "clown.md",
     "Pasted image 20260704104206.png",
     "Pasted image 20260704104140.png",
     "Pasted image 20260704103933.png",
