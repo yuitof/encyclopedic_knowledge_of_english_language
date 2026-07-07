@@ -1,0 +1,1 @@
+HR stands for Hunter Rank

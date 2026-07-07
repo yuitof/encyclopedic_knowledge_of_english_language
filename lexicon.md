@@ -1,0 +1,1 @@
+vocabularyとかに近いかもね

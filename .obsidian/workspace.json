@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "d1dc39911b374fee",
+        "id": "0b8da5af309327a1",
         "type": "tabs",
         "children": [
           {
-            "id": "66fc49ac4afe0492",
+            "id": "14d448473aabfbb3",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -179,39 +179,44 @@
       "bases:Create new base": false
     }
   },
-  "active": "66fc49ac4afe0492",
+  "active": "14d448473aabfbb3",
   "lastOpenFiles": [
-    "signpost.md",
-    "homie.md",
-    "allude allusion.md",
-    "craft.md",
-    "anesthesia.md",
-    "文学作品.md",
-    "英語圏の論文の始め方のパターン.md",
-    "gumbus.md",
-    "epiphany.md",
-    "scoot over.md",
-    "sunfish.md",
-    "catfish.md",
-    "pity shame.md",
-    "double standard.md",
-    "stall.md",
-    "syringe.md",
-    "myocardial infarction.md",
-    "broken heart syndrome.md",
-    "scotch whiskey.md",
-    "viving.md",
-    "Cantonese.md",
-    "oligarch.md",
-    "independence day.md",
+    "Pacific Time Zone (PT).md",
+    "Eastern Time Zone (ET).md",
+    "atm.md",
+    "Chutes and Ladders.md",
+    "Pasted image 20260707162907.png",
+    "Pasted image 20260707162446.png",
+    "百威 Budweiser.md",
+    "男性女性名詞.md",
+    "speak weeb.md",
+    "GTFO.md",
+    "butt in on.md",
+    "play hooky.md",
+    "別れの挨拶.md",
     "migrate off.md",
-    "canteen.md",
-    "are you also in to computer?.md",
+    "pop.md",
+    "pop off.md",
+    "get off.md",
+    "bummer.md",
+    "in a sense.md",
+    "economist.md",
+    "RMB.md",
+    "rooster.md",
+    "negative fish.md",
+    "what a shame!.md",
+    "creatine.md",
+    "viving.md",
+    "bulky.md",
+    "direct translation.md",
+    "Untitled",
+    "Pasted image 20260707074328.png",
+    "Pasted image 20260707064334.png",
+    "Pasted image 20260706140328.png",
     "Untitled.canvas",
     "Pasted image 20260704104206.png",
     "Pasted image 20260704104140.png",
     "Pasted image 20260704103933.png",
-    "Untitled.base",
-    "Untitled"
+    "Untitled.base"
   ]
 }
