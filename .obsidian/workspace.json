@@ -11,13 +11,172 @@
             "id": "14d448473aabfbb3",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "bulky.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "bulky"
+            }
+          },
+          {
+            "id": "575a7fec984d449b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "hat, haircut, tatoo strategy.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "hat, haircut, tatoo strategy"
+            }
+          },
+          {
+            "id": "66bf528ff867cee6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "gay fish.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "gay fish"
+            }
+          },
+          {
+            "id": "4ecaf1e28271467d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "happy for you.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "happy for you"
+            }
+          },
+          {
+            "id": "08bda35803ad613e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "vortex.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "vortex"
+            }
+          },
+          {
+            "id": "7c54bf81512dac36",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "top or bottom.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "top or bottom"
+            }
+          },
+          {
+            "id": "96770b70f4ed1c9b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "bi.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "bi"
+            }
+          },
+          {
+            "id": "654a2e7580c2df45",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Oarfish.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Oarfish"
+            }
+          },
+          {
+            "id": "2c73475a7d2acdd0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "pop.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "pop"
+            }
+          },
+          {
+            "id": "1fbf50b563bc248f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "domicile.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "domicile"
+            }
+          },
+          {
+            "id": "9f927f5fc905c7f3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Drake (musician).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Drake (musician)"
+            }
+          },
+          {
+            "id": "b382ce11a026bd8b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "barring.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "barring"
             }
           }
-        ]
+        ],
+        "currentTab": 10
       }
     ],
     "direction": "vertical"
@@ -49,8 +208,8 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
-                "matchingCase": false,
+                "query": "sunf",
+                "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
                 "extraContext": false,
@@ -179,8 +338,27 @@
       "bases:Create new base": false
     }
   },
-  "active": "14d448473aabfbb3",
+  "active": "9f927f5fc905c7f3",
   "lastOpenFiles": [
+    "domicile.md",
+    "Drake (musician).md",
+    "nrj.md",
+    "pop.md",
+    "sunfish.md",
+    "Untitled 2.md",
+    "Oarfish.md",
+    "Pasted image 20260709031334.png",
+    "bi.md",
+    "barring.md",
+    "top or bottom.md",
+    "bottom.md",
+    "vortex.md",
+    "happy for you.md",
+    "hat, haircut, tatoo strategy.md",
+    "bulky.md",
+    "gay fish.md",
+    "Pasted image 20260708185421.png",
+    "hunted numbers.md",
     "Pacific Time Zone (PT).md",
     "Eastern Time Zone (ET).md",
     "atm.md",
@@ -192,23 +370,6 @@
     "speak weeb.md",
     "GTFO.md",
     "butt in on.md",
-    "play hooky.md",
-    "別れの挨拶.md",
-    "migrate off.md",
-    "pop.md",
-    "pop off.md",
-    "get off.md",
-    "bummer.md",
-    "in a sense.md",
-    "economist.md",
-    "RMB.md",
-    "rooster.md",
-    "negative fish.md",
-    "what a shame!.md",
-    "creatine.md",
-    "viving.md",
-    "bulky.md",
-    "direct translation.md",
     "Untitled",
     "Pasted image 20260707074328.png",
     "Pasted image 20260707064334.png",
