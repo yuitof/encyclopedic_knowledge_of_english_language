@@ -1,0 +1,2 @@
+wifey
+syn: [[wife]]

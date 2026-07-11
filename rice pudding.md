@@ -1,0 +1,2 @@
+rice pudding
+ShirkKickが苦手なやつ

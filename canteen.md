@@ -1,0 +1,2 @@
+canteen
+syn: cafeteria
