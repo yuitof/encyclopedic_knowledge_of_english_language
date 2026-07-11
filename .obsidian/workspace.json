@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "adbcbd3e2a19aa45",
+        "id": "34045e7792dda1f7",
         "type": "tabs",
         "children": [
           {
-            "id": "709eba606e0e245b",
+            "id": "5eada9c3125303dc",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "worship (verb).md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "worship (verb)"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "bulky",
+                "query": "worship",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -179,10 +184,26 @@
       "bases:Create new base": false
     }
   },
-  "active": "73b4ed150a23e357",
+  "active": "5eada9c3125303dc",
   "lastOpenFiles": [
-    "c.md",
+    "paramedic.md",
+    "shredded.md",
+    "Magpie.md",
+    "chargoggagoggmanchauggagoggchaubunagungamaugg.md",
+    "pneumonoultramicroscopicsilicovolcanoconiosis.md",
+    "all as much.md",
+    "psychological operation.md",
+    "avi.md",
+    "worship (verb).md",
+    "medicine.md",
+    "squishy.md",
+    "philadelphia pennsylvania.md",
+    "U.S. state.md",
+    "paranoia.md",
+    "Granola.md",
+    "Pasted image 20260711055124.png",
     "caimans.md",
+    "c.md",
     "Pasted image 20260711054651.png",
     "Crocodile and alligator.md",
     "gharial.md",
@@ -190,32 +211,17 @@
     "snout.md",
     "Pasted image 20260711054525.png",
     "Pasted image 20260711054321.png",
-    "shredded.md",
     "bulky.md",
     "Lean.md",
     "Rome was not built in a day.md",
     "pop.md",
     "pop off.md",
     "energetic.md",
-    "Untitled.md",
-    "disciple.md",
-    "wife.md",
-    "wifey.md",
-    "death toll.md",
-    "allude allusion.md",
-    "bipolar.md",
-    "medicine.md",
-    "geo.md",
-    "culture.md",
-    "Cantonese.md",
-    "New York City.md",
-    "New York.md",
     "Pasted image 20260711043123.png",
     "Pasted image 20260711025414.png",
     "Pasted image 20260711024501.png",
     "Pasted image 20260710233357.png",
     "Pasted image 20260710232625.png",
-    "Pasted image 20260710232525.png",
     "Untitled",
     "Untitled.canvas",
     "Untitled.base"

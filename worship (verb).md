@@ -1,0 +1,2 @@
+worship (verb)
+- worship you
