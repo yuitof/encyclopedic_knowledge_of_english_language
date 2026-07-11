@@ -1,0 +1,1 @@
+furry has good rigみたいなこと言ってたっけ？よく覚えてない

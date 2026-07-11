@@ -1,0 +1,4 @@
+shake out
+to [change](https://dictionary.cambridge.org/us/dictionary/english/change "change") over a [period](https://dictionary.cambridge.org/us/dictionary/english/period "period") of [time](https://dictionary.cambridge.org/us/dictionary/english/time "time") before a [final](https://dictionary.cambridge.org/us/dictionary/english/final "final") [result](https://dictionary.cambridge.org/us/dictionary/english/result "result") is [known](https://dictionary.cambridge.org/us/dictionary/english/known "known"):
+
+- We have to [wait](https://dictionary.cambridge.org/us/dictionary/english/wait "wait") and [see](https://dictionary.cambridge.org/us/dictionary/english/see "see") how it all [shakes](https://dictionary.cambridge.org/us/dictionary/english/milkshake "shakes") out.

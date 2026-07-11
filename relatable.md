@@ -1,0 +1,2 @@
+relatable
+賛成できる
