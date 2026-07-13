@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "618004b5fd072cee",
+        "id": "79434c6a20304aa2",
         "type": "tabs",
         "children": [
           {
-            "id": "fe707043d75d3aa2",
+            "id": "49b380757414bbf7",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -179,7 +179,7 @@
       "bases:Create new base": false
     }
   },
-  "active": "fe707043d75d3aa2",
+  "active": "49b380757414bbf7",
   "lastOpenFiles": [
     "overprepare underprepare.md",
     "healthy.md",
