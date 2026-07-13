@@ -1,0 +1,2 @@
+consonant
+子音

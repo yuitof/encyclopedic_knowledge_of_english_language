@@ -3,3 +3,5 @@
 Bulky <-> [[Lean]]
 
 Both are muscular.
+
+compare: [[shredded]]
