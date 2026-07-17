@@ -1,0 +1,2 @@
+rizz (slang)
+: charisma
