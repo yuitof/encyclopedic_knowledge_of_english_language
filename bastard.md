@@ -1,0 +1,2 @@
+bastard
+: an expletive word?

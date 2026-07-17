@@ -13,3 +13,5 @@
 [[DiDi]] 中国のUber
 [[STEINS;GATE]] アニメ
 [[ふわふわ時間]] けいおん！の曲
+[[tiananmen square]] 天安門広場
+[[藤原妹紅]]
