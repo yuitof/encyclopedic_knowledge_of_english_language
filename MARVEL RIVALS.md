@@ -1,0 +1,2 @@
+MARVEL RIVALS
+というゲームがある

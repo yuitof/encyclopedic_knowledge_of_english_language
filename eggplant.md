@@ -1,0 +1,4 @@
+eggplant
+: ナス🍆
+
+BrE : [[aubergine]]

@@ -1,0 +1,2 @@
+lethal company
+: というゲームがある

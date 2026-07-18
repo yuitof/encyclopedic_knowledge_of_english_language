@@ -1,3 +1,7 @@
-酒飲みすぎて吐いたりすること
+hangover
+: 酒飲みすぎて吐いたりすること
 
-[[numb]]
+also see: [[numb]]
+
+compare: [[queasy]]
+

@@ -15,3 +15,10 @@
 [[ふわふわ時間]] けいおん！の曲
 [[tiananmen square]] 天安門広場
 [[藤原妹紅]]
+[[cart titan]]
+[[R.E.P.O.]]
+[[MARVEL RIVALS]]
+[[sky the children of light]]
+[[obsession]]
+[[breaking bad]]
+[[lethal company]]

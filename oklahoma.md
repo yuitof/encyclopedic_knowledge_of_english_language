@@ -1,2 +1,2 @@
 oklahoma
-abbreviation is ok
+Its abbreviation is ok
