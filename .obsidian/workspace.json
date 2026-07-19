@@ -4,20 +4,53 @@
     "type": "split",
     "children": [
       {
-        "id": "a62a952555c8fa4b",
+        "id": "9f2cf9aa3624f80c",
         "type": "tabs",
         "children": [
           {
-            "id": "5b43548753a7d3f4",
+            "id": "f3bd1adb3cf04c04",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "pre-nup.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "pre-nup"
+            }
+          },
+          {
+            "id": "6fbef8e530ae7fac",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "baddie.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "baddie"
+            }
+          },
+          {
+            "id": "d079480e2372762e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "what a waste.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "what a waste"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -49,7 +82,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "flippin",
+                "query": "prenu",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -179,46 +212,46 @@
       "bases:Create new base": false
     }
   },
-  "active": "73b4ed150a23e357",
+  "active": "d079480e2372762e",
   "lastOpenFiles": [
-    "vietnamese.md",
-    "flipping way.md",
-    "wack and lame.md",
-    "roll with.md",
-    "performative.md",
-    "FlexPose.md",
-    "discontinued.md",
-    "obnoxious.md",
-    "pakistan.md",
-    "figuring.md",
-    "I'm older than she.md",
-    "Cantonese.md",
-    "disciple.md",
-    "disciphle.md",
-    "Dominican Republic.md",
-    "creampie.md",
-    "give it away.md",
-    "armored core.md",
+    "angel bites piercings.md",
+    "anesthesia.md",
+    "what a waste.md",
+    "baddie.md",
+    "Untitled 2.md",
     "Untitled 3.md",
+    "Untitled 1.md",
+    "unsure.md",
+    "brake up.md",
+    "pre-nup.md",
+    "relinquish.md",
+    "Untitled",
+    "Ali Wong.md",
+    "full.md",
+    "harbin.md",
+    "百威 Budweiser.md",
+    "Lionel Messi.md",
+    "Pasted image 20260719113041.png",
+    "have my back.md",
+    "signing up.md",
+    "STD, STI.md",
+    "You won't be a billionaire, but you will be a good person..md",
+    "Junji Ito.md",
+    "Denmark.md",
+    "sell me out.md",
+    "damn.md",
+    "pop.md",
+    "blackface paint.md",
+    "Pasted image 20260719102341.png",
     "Pasted image 20260719090549.png",
     "Pasted image 20260719090539.png",
-    "hypotenuse.md",
-    "underwhelm.md",
-    "SlimeVR.md",
-    "Untitled 2.md",
-    "IMU.md",
-    "larp.md",
-    "plank fish.md",
     "Pasted image 20260719083328.png",
     "Pasted image 20260719082756.png",
     "Pasted image 20260718180601.png",
     "Pasted image 20260718154521.png",
     "Pasted image 20260718115530.png",
     "Pasted image 20260718110024.png",
-    "Pasted image 20260718054006.png",
-    "Pasted image 20260717181230.png",
     "help yourself",
-    "Untitled",
     "Untitled.canvas",
     "Untitled.base"
   ]

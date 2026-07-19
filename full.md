@@ -1,0 +1,2 @@
+full
+- a full word

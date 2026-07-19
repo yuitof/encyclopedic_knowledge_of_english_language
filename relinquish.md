@@ -1,0 +1,2 @@
+relinquish
+: give something up
