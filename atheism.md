@@ -1,0 +1,2 @@
+atheism <- practice
+atheist <- people

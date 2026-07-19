@@ -1,0 +1,2 @@
+Blade and Sorcery
+: というVRゲームがある

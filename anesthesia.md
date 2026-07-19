@@ -1,2 +1,4 @@
 麻酔
 薬のこと
+
+調べるとanesthesiaは状態でanestheticは薬そのものって出てくるね
