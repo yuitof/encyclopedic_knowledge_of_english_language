@@ -1,0 +1,2 @@
+smirk, smug
+: sneaky face

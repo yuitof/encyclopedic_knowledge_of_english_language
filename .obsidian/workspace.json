@@ -4,319 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "18c856b772551448",
+        "id": "a62a952555c8fa4b",
         "type": "tabs",
         "children": [
           {
-            "id": "8e8232afb887147a",
+            "id": "5b43548753a7d3f4",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "myocardial infarction.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "myocardial infarction"
-            }
-          },
-          {
-            "id": "8523e0a357ad0bcd",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "boomer.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "boomer"
-            }
-          },
-          {
-            "id": "ec63d58881cae5c9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "hybrid.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "hybrid"
-            }
-          },
-          {
-            "id": "b493d38041fa9fbd",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "obsession.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "obsession"
-            }
-          },
-          {
-            "id": "dd5d9639d1727c48",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Tanuki.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Tanuki"
-            }
-          },
-          {
-            "id": "1f887b6ea49d0846",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "genus.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "genus"
-            }
-          },
-          {
-            "id": "88fe7019636950d5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "squirrel.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "squirrel"
-            }
-          },
-          {
-            "id": "baccec71526232f3",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "straight.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "straight"
-            }
-          },
-          {
-            "id": "c7a4435b96e28b96",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "hangover.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "hangover"
-            }
-          },
-          {
-            "id": "f59516eb9057c2a8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "staple.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "staple"
-            }
-          },
-          {
-            "id": "a6d341f8b170fe1e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "amelia.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "amelia"
-            }
-          },
-          {
-            "id": "0926e4083d6c51b9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "say, cheese!.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "say, cheese!"
-            }
-          },
-          {
-            "id": "cf03112b53500e4c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "drag it.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "drag it"
-            }
-          },
-          {
-            "id": "188d449e1ab6d261",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "motherland.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "motherland"
-            }
-          },
-          {
-            "id": "4067c3f7f994bc51",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "minor.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "minor"
-            }
-          },
-          {
-            "id": "704563603103d8fb",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "kicking it.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "kicking it"
-            }
-          },
-          {
-            "id": "90037d8a0179439d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "boomer.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "boomer"
-            }
-          },
-          {
-            "id": "dd37b5f8c6740e96",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "lethal company.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "lethal company"
-            }
-          },
-          {
-            "id": "66e614a45ae8c621",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "culture.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "culture"
-            }
-          },
-          {
-            "id": "c7918d893686c4c8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "straw hat.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "straw hat"
-            }
-          },
-          {
-            "id": "aa5ac09c5df6b1bc",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "abominable.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "abominable"
-            }
-          },
-          {
-            "id": "40e7fa47d678bb33",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "the seasons are swapped.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "the seasons are swapped"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 21
+        ]
       }
     ],
     "direction": "vertical"
@@ -348,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "flippin",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -478,45 +179,45 @@
       "bases:Create new base": false
     }
   },
-  "active": "40e7fa47d678bb33",
+  "active": "73b4ed150a23e357",
   "lastOpenFiles": [
-    "abominable.md",
-    "the seasons are swapped.md",
-    "-196.md",
-    "scarecrow.md",
-    "Pasted image 20260718115530.png",
-    "straw hat.md",
-    "culture.md",
-    "Untitled.md",
-    "lethal company.md",
-    "boomer.md",
+    "vietnamese.md",
+    "flipping way.md",
+    "wack and lame.md",
+    "roll with.md",
+    "performative.md",
+    "FlexPose.md",
+    "discontinued.md",
     "obnoxious.md",
-    "Wasian.md",
-    "lang.md",
-    "dysgraphia.md",
-    "shitty.md",
-    "yeet.md",
-    "obsession.md",
-    "hypocrite.md",
-    "imperative form.md",
-    "hybrid.md",
-    "pica sufferer.md",
-    "compulsive.md",
-    "myocardial infarction.md",
-    "aside from.md",
-    "let you slide.md",
-    "Shiori Novella.md",
+    "pakistan.md",
+    "figuring.md",
+    "I'm older than she.md",
+    "Cantonese.md",
+    "disciple.md",
+    "disciphle.md",
+    "Dominican Republic.md",
+    "creampie.md",
+    "give it away.md",
+    "armored core.md",
+    "Untitled 3.md",
+    "Pasted image 20260719090549.png",
+    "Pasted image 20260719090539.png",
+    "hypotenuse.md",
+    "underwhelm.md",
+    "SlimeVR.md",
+    "Untitled 2.md",
+    "IMU.md",
+    "larp.md",
+    "plank fish.md",
+    "Pasted image 20260719083328.png",
+    "Pasted image 20260719082756.png",
+    "Pasted image 20260718180601.png",
+    "Pasted image 20260718154521.png",
+    "Pasted image 20260718115530.png",
     "Pasted image 20260718110024.png",
-    "CDL-A.md",
     "Pasted image 20260718054006.png",
     "Pasted image 20260717181230.png",
-    "Pasted image 20260717171714.png",
-    "Pasted image 20260716164512.png",
-    "Pasted image 20260716161310.png",
     "help yourself",
-    "Pasted image 20260716150423.png",
-    "Pasted image 20260716071813.png",
-    "Pasted image 20260716071745.png",
     "Untitled",
     "Untitled.canvas",
     "Untitled.base"

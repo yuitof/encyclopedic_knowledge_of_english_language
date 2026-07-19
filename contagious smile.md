@@ -1,0 +1,2 @@
+contagious smile
+: contagious で感染しやすいって感じだからつられ笑という感じか

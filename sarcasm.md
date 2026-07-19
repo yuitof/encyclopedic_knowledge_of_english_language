@@ -1,2 +1,2 @@
-nihongo jouzu /s
-it means sarcasm
+sarcasm
+- nihongo jouzu /s. it means sarcasm

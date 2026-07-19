@@ -1,0 +1,2 @@
+sleeping beauty
+これがbeautyで美人っていうのになるのの例か

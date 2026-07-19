@@ -1,0 +1,2 @@
+cringey
+tending to cause one to [cringe](https://www.merriam-webster.com/dictionary/cringe#h1) (as out of embarrassment or discomfort) **:** [cringeworthy](https://www.merriam-webster.com/dictionary/cringeworthy)

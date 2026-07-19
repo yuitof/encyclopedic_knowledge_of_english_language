@@ -1,2 +1,4 @@
 batman
 bat
+
+SEIKOの時計にもBATMANというものがある
