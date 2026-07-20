@@ -1,1 +1,2 @@
-vocabularyとかに近いかもね
+lexicon
+: vocabularyとかに近いかもね
