@@ -1,0 +1,2 @@
+strand (noun)
+: 

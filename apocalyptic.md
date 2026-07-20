@@ -1,0 +1,4 @@
+apocalyptic
+: 
+
+noun: apocalypse

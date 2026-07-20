@@ -4,109 +4,39 @@
     "type": "split",
     "children": [
       {
-        "id": "2c162192a9dd9123",
+        "id": "b6c702acc21f5efd",
         "type": "tabs",
         "children": [
           {
-            "id": "80626a18c01a384d",
+            "id": "c17c7aa76475d02f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "crash out.md",
+                "file": "canine.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "crash out"
+              "title": "canine"
             }
           },
           {
-            "id": "9da36a1d8d8d5f04",
+            "id": "d3a3b73e269ee4f4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "broke.md",
+                "file": "strand.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "broke"
-            }
-          },
-          {
-            "id": "d6253f0c05d25241",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "butter naan.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "butter naan"
-            }
-          },
-          {
-            "id": "fada13af05fa4a07",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "type shit.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "type shit"
-            }
-          },
-          {
-            "id": "b275830d298d60f7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "in good shape.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "in good shape"
-            }
-          },
-          {
-            "id": "916d929d6932b2b2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "BTA.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "BTA"
-            }
-          },
-          {
-            "id": "6d9cb3781a366bb6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "puase.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "puase"
+              "title": "strand"
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -138,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "BTA",
+                "query": "canine",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -268,34 +198,38 @@
       "bases:Create new base": false
     }
   },
-  "active": "6d9cb3781a366bb6",
+  "active": "d3a3b73e269ee4f4",
   "lastOpenFiles": [
-    "BTA.md",
-    "puase.md",
-    "in good shape.md",
-    "type shit.md",
-    "killing it.md",
-    "larp.md",
-    "bum.md",
-    "Untitled 1.md",
-    "butter naan.md",
-    "broke.md",
-    "shredded.md",
-    "Lean.md",
-    "bulky.md",
-    "lexicon.md",
+    "canine.md",
+    "strand.md",
+    "k-9.md",
+    "ago.md",
+    "Ali Wong.md",
+    "aggravating.md",
+    "acronym.md",
+    "Ace Taffy Ch..md",
+    ", but the thing is....md",
+    "U.S. state.md",
     "underwhelm.md",
-    "Untitled.md",
+    "Upstate New York.md",
+    "urinal.md",
+    "Untitled 3.md",
+    "Untitled 2.md",
+    "Untitled 1.md",
+    "Saint Petersburg.md",
+    "Pasted image 20260720142219.png",
+    "play hooky.md",
+    "apocalyptic.md",
     "crash out.md",
-    "cook.md",
-    "cooked.md",
-    "RMB.md",
-    "Japanese.md",
-    "unsure.md",
-    "contagious smile.md",
-    "spam.md",
-    "rip-off.md",
-    "absolve.md",
+    "on the dot.md",
+    "gangster.md",
+    "hangover.md",
+    "for the time being.md",
+    "return the favor.md",
+    "massage.md",
+    "Pasted image 20260720135016.png",
+    "Pasted image 20260720134045.png",
+    "Pasted image 20260720132541.png",
     "Pasted image 20260719165807.png",
     "Untitled",
     "Pasted image 20260719154141.png",
@@ -303,10 +237,6 @@
     "Pasted image 20260719102341.png",
     "Pasted image 20260719090549.png",
     "Pasted image 20260719090539.png",
-    "Pasted image 20260719083328.png",
-    "Pasted image 20260719082756.png",
-    "Pasted image 20260718180601.png",
-    "Pasted image 20260718154521.png",
     "help yourself",
     "Untitled.canvas",
     "Untitled.base"

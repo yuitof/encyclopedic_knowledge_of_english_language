@@ -1,2 +1,2 @@
 creampie
-: cumming inside a pussy
+: [[cumming]] inside a pussy

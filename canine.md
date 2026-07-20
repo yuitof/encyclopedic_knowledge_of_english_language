@@ -1,3 +1,4 @@
 canine
+: [[genus]] of dogs, including foxes and wolves
 
-: [[genus]] of dogs
+compare: [[k-9]]
