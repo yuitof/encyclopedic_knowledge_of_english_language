@@ -1,0 +1,2 @@
+deluxe
+: luxury

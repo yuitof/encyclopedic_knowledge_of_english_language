@@ -1,0 +1,2 @@
+absolve
+- absolve my responsibilities

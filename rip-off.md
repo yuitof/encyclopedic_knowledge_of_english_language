@@ -1,0 +1,2 @@
+rip-off
+: scam
