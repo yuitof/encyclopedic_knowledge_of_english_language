@@ -1,0 +1,2 @@
+spazz out
+: [[crash out]]
