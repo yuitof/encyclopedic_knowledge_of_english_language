@@ -1,2 +1,6 @@
 mate
-: it's Aussie
+:
+
+- Hello, mate
+
+it's [[Aussie]]
