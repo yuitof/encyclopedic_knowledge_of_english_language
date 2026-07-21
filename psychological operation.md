@@ -1,4 +1,4 @@
 psychological operation
-PSYOP
+: PSYOP
 
-close to brain washing
+close to brainwashing

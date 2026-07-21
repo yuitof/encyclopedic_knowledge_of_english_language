@@ -1,6 +1,12 @@
 pneumonoultramicroscopicsilicovolcanoconiosis
-pneumono: lang confer: penomonia
+: The longest word in English
+
+pneumono: lang 
+	confer: penomonia 肺炎
 ultramicroscopics
-silico 
+	ultra + microscopics
+silico
+	confer: silicon
 volcan
-coniosis -> disease
+	confer: volcano
+coniosis: disease

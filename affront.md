@@ -1,0 +1,2 @@
+affront
+: insult
