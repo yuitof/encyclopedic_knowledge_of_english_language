@@ -1,0 +1,2 @@
+louse /laʊs/
+pl: lice

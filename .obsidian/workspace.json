@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "f1b8912cf4b192aa",
+        "id": "045d19fa2492dcf6",
         "type": "tabs",
         "children": [
           {
-            "id": "45fc89c340f1264d",
+            "id": "4ea50203d2589484",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "gig.md",
+                "file": "louse.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "gig"
+              "title": "louse"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "gor",
+                "query": "lice",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -183,8 +183,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "45fc89c340f1264d",
+  "active": "4ea50203d2589484",
   "lastOpenFiles": [
+    "louse.md",
+    "tag along.md",
     "gig.md",
     "apparently.md",
     "The Game of Life.md",
@@ -212,8 +214,6 @@
     "Pasted image 20260721132010.png",
     "Pasted image 20260721131856.png",
     "Pasted image 20260721131840.png",
-    "palworld.md",
-    "pew pew.md",
     "Pasted image 20260721034711.png",
     "Pasted image 20260721033900.png",
     "Pasted image 20260720142219.png",
