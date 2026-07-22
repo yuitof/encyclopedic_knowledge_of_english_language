@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c93b3027b1284c91",
+        "id": "8f7649406568c47c",
         "type": "tabs",
         "children": [
           {
-            "id": "16e407aa17f53486",
+            "id": "62dfdc07681402dc",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "middle school.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "middle school"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "iddle",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -180,8 +184,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "48c4cd9a954656e7",
+  "active": "62dfdc07681402dc",
   "lastOpenFiles": [
+    "spam.md",
+    "middle school.md",
+    "chad.md",
+    "Pasted image 20260722173908.png",
+    "telltale.md",
+    "metamorphose.md",
     "nihilist.md",
     "incel.md",
     "chud.md",
@@ -205,11 +215,6 @@
     "boba, bubble tea.md",
     "smile for the camera.md",
     "are we meant to be here.md",
-    "let's get off here.md",
-    "you are in vr after all.md",
-    "how did you get through the rock?.md",
-    "dracula.md",
-    "gaudy.md",
     "Pasted image 20260722142304.png",
     "Pasted image 20260722120754.png",
     "Pasted image 20260721132010.png",
@@ -218,7 +223,6 @@
     "Pasted image 20260721034711.png",
     "Pasted image 20260721033900.png",
     "Pasted image 20260720142219.png",
-    "Pasted image 20260720135016.png",
     "help yourself",
     "Untitled.canvas",
     "Untitled.base"
