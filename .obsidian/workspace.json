@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "045d19fa2492dcf6",
+        "id": "c93b3027b1284c91",
         "type": "tabs",
         "children": [
           {
-            "id": "4ea50203d2589484",
+            "id": "16e407aa17f53486",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "louse.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "louse"
+              "title": "New tab"
             }
           }
         ]
@@ -53,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "lice",
+                "query": "",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,7 +70,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -183,34 +180,38 @@
       "bases:Create new base": false
     }
   },
-  "active": "4ea50203d2589484",
+  "active": "48c4cd9a954656e7",
   "lastOpenFiles": [
-    "louse.md",
-    "tag along.md",
-    "gig.md",
-    "apparently.md",
-    "The Game of Life.md",
-    "culture.md",
-    "patch.md",
-    "world vs word.md",
-    "running writing.md",
-    "auto mechanics.md",
-    "league of legends.md",
-    "Aussie.md",
-    "bloke.md",
-    "mate.md",
-    "overlook.md",
-    "conceited.md",
-    "come over here.md",
-    "fine shyt.md",
-    "homogenist.md",
-    "I'm trying to say it right.md",
-    "romanize.md",
-    "have my back.md",
-    "rewind.md",
-    "rage-bating.md",
-    "open up to.md",
-    "full facial hair.md",
+    "nihilist.md",
+    "incel.md",
+    "chud.md",
+    "great pug.md",
+    "cranium.md",
+    "skull something.md",
+    "rot.md",
+    "gooning.md",
+    "trance.md",
+    "burgeon.md",
+    "damn.md",
+    "don't miss this one.md",
+    "lululemon.md",
+    "bikini.md",
+    "throw a dice.md",
+    "puase.md",
+    "Untitled",
+    "Bitter melon.md",
+    "dairy queen.md",
+    "Pasted image 20260722144614.png",
+    "boba, bubble tea.md",
+    "smile for the camera.md",
+    "are we meant to be here.md",
+    "let's get off here.md",
+    "you are in vr after all.md",
+    "how did you get through the rock?.md",
+    "dracula.md",
+    "gaudy.md",
+    "Pasted image 20260722142304.png",
+    "Pasted image 20260722120754.png",
     "Pasted image 20260721132010.png",
     "Pasted image 20260721131856.png",
     "Pasted image 20260721131840.png",
@@ -218,10 +219,6 @@
     "Pasted image 20260721033900.png",
     "Pasted image 20260720142219.png",
     "Pasted image 20260720135016.png",
-    "Pasted image 20260720134045.png",
-    "Pasted image 20260720132541.png",
-    "Pasted image 20260719165807.png",
-    "Untitled",
     "help yourself",
     "Untitled.canvas",
     "Untitled.base"

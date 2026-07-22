@@ -1,0 +1,2 @@
+tentacle
+: 触手
