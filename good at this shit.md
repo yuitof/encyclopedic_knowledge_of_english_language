@@ -3,3 +3,5 @@ good at this shit
 
 this shit
 : thing
+
+I was talking about random shit.

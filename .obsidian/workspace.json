@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "23c91c6bbebab83d",
+        "id": "db3bd2ba21978061",
         "type": "tabs",
         "children": [
           {
-            "id": "1c3fac83bc0708bb",
+            "id": "4595286946a598c3",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "shabby.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "shabby"
+              "title": "New tab"
             }
           }
         ]
@@ -53,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "shabby",
+                "query": "pev",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,8 +70,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -184,34 +179,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "1c3fac83bc0708bb",
+  "active": "4595286946a598c3",
   "lastOpenFiles": [
+    "I feel you.md",
+    "shabby.md",
+    "good at this shit.md",
+    "it was chill vibe.md",
+    "damn.md",
+    "max.md",
+    "griefing.md",
+    "stone age.md",
+    "tic tac toe.md",
+    "o'lock in the evening.md",
+    "control mechanics.md",
+    "pev.md",
+    "chilly.md",
+    "pumping money into.md",
+    "as I understand.md",
+    "I'd have guessed.md",
+    "bev.md",
+    "medicine.md",
+    "migraine.md",
+    "shit.md",
+    "nap (verb).md",
+    "bother someone.md",
     "if I may ask.md",
     ", but the thing is....md",
     "misremember.md",
     "chairman.md",
-    "I don't know too much.md",
-    "ditch.md",
-    "okay, alright, yup, yes, definitely.md",
-    "proletariat.md",
-    "aristocrat(noble).md",
-    "bourgeoisie.md",
-    "What's my accent?.md",
-    "Strike Smack Wallop Spank.md",
-    "don't miss this one.md",
-    "suck.md",
-    "Goated with the sauce.md",
-    "Where in Japan.md",
-    "sweating someone's ass off.md",
-    "direct translation.md",
-    "literal translation.md",
-    "be verb.md",
-    "nuke.md",
-    "genus.md",
-    "canine.md",
-    "AWGN.md",
-    "drown.md",
-    "trainee.md",
     "Pasted image 20260722223932.png",
     "Pasted image 20260722173908.png",
     "Untitled",
