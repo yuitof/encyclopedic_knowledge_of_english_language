@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "0147f9a9a91a2810",
+        "id": "23c91c6bbebab83d",
         "type": "tabs",
         "children": [
           {
-            "id": "b4c0a3484c450c92",
+            "id": "1c3fac83bc0708bb",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "shabby.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "shabby"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "proletariat",
+                "query": "shabby",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -179,8 +184,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "b4c0a3484c450c92",
+  "active": "1c3fac83bc0708bb",
   "lastOpenFiles": [
+    "if I may ask.md",
+    ", but the thing is....md",
+    "misremember.md",
     "chairman.md",
     "I don't know too much.md",
     "ditch.md",
@@ -204,9 +212,6 @@
     "AWGN.md",
     "drown.md",
     "trainee.md",
-    "great pug.md",
-    "nihilist.md",
-    "phantom pain.md",
     "Pasted image 20260722223932.png",
     "Pasted image 20260722173908.png",
     "Untitled",
