@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "8f7649406568c47c",
+        "id": "e4163e9cfcf0a5a5",
         "type": "tabs",
         "children": [
           {
-            "id": "62dfdc07681402dc",
+            "id": "e7fe9eb48275dea9",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "middle school.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "middle school"
+              "title": "New tab"
             }
           }
         ]
@@ -53,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "iddle",
+                "query": "drown",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,8 +70,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -184,37 +179,38 @@
       "bases:Create new base": false
     }
   },
-  "active": "62dfdc07681402dc",
+  "active": "e7fe9eb48275dea9",
   "lastOpenFiles": [
-    "spam.md",
+    "AWGN.md",
+    "drown.md",
+    "trainee.md",
+    "great pug.md",
+    "nihilist.md",
+    "phantom pain.md",
+    "phantom sense.md",
+    "rift.md",
+    "triangles.md",
+    "k-9.md",
+    "Pasted image 20260722223932.png",
+    "canine.md",
+    "CPTSD.md",
+    "reciprocate.md",
     "middle school.md",
+    "shabby.md",
+    "spam.md",
     "chad.md",
     "Pasted image 20260722173908.png",
     "telltale.md",
     "metamorphose.md",
-    "nihilist.md",
     "incel.md",
     "chud.md",
-    "great pug.md",
     "cranium.md",
     "skull something.md",
     "rot.md",
     "gooning.md",
     "trance.md",
-    "burgeon.md",
-    "damn.md",
-    "don't miss this one.md",
-    "lululemon.md",
-    "bikini.md",
-    "throw a dice.md",
-    "puase.md",
     "Untitled",
-    "Bitter melon.md",
-    "dairy queen.md",
     "Pasted image 20260722144614.png",
-    "boba, bubble tea.md",
-    "smile for the camera.md",
-    "are we meant to be here.md",
     "Pasted image 20260722142304.png",
     "Pasted image 20260722120754.png",
     "Pasted image 20260721132010.png",
@@ -222,7 +218,6 @@
     "Pasted image 20260721131840.png",
     "Pasted image 20260721034711.png",
     "Pasted image 20260721033900.png",
-    "Pasted image 20260720142219.png",
     "help yourself",
     "Untitled.canvas",
     "Untitled.base"
