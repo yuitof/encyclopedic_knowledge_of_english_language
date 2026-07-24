@@ -1,0 +1,2 @@
+furthest
+: superlative of far

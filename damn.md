@@ -4,3 +4,5 @@ damn / damnit
 dang it
 
 oh man, [[I feel you]]
+
+jeez

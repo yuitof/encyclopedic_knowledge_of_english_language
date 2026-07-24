@@ -1,0 +1,4 @@
+bio
+: biography
+
+ゲームとかSNSのプロフィールのこと

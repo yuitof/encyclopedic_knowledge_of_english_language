@@ -3,3 +3,7 @@
 [[迷惑のon]]
 [[imperative form]]
 [[subjunctive mood]]
+[[the present perfect tense]]
+[[progressive·continuous form·aspect]]
+[[tense]]
+[[aspect]]
