@@ -4,3 +4,5 @@ Liminal is a word for the in-between It describes states times spaces etc that e
 - liminal spaces are creepy
 
 e.g. abandoned mall
+
+	looks normal but weird

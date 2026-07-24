@@ -1,5 +1,7 @@
 type shit
 good shit -> good そこに shit で強めてる
+[[I feel you]]
+I relate
 
 普通いいことに関して使える
 
