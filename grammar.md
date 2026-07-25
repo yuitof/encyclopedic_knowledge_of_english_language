@@ -7,3 +7,4 @@
 [[progressive·continuous form·aspect]]
 [[tense]]
 [[aspect]]
+[[conjugation]]

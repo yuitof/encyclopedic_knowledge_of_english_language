@@ -1,4 +1,4 @@
 armored core
 : というFPSがある
 
-also see: [[figuring]]
+also see: [[figurine]]

@@ -7,3 +7,5 @@ behaving in an unpleasant way by trying too much to get something or to mak
 
 動詞 + y の形
 [[needy]]
+[[picky]]
+

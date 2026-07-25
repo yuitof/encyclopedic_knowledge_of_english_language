@@ -1,0 +1,2 @@
+leviathan /ləˈvaɪəθən/
+: リバイアサン

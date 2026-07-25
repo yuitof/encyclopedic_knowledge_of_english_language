@@ -1,5 +1,6 @@
 gooning (slang)
 : %% prolonged masterbation %% trance of masterbation
+[[jerk off]]
 
 chronically addicted to masterbation
 

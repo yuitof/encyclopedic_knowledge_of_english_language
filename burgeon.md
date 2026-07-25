@@ -1,1 +1,3 @@
 burgeon
+
+adj -> burgeoning

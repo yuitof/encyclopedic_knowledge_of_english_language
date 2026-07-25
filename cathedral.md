@@ -1,0 +1,4 @@
+cathedral
+:
+
+compare: [[abbey]]

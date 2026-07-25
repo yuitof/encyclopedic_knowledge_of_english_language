@@ -1,0 +1,2 @@
+proper English
+: 一般にoffensiveではないけど、誰に言うかによってoffensiveになるかも？

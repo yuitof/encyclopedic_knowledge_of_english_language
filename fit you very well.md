@@ -1,2 +1,2 @@
 fit you very well
-: 似合うのに fit で言える
+: スキンとか[[shades]]とかが似合うのに fit で言える

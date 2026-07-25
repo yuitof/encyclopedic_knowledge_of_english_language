@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "ca164a901207a5d0",
+        "id": "8014e3d09eced6ef",
         "type": "tabs",
         "children": [
           {
-            "id": "8f5f640b3e6abd01",
+            "id": "b8576ed5002379e1",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -49,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "Hell",
+                "query": "draw",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,11 +70,12 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "648a6ada0608665d",
@@ -179,45 +180,44 @@
       "bases:Create new base": false
     }
   },
-  "active": "8f5f640b3e6abd01",
+  "active": "b8576ed5002379e1",
   "lastOpenFiles": [
-    "as much as I like to.md",
-    "after.md",
-    "look at something·someone.md",
-    "GORDON RAMSAY.md",
-    "Steven He.md",
-    "hell yeah.md",
-    "uncle roger.md",
-    "fine shyt.md",
-    "beg someone.md",
-    "AAVE.md",
-    "Vernacular.md",
-    "ikr.md",
-    "daddy Dom.md",
-    "BDSM.md",
-    "fetish.md",
-    "pedophile.md",
-    "dominatrix.md",
-    "cirno.md",
-    "Untitled 6.md",
-    "spark.md",
-    "Gemma.md",
-    "高所恐怖症.md",
-    "Vive.md",
-    "fortnight.md",
-    "SlimeVR.md",
-    "IMU.md",
+    "Puri.md",
+    "Pasted image 20260725141715.png",
+    "roast.md",
+    "draw.md",
+    "drown.md",
+    "oyster.md",
+    "100%.md",
+    "Shaun the sheep.md",
+    "pet peeve.md",
+    "it is.md",
+    "yeah.md",
+    "with the headset on (your head).md",
+    "cracky.md",
+    "crispy.md",
+    "jagged.md",
+    "taco.md",
+    "Bhaji.md",
+    "takeaway.md",
+    "for here or to go.md",
+    "wind someone up.md",
+    "take out.md",
+    "Pasted image 20260725132705.png",
+    "carry out.md",
+    "it's funny to me.md",
+    "open relationship.md",
+    "Untitled 9.md",
+    "fit you very well.md",
+    "Pasted image 20260725115718.png",
+    "Screenshot 2026-07-25 at 9.15.43 AM.png",
+    "Pasted image 20260725090340.png",
+    "Pasted image 20260725085906.png",
+    "Pasted image 20260725085620.png",
     "Pasted image 20260722223932.png",
     "Pasted image 20260722173908.png",
     "Untitled",
     "Pasted image 20260722144614.png",
-    "Pasted image 20260722142304.png",
-    "Pasted image 20260722120754.png",
-    "Pasted image 20260721132010.png",
-    "Pasted image 20260721131856.png",
-    "Pasted image 20260721131840.png",
-    "Pasted image 20260721034711.png",
-    "Pasted image 20260721033900.png",
     "help yourself",
     "Untitled.canvas",
     "Untitled.base"

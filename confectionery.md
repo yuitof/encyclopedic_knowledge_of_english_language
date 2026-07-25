@@ -1,0 +1,2 @@
+confectionery
+: sweets, chocolate, etc.
