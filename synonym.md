@@ -1,0 +1,2 @@
+synonym
+: syn in short

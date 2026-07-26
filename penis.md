@@ -1,0 +1,4 @@
+penis
+: 
+
+figuratively: [[wood]], [[pickle]]

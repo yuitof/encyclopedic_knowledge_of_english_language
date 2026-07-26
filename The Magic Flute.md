@@ -1,12 +1,9 @@
-Mozart
-Echoが最近みたって言ってた。
+The Magic Flute
+: Opera by Mozart. Echoが最近みたって言ってた。
 
-Sisi
-Austrian
-https://en.wikipedia.org/wiki/Empress_Elisabeth_of_Austria
+also see: [[Sisi]]
 
 German rock music
 
-Jesus Christ Superstar
-キリストの最期についてのミュージカル
-It's on tour on Hong Kong
+also see: [[Jesus Christ Superstar]]
+

@@ -1,0 +1,2 @@
+relic
+: [[artifact]]

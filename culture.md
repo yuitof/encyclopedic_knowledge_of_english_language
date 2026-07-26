@@ -24,3 +24,7 @@
 [[lethal company]]
 [[Helldivers]]
 [[ALYX]]
+[[Yoruichi Shihōin]]
+[[The Simpsons]]
+[[The Elder Scrolls V Skyrim]]
+

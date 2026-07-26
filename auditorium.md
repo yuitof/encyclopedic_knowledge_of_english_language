@@ -1,0 +1,2 @@
+auditorium
+: 講堂

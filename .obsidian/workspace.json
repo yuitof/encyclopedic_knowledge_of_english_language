@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "8014e3d09eced6ef",
+        "id": "6c88db79da80318a",
         "type": "tabs",
         "children": [
           {
-            "id": "b8576ed5002379e1",
+            "id": "623c2eedf47c10bc",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "every now and then.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "every now and then"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "draw",
+                "query": "now and",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,8 +74,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -180,35 +183,38 @@
       "bases:Create new base": false
     }
   },
-  "active": "b8576ed5002379e1",
+  "active": "73b4ed150a23e357",
   "lastOpenFiles": [
-    "Puri.md",
+    "be into something.md",
+    "real quick.md",
+    "look up something.md",
+    "lock in.md",
+    "perversion.md",
+    "perv.md",
+    "jamming.md",
+    "improvise.md",
+    "tiddy.md",
+    "boob.md",
+    "head light.md",
+    "boobs.md",
+    "kahuna.md",
+    "knocker.md",
+    "nigga.md",
+    "penis.md",
+    "give birth to somebody.md",
+    "time passes way fast.md",
+    "damn.md",
+    "oh man.md",
+    "dang.md",
+    "long time no see.md",
+    "pickle.md",
+    "wood.md",
+    "tata.md",
+    "tit.md",
+    "Untitled",
+    "Pasted image 20260726045158.png",
     "Pasted image 20260725141715.png",
-    "roast.md",
-    "draw.md",
-    "drown.md",
-    "oyster.md",
-    "100%.md",
-    "Shaun the sheep.md",
-    "pet peeve.md",
-    "it is.md",
-    "yeah.md",
-    "with the headset on (your head).md",
-    "cracky.md",
-    "crispy.md",
-    "jagged.md",
-    "taco.md",
-    "Bhaji.md",
-    "takeaway.md",
-    "for here or to go.md",
-    "wind someone up.md",
-    "take out.md",
     "Pasted image 20260725132705.png",
-    "carry out.md",
-    "it's funny to me.md",
-    "open relationship.md",
-    "Untitled 9.md",
-    "fit you very well.md",
     "Pasted image 20260725115718.png",
     "Screenshot 2026-07-25 at 9.15.43 AM.png",
     "Pasted image 20260725090340.png",
@@ -216,8 +222,6 @@
     "Pasted image 20260725085620.png",
     "Pasted image 20260722223932.png",
     "Pasted image 20260722173908.png",
-    "Untitled",
-    "Pasted image 20260722144614.png",
     "help yourself",
     "Untitled.canvas",
     "Untitled.base"

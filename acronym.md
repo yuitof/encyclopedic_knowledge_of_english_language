@@ -5,3 +5,7 @@
 [[JLPT]]
 [[nrj]]
 [[PNG]]
+[[gif]]
+[[wb]]
+[[TIL]]
+
