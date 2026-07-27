@@ -1,2 +1,4 @@
 consonant
-子音
+: 子音
+
+opp: [[vowel]]

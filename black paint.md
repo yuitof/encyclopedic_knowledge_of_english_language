@@ -1,4 +1,4 @@
 black paint
-opp: white wash
+opp: [[whitewash]]
 
 : white people acting like black

@@ -1,0 +1,1 @@
+- Borderline personality disorder usually begins by early adulthood. The condition is most serious in young adulthood.

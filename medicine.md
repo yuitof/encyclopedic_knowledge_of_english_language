@@ -7,3 +7,5 @@
 [[bipolar]]
 [[paranoia]]
 [[migraine]]
+[[OCD, PPD, BPD]]
+[[dysgraphia]]

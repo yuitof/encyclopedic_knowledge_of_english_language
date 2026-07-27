@@ -27,4 +27,5 @@
 [[Yoruichi Shihōin]]
 [[The Simpsons]]
 [[The Elder Scrolls V Skyrim]]
-
+[[Dark Souls]]
+[[The Wandering Earth]]

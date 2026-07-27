@@ -1,0 +1,2 @@
+political comedy
+- [[Jon Stewart]]

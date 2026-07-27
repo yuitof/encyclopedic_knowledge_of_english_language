@@ -1,2 +1,2 @@
 hercules /ˈhɜːkjəliːz/
-: demigod in greek mythology
+: demigod in greek [[mythology]]

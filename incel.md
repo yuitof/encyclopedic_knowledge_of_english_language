@@ -4,3 +4,5 @@ incel
 そして犯罪とかをする人のことでヤバい人を指す
 
 involuntary celibate 以上の意味があるかもしれない
+
+also see; [[foid]]

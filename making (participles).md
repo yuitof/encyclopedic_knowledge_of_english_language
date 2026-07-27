@@ -5,4 +5,4 @@ making
 
 not knowing とかは、様態表しがちとかと言う仮説を立ててる。
 
-being とか being が落ちた participle は前に置かれがちで理由みたいなこととかある？
+being とか being が落ちた [[participle]] は前に置かれがちで理由みたいなこととかある？

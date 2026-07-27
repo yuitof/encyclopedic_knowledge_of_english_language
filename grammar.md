@@ -8,3 +8,5 @@
 [[tense]]
 [[aspect]]
 [[conjugation]]
+[[infinitive]]
+[[participle]]

@@ -1,1 +1,4 @@
-furry has good rigみたいなこと言ってたっけ？よく覚えてない
+rig
+: clothing 👈 🤔
+
+- [[furry]] has good rigみたいなこと言ってたっけ？よく覚えてない
