@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "7614a448e7700767",
+        "id": "5cfc7b3798481a92",
         "type": "tabs",
         "children": [
           {
-            "id": "d0bd491e0016b316",
+            "id": "8f2c0f5cfc69b62b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "daddy Dom.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "daddy Dom"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "rizz",
+                "query": "daddy",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -180,8 +184,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "d0bd491e0016b316",
+  "active": "8f2c0f5cfc69b62b",
   "lastOpenFiles": [
+    "alliteration.md",
+    "zodiac.md",
+    "hibernate.md",
     "rizz.md",
     "negative fish.md",
     "Untitled 4.md",
@@ -191,7 +198,6 @@
     "language laddering.md",
     "clinical medicine.md",
     "gotcha.md",
-    "alliteration.md",
     "Untitled 3.md",
     "foid.md",
     "incel.md",
@@ -206,8 +212,6 @@
     "picky.md",
     "unpickable.md",
     "furry.md",
-    "rig.md",
-    "golden shower.md",
     "Pasted image 20260727120011.png",
     "Untitled",
     "Pasted image 20260726045158.png",

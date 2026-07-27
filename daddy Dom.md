@@ -8,3 +8,6 @@ you can also say [[BDSM]]
 also see: daddy [[fetish]]
 
 - https://youtu.be/40qMrMknBfY?t=581
+
+
+also: [[mommy Dom]], [[dommy mommy]]
