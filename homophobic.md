@@ -1,0 +1,4 @@
+homophobic
+: 
+
+also see: [[transphobic]]

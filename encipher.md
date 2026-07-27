@@ -1,0 +1,2 @@
+encipher
+opp: decipher
