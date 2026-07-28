@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "9ba8d5000a262d76",
+        "id": "65f59df33f448c46",
         "type": "tabs",
         "children": [
           {
-            "id": "e79cc1712c28907c",
+            "id": "3cfbbd066e3d5652",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -49,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "put",
+                "query": "chair",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,7 +70,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -179,8 +180,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "e79cc1712c28907c",
+  "active": "3cfbbd066e3d5652",
   "lastOpenFiles": [
+    "chairman.md",
+    "din.md",
+    "hustle.md",
+    "bustle.md",
+    "hassle.md",
     "how do I put it.md",
     "reed.md",
     "straw.md",
@@ -202,11 +208,6 @@
     "Jon Stewart.md",
     "藤原妹紅.md",
     "geo.md",
-    "MARVEL RIVALS.md",
-    "lululemon.md",
-    "comfy.md",
-    "alliteration.md",
-    "advise.md",
     "Pasted image 20260727120011.png",
     "Untitled",
     "Pasted image 20260726045158.png",
