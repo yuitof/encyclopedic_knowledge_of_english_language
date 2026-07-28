@@ -3,3 +3,5 @@ bummer
 - I locked my keys in the car - bummer!
 
 (what a) bummer
+
+: [[bum]]
