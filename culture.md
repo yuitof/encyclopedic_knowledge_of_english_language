@@ -1,31 +1,45 @@
-[[Ace Taffy Ch.]] 中国のVTuber
-[[angel bites piercings]] ピアス
-[[Chutes and Ladders]] ボードゲーム
-[[Drake (musician)]] ラッパー
-[[Gumbus the Cat]] 有名な猫
-[[hit and blow]] ボードゲーム
-[[JJ CHIKADA]] 日本のDJ
-[[Meituan]] 中国のUber Eats
-[[Merry Christmas, Mr. Lawrence]][[scotch whiskey]] 戦場のメリークリスマス
-[[Serial Experiments Lain]]
-[[ONLY]] ファッションブランド
-[[escape the backrooms]] ゲーム
-[[DiDi]] 中国のUber
-[[STEINS;GATE]] アニメ
-[[ふわふわ時間]] けいおん！の曲
-[[tiananmen square]] 天安門広場
-[[藤原妹紅]]
-[[cart titan]]
-[[R.E.P.O.]]
-[[MARVEL RIVALS]]
-[[sky the children of light]]
-[[obsession]]
-[[breaking bad]]
-[[lethal company]]
-[[Helldivers]]
-[[ALYX]]
-[[Yoruichi Shihōin]]
-[[The Simpsons]]
-[[The Elder Scrolls V Skyrim]]
-[[Dark Souls]]
-[[The Wandering Earth]]
+#### celebrities
+- [[Ace Taffy Ch.]] 中国のVTuber
+- [[Drake (musician)]] ラッパー
+- [[Gumbus the Cat]] 有名な猫
+- [[JJ CHIKADA]] 日本のDJ
+- [[Jon Stewart]] stand-up comedian
+
+#### games
+- [[Chutes and Ladders]] ボードゲーム
+- [[hit and blow]] ボードゲーム
+- [[escape the backrooms]] ゲーム
+- [[R.E.P.O.]]
+- [[MARVEL RIVALS]]
+- [[sky the children of light]]
+- [[ALYX]]
+- [[藤原妹紅]]
+- [[Helldivers]]
+- [[lethal company]]
+
+#### animes, cartoon
+- [[STEINS;GATE]] アニメ
+- [[The Elder Scrolls V Skyrim]]
+- [[Dark Souls]]
+- [[Serial Experiments Lain]]
+- [[ふわふわ時間]] けいおん！の曲
+- [[Yoruichi Shihōin]]
+- [[The Simpsons]]
+
+
+#### movies, dramas
+- [[Merry Christmas, Mr. Lawrence]][[scotch whiskey]] 戦場のメリークリスマス
+- [[obsession]]
+- [[The Wandering Earth]]
+- [[breaking bad]]
+#### politics
+- [[cart titan]]
+
+#### product
+- [[Meituan]] 中国のUber Eats
+- [[DiDi]] 中国のUber
+
+#### fashion
+- [[ONLY]] ファッションブランド
+- [[angel bites piercings]] ピアス
+- [[lululemon]] そういうカナダのブランド

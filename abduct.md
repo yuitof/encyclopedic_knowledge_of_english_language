@@ -1,0 +1,2 @@
+abduct
+: kidnap
