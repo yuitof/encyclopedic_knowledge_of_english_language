@@ -10,5 +10,7 @@ shit が thing のような意味で使われる例
 [[some shit]]
 [[kind of shit]]
 [[good at this shit]]
+[[that shit]] も OK
+[[random shit]]
 
 - you should throw that shit away
