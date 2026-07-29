@@ -11,10 +11,14 @@
             "id": "d47b288eedc7f052",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "sadism.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "sadism"
             }
           }
         ]
@@ -181,6 +185,10 @@
   },
   "active": "d47b288eedc7f052",
   "lastOpenFiles": [
+    "masochism.md",
+    "sadism.md",
+    "masochistic.md",
+    "streak.md",
     "remember.md",
     "now.md",
     "tickle.md",
@@ -207,10 +215,6 @@
     "dementia.md",
     "bummer.md",
     "flush.md",
-    "medication.md",
-    "clog.md",
-    "bum.md",
-    "not going to.md",
     "Untitled",
     "Pasted image 20260725141715.png",
     "Pasted image 20260725132705.png",
