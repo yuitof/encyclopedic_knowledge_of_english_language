@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "5f63a3724505163e",
+        "id": "6ed4220bc14fab6e",
         "type": "tabs",
         "children": [
           {
-            "id": "db7ad289f73794b3",
+            "id": "d47b288eedc7f052",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -179,8 +179,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "db7ad289f73794b3",
+  "active": "d47b288eedc7f052",
   "lastOpenFiles": [
+    "remember.md",
+    "now.md",
     "tickle.md",
     "fog.md",
     "hang out.md",
@@ -209,8 +211,6 @@
     "clog.md",
     "bum.md",
     "not going to.md",
-    "get somebody.md",
-    "bustle.md",
     "Untitled",
     "Pasted image 20260725141715.png",
     "Pasted image 20260725132705.png",
