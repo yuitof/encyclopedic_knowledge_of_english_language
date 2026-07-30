@@ -7,10 +7,12 @@ shit (exclamation)
 -> To avoid saying 'shit', you can say 'shoot' instead.
 
 shit が thing のような意味で使われる例
-[[some shit]]
-[[kind of shit]]
-[[good at this shit]]
-[[that shit]] も OK
-[[random shit]]
+- [[some shit]]
+- [[kind of shit]]
+- [[good at this shit]]
+- [[that shit]] も OK
+- [[random shit]]
+
+- [[this thing]] と言う言い方もよく出会う。具体的に何かを言いたくない時とかに使えそう。
 
 - you should throw that shit away

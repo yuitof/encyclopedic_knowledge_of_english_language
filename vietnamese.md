@@ -1,2 +1,6 @@
 vietnamese
-Demonyms of Vietnam
+: Demonyms of Vietnam
+
+フランスに占領されてたことがある。
+
+also see: [[occupation]], [[motherland]]

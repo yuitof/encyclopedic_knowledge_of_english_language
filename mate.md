@@ -9,3 +9,8 @@ mate
 
 also see: [[what's going on?]]
 [[Aussie]] way of saying bro??
+
+
+: 一つ目はオーストラリアとかイギリスの用法だけど、mate は動物のつがいの相手を指すこともできる。
+
+also see: [[mating]]
