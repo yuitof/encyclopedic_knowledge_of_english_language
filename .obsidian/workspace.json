@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c727d7c1f7c09fa7",
+        "id": "45086aff3c8bfdf8",
         "type": "tabs",
         "children": [
           {
-            "id": "823809e0c1625359",
+            "id": "cec7f8053d7aefff",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "streak.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "streak"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "lube",
+                "query": "streak",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -179,8 +184,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "823809e0c1625359",
+  "active": "cec7f8053d7aefff",
   "lastOpenFiles": [
+    "ripple.md",
+    "scrub.md",
     "lube.md",
     "Spirited Away.md",
     "willy-nilly.md",
@@ -205,8 +212,6 @@
     "hotpot.md",
     "stingray.md",
     "flatfish.md",
-    "me too.md",
-    "Untitled 6.md",
     "Pasted image 20260726045158.png",
     "Pasted image 20260727120011.png",
     "Pasted image 20260711024501.png",
