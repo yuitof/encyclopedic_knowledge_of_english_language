@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "ffab5a78a2056263",
+        "id": "c727d7c1f7c09fa7",
         "type": "tabs",
         "children": [
           {
-            "id": "5e0e4e6652839bf6",
+            "id": "823809e0c1625359",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -49,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "compulsory",
+                "query": "lube",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -179,8 +179,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "5e0e4e6652839bf6",
+  "active": "823809e0c1625359",
   "lastOpenFiles": [
+    "lube.md",
+    "Spirited Away.md",
     "willy-nilly.md",
     "machine gun.md",
     "compulsory.md",
@@ -205,8 +207,6 @@
     "flatfish.md",
     "me too.md",
     "Untitled 6.md",
-    "good at this shit.md",
-    "chilling.md",
     "Pasted image 20260726045158.png",
     "Pasted image 20260727120011.png",
     "Pasted image 20260711024501.png",
