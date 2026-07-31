@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "a1d2808761f89b79",
+        "id": "7558f33e9237a7f6",
         "type": "tabs",
         "children": [
           {
-            "id": "6f690a5652fe3c2a",
+            "id": "91769bec56f30b5f",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "stripper dance.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "stripper dance"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "Shenz",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -185,9 +181,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "6f690a5652fe3c2a",
+  "active": "91769bec56f30b5f",
   "lastOpenFiles": [
+    "Huaqiangbei.md",
     "stripper dance.md",
+    "strip.md",
+    "peepee.md",
+    "Shenzhen.md",
     "cocoon.md",
     "gore.md",
     "gory.md",
@@ -209,11 +209,7 @@
     "squashy.md",
     "squash.md",
     "plushie.md",
-    "squeamish.md",
-    "mating.md",
-    "cambodia.md",
     "Pasted image 20260730175838.png",
-    "mate.md",
     "Pasted image 20260730174052.png",
     "Pasted image 20260726045158.png",
     "Pasted image 20260727120011.png",
