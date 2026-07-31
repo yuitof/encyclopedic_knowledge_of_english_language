@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "e081dde3e228f32b",
+        "id": "30fd05e8d6b58c48",
         "type": "tabs",
         "children": [
           {
-            "id": "5d3b43ce95315a45",
+            "id": "913ff80cdfb6f4aa",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -181,8 +181,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "5d3b43ce95315a45",
+  "active": "913ff80cdfb6f4aa",
   "lastOpenFiles": [
+    "drag down.md",
+    "drag it.md",
     "open up to.md",
     "for the aversion to people.md",
     "as it is.md",
@@ -210,8 +212,6 @@
     "protagonist.md",
     "hunch (verb).md",
     "fish.md",
-    "blobfish.md",
-    "explanatory.md",
     "Pasted image 20260730175838.png",
     "Pasted image 20260730174052.png",
     "Pasted image 20260726045158.png",
