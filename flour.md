@@ -1,0 +1,4 @@
+flour
+:
+
+compare: [[wheat]], [[starch]]

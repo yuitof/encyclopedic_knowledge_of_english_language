@@ -1,3 +1,3 @@
 stamppot
-: stamppen (dutch) 潰された感じのもの
+: [[stamppen (dutch)]] 潰された感じのもの
 looks like baby puke

@@ -16,6 +16,7 @@
 - [[藤原妹紅]]
 - [[Helldivers]]
 - [[lethal company]]
+- [[palworld]]
 
 #### animes, cartoon
 - [[STEINS;GATE]] アニメ
