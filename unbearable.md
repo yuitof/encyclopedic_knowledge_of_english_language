@@ -1,0 +1,2 @@
+unbearable
+: 耐えられない
