@@ -11,10 +11,14 @@
             "id": "6f690a5652fe3c2a",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "stripper dance.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "stripper dance"
             }
           }
         ]
@@ -183,6 +187,7 @@
   },
   "active": "6f690a5652fe3c2a",
   "lastOpenFiles": [
+    "stripper dance.md",
     "cocoon.md",
     "gore.md",
     "gory.md",
@@ -209,7 +214,6 @@
     "cambodia.md",
     "Pasted image 20260730175838.png",
     "mate.md",
-    "numb.md",
     "Pasted image 20260730174052.png",
     "Pasted image 20260726045158.png",
     "Pasted image 20260727120011.png",
