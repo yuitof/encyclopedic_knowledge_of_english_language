@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "1291c2a484de5d33",
+        "id": "a1d2808761f89b79",
         "type": "tabs",
         "children": [
           {
-            "id": "963e489056cc0abe",
+            "id": "6f690a5652fe3c2a",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "shank",
+                "query": "",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -181,8 +181,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "963e489056cc0abe",
+  "active": "6f690a5652fe3c2a",
   "lastOpenFiles": [
+    "cocoon.md",
+    "gore.md",
+    "gory.md",
     "hostel.md",
     "shank.md",
     "kaboom.md",
@@ -207,9 +210,6 @@
     "Pasted image 20260730175838.png",
     "mate.md",
     "numb.md",
-    "comrade.md",
-    "baguette.md",
-    "cabbage.md",
     "Pasted image 20260730174052.png",
     "Pasted image 20260726045158.png",
     "Pasted image 20260727120011.png",
