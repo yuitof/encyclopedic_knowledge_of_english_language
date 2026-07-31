@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "112ccd6a7e931889",
+        "id": "1291c2a484de5d33",
         "type": "tabs",
         "children": [
           {
-            "id": "3a8ce7fc58169da1",
+            "id": "963e489056cc0abe",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -37,7 +37,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -179,8 +181,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "3a8ce7fc58169da1",
+  "active": "963e489056cc0abe",
   "lastOpenFiles": [
+    "hostel.md",
     "shank.md",
     "kaboom.md",
     "fault.md",
@@ -207,7 +210,6 @@
     "comrade.md",
     "baguette.md",
     "cabbage.md",
-    "have sex.md",
     "Pasted image 20260730174052.png",
     "Pasted image 20260726045158.png",
     "Pasted image 20260727120011.png",
