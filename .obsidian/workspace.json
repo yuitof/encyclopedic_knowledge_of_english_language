@@ -4,24 +4,81 @@
     "type": "split",
     "children": [
       {
-        "id": "00705df6a1a56f8c",
+        "id": "b4d8800264f38e0b",
         "type": "tabs",
         "children": [
           {
-            "id": "ba95f1dfe6b820db",
+            "id": "27a8a2d259a4e6ac",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "bank teller.md",
+                "file": "310.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "bank teller"
+              "title": "310"
+            }
+          },
+          {
+            "id": "1a54e063c74de17e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "elk.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "elk"
+            }
+          },
+          {
+            "id": "8d9a188be53a14c7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "tummy.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "tummy"
+            }
+          },
+          {
+            "id": "4936cd370bb32cc1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "it's a conversation for a different day.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "it's a conversation for a different day"
+            }
+          },
+          {
+            "id": "c304449980e1fd76",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "that's on her.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "that's on her"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -55,7 +112,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "over there",
+                "query": "grief",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,7 +133,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -185,10 +243,24 @@
       "bases:Create new base": false
     }
   },
-  "active": "ba95f1dfe6b820db",
+  "active": "c304449980e1fd76",
   "lastOpenFiles": [
-    "bank.md",
+    "troll.md",
+    "griefing.md",
+    "that's on her.md",
+    "it's a conversation for a different day.md",
+    "tummy.md",
+    "elk.md",
+    "Untitled",
+    "310.md",
+    "shit.md",
+    "tts.md",
+    "wrinkle.md",
+    "role-play doing X.md",
+    "Animal Crossing.md",
+    "culture.md",
     "bank teller.md",
+    "bank.md",
     "portmanteau.md",
     "vibe.md",
     "put someone down.md",
@@ -200,19 +272,6 @@
     "baddie.md",
     "boob.md",
     "sarcasm.md",
-    "creampie.md",
-    "foid.md",
-    "negative fish.md",
-    "fish.md",
-    "let's talk about something else.md",
-    "penis.md",
-    "Hong Kong.md",
-    "Victoria Harbour.md",
-    "Cantonese.md",
-    "lingua franca.md",
-    "join me as we explore X.md",
-    "trick, coax, hoax into doing X.md",
-    "every once in a while.md",
     "Pasted image 20260731083952.png",
     "Pasted image 20260731083926.png",
     "Pasted image 20260731083919.png",
@@ -222,7 +281,6 @@
     "Pasted image 20260727120011.png",
     "Pasted image 20260711024501.png",
     "Pasted image 20260707162907.png",
-    "Untitled",
     "Pasted image 20260725141715.png",
     "help yourself",
     "Untitled.canvas",

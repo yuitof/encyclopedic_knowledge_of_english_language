@@ -17,6 +17,7 @@
 - [[Helldivers]]
 - [[lethal company]]
 - [[palworld]]
+- [[Animal Crossing]]
 
 #### animes, cartoon
 - [[STEINS;GATE]] アニメ

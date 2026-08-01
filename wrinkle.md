@@ -1,0 +1,4 @@
+wrinkle
+: シワ
+
+- wrinkle-free
