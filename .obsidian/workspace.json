@@ -4,20 +4,53 @@
     "type": "split",
     "children": [
       {
-        "id": "2e558a15965c3321",
+        "id": "1e407ee7c226f788",
         "type": "tabs",
         "children": [
           {
-            "id": "c00f6f17355a8d88",
+            "id": "1687df8176a908fa",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "portmanteau.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "portmanteau"
+            }
+          },
+          {
+            "id": "095112d67961ddc1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "baddie.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "baddie"
+            }
+          },
+          {
+            "id": "e069a54101207124",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "gay fish.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "gay fish"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -51,7 +84,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "cao",
+                "query": "girlf",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -182,8 +215,26 @@
       "bases:Create new base": false
     }
   },
-  "active": "c00f6f17355a8d88",
+  "active": "095112d67961ddc1",
   "lastOpenFiles": [
+    "boob.md",
+    "sarcasm.md",
+    "creampie.md",
+    "foid.md",
+    "gay fish.md",
+    "negative fish.md",
+    "fish.md",
+    "let's talk about something else.md",
+    "portmanteau.md",
+    "penis.md",
+    "Hong Kong.md",
+    "Victoria Harbour.md",
+    "Cantonese.md",
+    "lingua franca.md",
+    "join me as we explore X.md",
+    "trick, coax, hoax into doing X.md",
+    "every once in a while.md",
+    "every now and then.md",
     "head shot.md",
     "practice makes the perfect.md",
     "go dutch.md",
@@ -192,24 +243,6 @@
     "primary school.md",
     "humping.md",
     "cough syrup.md",
-    "cao.md",
-    "stereotype.md",
-    "pick up the pace.md",
-    "out there.md",
-    "dope.md",
-    "wanky.md",
-    "pledge allegiance.md",
-    "fentanyl.md",
-    "DMA.md",
-    "alliteration.md",
-    "childhood friend.md",
-    "middle school.md",
-    "alpha female.md",
-    "pal.md",
-    "Super Smash Bros.md",
-    "sober.md",
-    "simp.md",
-    "go crazy.md",
     "Pasted image 20260731083952.png",
     "Pasted image 20260731083926.png",
     "Pasted image 20260731083919.png",
