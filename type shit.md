@@ -5,7 +5,9 @@ I relate
 
 普通いいことに関して使える
 
-oh yeah yeah type shit
+oh yeah yeah type shit, 
 いいね，いいね
+
+alright
 
 [[killing it]]
