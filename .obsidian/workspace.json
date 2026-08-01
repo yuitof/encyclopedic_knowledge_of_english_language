@@ -11,10 +11,14 @@
             "id": "ba95f1dfe6b820db",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "bank teller.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "bank teller"
             }
           }
         ]
@@ -183,6 +187,8 @@
   },
   "active": "ba95f1dfe6b820db",
   "lastOpenFiles": [
+    "bank.md",
+    "bank teller.md",
     "portmanteau.md",
     "vibe.md",
     "put someone down.md",
@@ -207,8 +213,6 @@
     "join me as we explore X.md",
     "trick, coax, hoax into doing X.md",
     "every once in a while.md",
-    "every now and then.md",
-    "head shot.md",
     "Pasted image 20260731083952.png",
     "Pasted image 20260731083926.png",
     "Pasted image 20260731083919.png",
