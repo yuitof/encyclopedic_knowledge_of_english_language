@@ -4,123 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "706d350934ecbbd6",
+        "id": "2e558a15965c3321",
         "type": "tabs",
         "children": [
           {
-            "id": "1859641b4e10dac6",
+            "id": "c00f6f17355a8d88",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "head shot.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "head shot"
-            }
-          },
-          {
-            "id": "69c21045e6810cce",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "practice makes the perfect.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "practice makes the perfect"
-            }
-          },
-          {
-            "id": "64b15f6ad454b11d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "go dutch.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "go dutch"
-            }
-          },
-          {
-            "id": "abb3febebb729e23",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "croissant.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "croissant"
-            }
-          },
-          {
-            "id": "75a4bc2ba2122af2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "pack.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "pack"
-            }
-          },
-          {
-            "id": "634d0e63af2ad7e5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "primary school.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "primary school"
-            }
-          },
-          {
-            "id": "0d180e74b0f4b3b8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "humping.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "humping"
-            }
-          },
-          {
-            "id": "297f282f9e660219",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "cough syrup.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "cough syrup"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 7
+        ]
       }
     ],
     "direction": "vertical"
@@ -154,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "hum",
+                "query": "cao",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -175,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -284,34 +182,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "297f282f9e660219",
+  "active": "c00f6f17355a8d88",
   "lastOpenFiles": [
+    "head shot.md",
+    "practice makes the perfect.md",
+    "go dutch.md",
+    "croissant.md",
+    "pack.md",
+    "primary school.md",
     "humping.md",
     "cough syrup.md",
+    "cao.md",
+    "stereotype.md",
+    "pick up the pace.md",
+    "out there.md",
+    "dope.md",
+    "wanky.md",
+    "pledge allegiance.md",
+    "fentanyl.md",
+    "DMA.md",
+    "alliteration.md",
     "childhood friend.md",
-    "primary school.md",
     "middle school.md",
     "alpha female.md",
     "pal.md",
     "Super Smash Bros.md",
     "sober.md",
-    "pack.md",
     "simp.md",
     "go crazy.md",
-    "be into something.md",
-    "culture.md",
-    "palworld.md",
-    "Untitled 8.md",
-    "croissant.md",
-    "go dutch.md",
-    "practice makes the perfect.md",
-    "saying.md",
-    "head shot.md",
-    "Vive.md",
-    "stamppen (dutch).md",
-    "would you rather.md",
-    "gay.md",
-    "portrait.md",
     "Pasted image 20260731083952.png",
     "Pasted image 20260731083926.png",
     "Pasted image 20260731083919.png",
