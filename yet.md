@@ -4,6 +4,6 @@ yet
 
 - yet another, yet again
 
-- 最上級 + yet とか？
+- [[最上級 + yet]] とか？
 
 - have yet to do something

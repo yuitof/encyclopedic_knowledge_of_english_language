@@ -9,3 +9,6 @@ also see: [[alliteration]]
 : an illicit drug (such as heroin or cocaine) used for its intoxicating or euphoric effects
 
 also see: [[fentanyl]]
+
+: slang excellent 
+- That's dope 👈????

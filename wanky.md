@@ -1,2 +1,2 @@
 wanky
-: silly
+: [[silly]]
