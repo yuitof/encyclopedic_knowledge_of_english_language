@@ -1,0 +1,2 @@
+jealous of someone·something
+: 

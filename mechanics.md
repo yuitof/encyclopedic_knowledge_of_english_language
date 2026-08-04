@@ -1,0 +1,4 @@
+mechanics
+: function
+
+機能みたいな感じでも使えるし、fortniteで建築の技術みたいな意味で使う例も見かける
