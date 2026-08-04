@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "9b877c10b9717dab",
+        "id": "6235dc44587235dc",
         "type": "tabs",
         "children": [
           {
-            "id": "15b0db4f3ed4eabf",
+            "id": "d713106dab0dea76",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -182,8 +181,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "15b0db4f3ed4eabf",
+  "active": "d713106dab0dea76",
   "lastOpenFiles": [
+    "chicken parm.md",
     "compilation.md",
     "let's roll.md",
     "disembark.md",
@@ -209,7 +209,6 @@
     "mechanics.md",
     "I'm cool with that.md",
     "killing it.md",
-    "raining cats and dogs.md",
     "Pasted image 20260803121255.png",
     "Untitled 3",
     "Pasted image 20260801160749.png",
