@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "8021c1d5a455947c",
+        "id": "673cadffb76c56cf",
         "type": "tabs",
         "children": [
           {
-            "id": "a0996a8a46f011a3",
+            "id": "7ad4c75b2a3dcaaf",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "whatever",
+                "query": "as of yet",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -181,8 +182,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "a0996a8a46f011a3",
+  "active": "7ad4c75b2a3dcaaf",
   "lastOpenFiles": [
+    "as of yet.md",
+    "itinerary.md",
+    "decide.md",
+    "stanza.md",
+    "though.md",
+    "scratch the surface of X.md",
+    "money laundering game.md",
+    "in place.md",
     "whatever the fuck.md",
     "take someone's word to my heart.md",
     "scare the fuck out of somebody.md",
@@ -201,14 +210,6 @@
     "that shit.md",
     "on the planet of earth.md",
     "shit.md",
-    "none of them.md",
-    "chicken parm.md",
-    "compilation.md",
-    "let's roll.md",
-    "disembark.md",
-    "meet with someone.md",
-    "crocodile.md",
-    "knocker.md",
     "Pasted image 20260803121255.png",
     "Untitled 3",
     "Pasted image 20260801160749.png",
