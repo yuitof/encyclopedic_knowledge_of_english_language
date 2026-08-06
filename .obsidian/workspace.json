@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "673cadffb76c56cf",
+        "id": "6bcb35e949a945cd",
         "type": "tabs",
         "children": [
           {
-            "id": "7ad4c75b2a3dcaaf",
+            "id": "cf8ceda0889c07c0",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "as of yet",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -182,8 +181,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "7ad4c75b2a3dcaaf",
+  "active": "cf8ceda0889c07c0",
   "lastOpenFiles": [
+    "swing by.md",
     "as of yet.md",
     "itinerary.md",
     "decide.md",
@@ -209,7 +209,6 @@
     "orbit.md",
     "that shit.md",
     "on the planet of earth.md",
-    "shit.md",
     "Pasted image 20260803121255.png",
     "Untitled 3",
     "Pasted image 20260801160749.png",
