@@ -6,6 +6,6 @@ connoisseur of music
 コノシシォアーみたいな発音をbritishがしてた
 
 - I'm a vrchat connoisseur.
--> cringe
+-> [[cringe]]
 - I'm a connoisseur of women
 っていうと女性のことを知ってるプロフェッショナルって言ってるみたいでcringe

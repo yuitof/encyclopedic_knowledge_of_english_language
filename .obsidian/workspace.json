@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "cf1da3a3a8b6ac2a",
+        "id": "5c7958ceec7315eb",
         "type": "tabs",
         "children": [
           {
-            "id": "eec25c09a4ed8ec0",
+            "id": "51426f890d6b4fb9",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "mummy",
+                "query": "bowel",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -182,8 +181,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "eec25c09a4ed8ec0",
+  "active": "51426f890d6b4fb9",
   "lastOpenFiles": [
+    "gut.md",
+    "bowl.md",
+    "bowel.md",
+    "cringe.md",
+    "sick freak.md",
+    "connoisseur.md",
+    "cringey.md",
+    "learn a thing or two.md",
     "mummy.md",
     "pev.md",
     "bev.md",
@@ -202,14 +209,6 @@
     "butler.md",
     "can I get X ?.md",
     "a piece of shit.md",
-    "swing by.md",
-    "as of yet.md",
-    "itinerary.md",
-    "decide.md",
-    "stanza.md",
-    "though.md",
-    "scratch the surface of X.md",
-    "money laundering game.md",
     "Pasted image 20260803121255.png",
     "Untitled 3",
     "Pasted image 20260801160749.png",
