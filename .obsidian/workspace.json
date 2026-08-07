@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "8b2292a4814b52f3",
+        "id": "cf1da3a3a8b6ac2a",
         "type": "tabs",
         "children": [
           {
-            "id": "878956a7effe78ee",
+            "id": "eec25c09a4ed8ec0",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "honk",
+                "query": "mummy",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -181,8 +182,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "878956a7effe78ee",
+  "active": "eec25c09a4ed8ec0",
   "lastOpenFiles": [
+    "mummy.md",
+    "pev.md",
+    "bev.md",
     "get a girl.md",
     "clown.md",
     "come in handy.md",
@@ -206,9 +210,6 @@
     "though.md",
     "scratch the surface of X.md",
     "money laundering game.md",
-    "in place.md",
-    "whatever the fuck.md",
-    "take someone's word to my heart.md",
     "Pasted image 20260803121255.png",
     "Untitled 3",
     "Pasted image 20260801160749.png",
