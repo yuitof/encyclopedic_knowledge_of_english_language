@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "it's a conversation for a different day.md",
+                "file": "by card.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "it's a conversation for a different day"
+              "title": "by card"
             }
           }
         ]
@@ -55,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "who knows",
+                "query": "I think I'll",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,7 +76,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -187,9 +188,10 @@
   },
   "active": "51426f890d6b4fb9",
   "lastOpenFiles": [
-    "dairy.md",
     "I think I'll use my credit card.md",
+    "by card.md",
     "it's a conversation for a different day.md",
+    "dairy.md",
     "who knows what S V.md",
     "gut.md",
     "bowl.md",
@@ -212,7 +214,6 @@
     "I want the same.md",
     "Vernacular.md",
     "compulsory.md",
-    "accent.md",
     "Pasted image 20260803121255.png",
     "Untitled 3",
     "Pasted image 20260801160749.png",
