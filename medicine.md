@@ -12,3 +12,4 @@
 [[dementia]]
 [[fentanyl]]
 [[DMA]]
+[[hypothermia]]

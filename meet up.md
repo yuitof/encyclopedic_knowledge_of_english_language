@@ -1,4 +1,3 @@
-
 meetup (noun)
 : an informal meeting or social event
 

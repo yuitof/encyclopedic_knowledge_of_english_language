@@ -1,1 +1,2 @@
-そういうゲームがある。wordleみたいな感じ。compassさんとやった
+hit and blow
+: そういうゲームがある。wordleみたいな感じ。compassさんとやった
