@@ -7,4 +7,7 @@ say を使うパターンや should を使ったり、how to do の形のもの�
 
 ChatGPTと話してると、目的語は it か this のことが多そう。特に how should I put it とかはよく使われそう。
 
+
+"what's the word" "what is it"という言い方もできる
+
 also see: [[filler]]

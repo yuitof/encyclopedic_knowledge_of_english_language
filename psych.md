@@ -1,0 +1,2 @@
+psych
+: stands for psychology
