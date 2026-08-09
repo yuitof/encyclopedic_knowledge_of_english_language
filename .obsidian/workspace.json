@@ -11,10 +11,14 @@
             "id": "3ec55615b77fa45a",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "femboy.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "femboy"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "as of ",
+                "query": "femboy",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -184,6 +188,8 @@
   },
   "active": "3ec55615b77fa45a",
   "lastOpenFiles": [
+    "there is an incongruency between something.md",
+    "sycophantic.md",
     "as of yet.md",
     "redolence.md",
     "plato.md",
@@ -208,8 +214,6 @@
     "if that makes sense.md",
     "say hi.md",
     "medication.md",
-    "in itself.md",
-    "gratification.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
