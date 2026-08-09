@@ -3,4 +3,4 @@ I'm not gonna lie
 
 https://www.quora.com/Why-do-people-say-Im-not-gonna-lie-instead-of-just-saying-Im-lying-or-something-like-that
 
-[[tbh]]
+also see: [[tbh]], [[ngl]]
