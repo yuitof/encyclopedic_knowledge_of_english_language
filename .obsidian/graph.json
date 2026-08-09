@@ -1,6 +1,6 @@
 {
   "collapse-filter": false,
-  "search": "troll",
+  "search": "",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
@@ -17,6 +17,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.41212136791751797,
-  "close": false
+  "scale": 0.09686535879581955,
+  "close": true
 }
