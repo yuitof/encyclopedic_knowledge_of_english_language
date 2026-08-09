@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "29314365aa6fa7c4",
+        "id": "0479bd50bf27ad19",
         "type": "tabs",
         "children": [
           {
-            "id": "007b0109dc590d34",
+            "id": "3ec55615b77fa45a",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "a bit",
+                "query": "as of ",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -181,8 +182,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "007b0109dc590d34",
+  "active": "3ec55615b77fa45a",
   "lastOpenFiles": [
+    "as of yet.md",
     "redolence.md",
     "plato.md",
     "a bit.md",
@@ -208,7 +210,6 @@
     "medication.md",
     "in itself.md",
     "gratification.md",
-    "suck.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
