@@ -1,0 +1,2 @@
+horsey (slang)
+: たつのおとしご

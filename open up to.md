@@ -1,7 +1,18 @@
-open up to
+open up to (verb)
 : to become communicative
-- I've never [opened](https://dictionary.cambridge.org/us/dictionary/english/open "opened") up to anyone like I do to you.
+- I've never opened up to anyone like I ~~do~~ did to you.
 
+- You should open up to people. <- 
+shouldがあるときは up が入るのかな？
 
-close up
-: 黙こむ見たいな感じの意味なりそう
+in question
+- Do you open up to anyone? 👈 ?????
+
+also see: Are you [[vulnerable]] to anyone?
+
+opening up to
+: syn let out your secret, reveal
+
+~~[[close up]]~~
+~~: 黙こむ見たいな感じの意味なりそう~~
+use instead: nervous

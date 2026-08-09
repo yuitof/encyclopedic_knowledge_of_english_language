@@ -14,6 +14,7 @@ shit が thing のような意味で使われる例
 - [[random shit]]
 - holy shit
 - give me the strongest shit you got
+- real shit <- ???
 
 形容詞とか冠詞相当語とかと使われると thing の意味になりたい。
 
