@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "e95cbf7053c64614",
+        "id": "7dc5387fe50e2772",
         "type": "tabs",
         "children": [
           {
-            "id": "11ad63efefebee19",
+            "id": "a459730daa0392c4",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "open up to.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "open up to"
+              "title": "New tab"
             }
           }
         ]
@@ -76,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -186,8 +181,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "11ad63efefebee19",
+  "active": "a459730daa0392c4",
   "lastOpenFiles": [
+    "open up to.md",
+    "in between that.md",
     "femboy.md",
     "there is an incongruency between something.md",
     "sycophantic.md",
@@ -212,8 +209,6 @@
     "trigonometry.md",
     "disciplined.md",
     "gamified.md",
-    "if that makes sense.md",
-    "say hi.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
