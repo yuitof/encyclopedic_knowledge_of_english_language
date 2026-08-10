@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "c3b4b98875d9d44f",
+        "id": "ba41e18f2ca3eb84",
         "type": "tabs",
         "children": [
           {
-            "id": "95c2b5f84d1296d2",
+            "id": "e43fb3cc38e6333b",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -181,8 +181,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "95c2b5f84d1296d2",
+  "active": "e43fb3cc38e6333b",
   "lastOpenFiles": [
+    "shakey's.md",
     "performative.md",
     "what's crazy about that?.md",
     "footjob.md",
@@ -208,7 +209,6 @@
     "in a sense.md",
     "gravitated towards.md",
     "how do I put it.md",
-    "psych.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
