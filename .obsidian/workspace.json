@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "7dc5387fe50e2772",
+        "id": "c3b4b98875d9d44f",
         "type": "tabs",
         "children": [
           {
-            "id": "a459730daa0392c4",
+            "id": "95c2b5f84d1296d2",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "open up to",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -181,8 +181,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "a459730daa0392c4",
+  "active": "95c2b5f84d1296d2",
   "lastOpenFiles": [
+    "performative.md",
+    "what's crazy about that?.md",
+    "footjob.md",
     "open up to.md",
     "in between that.md",
     "femboy.md",
@@ -206,9 +209,6 @@
     "gravitated towards.md",
     "how do I put it.md",
     "psych.md",
-    "trigonometry.md",
-    "disciplined.md",
-    "gamified.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
