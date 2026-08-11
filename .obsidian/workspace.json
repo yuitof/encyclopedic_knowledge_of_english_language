@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "ba41e18f2ca3eb84",
+        "id": "621ef06f502910b2",
         "type": "tabs",
         "children": [
           {
-            "id": "e43fb3cc38e6333b",
+            "id": "95f262f26fb9a225",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "don't threaten me with a good time.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "don't threaten me with a good time"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "don't threaten me",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +76,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -181,8 +186,23 @@
       "bases:Create new base": false
     }
   },
-  "active": "e43fb3cc38e6333b",
+  "active": "95f262f26fb9a225",
   "lastOpenFiles": [
+    "accent.md",
+    "stress.md",
+    "inflection.md",
+    "compulsory.md",
+    "don't threaten me with a good time.md",
+    "dick.md",
+    "humping.md",
+    "jackhammer.md",
+    "suck.md",
+    "coursed doll.md",
+    "super-duper.md",
+    "gooning.md",
+    "what's up.md",
+    "what's good someone.md",
+    "haptics.md",
     "shakey's.md",
     "performative.md",
     "what's crazy about that?.md",
@@ -194,21 +214,6 @@
     "sycophantic.md",
     "as of yet.md",
     "redolence.md",
-    "plato.md",
-    "a bit.md",
-    "I'm not sure I'm following, mate.md",
-    "mate.md",
-    "then again.md",
-    "I'm not gonna lie.md",
-    "ngl.md",
-    "filler.md",
-    "don't get me wrong.md",
-    ", but the thing is....md",
-    "fuck up.md",
-    "learn a thing or two.md",
-    "in a sense.md",
-    "gravitated towards.md",
-    "how do I put it.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",

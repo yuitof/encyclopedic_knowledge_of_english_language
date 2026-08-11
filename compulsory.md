@@ -3,4 +3,4 @@ compulsory class /kəmˈpʌlsəri/
 
 /l/ は母音に近い音で舌先を歯茎裏につける必要はなさそう
 
-強勢はstressという[[accent]]ではないので注意
+強勢は[[stress]]という[[accent]]ではないので注意

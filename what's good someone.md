@@ -1,2 +1,2 @@
 what's good someone
-: what's up
+: [[what's up]]

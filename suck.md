@@ -3,3 +3,6 @@ suck
 
 - We suck
 - You suck at singing
+
+:
+- suck my [[dick]]
