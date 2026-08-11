@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "975b30f0d6f770ea",
+        "id": "c7e94dcd53d9a578",
         "type": "tabs",
         "children": [
           {
-            "id": "02e87ba5a0fec687",
+            "id": "80a08c501986561b",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "unders",
+                "query": "dayum",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -184,8 +184,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "02e87ba5a0fec687",
+  "active": "80a08c501986561b",
   "lastOpenFiles": [
+    "you never know.md",
     "utensils.md",
     "as I understand.md",
     "_test.md",
@@ -212,7 +213,6 @@
     "shit.md",
     "good at this shit.md",
     "AAVE.md",
-    "all about.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
