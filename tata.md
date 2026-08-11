@@ -1,4 +1,4 @@
 tata
 : bye-bye
 
-: [tits](tit)
+: [[tit|tits]]

@@ -1,4 +1,4 @@
 to annoy somebody
-syn: [jar](jarring)
+syn: [[jarring|jar]]
 
 -  Her voice really grates on me.

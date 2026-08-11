@@ -1,4 +1,4 @@
 commencement
 : beginning
 
-: the ceremonies or the day for [conferring](confer) degrees or diplomas
+: the ceremonies or the day for [[confer|conferring]] degrees or diplomas

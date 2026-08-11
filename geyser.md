@@ -1,5 +1,5 @@
 geyser /ˈɡaɪzər/
 : 間欠泉
 
-- The geyser [spouted](spout) huge columns of water from the ground.
+- The geyser [[spout|spouted]] huge columns of water from the ground.
 

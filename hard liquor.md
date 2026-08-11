@@ -1,5 +1,5 @@
 hard liquor
-: [蒸留](distillation)させて作るお酒 e.g. [[vodka]]
+: [[distillation|蒸留]]させて作るお酒 e.g. [[vodka]]
 
 also called: [[spirit]]
 

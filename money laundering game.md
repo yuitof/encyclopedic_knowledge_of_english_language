@@ -1,5 +1,5 @@
 money laundering game
-: gacha games [/s](sarcasm)
+: gacha games [[sarcasm|/s]]
 
 also see: [[launder]]
 
