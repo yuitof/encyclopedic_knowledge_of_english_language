@@ -11,10 +11,14 @@
             "id": "80a08c501986561b",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "会話の始め方.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "会話の始め方"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "dayum",
+                "query": "会話の",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +76,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -92,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "会話の始め方.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "会話の始め方.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -186,6 +193,7 @@
   },
   "active": "80a08c501986561b",
   "lastOpenFiles": [
+    "I'm doing well.md",
     "you never know.md",
     "utensils.md",
     "as I understand.md",
@@ -212,7 +220,6 @@
     "fine shyt.md",
     "shit.md",
     "good at this shit.md",
-    "AAVE.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
