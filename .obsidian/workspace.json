@@ -4,20 +4,39 @@
     "type": "split",
     "children": [
       {
-        "id": "51e396cb1f254f4a",
+        "id": "49154d4425f0bb84",
         "type": "tabs",
         "children": [
           {
-            "id": "15acbae2d8999fbc",
+            "id": "db7c6e5a15ad5d6b",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "suck.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "suck"
+            }
+          },
+          {
+            "id": "a4c2c293754963f2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "wad.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "wad"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -51,7 +70,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "hot",
+                "query": "wad",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -93,7 +112,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Welcome.md",
+                "file": "wad.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +122,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Welcome"
+              "title": "Backlinks"
             }
           },
           {
@@ -168,8 +187,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -182,34 +200,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "15acbae2d8999fbc",
+  "active": "a4c2c293754963f2",
   "lastOpenFiles": [
-    "hot.md",
-    "don't threaten me with a good time.md",
-    "accent.md",
-    "stress.md",
-    "inflection.md",
-    "compulsory.md",
-    "dick.md",
-    "humping.md",
-    "jackhammer.md",
-    "suck.md",
-    "coursed doll.md",
-    "super-duper.md",
-    "gooning.md",
-    "what's up.md",
-    "what's good someone.md",
-    "haptics.md",
-    "shakey's.md",
-    "performative.md",
-    "what's crazy about that?.md",
-    "footjob.md",
-    "open up to.md",
-    "in between that.md",
-    "femboy.md",
-    "there is an incongruency between something.md",
-    "sycophantic.md",
-    "as of yet.md",
+    "aye aboot.md",
+    "AWGN.md",
+    "avoidant attachment anxious attachment.md",
+    "avi.md",
+    "auto mechanics.md",
+    "Aussie.md",
+    "audit.md",
+    "atonement.md",
+    "ikr.md",
+    "fine shyt.md",
+    "shit.md",
+    "good at this shit.md",
+    "AAVE.md",
+    "all about.md",
+    "all.md",
+    "Ali Wong.md",
+    "alexa stop talking.md",
+    "aircon.md",
+    "ago.md",
+    "aggravating.md",
+    "again and again.md",
+    "after.md",
+    "affront.md",
+    "advise.md",
+    "admit to (doing) X.md",
+    "address.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",

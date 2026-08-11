@@ -3,6 +3,7 @@ suck
 
 - We suck
 - You suck at singing
+- I suck at recognising jokes sometimes lol
 
 :
 - suck my [[dick]]

@@ -16,6 +16,9 @@ shit が thing のような意味で使われる例
 - give me the strongest shit you got
 - real shit <- ???
 
+shit が person のような意味で使われる例
+- [[fine shyt]]
+
 形容詞とか冠詞相当語とかと使われると thing の意味になりたい。
 
 - [[this thing]] と言う言い方もよく出会う。具体的に何かを言いたくない時とかに使えそう。
