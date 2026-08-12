@@ -11,10 +11,14 @@
             "id": "6be455cae2094a86",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "ovoviviparous.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "ovoviviparous"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "as if",
+                "query": "ovoviviparous",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -92,6 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "ovoviviparous.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "ovoviviparous.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,11 +190,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "6be455cae2094a86",
+  "active": "73b4ed150a23e357",
   "lastOpenFiles": [
+    "oviparous.md",
+    "ovoviviparous.md",
+    "viviparous.md",
     "yeah.md",
     "filter feeder.md",
-    "ovoviviparous.md",
     "wire up.md",
     "grid.md",
     "puffed.md",
@@ -211,8 +219,6 @@
     "wad.md",
     "gloss over.md",
     "aye aboot.md",
-    "AWGN.md",
-    "avoidant attachment anxious attachment.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",

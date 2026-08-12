@@ -4,3 +4,5 @@ ovoviviparous
 
 - **Reproduction is still mysterious.** They're [[ovoviviparous]] — hatch eggs internally. A single female was found carrying ~300 pups, but we still don't know much about their breeding grounds.
   **Tourists love them.** Places like the Maldives, Mexico (Holbox), and the Philippines offer snorkel encounters — the Maldives even features one on its currency!
+
+also see: [[viviparous]], [[oviparous]]
