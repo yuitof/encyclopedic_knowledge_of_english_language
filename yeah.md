@@ -3,6 +3,8 @@ yeah
 
 あと、yeah は否定語が含まれている疑問文に対して答える時、日本語と同じように文自体の主張に対して使われる。逆にYes, no, nah とかは動詞に対して使われる気がする。
 
+hellotalkでyesが否定文の肯定に使われてた気がする。何だっけイギリス人がモロッコ人と話してて、アラビア語教えてくれてないから話せない見たいな文脈だったっけ？忘れちゃった。違ったかも
+
 https://www.instagram.com/reel/DbBUbV3xxuG/?igsh=MXZweWI1NTVnOXJ0
 
 https://youtu.be/eo03fVJU6jM?t=827

@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "21ba6e4ed3db1e40",
+        "id": "4c30b0a48ba5906e",
         "type": "tabs",
         "children": [
           {
-            "id": "8050ee5761eb600c",
+            "id": "6be455cae2094a86",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "会話の",
+                "query": "as if",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -185,8 +184,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "8050ee5761eb600c",
+  "active": "6be455cae2094a86",
   "lastOpenFiles": [
+    "yeah.md",
+    "filter feeder.md",
+    "ovoviviparous.md",
+    "wire up.md",
+    "grid.md",
+    "puffed.md",
+    "filterfeeder.md",
+    "Whale shark.md",
     "I'm doing well.md",
     "会話の始め方.md",
     "you never know.md",
@@ -206,14 +213,6 @@
     "aye aboot.md",
     "AWGN.md",
     "avoidant attachment anxious attachment.md",
-    "avi.md",
-    "auto mechanics.md",
-    "Aussie.md",
-    "audit.md",
-    "atonement.md",
-    "ikr.md",
-    "fine shyt.md",
-    "shit.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
