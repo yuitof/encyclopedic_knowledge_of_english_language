@@ -1,0 +1,3 @@
+diarrhea /ˌdaɪəˈriːə/
+: 下痢
+- I just had the worst [[diarrhea]] the in this cruise…

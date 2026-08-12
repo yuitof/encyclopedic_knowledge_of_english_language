@@ -1,0 +1,4 @@
+poopy diapers
+: 
+
+diaper はおむつのこと

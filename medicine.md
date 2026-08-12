@@ -13,3 +13,4 @@
 [[fentanyl]]
 [[DMA]]
 [[hypothermia]]
+[[diarrhea]]

@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "4c30b0a48ba5906e",
+        "id": "6a4556e854e28664",
         "type": "tabs",
         "children": [
           {
-            "id": "6be455cae2094a86",
+            "id": "15d8f22fed2bbb60",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ovoviviparous.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "ovoviviparous"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "ovoviviparous",
+                "query": "knocker",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -96,7 +93,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ovoviviparous.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -165,7 +161,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ovoviviparous.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -190,42 +185,42 @@
       "bases:Create new base": false
     }
   },
-  "active": "73b4ed150a23e357",
+  "active": "15d8f22fed2bbb60",
   "lastOpenFiles": [
-    "oviparous.md",
-    "ovoviviparous.md",
-    "viviparous.md",
-    "yeah.md",
-    "filter feeder.md",
-    "wire up.md",
-    "grid.md",
-    "puffed.md",
-    "filterfeeder.md",
-    "Whale shark.md",
-    "I'm doing well.md",
-    "会話の始め方.md",
-    "you never know.md",
-    "utensils.md",
-    "as I understand.md",
-    "_test.md",
+    "if it ain't broke, don't fix it.md",
+    "quilt.md",
+    "knock somebody <-> out.md",
+    "knocker.md",
+    "on time.md",
+    "first things first.md",
+    "poopy diapers.md",
+    "diarrhea.md",
+    "rudder.md",
+    "list.md",
+    "ledge.md",
+    "listed.md",
+    "helm.md",
+    "helmsman.md",
+    "medicine.md",
+    "acronym.md",
+    "what's up.md",
+    "what's good, someone.md",
+    "Borat.md",
+    "cramp.md",
+    "swing by.md",
+    "高所恐怖症.md",
+    "aperture.md",
+    "nausea.md",
+    "dox.md",
+    "NDA.md",
+    "Untitled",
     "_test.base",
-    "Untitled 1.md",
-    "finicky.md",
-    "fall.md",
-    "Finessing finicky firewalls.md",
-    "finesse.md",
-    "after.md",
-    "suck.md",
-    "wad.md",
-    "gloss over.md",
-    "aye aboot.md",
     "Pasted image 20260809020821.png",
     "Pasted image 20260803121255.png",
     "Untitled 3",
     "Pasted image 20260801160749.png",
     "Untitled 2",
     "Untitled 1",
-    "Untitled",
     "Pasted image 20260731083952.png",
     "Pasted image 20260731083926.png",
     "Pasted image 20260731083919.png",
