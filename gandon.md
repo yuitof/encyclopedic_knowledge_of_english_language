@@ -1,0 +1,2 @@
+gandon (russian)
+: stupid

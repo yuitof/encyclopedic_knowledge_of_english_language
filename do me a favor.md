@@ -1,1 +1,3 @@
 - Mark 42, inbound. [[the prodigal son returns|The prodigal son returns]] (…) Jarvis, do me a favor and blow Mark 42
+
+also see: [[return the favor]]
