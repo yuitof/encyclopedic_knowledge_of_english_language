@@ -4,39 +4,63 @@
     "type": "split",
     "children": [
       {
-        "id": "45c8218cf784644f",
+        "id": "45d4a5b63fb545df",
         "type": "tabs",
         "children": [
           {
-            "id": "bf95bb2f5c72cce4",
+            "id": "39d0b182ec024391",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "it's a conversation for a different day.md",
+                "file": "I'm doing well.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "it's a conversation for a different day"
+              "title": "I'm doing well"
             }
           },
           {
-            "id": "76cc971b15128d53",
+            "id": "1b543f23f6091cf2",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "talk (transitive).md",
+                "file": "let me get it straight.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "talk (transitive)"
+              "title": "let me get it straight"
+            }
+          },
+          {
+            "id": "b13d9ad76ee20d5e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "am I understanding correctly.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "am I understanding correctly"
+            }
+          },
+          {
+            "id": "9c0faba2384eb812",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -70,7 +94,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "different",
+                "query": "fiddly",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -91,7 +115,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -111,7 +136,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "talk (transitive).md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -180,7 +204,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "talk (transitive).md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -205,34 +228,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "76cc971b15128d53",
+  "active": "48c4cd9a954656e7",
   "lastOpenFiles": [
-    "it's a conversation for a different day.md",
-    "talk (transitive).md",
-    "the 比較級.md",
-    "do me a favor.md",
-    "comb.md",
-    "big up.md",
-    "motorhome.md",
-    "lift.md",
-    "Untitled.md",
-    "bill.md",
-    "rustic.md",
-    "ball pit.md",
-    "birth.md",
-    "square one.md",
-    "call me whatever you want.md",
-    "rot.md",
-    "gandon.md",
-    "Chutes and Ladders.md",
-    "pool.md",
-    "outlay.md",
-    "bumpkin.md",
-    "don't wait up for me.md",
+    "am I understanding correctly.md",
+    "let me get it straight.md",
+    "I'm doing well.md",
     "会話の始め方.md",
-    "insufferable.md",
-    "vietnamese.md",
-    "I pray that S V.md",
+    "take the edge off.md",
+    "regime.md",
+    "indefinitely.md",
+    "much as.md",
+    "crayfish.md",
+    "wrestle with somethings.md",
+    "doubly.md",
+    "crawfish.md",
+    "mudbug.md",
+    "as much.md",
+    "as much as I like to.md",
+    "much less.md",
+    "all as much.md",
+    "flush.md",
+    "fluff.md",
+    "plethora.md",
+    "Untitled 2.md",
+    "cheesy.md",
+    "tacky.md",
+    "bumpkin.md",
+    "miscellaneous.md",
+    "Untitled 1.md",
     "Untitled",
     "_test.base",
     "Pasted image 20260809020821.png",

@@ -1,0 +1,4 @@
+fluff
+: Here, “fluff” means unnecessary complexity, extra details, or superficial stuff surrounding the core idea. (ChatGPT)
+
+- The oldest is the UPnP IGD (Universal Plug’n’Play Internet Gateway Device) protocol. It was born in the late 1990’s, and as such uses a lot of very 90’s technology (XML, SOAP, multicast HTTP over UDP — yes, really) and is quite hard to implement correctly and securely — but a lot of routers shipped with UPnP, and a lot still do. If we strip away all the [[fluff]], we find a very simple request-response that all three of our port mapping protocols implement: “Hi, please forward a WAN port to lan-ip:port,” and “okay, I’ve allocated wan-ip:port for you.”
