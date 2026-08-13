@@ -1,2 +1,2 @@
 avi
-stands for avatar
+: stands for avatar

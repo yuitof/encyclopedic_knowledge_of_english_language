@@ -53,14 +53,60 @@
             "id": "9c0faba2384eb812",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "lifeline training.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "lifeline training"
+            }
+          },
+          {
+            "id": "a78f6924524c0b8d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "goth.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "goth"
+            }
+          },
+          {
+            "id": "4e09ee8e0b4621b6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "fetish.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "fetish"
+            }
+          },
+          {
+            "id": "8cba0b19fa7daccf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "avi.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "avi"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 6
       }
     ],
     "direction": "vertical"
@@ -94,7 +140,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "fiddly",
+                "query": "avi",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -136,6 +182,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "avi.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -204,6 +251,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "avi.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -228,8 +276,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "48c4cd9a954656e7",
+  "active": "8cba0b19fa7daccf",
   "lastOpenFiles": [
+    "fetish.md",
+    "daddy Dom.md",
+    "goth.md",
+    "lifeline training.md",
     "am I understanding correctly.md",
     "let me get it straight.md",
     "I'm doing well.md",
@@ -252,10 +304,6 @@
     "plethora.md",
     "Untitled 2.md",
     "cheesy.md",
-    "tacky.md",
-    "bumpkin.md",
-    "miscellaneous.md",
-    "Untitled 1.md",
     "Untitled",
     "_test.base",
     "Pasted image 20260809020821.png",
