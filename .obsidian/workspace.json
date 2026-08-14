@@ -4,193 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "45d4a5b63fb545df",
+        "id": "e1d9181ac17f4e54",
         "type": "tabs",
         "children": [
           {
-            "id": "39d0b182ec024391",
+            "id": "78ca3fd456a6fd50",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "I'm doing well.md",
+                "file": "ahead of time.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "I'm doing well"
-            }
-          },
-          {
-            "id": "1b543f23f6091cf2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "let me get it straight.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "let me get it straight"
-            }
-          },
-          {
-            "id": "b13d9ad76ee20d5e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "am I understanding correctly.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "am I understanding correctly"
-            }
-          },
-          {
-            "id": "9c0faba2384eb812",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "lifeline training.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "lifeline training"
-            }
-          },
-          {
-            "id": "a78f6924524c0b8d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "goth.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "goth"
-            }
-          },
-          {
-            "id": "4e09ee8e0b4621b6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "fetish.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "fetish"
-            }
-          },
-          {
-            "id": "8cba0b19fa7daccf",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "avi.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "avi"
-            }
-          },
-          {
-            "id": "314a05270dd97bfe",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "distillation.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "distillation"
-            }
-          },
-          {
-            "id": "f873d9d4091daf0c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "cabaret club.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "cabaret club"
-            }
-          },
-          {
-            "id": "4a419a072cb9fd07",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "versed.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "versed"
-            }
-          },
-          {
-            "id": "7d198d454c569144",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "what's up.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "what's up"
-            }
-          },
-          {
-            "id": "73ec9f280ea6956b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": ", but the thing is....md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": ", but the thing is..."
-            }
-          },
-          {
-            "id": "cebd3860bf33306e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "mustang.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "mustang"
+              "title": "ahead of time"
             }
           }
-        ],
-        "currentTab": 12
+        ]
       }
     ],
     "direction": "vertical"
@@ -224,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "mustang",
+                "query": "in advance",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -266,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "mustang.md",
+                "file": "ahead of time.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -335,7 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "mustang.md",
+                "file": "ahead of time.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -360,34 +191,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "cebd3860bf33306e",
+  "active": "78ca3fd456a6fd50",
   "lastOpenFiles": [
-    "pretty.md",
-    "mustang.md",
-    "the starry night.md",
-    "Cafe Terrace at Night.md",
-    ", but the thing is....md",
-    "porch.md",
-    "twist.md",
-    "what's up.md",
-    "what's up with X with Y.md",
-    "versed.md",
-    "cabaret club.md",
-    "distillation.md",
-    "avi.md",
-    "fetish.md",
-    "daddy Dom.md",
-    "goth.md",
-    "lifeline training.md",
+    "in advance.md",
+    "ahead of time.md",
+    "improvise.md",
+    "might as well.md",
+    "get around to something.md",
+    "spoof.md",
+    "poof.md",
+    "spooky.md",
+    "array of something.md",
+    "a range of something.md",
+    "get around to.md",
+    "none the wiser.md",
+    "go V something.md",
+    "squid.md",
     "am I understanding correctly.md",
-    "let me get it straight.md",
-    "I'm doing well.md",
-    "会話の始め方.md",
-    "take the edge off.md",
-    "regime.md",
-    "indefinitely.md",
-    "much as.md",
-    "crayfish.md",
+    "get something right.md",
+    "have a trick up my sleeve.md",
+    "fingernail.md",
+    "接続詞の直後の again.md",
+    "yet.md",
+    "off-putting.md",
+    "makeover.md",
+    "hypertensive.md",
+    "mind you.md",
+    "behind the scenes.md",
+    "medicine.md",
     "Untitled",
     "_test.base",
     "Pasted image 20260809020821.png",

@@ -14,3 +14,4 @@
 [[DMA]]
 [[hypothermia]]
 [[diarrhea]]
+[[hypertensive]]
