@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "e1d9181ac17f4e54",
+        "id": "c4c8f4a1f9673992",
         "type": "tabs",
         "children": [
           {
-            "id": "78ca3fd456a6fd50",
+            "id": "e98cb5b673292116",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ahead of time.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "ahead of time"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "in advance",
+                "query": "let me see",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -97,7 +92,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ahead of time.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +160,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ahead of time.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -191,10 +184,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "78ca3fd456a6fd50",
+  "active": "e98cb5b673292116",
   "lastOpenFiles": [
-    "in advance.md",
+    "suffice (it) to say that.md",
+    "catch.md",
     "ahead of time.md",
+    "in advance.md",
     "improvise.md",
     "might as well.md",
     "get around to something.md",
@@ -217,8 +212,6 @@
     "makeover.md",
     "hypertensive.md",
     "mind you.md",
-    "behind the scenes.md",
-    "medicine.md",
     "Untitled",
     "_test.base",
     "Pasted image 20260809020821.png",
