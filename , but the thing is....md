@@ -2,3 +2,4 @@
 
 also: 
 - here is the thing (about something)...
+- If someone says [[, but the thing is...|but the thing to this girl is]] she's is a guy, like that, it's less alarming
