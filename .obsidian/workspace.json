@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c4c8f4a1f9673992",
+        "id": "2e30700750e037a6",
         "type": "tabs",
         "children": [
           {
-            "id": "e98cb5b673292116",
+            "id": "6b7cf39ea7ae09e0",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "boozer.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "boozer"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "let me see",
+                "query": "boozer",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +76,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -92,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "boozer.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "boozer.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,34 +191,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "e98cb5b673292116",
+  "active": "6b7cf39ea7ae09e0",
   "lastOpenFiles": [
-    "suffice (it) to say that.md",
-    "catch.md",
-    "ahead of time.md",
-    "in advance.md",
-    "improvise.md",
-    "might as well.md",
-    "get around to something.md",
-    "spoof.md",
-    "poof.md",
-    "spooky.md",
-    "array of something.md",
-    "a range of something.md",
-    "get around to.md",
-    "none the wiser.md",
-    "go V something.md",
-    "squid.md",
-    "am I understanding correctly.md",
-    "get something right.md",
-    "have a trick up my sleeve.md",
-    "fingernail.md",
-    "接続詞の直後の again.md",
-    "yet.md",
-    "off-putting.md",
-    "makeover.md",
-    "hypertensive.md",
-    "mind you.md",
+    "boozer.md",
+    "ale.md",
+    "rat spot.md",
+    "rabbit hole.md",
+    "what's good, someone.md",
+    "bumpkin.md",
+    "vagina.md",
+    "cheesy.md",
+    "red light green light.md",
+    "what do you do.md",
+    "Whale shark.md",
+    "well.md",
+    "wb.md",
+    "warehouse.md",
+    "wanky.md",
+    "WAIS.md",
+    "VRCの抜け方.md",
+    "VRChat.md",
+    "vein.md",
+    "unnerve.md",
+    "travel.md",
+    "triangle love.md",
+    "trail.md",
+    "tiddy.md",
+    "tie up.md",
+    "TIL.md",
     "Untitled",
     "_test.base",
     "Pasted image 20260809020821.png",
