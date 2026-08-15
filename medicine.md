@@ -15,3 +15,5 @@
 [[hypothermia]]
 [[diarrhea]]
 [[hypertensive]]
+[[hemorrhoids]]
+

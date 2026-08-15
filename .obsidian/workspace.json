@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "2e30700750e037a6",
+        "id": "72f2257746f3ea76",
         "type": "tabs",
         "children": [
           {
-            "id": "6b7cf39ea7ae09e0",
+            "id": "c9bfb7e8d7e83a16",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "boozer.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "boozer"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "boozer",
+                "query": "snark",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -97,7 +93,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "boozer.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +161,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "boozer.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -191,34 +185,35 @@
       "bases:Create new base": false
     }
   },
-  "active": "6b7cf39ea7ae09e0",
+  "active": "c9bfb7e8d7e83a16",
   "lastOpenFiles": [
-    "boozer.md",
-    "ale.md",
-    "rat spot.md",
-    "rabbit hole.md",
-    "what's good, someone.md",
-    "bumpkin.md",
-    "vagina.md",
-    "cheesy.md",
-    "red light green light.md",
-    "what do you do.md",
-    "Whale shark.md",
-    "well.md",
-    "wb.md",
-    "warehouse.md",
-    "wanky.md",
-    "WAIS.md",
-    "VRCの抜け方.md",
-    "VRChat.md",
-    "vein.md",
-    "unnerve.md",
-    "travel.md",
-    "triangle love.md",
-    "trail.md",
-    "tiddy.md",
-    "tie up.md",
-    "TIL.md",
+    "hemorrhoids.md",
+    "snarky.md",
+    "phonics.md",
+    "Untitled 5.md",
+    "modern rp.md",
+    "religious.md",
+    "mora.md",
+    "scare the fuck out of somebody.md",
+    "sporadically.md",
+    "lyrics.md",
+    "toy with someone.md",
+    "jumbled up.md",
+    "trespass.md",
+    "kick in.md",
+    "genitive form.md",
+    "like I said.md",
+    "skit.md",
+    "urban digital.md",
+    "cemetery.md",
+    "basically.md",
+    "spit.md",
+    "tibetan buddhism.md",
+    "aubergine.md",
+    "copycat.md",
+    "persona.md",
+    "monk.md",
+    "Untitled 1",
     "Untitled",
     "_test.base",
     "Pasted image 20260809020821.png",
@@ -226,7 +221,6 @@
     "Untitled 3",
     "Pasted image 20260801160749.png",
     "Untitled 2",
-    "Untitled 1",
     "Pasted image 20260731083952.png",
     "Pasted image 20260731083926.png",
     "Pasted image 20260731083919.png",

@@ -1,0 +1,2 @@
+offerings
+: お供物
