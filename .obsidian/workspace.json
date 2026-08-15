@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "72f2257746f3ea76",
+        "id": "cc6ec50335e29772",
         "type": "tabs",
         "children": [
           {
-            "id": "c9bfb7e8d7e83a16",
+            "id": "a678933e0b6ea4a9",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "snark",
+                "query": "not really",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -185,8 +185,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "c9bfb7e8d7e83a16",
+  "active": "a678933e0b6ea4a9",
   "lastOpenFiles": [
+    "not really.md",
+    "no, really.md",
+    "being like \"\" 分詞構文.md",
+    "uni.md",
+    "uneducated.md",
     "hemorrhoids.md",
     "snarky.md",
     "phonics.md",
@@ -208,11 +213,6 @@
     "cemetery.md",
     "basically.md",
     "spit.md",
-    "tibetan buddhism.md",
-    "aubergine.md",
-    "copycat.md",
-    "persona.md",
-    "monk.md",
     "Untitled 1",
     "Untitled",
     "_test.base",
