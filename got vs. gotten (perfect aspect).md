@@ -20,3 +20,5 @@ got vs. gotten (perfect aspect)
 
 僕
 	have の意味の have got の時だけ got という形の過去分詞が好まれるだけ説ある？
+
+疑問文の場合は what have we got here?
