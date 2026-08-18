@@ -16,4 +16,5 @@
 [[diarrhea]]
 [[hypertensive]]
 [[hemorrhoids]]
+[[amnesia]]
 
