@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "231ecc01b8a5f6a9",
+        "id": "f483f3b5093574cc",
         "type": "tabs",
         "children": [
           {
-            "id": "2fc400e1d1f52c5a",
+            "id": "f46603e69a9be43c",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "medicine",
+                "query": "incong",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -185,8 +184,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "2fc400e1d1f52c5a",
+  "active": "f46603e69a9be43c",
   "lastOpenFiles": [
+    "washed.md",
+    "psychological operation.md",
     "street.md",
     "jogger.md",
     "antagonize.md",
@@ -211,8 +212,6 @@
     "being like \"\" 分詞構文.md",
     "uni.md",
     "uneducated.md",
-    "hemorrhoids.md",
-    "snarky.md",
     "Untitled 1",
     "Untitled",
     "_test.base",
