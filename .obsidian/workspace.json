@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "e6f621df730988a0",
+        "id": "76b492a8d7b410be",
         "type": "tabs",
         "children": [
           {
-            "id": "7ab5e626d2920fa1",
+            "id": "05cfb66a60109ede",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "abhorrent.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "abhorrent"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "culture",
+                "query": "abhorr",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -93,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "abhorrent.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -161,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "abhorrent.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -185,8 +191,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "7ab5e626d2920fa1",
+  "active": "05cfb66a60109ede",
   "lastOpenFiles": [
+    "abhorrent.md",
+    "you're all good.md",
+    "dust storm.md",
+    "copycat.md",
+    "saying.md",
+    "until done tell none.md",
+    "Untitled 7.md",
     "culture.md",
     "cat called car.md",
     "taxidermy.md",
@@ -206,13 +219,6 @@
     "deskie.md",
     "FBT.md",
     "lock themselves up.md",
-    "you keep cutting off.md",
-    "proprietary.md",
-    "let's go with this.md",
-    "got vs. gotten (perfect aspect).md",
-    "hols.md",
-    "Untitled 6.md",
-    "boozer.md",
     "Untitled 1",
     "Untitled",
     "_test.base",
