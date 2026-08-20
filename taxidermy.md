@@ -1,0 +1,2 @@
+taxidermy
+: 剥製

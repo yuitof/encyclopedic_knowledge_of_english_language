@@ -45,3 +45,6 @@
 - [[ONLY]] ファッションブランド
 - [[angel bites piercings]] ピアス
 - [[lululemon]] そういうカナダのブランド
+
+#### meme
+- [[cat called car]]
