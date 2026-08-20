@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "76b492a8d7b410be",
+        "id": "28f553529b05defa",
         "type": "tabs",
         "children": [
           {
-            "id": "05cfb66a60109ede",
+            "id": "bf9e4dda7de30546",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "abhorrent.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "abhorrent"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "abhorr",
+                "query": "red light green light",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -97,7 +93,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "abhorrent.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +161,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "abhorrent.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -191,34 +185,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "05cfb66a60109ede",
+  "active": "bf9e4dda7de30546",
   "lastOpenFiles": [
+    "red light green light.md",
+    "TRPG.md",
+    "red light.md",
+    "acronym.md",
+    "IDC.md",
+    "phonics.md",
+    "Untitled 8.md",
+    "genitive form.md",
+    "The nail that sticks out gets hammered down..md",
+    "direct translation.md",
+    "geo.md",
+    "culture.md",
+    "Hubei.md",
+    "coma.md",
+    "what is two plus two?.md",
+    "Puxi.md",
+    "urban digital.md",
+    "medicine.md",
+    "amnesia.md",
+    "bug somebody.md",
     "abhorrent.md",
+    "clash with someone.md",
+    "what's up.md",
     "you're all good.md",
     "dust storm.md",
     "copycat.md",
-    "saying.md",
-    "until done tell none.md",
-    "Untitled 7.md",
-    "culture.md",
-    "cat called car.md",
-    "taxidermy.md",
-    "dairy queen.md",
-    "Wendy’s burger.md",
-    "jade.md",
-    "get bogged down.md",
-    "washed.md",
-    "psychological operation.md",
-    "street.md",
-    "jogger.md",
-    "antagonize.md",
-    "amnesia.md",
-    "medicine.md",
-    "ovulate.md",
-    "get along with someone.md",
-    "deskie.md",
-    "FBT.md",
-    "lock themselves up.md",
     "Untitled 1",
     "Untitled",
     "_test.base",
