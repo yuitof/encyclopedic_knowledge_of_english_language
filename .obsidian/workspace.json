@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "28f553529b05defa",
+        "id": "afe251b004c224c0",
         "type": "tabs",
         "children": [
           {
-            "id": "bf9e4dda7de30546",
+            "id": "924f1210a464f0e5",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "fuck with someone.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "fuck with someone"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "red light green light",
+                "query": "fuck with",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -93,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "fuck with someone.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -161,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "fuck with someone.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -185,12 +191,17 @@
       "bases:Create new base": false
     }
   },
-  "active": "bf9e4dda7de30546",
+  "active": "924f1210a464f0e5",
   "lastOpenFiles": [
+    "plan on doing something.md",
+    "PAX.md",
+    "tones.md",
+    "itinerary.md",
+    "acronym.md",
+    "rn.md",
     "red light green light.md",
     "TRPG.md",
     "red light.md",
-    "acronym.md",
     "IDC.md",
     "phonics.md",
     "Untitled 8.md",
@@ -208,11 +219,6 @@
     "amnesia.md",
     "bug somebody.md",
     "abhorrent.md",
-    "clash with someone.md",
-    "what's up.md",
-    "you're all good.md",
-    "dust storm.md",
-    "copycat.md",
     "Untitled 1",
     "Untitled",
     "_test.base",
