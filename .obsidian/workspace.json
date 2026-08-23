@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "58fb0b604dc68f7c",
+        "id": "c19499700417bf9c",
         "type": "tabs",
         "children": [
           {
-            "id": "5d0c7818405f298f",
+            "id": "dc36fcf62729a868",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "congee",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -185,14 +184,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "5d0c7818405f298f",
+  "active": "dc36fcf62729a868",
   "lastOpenFiles": [
+    "semi aquatic.md",
+    "porridge.md",
+    "slander.md",
     "I was linking \"\".md",
     "rage-bating.md",
     "not … all that much.md",
     "関係代名詞 that が人に掛かる例.md",
-    "slander.md",
-    "porridge.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "smut.md",
