@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "afe251b004c224c0",
+        "id": "58fb0b604dc68f7c",
         "type": "tabs",
         "children": [
           {
-            "id": "924f1210a464f0e5",
+            "id": "5d0c7818405f298f",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "fuck with someone.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "fuck with someone"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "fuck with",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -97,7 +93,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "fuck with someone.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +161,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "fuck with someone.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -191,8 +185,20 @@
       "bases:Create new base": false
     }
   },
-  "active": "924f1210a464f0e5",
+  "active": "5d0c7818405f298f",
   "lastOpenFiles": [
+    "I was linking \"\".md",
+    "rage-bating.md",
+    "not … all that much.md",
+    "関係代名詞 that が人に掛かる例.md",
+    "slander.md",
+    "porridge.md",
+    "Pasted image 20260823131807.png",
+    "Pasted image 20260823131758.png",
+    "smut.md",
+    "lotus root.md",
+    "fuck with someone.md",
+    "gimbal.md",
     "plan on doing something.md",
     "PAX.md",
     "tones.md",
@@ -208,17 +214,6 @@
     "genitive form.md",
     "The nail that sticks out gets hammered down..md",
     "direct translation.md",
-    "geo.md",
-    "culture.md",
-    "Hubei.md",
-    "coma.md",
-    "what is two plus two?.md",
-    "Puxi.md",
-    "urban digital.md",
-    "medicine.md",
-    "amnesia.md",
-    "bug somebody.md",
-    "abhorrent.md",
     "Untitled 1",
     "Untitled",
     "_test.base",
@@ -232,8 +227,6 @@
     "Pasted image 20260731083919.png",
     "Pasted image 20260730175838.png",
     "Pasted image 20260730174052.png",
-    "Pasted image 20260726045158.png",
-    "Pasted image 20260727120011.png",
     "help yourself",
     "Untitled.canvas"
   ]
