@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c19499700417bf9c",
+        "id": "49d014f96af0acd1",
         "type": "tabs",
         "children": [
           {
-            "id": "dc36fcf62729a868",
+            "id": "11106d2772a21e13",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "reserved.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "reserved"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "congee",
+                "query": "acro",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -92,6 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "reserved.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "reserved.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,36 +190,36 @@
       "bases:Create new base": false
     }
   },
-  "active": "dc36fcf62729a868",
+  "active": "11106d2772a21e13",
   "lastOpenFiles": [
+    "reserved.md",
+    "shank.md",
+    "pretentious.md",
+    "corny.md",
+    "IPA.md",
+    "afterwards.md",
+    "volatile.md",
+    "acronym.md",
+    "cheesy.md",
+    "twerking.md",
+    "stripper dance.md",
+    "hotpot.md",
+    "a piece of shit.md",
+    "flap.md",
+    "conceited.md",
+    "start off as Chinese accent.md",
+    "gluten.md",
+    "dairy.md",
+    "you keep cutting off.md",
+    "your voice is on and off.md",
     "semi aquatic.md",
     "porridge.md",
     "slander.md",
     "I was linking \"\".md",
     "rage-bating.md",
     "not … all that much.md",
-    "関係代名詞 that が人に掛かる例.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
-    "smut.md",
-    "lotus root.md",
-    "fuck with someone.md",
-    "gimbal.md",
-    "plan on doing something.md",
-    "PAX.md",
-    "tones.md",
-    "itinerary.md",
-    "acronym.md",
-    "rn.md",
-    "red light green light.md",
-    "TRPG.md",
-    "red light.md",
-    "IDC.md",
-    "phonics.md",
-    "Untitled 8.md",
-    "genitive form.md",
-    "The nail that sticks out gets hammered down..md",
-    "direct translation.md",
     "Untitled 1",
     "Untitled",
     "_test.base",

@@ -6,4 +6,4 @@ cheesy /kliːˈʃeɪd/
 
 syn: [[tacky]]
 
-also see: used by [[bumpkin]] people
+also see: used by [[bumpkin]] people, [[corny]]
