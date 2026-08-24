@@ -10,3 +10,4 @@
 [[conjugation]]
 [[infinitive]]
 [[participle]]
+[[proper noun]]
