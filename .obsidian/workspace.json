@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "7a991f7dd7bc1536",
+        "id": "0d3b97de4e312132",
         "type": "tabs",
         "children": [
           {
-            "id": "5e070c66c60c2cd7",
+            "id": "2763fa6d16ef855c",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -184,8 +184,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "5e070c66c60c2cd7",
+  "active": "2763fa6d16ef855c",
   "lastOpenFiles": [
+    "roger.md",
     "dude.md",
     "lust.md",
     "Bastion Hosts.md",
@@ -211,7 +212,6 @@
     "hotpot.md",
     "a piece of shit.md",
     "flap.md",
-    "conceited.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
