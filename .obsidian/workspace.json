@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "0d3b97de4e312132",
+        "id": "fcd880ad8ee649a4",
         "type": "tabs",
         "children": [
           {
-            "id": "2763fa6d16ef855c",
+            "id": "9c36111f305e4bdb",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "go to the effort.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "go to the effort"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "dude",
+                "query": "push past that",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -92,6 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "go to the effort.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "go to the effort.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,8 +190,18 @@
       "bases:Create new base": false
     }
   },
-  "active": "2763fa6d16ef855c",
+  "active": "9c36111f305e4bdb",
   "lastOpenFiles": [
+    "go to the effort.md",
+    "on the fly.md",
+    "telephony.md",
+    "scrape the surface.md",
+    "redolent.md",
+    "push past that.md",
+    "bust out.md",
+    "fiddle with.md",
+    "the home stretch.md",
+    "dob.md",
     "roger.md",
     "dude.md",
     "lust.md",
@@ -202,16 +218,6 @@
     "irs.md",
     "shank.md",
     "pretentious.md",
-    "corny.md",
-    "IPA.md",
-    "afterwards.md",
-    "volatile.md",
-    "cheesy.md",
-    "twerking.md",
-    "stripper dance.md",
-    "hotpot.md",
-    "a piece of shit.md",
-    "flap.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
