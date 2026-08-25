@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "5932cbece3354daf",
+        "id": "b6ab82330a7b6da8",
         "type": "tabs",
         "children": [
           {
-            "id": "7998e8fc12b06811",
+            "id": "848283d99d8e1c6c",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -185,8 +184,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "7998e8fc12b06811",
+  "active": "848283d99d8e1c6c",
   "lastOpenFiles": [
+    "froggy.md",
+    "fiddly.md",
+    "noob.md",
     "ready to get down to business.md",
     "go like \"\".md",
     "pretty.md",
@@ -210,9 +212,6 @@
     "body scrub.md",
     "pore.md",
     "the home stretch.md",
-    "the same (thing) goes for X.md",
-    "Untitled 9.md",
-    "on the fly.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
