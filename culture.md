@@ -34,6 +34,8 @@
 - [[obsession]]
 - [[The Wandering Earth]]
 - [[breaking bad]]
+- [[The Hugo Award]]
+
 #### politics
 - [[cart titan]]
 

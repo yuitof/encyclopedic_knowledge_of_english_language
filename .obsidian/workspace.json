@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "fcd880ad8ee649a4",
+        "id": "5932cbece3354daf",
         "type": "tabs",
         "children": [
           {
-            "id": "9c36111f305e4bdb",
+            "id": "7998e8fc12b06811",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "go to the effort.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "go to the effort"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "push past that",
+                "query": "like",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -96,7 +93,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "go to the effort.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -165,7 +161,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "go to the effort.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -190,34 +185,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "9c36111f305e4bdb",
+  "active": "7998e8fc12b06811",
   "lastOpenFiles": [
+    "ready to get down to business.md",
+    "go like \"\".md",
+    "pretty.md",
+    "you got me.md",
+    "scurry away.md",
+    "I'd be down.md",
+    "citation.md",
+    "metropolis.md",
+    "way too adj.md",
+    "milo.md",
+    "smut.md",
+    "unchaste.md",
+    "lewd.md",
+    "thot.md",
+    "slut.md",
+    "The Hugo Award.md",
+    "ward.md",
+    "brim with quirks.md",
+    "culture.md",
     "go to the effort.md",
-    "on the fly.md",
-    "telephony.md",
-    "scrape the surface.md",
-    "redolent.md",
-    "push past that.md",
-    "bust out.md",
-    "fiddle with.md",
+    "body scrub.md",
+    "pore.md",
     "the home stretch.md",
-    "dob.md",
-    "roger.md",
-    "dude.md",
-    "lust.md",
-    "Bastion Hosts.md",
-    "cognizant.md",
-    "a whole heap to do with.md",
-    "rage-bating.md",
-    "tear in half.md",
-    "reserved.md",
-    "acronym.md",
-    "grammar.md",
-    "turn me on.md",
-    "proper noun.md",
-    "irs.md",
-    "shank.md",
-    "pretentious.md",
+    "the same (thing) goes for X.md",
+    "Untitled 9.md",
+    "on the fly.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
