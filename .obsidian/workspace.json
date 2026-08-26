@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "b6ab82330a7b6da8",
+        "id": "dc2270deba365d16",
         "type": "tabs",
         "children": [
           {
-            "id": "848283d99d8e1c6c",
+            "id": "5b024f607ccfa42d",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "like",
+                "query": "smut",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -184,8 +185,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "848283d99d8e1c6c",
+  "active": "5b024f607ccfa42d",
   "lastOpenFiles": [
+    "smut.md",
     "froggy.md",
     "fiddly.md",
     "noob.md",
@@ -199,7 +201,6 @@
     "metropolis.md",
     "way too adj.md",
     "milo.md",
-    "smut.md",
     "unchaste.md",
     "lewd.md",
     "thot.md",
