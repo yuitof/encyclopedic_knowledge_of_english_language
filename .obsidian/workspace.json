@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "bcb01e3c1505220f",
+        "id": "88c80aa3aaee6bff",
         "type": "tabs",
         "children": [
           {
-            "id": "e87969022a42114a",
+            "id": "1b4f668c121ae520",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "compared to.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "compared to"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "talk to whoever",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -96,7 +92,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "compared to.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -165,7 +160,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "compared to.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -190,10 +184,26 @@
       "bases:Create new base": false
     }
   },
-  "active": "e87969022a42114a",
+  "active": "1b4f668c121ae520",
   "lastOpenFiles": [
-    "compared to.md",
+    "性別わからない they.md",
+    "接続詞 so.md",
     "not that.md",
+    "definitely.md",
+    "call me whatever you want.md",
+    "I guess.md",
+    "Untitled 13.md",
+    "culture.md",
+    "jealous of someone·something.md",
+    "walk (transitive).md",
+    "text (verb).md",
+    "Untitled 12.md",
+    "Magic 8 ball.md",
+    "rabbit hole.md",
+    "rat spot.md",
+    "compared to.md",
+    "proprietary.md",
+    "Untitled 11.md",
     "girlies.md",
     "what's up.md",
     "what's up with X with Y.md",
@@ -202,22 +212,6 @@
     "fiddle with.md",
     "a lil.md",
     "all.md",
-    "gn.md",
-    "fr.md",
-    "starch.md",
-    "mods.md",
-    "Untitled 10.md",
-    "smut.md",
-    "froggy.md",
-    "fiddly.md",
-    "noob.md",
-    "ready to get down to business.md",
-    "go like \"\".md",
-    "pretty.md",
-    "you got me.md",
-    "scurry away.md",
-    "I'd be down.md",
-    "citation.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",

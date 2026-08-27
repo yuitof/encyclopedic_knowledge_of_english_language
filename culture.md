@@ -18,6 +18,7 @@
 - [[lethal company]]
 - [[palworld]]
 - [[Animal Crossing]]
+- [[Magic 8 ball]]
 
 #### animes, cartoon
 - [[STEINS;GATE]] アニメ
