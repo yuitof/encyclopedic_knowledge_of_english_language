@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "627feed7a58ffedf",
+        "id": "bcb01e3c1505220f",
         "type": "tabs",
         "children": [
           {
-            "id": "64d11a2659c30b31",
+            "id": "e87969022a42114a",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "compared to.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "compared to"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "starch",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -92,6 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "compared to.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "compared to.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,8 +190,20 @@
       "bases:Create new base": false
     }
   },
-  "active": "64d11a2659c30b31",
+  "active": "e87969022a42114a",
   "lastOpenFiles": [
+    "compared to.md",
+    "not that.md",
+    "girlies.md",
+    "what's up.md",
+    "what's up with X with Y.md",
+    "What's up with it?.md",
+    "ification.md",
+    "fiddle with.md",
+    "a lil.md",
+    "all.md",
+    "gn.md",
+    "fr.md",
     "starch.md",
     "mods.md",
     "Untitled 10.md",
@@ -200,18 +218,6 @@
     "scurry away.md",
     "I'd be down.md",
     "citation.md",
-    "metropolis.md",
-    "way too adj.md",
-    "milo.md",
-    "unchaste.md",
-    "lewd.md",
-    "thot.md",
-    "slut.md",
-    "The Hugo Award.md",
-    "ward.md",
-    "brim with quirks.md",
-    "culture.md",
-    "go to the effort.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
