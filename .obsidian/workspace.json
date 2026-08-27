@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "dc2270deba365d16",
+        "id": "627feed7a58ffedf",
         "type": "tabs",
         "children": [
           {
-            "id": "5b024f607ccfa42d",
+            "id": "64d11a2659c30b31",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "smut",
+                "query": "starch",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -185,8 +184,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "5b024f607ccfa42d",
+  "active": "64d11a2659c30b31",
   "lastOpenFiles": [
+    "starch.md",
+    "mods.md",
+    "Untitled 10.md",
     "smut.md",
     "froggy.md",
     "fiddly.md",
@@ -210,9 +212,6 @@
     "brim with quirks.md",
     "culture.md",
     "go to the effort.md",
-    "body scrub.md",
-    "pore.md",
-    "the home stretch.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
