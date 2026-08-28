@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "88c80aa3aaee6bff",
+        "id": "6039922a36a35bdf",
         "type": "tabs",
         "children": [
           {
-            "id": "1b4f668c121ae520",
+            "id": "28f2e2dfb781551b",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Hubei.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Hubei"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "talk to whoever",
+                "query": "武漢",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +76,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -92,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Hubei.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Hubei.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,8 +191,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "1b4f668c121ae520",
+  "active": "28f2e2dfb781551b",
   "lastOpenFiles": [
+    "roger.md",
+    "birsday.md",
+    "hangzhou.md",
+    "geo.md",
+    "climb a tower.md",
+    "For work or holiday.md",
     "性別わからない they.md",
     "接続詞 so.md",
     "not that.md",
@@ -206,12 +219,6 @@
     "Untitled 11.md",
     "girlies.md",
     "what's up.md",
-    "what's up with X with Y.md",
-    "What's up with it?.md",
-    "ification.md",
-    "fiddle with.md",
-    "a lil.md",
-    "all.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",

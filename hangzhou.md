@@ -1,0 +1,2 @@
+hangzhou
+: 上海から電車で40分ぐらいのところにある都市。湖が有名なtourist spot
