@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "8630a7dd75382387",
+        "id": "aad4823d6b9ff5d7",
         "type": "tabs",
         "children": [
           {
-            "id": "12f4d4f2aa51929b",
+            "id": "ecddc2e9353ea4b2",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "puddle.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "puddle"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "gondon",
+                "query": "puddle",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +76,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -92,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "puddle.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "puddle.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,8 +191,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "12f4d4f2aa51929b",
+  "active": "ecddc2e9353ea4b2",
   "lastOpenFiles": [
+    "endorsement.md",
+    "lingua franca.md",
     "throughput.md",
     "heat treatment.md",
     "rapid-fire.md",
@@ -210,8 +219,6 @@
     "性別わからない they.md",
     "接続詞 so.md",
     "not that.md",
-    "definitely.md",
-    "call me whatever you want.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
