@@ -1,2 +1,4 @@
 pool
 : ビリヤード
+
+syn : [[snooker]]

@@ -3,4 +3,4 @@ running writing
 
 opp: [[regular writing]]
 
-also see: [[run-on sentences]]
+also see: [[run-on sentences]], [[cursive]]
