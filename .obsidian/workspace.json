@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "aad4823d6b9ff5d7",
+        "id": "56f9148f18b3ac6e",
         "type": "tabs",
         "children": [
           {
-            "id": "ecddc2e9353ea4b2",
+            "id": "1c3c588ca8bed6e4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "puddle.md",
+                "file": "lunatic.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "puddle"
+              "title": "lunatic"
             }
           }
         ]
@@ -55,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "puddle",
+                "query": "yet",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,8 +76,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -97,7 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "puddle.md",
+                "file": "lunatic.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "puddle.md",
+                "file": "lunatic.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -191,8 +190,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "ecddc2e9353ea4b2",
+  "active": "1c3c588ca8bed6e4",
   "lastOpenFiles": [
+    "lunatic.md",
+    "yet.md",
+    "puddle.md",
     "endorsement.md",
     "lingua franca.md",
     "throughput.md",
@@ -216,9 +218,6 @@
     "geo.md",
     "climb a tower.md",
     "For work or holiday.md",
-    "性別わからない they.md",
-    "接続詞 so.md",
-    "not that.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
