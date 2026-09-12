@@ -1,0 +1,2 @@
+indict (verb)
+: noun 👉 indictment

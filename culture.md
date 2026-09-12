@@ -4,6 +4,7 @@
 - [[Gumbus the Cat]] 有名な猫
 - [[JJ CHIKADA]] 日本のDJ
 - [[Jon Stewart]] stand-up comedian
+- [[xQc]]
 
 #### games
 - [[Chutes and Ladders]] ボードゲーム

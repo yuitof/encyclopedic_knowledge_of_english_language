@@ -1,0 +1,2 @@
+underwear
+: uncountable
