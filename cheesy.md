@@ -7,3 +7,5 @@ cheesy /kliːˈʃeɪd/
 syn: [[tacky]]
 
 also see: used by [[bumpkin]] people, [[corny]]
+
+: 普通に「チーズの」みたいな意味でも使える

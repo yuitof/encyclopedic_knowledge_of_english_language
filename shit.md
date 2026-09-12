@@ -15,6 +15,7 @@ shit が thing のような意味で使われる例
 - holy shit
 - give me the strongest shit you got
 - real shit <- ???
+- all the shit I did wrong
 
 shit が person のような意味で使われる例
 - [[fine shyt]]

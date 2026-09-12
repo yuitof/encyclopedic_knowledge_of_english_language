@@ -1,0 +1,2 @@
+peacock
+: wikipediaによると本来はオスだけをpeacockと呼ぶらしいけど、日常会話ではオスメスを区別せずにpeacockと使われることもあるらしい

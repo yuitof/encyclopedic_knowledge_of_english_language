@@ -9,6 +9,8 @@
 - [[tiananmen square]] 天安門広場
 - [[Hubei]]
 - [[hangzhou]]
+- [[Qingdao]]
+- [[Xintiandi]]
 ### Korea
 - [[Jeju Island]]
 
