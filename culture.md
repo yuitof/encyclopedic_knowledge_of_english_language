@@ -20,6 +20,8 @@
 - [[palworld]]
 - [[Animal Crossing]]
 - [[Magic 8 ball]]
+- [[Assassin's Creed]]
+- [[Minesweeper]]
 
 #### animes, cartoon
 - [[STEINS;GATE]] アニメ
