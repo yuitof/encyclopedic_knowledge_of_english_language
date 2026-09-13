@@ -1,0 +1,2 @@
+cuss
+syn: banter
