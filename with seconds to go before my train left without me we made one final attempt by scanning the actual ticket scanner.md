@@ -1,0 +1,1 @@
+with seconds to go before my train left without me we made one final attempt by scanning the actual ticket scanner

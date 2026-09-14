@@ -4,371 +4,39 @@
     "type": "split",
     "children": [
       {
-        "id": "f57677b9da758036",
+        "id": "fef81bcbe3f71776",
         "type": "tabs",
         "children": [
           {
-            "id": "290b93dab4831d5f",
+            "id": "c739f1dce4b58dc5",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "sea rabbit.md",
+                "file": "proprietary.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "sea rabbit"
+              "title": "proprietary"
             }
           },
           {
-            "id": "9143dfc20efe3f36",
+            "id": "3760c7e4999ab3d0",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "crack at the stem 👈 ???.md",
+                "file": "concession.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "crack at the stem 👈 ???"
-            }
-          },
-          {
-            "id": "6a56604683727958",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "vacated.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "vacated"
-            }
-          },
-          {
-            "id": "094f59f2eb992d28",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "commensurate with.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "commensurate with"
-            }
-          },
-          {
-            "id": "0d300a99a2ac6bb3",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "wax.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "wax"
-            }
-          },
-          {
-            "id": "6679149b3b091f20",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "greasy.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "greasy"
-            }
-          },
-          {
-            "id": "7d88c7caef5f30a2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "skirmish.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "skirmish"
-            }
-          },
-          {
-            "id": "e93115246dc9b9b6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "rite.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "rite"
-            }
-          },
-          {
-            "id": "860b17bf0d9dac6e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "tenure.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "tenure"
-            }
-          },
-          {
-            "id": "417a2ee518dd6c5f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "kind of.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "kind of"
-            }
-          },
-          {
-            "id": "e1dda47e2839fa39",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "mog.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "mog"
-            }
-          },
-          {
-            "id": "06e557254a5a8072",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "girl.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "girl"
-            }
-          },
-          {
-            "id": "032328fe54500f97",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "動詞 + y.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "動詞 + y"
-            }
-          },
-          {
-            "id": "ac950cc07e53b60c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "動詞 + y.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "動詞 + y"
-            }
-          },
-          {
-            "id": "dd7b43a9ba844fee",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "X agree that S V.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "X agree that S V"
-            }
-          },
-          {
-            "id": "2c1f066217b345af",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "good.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "good"
-            }
-          },
-          {
-            "id": "406734fe85a0e3e4",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "cheesy.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "cheesy"
-            }
-          },
-          {
-            "id": "0d83d8bb076dfcfc",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "protagonist.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "protagonist"
-            }
-          },
-          {
-            "id": "4efdc5697bbd4318",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "aura.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "aura"
-            }
-          },
-          {
-            "id": "81d6f0977e4f554a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "go like \"\".md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "go like \"\""
-            }
-          },
-          {
-            "id": "d2c0e5a8dffedf91",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "go V.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "go V"
-            }
-          },
-          {
-            "id": "a9bc9b0d0b74d970",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "imma.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "imma"
-            }
-          },
-          {
-            "id": "bce991bad9db5925",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
-            }
-          },
-          {
-            "id": "94592bde9c893c13",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "detour.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "detour"
-            }
-          },
-          {
-            "id": "6d62771a4f4a113d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "updog.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "updog"
-            }
-          },
-          {
-            "id": "1b3ede9f2113203a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "a wee.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "a wee"
+              "title": "concession"
             }
           }
         ],
-        "currentTab": 25
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -402,7 +70,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "a ",
+                "query": "proprietary",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -443,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "a wee.md",
+                "file": "concession.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -512,7 +180,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "a wee.md",
+                "file": "concession.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -537,34 +205,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "1b3ede9f2113203a",
+  "active": "3760c7e4999ab3d0",
   "lastOpenFiles": [
-    "updog.md",
-    "a wee.md",
-    "detour.md",
-    "imma.md",
-    "finna.md",
-    "lemme.md",
-    "Untitled 19.md",
-    "go V.md",
-    "go like \"\".md",
-    "make it out.md",
-    "aura.md",
-    "protagonist.md",
-    "Untitled 18.md",
-    "cheesy.md",
-    "really.md",
-    "good.md",
-    "X agree that S V.md",
-    "動詞 + y.md",
-    "touchy.md",
-    "pushy.md",
-    "e-girl.md",
-    "Untitled 17.md",
-    "girl.md",
-    "get somebody.md",
-    "AAVE.md",
-    "cuss.md",
+    "proprietary.md",
+    "concession.md",
+    "massage.md",
+    "a pick-up line.md",
+    "compensate (X) for Y.md",
+    "Jon Stewart.md",
+    "damn.md",
+    "spring onion.md",
+    "最上級 + yet.md",
+    "get a girl.md",
+    "完了形·過去時制 in 期間.md",
+    "in itself.md",
+    "urinal.md",
+    "dating app.md",
+    "a heads-up.md",
+    "I think.md",
+    "bad.md",
+    "He punched a hole in the wall.md",
+    "food truck.md",
+    "piece.md",
+    "cringe.md",
+    "IPA.md",
+    "yet.md",
+    "with seconds to go before my train left without me we made one final attempt by scanning the actual ticket scanner.md",
+    "wand.md",
+    "Untitled 22.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
