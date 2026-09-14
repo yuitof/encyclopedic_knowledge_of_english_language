@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "1239e7e3a8747da4",
+        "id": "735e9de0d4864551",
         "type": "tabs",
         "children": [
           {
-            "id": "de576315ebde9db3",
+            "id": "18de307fe45440fc",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "what's the point",
+                "query": "assa",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -184,8 +184,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "de576315ebde9db3",
+  "active": "18de307fe45440fc",
   "lastOpenFiles": [
+    "ale.md",
+    "statement.md",
+    "Assassin's Creed.md",
     "mace.md",
     "deceptively simple.md",
     "miss out.md",
@@ -209,9 +212,6 @@
     "work for X.md",
     "proprietary.md",
     "make it.md",
-    "what's wrong with.md",
-    "e chest.md",
-    "who knows.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
