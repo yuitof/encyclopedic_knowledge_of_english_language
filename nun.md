@@ -1,0 +1,4 @@
+nun
+:
+
+also see: [[monk]]

@@ -1,0 +1,2 @@
+awkward
+: 主語はawkwardさせてるもので、awkwardに感じてる側は主語になれない

@@ -1,0 +1,2 @@
+(sea) urchin
+: ウニ

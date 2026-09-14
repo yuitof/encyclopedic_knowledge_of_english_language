@@ -1,0 +1,2 @@
+shortsighted
+: 近視

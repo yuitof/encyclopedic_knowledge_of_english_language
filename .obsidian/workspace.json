@@ -4,67 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "fef81bcbe3f71776",
+        "id": "ce2d7f38491c3139",
         "type": "tabs",
         "children": [
           {
-            "id": "c739f1dce4b58dc5",
+            "id": "17161d7085ab4eec",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "proprietary.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "proprietary"
-            }
-          },
-          {
-            "id": "3760c7e4999ab3d0",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "make it.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "make it"
-            }
-          },
-          {
-            "id": "01abec9095b48524",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "what's wrong with.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "what's wrong with"
-            }
-          },
-          {
-            "id": "0f865fa59225c81b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "e chest.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "e chest"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "wrong",
+                "query": "what's the point",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -139,7 +92,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "e chest.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -208,7 +160,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "e chest.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -233,34 +184,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "0f865fa59225c81b",
+  "active": "17161d7085ab4eec",
   "lastOpenFiles": [
+    "someone is relationship with someone.md",
+    "what's the point?.md",
+    "literally.md",
+    "as fuck.md",
+    "awkward.md",
+    "want them out of your garage.md",
+    "play ball.md",
+    "(sea) urchin.md",
+    "plumbing.md",
+    "plum.md",
+    "Untitled 24.md",
+    "date.md",
+    "taro.md",
+    "mouth ulcer.md",
+    "sesame.md",
+    "work for X.md",
+    "proprietary.md",
+    "make it.md",
     "what's wrong with.md",
     "e chest.md",
-    "what's wrong with the face?.md",
-    "total.md",
-    "tow truck.md",
-    "make it.md",
-    "make it out.md",
-    "have.md",
-    "Untitled 23.md",
-    "concession.md",
-    "proprietary.md",
-    "massage.md",
-    "a pick-up line.md",
-    "compensate (X) for Y.md",
-    "Jon Stewart.md",
-    "damn.md",
-    "spring onion.md",
-    "最上級 + yet.md",
-    "get a girl.md",
-    "完了形·過去時制 in 期間.md",
-    "in itself.md",
-    "urinal.md",
-    "dating app.md",
-    "a heads-up.md",
-    "I think.md",
-    "bad.md",
+    "who knows.md",
+    "nun.md",
+    "shortsighted.md",
+    "paroxetine.md",
+    "medicine.md",
+    "monk.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",

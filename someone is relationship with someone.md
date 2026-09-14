@@ -1,0 +1,2 @@
+someone is relationship with someone
+: chatgptによると不自然。アメリカの友達がtextでこれ言ってきたから、会話とかだとあり得たりするんだろうか？主語と補語が一致しないパターン age とかそういう感じのパターンになるのかなと思ってメモ
