@@ -181,12 +181,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "blasphemy.md",
+                "file": "have a trick up my sleeve.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "blasphemy"
+              "title": "have a trick up my sleeve"
             }
           }
         ],
@@ -224,7 +224,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "blasphomy",
+                "query": "sleeve",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -245,7 +245,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -265,7 +266,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "blasphemy.md",
+                "file": "have a trick up my sleeve.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -334,7 +335,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "blasphemy.md",
+                "file": "have a trick up my sleeve.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -361,8 +362,8 @@
   },
   "active": "75e3868414dd3503",
   "lastOpenFiles": [
-    "for the time being.md",
     "blasphemy.md",
+    "for the time being.md",
     "the other day.md",
     "filler.md",
     "a low profile.md",

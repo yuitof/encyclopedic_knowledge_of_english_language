@@ -2,4 +2,4 @@
 
 - So presumably, I have a trick up my sleeve to get out of this, right?
 
-roll up your sleeves という言い方もある
+roll up your sleeves という言い方もある。英語は袖が好きなんだろうか
