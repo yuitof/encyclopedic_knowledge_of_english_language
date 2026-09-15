@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "d519d93aae418e3a",
+        "id": "1130835924762b88",
         "type": "tabs",
         "children": [
           {
-            "id": "4e090806b60f0bcc",
+            "id": "4cb9ef32a7178c06",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "the.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "the"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "so and so forth",
+                "query": "pretty",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -92,6 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "the.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "the.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,35 +190,35 @@
       "bases:Create new base": false
     }
   },
-  "active": "4e090806b60f0bcc",
+  "active": "4cb9ef32a7178c06",
   "lastOpenFiles": [
-    "For work or holiday.md",
-    "this is someone.md",
-    "every single X.md",
-    "help (X) <-> out.md",
-    "take care (of yourself).md",
-    "make sense.md",
-    "if it isn't someone.md",
-    "so on and so forth.md",
-    "makes sense.md",
+    "the.md",
+    "in good shape.md",
+    "make sure.md",
+    "twist.md",
+    "dodge X.md",
+    "medicine.md",
+    "safe to say.md",
+    "how do you feel (about X)?.md",
+    "pretty.md",
+    "be in.md",
+    "on.md",
+    "dude.md",
+    "mat.md",
+    "chad.md",
+    "chud.md",
+    "bun.md",
+    "arthritis.md",
+    "asthma attack.md",
+    "asthma.md",
+    "real quick.md",
+    "good.md",
+    "uni.md",
+    "rage quit.md",
+    "人称代名詞+数.md",
+    "sign.md",
+    "make it.md",
     "Untitled",
-    "last X detail.md",
-    "aside.md",
-    "get together.md",
-    "wrap.md",
-    "別れの挨拶.md",
-    "say hi.md",
-    "say someone's goodbye(s).md",
-    "Lean.md",
-    "keep a low profile.md",
-    "don't wait up for me.md",
-    "tell you what.md",
-    "after.md",
-    "make a trip to X.md",
-    "live a X life.md",
-    "I was just about to set out when I remembered something important..md",
-    "dire situation.md",
-    "refer X to Y.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",

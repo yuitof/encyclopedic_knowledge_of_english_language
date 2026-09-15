@@ -1,1 +1,1 @@
-asthma attack
+[[asthma]] attack

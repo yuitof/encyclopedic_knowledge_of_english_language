@@ -18,3 +18,5 @@
 [[hemorrhoids]]
 [[amnesia]]
 [[paroxetine]]
+[[asthma]]
+[[arthritis]]
