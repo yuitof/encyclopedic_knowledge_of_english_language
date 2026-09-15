@@ -4,81 +4,193 @@
     "type": "split",
     "children": [
       {
-        "id": "386bca2de661615c",
+        "id": "68a4453966e5a622",
         "type": "tabs",
         "children": [
           {
-            "id": "65a0bfc030558a06",
+            "id": "8529ae749034dd4a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "as much as.md",
+                "file": "after.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "as much as"
+              "title": "after"
             }
           },
           {
-            "id": "38b4220c739f8a1d",
+            "id": "36744eb8362acd53",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "as for X.md",
+                "file": "make a trip to X.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "as for X"
+              "title": "make a trip to X"
             }
           },
           {
-            "id": "5dbb77192aa63066",
+            "id": "e24cae039857d4c7",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "sentence.md",
+                "file": "live a X life.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "sentence"
+              "title": "live a X life"
             }
           },
           {
-            "id": "35f3ca56485352e5",
+            "id": "67844d18d645de85",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "prose.md",
+                "file": "I was just about to set out when I remembered something important..md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "prose"
+              "title": "I was just about to set out when I remembered something important."
             }
           },
           {
-            "id": "f777c0eafb3e640f",
+            "id": "9715f660c2b25795",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "might as well.md",
+                "file": "help X out.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "might as well"
+              "title": "help X out"
+            }
+          },
+          {
+            "id": "793d251de096ce17",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "dire situation.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "dire situation"
+            }
+          },
+          {
+            "id": "2466c1179161c421",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "refer X to Y.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "refer X to Y"
+            }
+          },
+          {
+            "id": "cc420ab66eae1ad3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "have someone's trust.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "have someone's trust"
+            }
+          },
+          {
+            "id": "b463bfcc43d5389d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "much less.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "much less"
+            }
+          },
+          {
+            "id": "05825531e0d2410d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "It would seem that my words have fallen on deaf ears.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "It would seem that my words have fallen on deaf ears"
+            }
+          },
+          {
+            "id": "e8253ea6a6283718",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "filler.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "filler"
+            }
+          },
+          {
+            "id": "a1e02cdb1e9010c6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "for the time being.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "for the time being"
+            }
+          },
+          {
+            "id": "75e3868414dd3503",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "blasphemy.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "blasphemy"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 12
       }
     ],
     "direction": "vertical"
@@ -112,7 +224,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "as much as",
+                "query": "blasphomy",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -153,7 +265,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "prose.md",
+                "file": "blasphemy.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -222,7 +334,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "prose.md",
+                "file": "blasphemy.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -247,34 +359,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "35f3ca56485352e5",
+  "active": "75e3868414dd3503",
   "lastOpenFiles": [
+    "for the time being.md",
+    "blasphemy.md",
+    "the other day.md",
+    "filler.md",
+    "a low profile.md",
+    "It would seem that my words have fallen on deaf ears.md",
+    "much less.md",
+    "after.md",
+    "feel off.md",
+    "quite.md",
+    "have someone's trust.md",
+    "have my back.md",
+    "refer X to Y.md",
+    "dire situation.md",
+    "help X out.md",
+    "I was just about to set out when I remembered something important..md",
+    "live a X life.md",
+    "make a trip to X.md",
+    "have a trick up my sleeve.md",
+    "miss out.md",
+    "vulnerable.md",
+    "volunerab;e.md",
+    "as much as.md",
+    "as for X.md",
     "sentence.md",
     "prose.md",
-    "as for X.md",
-    "as much as.md",
-    "as much as I like to.md",
-    "as much.md",
-    "speaking of which,.md",
-    "might as well.md",
-    "being like \"\" 分詞構文.md",
-    "participle.md",
-    "being 省略して名詞だけの分詞構文.md",
-    "grammar.md",
-    "genitive form.md",
-    "Untitled 25.md",
-    "if it weren't for X, S would V.md",
-    "make it out.md",
-    "even so.md",
-    "mercenary.md",
-    "(with) that (being) said.md",
-    "happen to do.md",
-    "主語を省略する文.md",
-    "now that.md",
-    "every once in a while.md",
-    "after.md",
-    "all about.md",
-    "go like \"\".md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
