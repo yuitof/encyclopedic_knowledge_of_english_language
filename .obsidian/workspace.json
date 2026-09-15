@@ -13,15 +13,72 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "speaking of which,.md",
+                "file": "as much as.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "speaking of which,"
+              "title": "as much as"
+            }
+          },
+          {
+            "id": "38b4220c739f8a1d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "as for X.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "as for X"
+            }
+          },
+          {
+            "id": "5dbb77192aa63066",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "sentence.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "sentence"
+            }
+          },
+          {
+            "id": "35f3ca56485352e5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "prose.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "prose"
+            }
+          },
+          {
+            "id": "f777c0eafb3e640f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "might as well.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "might as well"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -55,7 +112,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "speaking of whic",
+                "query": "as much as",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,8 +133,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -97,7 +153,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "speaking of which,.md",
+                "file": "prose.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +222,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "speaking of which,.md",
+                "file": "prose.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -191,8 +247,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "65a0bfc030558a06",
+  "active": "35f3ca56485352e5",
   "lastOpenFiles": [
+    "sentence.md",
+    "prose.md",
+    "as for X.md",
+    "as much as.md",
+    "as much as I like to.md",
+    "as much.md",
+    "speaking of which,.md",
+    "might as well.md",
     "being like \"\" 分詞構文.md",
     "participle.md",
     "being 省略して名詞だけの分詞構文.md",
@@ -203,7 +267,6 @@
     "make it out.md",
     "even so.md",
     "mercenary.md",
-    "speaking of which,.md",
     "(with) that (being) said.md",
     "happen to do.md",
     "主語を省略する文.md",
@@ -212,13 +275,6 @@
     "after.md",
     "all about.md",
     "go like \"\".md",
-    "jerk off.md",
-    "figurine.md",
-    "food truck.md",
-    "cheesy.md",
-    "I think.md",
-    "He punched a hole in the wall.md",
-    "rage quit.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
