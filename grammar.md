@@ -11,3 +11,4 @@
 [[infinitive]]
 [[participle]]
 [[proper noun]]
+[[genitive form]]
