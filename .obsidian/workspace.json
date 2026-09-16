@@ -20,8 +20,23 @@
               "icon": "lucide-file",
               "title": "the"
             }
+          },
+          {
+            "id": "5fdb16c690ad0f95",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "数字の読み方.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "数字の読み方"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -96,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "the.md",
+                "file": "数字の読み方.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -165,7 +180,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "the.md",
+                "file": "数字の読み方.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -190,9 +205,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "4cb9ef32a7178c06",
+  "active": "5fdb16c690ad0f95",
   "lastOpenFiles": [
     "the.md",
+    "数字の読み方.md",
     "in good shape.md",
     "make sure.md",
     "twist.md",
@@ -217,7 +233,6 @@
     "rage quit.md",
     "人称代名詞+数.md",
     "sign.md",
-    "make it.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
