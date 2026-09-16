@@ -1,0 +1,3 @@
+X to attend to
+
+- At that time, The Seven were all summoned to the nation of Khaenri'ah, except for me. I had a more important task to attend to…

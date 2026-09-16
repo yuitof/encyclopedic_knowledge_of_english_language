@@ -1,4 +1,4 @@
 trainee
 : one that is being trained especially for a job
 
-also see: mentor, mentee
+also see: mentor, mentee, escapee

@@ -5,3 +5,6 @@ after
 - No, that can't be right. Most of the mad scholars had made contact with the "divine consciousness" in the forest… That's what the Akademiya is after.
 - Haypasia!? Why would he want her? What is he after?
 - They might be after Haypasia. Let's get back to Pardis Dhyai!
+
+go after とか
+- But it only goes after mechanical components. This doesn't make any sense.
