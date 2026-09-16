@@ -6,3 +6,4 @@ I'd be down
 - A: I never been with a dude before, i am a little nervous.  
   B: You want a [[hummer]]?  
   A: Yeah, I'd be down with that.
+- I'm so down. Let's do it
