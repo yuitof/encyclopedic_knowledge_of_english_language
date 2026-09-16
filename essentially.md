@@ -1,0 +1,2 @@
+essentially
+- \[I]n mastering the expression speakers obviously abstract away from many precise details that vary from one occasion to another (the date and city, the specific identity of the pole- climber, the color of her hair, and so on). Still, all the features mentioned in the preceding paragraph \[Slides 456–457; SH] are [[essentially]] constant from one occasion to the next and consequently survive the cancellation process.

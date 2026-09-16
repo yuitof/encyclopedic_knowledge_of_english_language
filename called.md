@@ -7,4 +7,4 @@ called
 call somebody by something
 - We call each other by our first names here.
 
-also see: [[address]]
+also see: [[named]], [[address]]
