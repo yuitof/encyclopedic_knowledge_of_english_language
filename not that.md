@@ -7,3 +7,5 @@ not that
 https://www.instagram.com/reel/DchAH4_DVN4/
 
 この動画の中で not that I care anything っていうのが2回も出てくる。
+
+it's が省略されてると考えると、この it は現状を指す it でそう考えると、[[it's like]] と似ているような気もする
