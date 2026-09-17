@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "a788147cab963553",
+        "id": "823a21dbcbf14d87",
         "type": "tabs",
         "children": [
           {
-            "id": "158496031df7b1d8",
+            "id": "6a84247efedd4537",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "really",
+                "query": "out of the box",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -184,8 +184,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "158496031df7b1d8",
+  "active": "6a84247efedd4537",
   "lastOpenFiles": [
+    "out of the box.md",
+    "pros and cons.md",
+    "acronym.md",
+    "Liminal.md",
+    "have to vs. need to.md",
+    "not more than.md",
     "omni-.md",
     "how dare you.md",
     "really.md",
@@ -206,12 +212,6 @@
     "bonkers.md",
     "had better.md",
     "stand a chance against X.md",
-    "it's like.md",
-    "hot.md",
-    "own.md",
-    "relate to someone.md",
-    "uncle roger.md",
-    "go V.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
