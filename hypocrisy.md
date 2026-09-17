@@ -1,0 +1,2 @@
+hypocrisy
+: 偽善

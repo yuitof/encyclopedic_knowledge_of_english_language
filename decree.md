@@ -1,0 +1,4 @@
+decree
+: 
+
+- my royal decree!

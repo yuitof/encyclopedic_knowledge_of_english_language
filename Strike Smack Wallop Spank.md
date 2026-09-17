@@ -2,3 +2,5 @@
 - Smack は手で殴る
 - Wallop は普通使わない
 - Spank はお尻にしか使わない（罰orERP）
+
+- [[whack]]

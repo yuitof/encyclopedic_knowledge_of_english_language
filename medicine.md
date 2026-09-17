@@ -20,3 +20,4 @@
 [[paroxetine]]
 [[asthma]]
 [[arthritis]]
+[[antipyretic]]

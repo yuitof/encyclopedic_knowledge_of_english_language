@@ -1,0 +1,1 @@
+remove X from the picture
