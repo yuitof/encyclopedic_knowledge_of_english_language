@@ -11,10 +11,14 @@
             "id": "6a84247efedd4537",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "be by someone's side.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "be by someone's side"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "out of the box",
+                "query": "side",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +76,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -92,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "be by someone's side.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "be by someone's side.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -186,6 +193,7 @@
   },
   "active": "6a84247efedd4537",
   "lastOpenFiles": [
+    "on the side.md",
     "out of the box.md",
     "pros and cons.md",
     "acronym.md",
@@ -211,7 +219,6 @@
     "take it.md",
     "bonkers.md",
     "had better.md",
-    "stand a chance against X.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
