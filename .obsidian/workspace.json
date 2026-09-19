@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "a840002c8102ef2f",
+        "id": "7a1e48fb0a4d98a2",
         "type": "tabs",
         "children": [
           {
-            "id": "38b76ee06fa55abc",
+            "id": "f1e15f6b483093e6",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "decree.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "decree"
+              "title": "New tab"
             }
           }
         ]
@@ -76,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -97,7 +92,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "decree.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +160,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "decree.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -191,8 +184,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "38b76ee06fa55abc",
+  "active": "f1e15f6b483093e6",
   "lastOpenFiles": [
+    "decree.md",
+    "under the hood.md",
     "Snuffy.md",
     "culture.md",
     "peak.md",
@@ -217,8 +212,6 @@
     "on.md",
     "pickaxe.md",
     "toxic.md",
-    "mat.md",
-    "bond.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
