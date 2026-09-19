@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "f8646b83d62c6380",
+        "id": "a840002c8102ef2f",
         "type": "tabs",
         "children": [
           {
-            "id": "957f070d71e6e1ca",
+            "id": "38b76ee06fa55abc",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "decree.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "decree"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "so on and so forth",
+                "query": "decree",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -93,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "decree.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -161,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "decree.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -185,34 +191,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "957f070d71e6e1ca",
+  "active": "38b76ee06fa55abc",
   "lastOpenFiles": [
-    "be by someone's side.md",
-    "so on and so forth.md",
-    "binomen.md",
-    "on the side.md",
-    "out of the box.md",
-    "pros and cons.md",
-    "acronym.md",
-    "Liminal.md",
-    "have to vs. need to.md",
-    "not more than.md",
-    "omni-.md",
-    "how dare you.md",
-    "really.md",
-    "run into someone.md",
-    "not really.md",
-    "stand in for.md",
-    "all along.md",
-    "been.md",
-    "just.md",
-    "cannibal.md",
-    "absolutely.md",
-    "look for.md",
-    "you liar.md",
-    "go crazy.md",
-    "Untitled 36.md",
-    "wrap.md",
+    "Snuffy.md",
+    "culture.md",
+    "peak.md",
+    "Tanuki.md",
+    "Untitled 38.md",
+    "debut.md",
+    "hype.md",
+    "hit the road.md",
+    "lewd.md",
+    "unchaste.md",
+    "virginity.md",
+    "disclaimer.md",
+    "roadkill.md",
+    "shout-out.md",
+    "disciple.md",
+    "pupil.md",
+    "showcase.md",
+    "geo.md",
+    "sign.md",
+    "LUTs.md",
+    "TP.md",
+    "on.md",
+    "pickaxe.md",
+    "toxic.md",
+    "mat.md",
+    "bond.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",

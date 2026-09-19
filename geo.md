@@ -11,6 +11,7 @@
 - [[hangzhou]]
 - [[Qingdao]]
 - [[Xintiandi]]
+- [[the bund]]
 ### Korea
 - [[Jeju Island]]
 

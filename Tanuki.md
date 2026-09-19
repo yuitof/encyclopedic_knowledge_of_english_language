@@ -1,2 +1,2 @@
 Tanuki
-: raccoon と区別して使われる
+: [[raccoon]] と区別して使われる

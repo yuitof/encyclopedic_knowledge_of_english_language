@@ -5,6 +5,7 @@
 - [[JJ CHIKADA]] 日本のDJ
 - [[Jon Stewart]] stand-up comedian
 - [[xQc]]
+- [[Snuffy]]
 
 #### games
 - [[Chutes and Ladders]] ボードゲーム
