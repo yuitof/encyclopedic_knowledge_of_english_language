@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "7a1e48fb0a4d98a2",
+        "id": "5515466e13164d4c",
         "type": "tabs",
         "children": [
           {
-            "id": "f1e15f6b483093e6",
+            "id": "ef2941ad9649c71a",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "do, and doing, do.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "do, and doing, do"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "decree",
+                "query": "make sure",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -92,6 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "do, and doing, do.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "do, and doing, do.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,8 +190,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "f1e15f6b483093e6",
+  "active": "ef2941ad9649c71a",
   "lastOpenFiles": [
+    "\"\" says ↔ X as.md",
+    "do, and doing, do.md",
+    "be allowed to do.md",
+    "speak up.md",
+    "make sure.md",
+    "if that makes sense.md",
+    "you got it.md",
+    "I was wandering.md",
     "decree.md",
     "under the hood.md",
     "Snuffy.md",
@@ -204,14 +218,6 @@
     "shout-out.md",
     "disciple.md",
     "pupil.md",
-    "showcase.md",
-    "geo.md",
-    "sign.md",
-    "LUTs.md",
-    "TP.md",
-    "on.md",
-    "pickaxe.md",
-    "toxic.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
