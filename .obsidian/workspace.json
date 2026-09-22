@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "to 不定詞 結果.md",
+                "file": "as much as.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "to 不定詞 結果"
+              "title": "as much as"
             }
           }
         ]
@@ -55,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "what does that have to do with",
+                "query": "all as much",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -97,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "to 不定詞 結果.md",
+                "file": "as much as.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "to 不定詞 結果.md",
+                "file": "as much as.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -193,8 +193,10 @@
   },
   "active": "274d4d67d7d47757",
   "lastOpenFiles": [
-    "最上級 of 倒置.md",
+    "all as much.md",
+    "though.md",
     "to 不定詞 結果.md",
+    "最上級 of 倒置.md",
     "SV and then SV.md",
     "pedestal.md",
     "a whole heap to do with.md",
@@ -206,7 +208,6 @@
     "人称代名詞+数.md",
     "命令文条件節.md",
     "Untitled 39.md",
-    "all as much.md",
     "all.md",
     "all about.md",
     "clog.md",
@@ -218,7 +219,6 @@
     "underwhelming.md",
     "to be honest.md",
     "(if) Imma be honest.md",
-    "imma.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
