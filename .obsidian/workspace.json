@@ -4,39 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "20bb160e6488f153",
+        "id": "296d9a7cf997ee6e",
         "type": "tabs",
         "children": [
           {
-            "id": "e89b0abf42cf1b26",
+            "id": "523f56876d7a9f87",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "snatched a paper out.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "snatched a paper out"
-            }
-          },
-          {
-            "id": "d521593aaa7e7152",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "cross section.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "cross section"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -95,7 +76,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 959.3765716552734
+    "width": 265.10157775878906
   },
   "right": {
     "id": "648a6ada0608665d",
@@ -111,7 +92,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "cross section.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -180,7 +160,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "cross section.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -205,11 +184,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "d521593aaa7e7152",
+  "active": "523f56876d7a9f87",
   "lastOpenFiles": [
-    "consider X to do.md",
-    "cross section.md",
+    "make up one's mind.md",
+    "V X into doing.md",
     "snatched a paper out.md",
+    "cross section.md",
+    "consider X to do.md",
     "of 構成要素.md",
     "feel.md",
     "so… that.md",
@@ -231,8 +212,6 @@
     "work up.md",
     "being like \"\" 分詞構文.md",
     "go V.md",
-    "take your time.md",
-    "人称代名詞+数.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
