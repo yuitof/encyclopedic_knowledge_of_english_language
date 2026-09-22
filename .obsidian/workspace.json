@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "b5153094438105f0",
+        "id": "97abc7271a0f11b9",
         "type": "tabs",
         "children": [
           {
-            "id": "22e58288e4c8a1da",
+            "id": "3573ac6dad87784e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "knot.md",
+                "file": "clog.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "knot"
+              "title": "clog"
             }
           }
         ]
@@ -55,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "make sure",
+                "query": "clog",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,7 +76,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -96,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "knot.md",
+                "file": "clog.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -165,7 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "knot.md",
+                "file": "clog.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -190,8 +191,22 @@
       "bases:Create new base": false
     }
   },
-  "active": "22e58288e4c8a1da",
+  "active": "3573ac6dad87784e",
   "lastOpenFiles": [
+    "pedestal.md",
+    "claw machine.md",
+    "this whole time.md",
+    "all along.md",
+    "wholesome.md",
+    "big booty latina.md",
+    "underwhelming.md",
+    "to be honest.md",
+    "(if) Imma be honest.md",
+    "imma.md",
+    "tbh.md",
+    "shit.md",
+    "larp.md",
+    "sure.md",
     "knot.md",
     "do, and doing, do.md",
     "\"\" says ↔ X as.md",
@@ -204,20 +219,6 @@
     "decree.md",
     "under the hood.md",
     "Snuffy.md",
-    "culture.md",
-    "peak.md",
-    "Tanuki.md",
-    "Untitled 38.md",
-    "debut.md",
-    "hype.md",
-    "hit the road.md",
-    "lewd.md",
-    "unchaste.md",
-    "virginity.md",
-    "disclaimer.md",
-    "roadkill.md",
-    "shout-out.md",
-    "disciple.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
