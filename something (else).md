@@ -5,3 +5,6 @@ something (else)
 「この作品には何か感じるものがある」みたいな日本語を自分はよく使ってしまう
 
 - cool. that's something.
+
+thing:
+- Even before vibe coding became [[thing|a thing]], programming still consisted of a lot of copy and pasting from stack overflow and other sources.
