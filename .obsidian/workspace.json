@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "7ce890831805f63c",
+        "id": "eac8e091ebc7cb9e",
         "type": "tabs",
         "children": [
           {
-            "id": "a29bbe4d9276bb08",
+            "id": "20f2b6cb2372425d",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "archon.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "archon"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "archon",
+                "query": "out there",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -97,7 +93,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "archon.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +161,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "archon.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -191,10 +185,19 @@
       "bases:Create new base": false
     }
   },
-  "active": "a29bbe4d9276bb08",
+  "active": "20f2b6cb2372425d",
   "lastOpenFiles": [
-    "archaic.md",
+    "tell you what.md",
+    "out there.md",
+    "a lifesaver.md",
+    "as opposed to.md",
+    "as to do.md",
+    "for some reason.md",
+    "jade.md",
+    "kind of.md",
+    "something (else).md",
     "archon.md",
+    "archaic.md",
     "caress.md",
     "pat.md",
     "of 構成要素.md",
@@ -206,19 +209,10 @@
     "barring.md",
     "well.md",
     "rather.md",
-    "as to do.md",
     "would you rather.md",
     "as of X.md",
     "inducement.md",
     "underwhelming.md",
-    "underwhelm.md",
-    "as for X.md",
-    "obliged.md",
-    "peak.md",
-    "every now and then.md",
-    "far out.md",
-    "she·her.md",
-    "braid.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
