@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "caress.md",
+                "file": "archon.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "caress"
+              "title": "archon"
             }
           }
         ]
@@ -55,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "pat",
+                "query": "archon",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -81,7 +81,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 922.3312835693359
+    "width": 262.3265838623047
   },
   "right": {
     "id": "648a6ada0608665d",
@@ -97,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "caress.md",
+                "file": "archon.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,7 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "caress.md",
+                "file": "archon.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -193,6 +193,9 @@
   },
   "active": "a29bbe4d9276bb08",
   "lastOpenFiles": [
+    "archaic.md",
+    "archon.md",
+    "caress.md",
     "pat.md",
     "of 構成要素.md",
     "long ago and far away, once upon a time.md",
@@ -216,9 +219,6 @@
     "far out.md",
     "she·her.md",
     "braid.md",
-    "boast to X.md",
-    "bun.md",
-    "最上級 of 倒置.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
