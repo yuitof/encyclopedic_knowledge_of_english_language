@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "296d9a7cf997ee6e",
+        "id": "7ce890831805f63c",
         "type": "tabs",
         "children": [
           {
-            "id": "523f56876d7a9f87",
+            "id": "a29bbe4d9276bb08",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "caress.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "caress"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "feel",
+                "query": "pat",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,11 +76,12 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 265.10157775878906
+    "width": 922.3312835693359
   },
   "right": {
     "id": "648a6ada0608665d",
@@ -92,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "caress.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +166,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "caress.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,34 +191,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "523f56876d7a9f87",
+  "active": "a29bbe4d9276bb08",
   "lastOpenFiles": [
-    "make up one's mind.md",
-    "V X into doing.md",
-    "snatched a paper out.md",
-    "cross section.md",
-    "consider X to do.md",
+    "pat.md",
     "of 構成要素.md",
-    "feel.md",
-    "so… that.md",
-    "being 省略して名詞だけの分詞構文.md",
-    "200.md",
-    "100%.md",
-    "compilation.md",
-    "I'm (so) done.md",
-    "have to be doing.md",
-    "as much as.md",
-    "all as much.md",
-    "though.md",
-    "to 不定詞 結果.md",
+    "long ago and far away, once upon a time.md",
+    "saga.md",
+    "I don't know too much.md",
+    "be well.md",
+    "traitor.md",
+    "barring.md",
+    "well.md",
+    "rather.md",
+    "as to do.md",
+    "would you rather.md",
+    "as of X.md",
+    "inducement.md",
+    "underwhelming.md",
+    "underwhelm.md",
+    "as for X.md",
+    "obliged.md",
+    "peak.md",
+    "every now and then.md",
+    "far out.md",
+    "she·her.md",
+    "braid.md",
+    "boast to X.md",
+    "bun.md",
     "最上級 of 倒置.md",
-    "SV and then SV.md",
-    "pedestal.md",
-    "a whole heap to do with.md",
-    "got vs. gotten (perfect aspect).md",
-    "work up.md",
-    "being like \"\" 分詞構文.md",
-    "go V.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
