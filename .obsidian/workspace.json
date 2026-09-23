@@ -11,10 +11,14 @@
             "id": "20f2b6cb2372425d",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "be busy with someone.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "be busy with someone"
             }
           }
         ]
@@ -72,8 +76,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -93,6 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "be busy with someone.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -161,6 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "be busy with someone.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -187,6 +192,7 @@
   },
   "active": "20f2b6cb2372425d",
   "lastOpenFiles": [
+    "be busy with someone.md",
     "tell you what.md",
     "out there.md",
     "a lifesaver.md",
@@ -212,7 +218,6 @@
     "would you rather.md",
     "as of X.md",
     "inducement.md",
-    "underwhelming.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
