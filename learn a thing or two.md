@@ -9,3 +9,5 @@ also see: [[saying]]
 
 - I know a thing or two of stuff. 
 こういう感じでも使える？？
+
+ - Sometimes also a man or woman much older falls silent for a day or two, and then leaves home.

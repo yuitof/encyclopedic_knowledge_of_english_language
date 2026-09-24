@@ -10,3 +10,6 @@ feel
 	also see: [[100%]], [[200]]
 	
 	[[snatched a paper out]] について snatch の取り出す部分へのプロファイルと取り出した後にはこの外にある out がプロファイルする部分がちょっとずれてて、時間的な経過を感じる
+
+
+fall apart, tear apart
