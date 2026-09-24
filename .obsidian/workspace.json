@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "c27c5e35e15a98ec",
+        "id": "4b52d7af5e7011b1",
         "type": "tabs",
         "children": [
           {
-            "id": "82b3d2cbb80fee44",
+            "id": "82b30ce6d674fff9",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "vagina",
+                "query": "even",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -184,8 +185,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "82b3d2cbb80fee44",
+  "active": "82b30ce6d674fff9",
   "lastOpenFiles": [
+    "bid.md",
+    "even.md",
+    "even so.md",
+    "we are even.md",
     "knot.md",
     "\"\" says ↔ X as.md",
     "fart.md",
@@ -208,10 +213,6 @@
     "stern.md",
     "rudder.md",
     "helm.md",
-    "a good deal.md",
-    "at night.md",
-    "thing.md",
-    "become of somebody.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
