@@ -1,5 +1,5 @@
 in good shape
-: likely to win, the odds of winning are very high
+: [[likely]] to win, the odds of winning are very high
 
 : the physical condition of somebody/something
 - He's in good shape for someone who had surgery six months ago.

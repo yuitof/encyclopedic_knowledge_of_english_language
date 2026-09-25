@@ -1,11 +1,14 @@
 full facial hair
 : 顔全体が髭で覆われてる
 
-soul patch
+: hair は髪というより毛のことも多い
+- He was wearing a [[camel]]'s-hair overcoat.
+
+[[soul patch]]
 ![[Pasted image 20260721131856.png]]
 
-goatee
+[[goatee]]
 ![[Pasted image 20260721131840.png]]
 
-beard
+[[beard]]
 ![[Pasted image 20260721132010.png]]

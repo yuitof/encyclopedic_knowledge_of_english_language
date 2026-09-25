@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "452ef2c3ef5fa055",
+        "id": "508d13609f608985",
         "type": "tabs",
         "children": [
           {
-            "id": "a5fe05008600b847",
+            "id": "8e844808275cae7f",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "street.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "street"
             }
           }
         ]
@@ -51,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "peeping",
+                "query": "this",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -92,6 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "street.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -160,6 +165,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "street.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -184,35 +190,35 @@
       "bases:Create new base": false
     }
   },
-  "active": "a5fe05008600b847",
+  "active": "8e844808275cae7f",
   "lastOpenFiles": [
-    "dorsal.md",
-    "culture.md",
-    "prerequisite for·to doing.md",
-    "the same (thing) goes for X.md",
-    "be not a big fan (of X).md",
-    "crook.md",
-    "unhinged.md",
-    "white supremacy.md",
+    "Untitled 39.md",
+    "street.md",
+    "bun.md",
+    "obliged.md",
+    "every now and then.md",
+    "inducement.md",
+    "as of X.md",
+    "as to do.md",
+    "of 構成要素.md",
+    "副詞 this, that.md",
+    "like this·that.md",
+    "in good shape.md",
+    "someone is likely to do.md",
+    "had better.md",
+    "hick.md",
+    "bumpkin.md",
+    "walk (transitive).md",
+    "empirically.md",
+    "finna.md",
+    "full facial hair.md",
+    "camel.md",
+    "decide.md",
+    "total.md",
+    "literally.md",
+    "catch.md",
+    "wtf.md",
     "Untitled",
-    "sabotage.md",
-    "makes sense.md",
-    "make sense.md",
-    "Snuffy.md",
-    "archon.md",
-    "a lifesaver.md",
-    "vagina.md",
-    "kiwi.md",
-    "anti-.md",
-    "with fluency.md",
-    "The Old Man and The Sea.md",
-    "dorsal scale.md",
-    "Full Body Estimation.md",
-    "Untitled 41.md",
-    "peeping tom.md",
-    "jackshit.md",
-    "shit.md",
-    "if that makes sense.md",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
     "Untitled 1",
