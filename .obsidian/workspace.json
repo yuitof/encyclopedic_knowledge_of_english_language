@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "6fab4b1279d00789",
+        "id": "cf8c6f75a43d96ac",
         "type": "tabs",
         "children": [
           {
-            "id": "891a5f9ce1942dcb",
+            "id": "4d1261c3899ef519",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "insta",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -93,7 +93,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "that's how it is.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -162,7 +161,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "that's how it is.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -187,8 +185,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "48c4cd9a954656e7",
+  "active": "4d1261c3899ef519",
   "lastOpenFiles": [
+    "insta.md",
+    "updog.md",
+    "crispy.md",
+    "crunchy.md",
     "fuck off.md",
     "that's how it is.md",
     "poof.md",
@@ -211,10 +213,6 @@
     "greasy.md",
     "snivel.md",
     "wretched.md",
-    "jarring.md",
-    "snatched a paper out.md",
-    "had better.md",
-    "shove.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
