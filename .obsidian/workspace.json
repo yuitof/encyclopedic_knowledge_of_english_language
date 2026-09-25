@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "dfa49d7a1c1c8c2f",
+        "id": "2c2c9680d76add80",
         "type": "tabs",
         "children": [
           {
-            "id": "3e143a5be5ef739f",
+            "id": "0db3801258cbf693",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "conc",
+                "query": "clutch",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -184,8 +185,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "73b4ed150a23e357",
+  "active": "0db3801258cbf693",
   "lastOpenFiles": [
+    "redemption.md",
+    "clutch.md",
+    "good.md",
+    "a slew of X.md",
+    "pull off.md",
     "compilation.md",
     "busted.md",
     "pretentious.md",
@@ -207,11 +213,6 @@
     "feel.md",
     "feel like doing.md",
     "feel like doing something.md",
-    "feel off.md",
-    "patient.md",
-    "I feel you.md",
-    "refer X to Y.md",
-    "pathetic.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
