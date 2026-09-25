@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "6233e3677820df37",
+        "id": "dfa49d7a1c1c8c2f",
         "type": "tabs",
         "children": [
           {
-            "id": "8f45326587b15f71",
+            "id": "3e143a5be5ef739f",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "時間の",
+                "query": "conc",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -92,7 +92,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "feel.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -161,7 +160,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "feel.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -188,7 +186,24 @@
   },
   "active": "73b4ed150a23e357",
   "lastOpenFiles": [
+    "compilation.md",
+    "busted.md",
+    "pretentious.md",
+    "conceited.md",
+    "so long as.md",
+    "X the Y.md",
+    "no offense.md",
+    "否定文で否定語を複数回入れることで非標準な言い方ができる.md",
+    "三単現の s を飛ばすことで非標準な位言い方ができる.md",
+    "presume away.md",
     "snatched a paper out.md",
+    "sit at a table.md",
+    "all.md",
+    "人 seems to do.md",
+    "with seconds to go before my train left without me we made one final attempt by scanning the actual ticket scanner.md",
+    "sit on your ass.md",
+    "人称代名詞+数.md",
+    "lash.md",
     "feel.md",
     "feel like doing.md",
     "feel like doing something.md",
@@ -197,23 +212,6 @@
     "I feel you.md",
     "refer X to Y.md",
     "pathetic.md",
-    "empathetic.md",
-    "will be off.md",
-    "batch.md",
-    "step into X.md",
-    "join me as we explore X.md",
-    "副詞 this, that.md",
-    "street.md",
-    "bun.md",
-    "obliged.md",
-    "every now and then.md",
-    "inducement.md",
-    "as of X.md",
-    "as to do.md",
-    "of 構成要素.md",
-    "like this·that.md",
-    "in good shape.md",
-    "someone is likely to do.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",

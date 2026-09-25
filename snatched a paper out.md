@@ -9,3 +9,6 @@ snatched a paper out
 時間のずれとか結果みたいなのだと
 - 'it's just an ordinary little paw, dried to a mummy.'
 みたいなのとか
+
+
+- He snapped the case shut and walked away.
