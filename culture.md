@@ -23,6 +23,7 @@
 - [[Magic 8 ball]]
 - [[Assassin's Creed]]
 - [[Minesweeper]]
+- [[Full Body Estimation]]
 
 #### animes, cartoon
 - [[STEINS;GATE]] アニメ
@@ -40,6 +41,9 @@
 - [[The Wandering Earth]]
 - [[breaking bad]]
 - [[The Hugo Award]]
+
+#### books
+- [[The Old Man and The Sea]]
 
 #### politics
 - [[cart titan]]

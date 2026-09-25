@@ -17,6 +17,7 @@ shit が thing のような意味で使われる例
 - real shit <- ???
 - all the shit I did wrong
 - holy shit
+- [[jackshit]]
 
 shit が person のような意味で使われる例
 - [[fine shyt]]
