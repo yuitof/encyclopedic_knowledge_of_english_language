@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "cf8c6f75a43d96ac",
+        "id": "360459261a9a468f",
         "type": "tabs",
         "children": [
           {
-            "id": "4d1261c3899ef519",
+            "id": "ce7ae0d4b18c4790",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "insta",
+                "query": "a bit",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,8 +72,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -185,8 +184,17 @@
       "bases:Create new base": false
     }
   },
-  "active": "4d1261c3899ef519",
+  "active": "ce7ae0d4b18c4790",
   "lastOpenFiles": [
+    "a bit.md",
+    "Untitled 39.md",
+    "bid.md",
+    "bokeh.md",
+    "X to start off with.md",
+    "I was (just) wondering.md",
+    "by any chance.md",
+    "jumbled up.md",
+    "I'm doing well.md",
     "insta.md",
     "updog.md",
     "crispy.md",
@@ -204,15 +212,6 @@
     "yeah.md",
     "yea.md",
     "what does that have to do with anything?.md",
-    "weave.md",
-    "pedestal.md",
-    "grate on.md",
-    "teensy-weensy.md",
-    "shout-out.md",
-    "whine.md",
-    "greasy.md",
-    "snivel.md",
-    "wretched.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
