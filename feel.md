@@ -13,3 +13,14 @@ feel
 
 
 fall apart, tear apart
+
+
+feel は [[subject]] が [[agent]] になることもあれば [[patient]] になることもある気がする
+
+agent:
+- [[I feel you]]
+- [[feel like doing]]
+
+patient:
+- [[feel off]]
+- He opened the suitcase. Two long packages in brown wrapping paper. He [[snatched a paper out|took one out]]. **It felt like meat.** He [[snatched a paper out|tore the package open]] at one end, revealing a woman's naked foot.

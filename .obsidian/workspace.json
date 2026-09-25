@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "508d13609f608985",
+        "id": "6233e3677820df37",
         "type": "tabs",
         "children": [
           {
-            "id": "8e844808275cae7f",
+            "id": "8f45326587b15f71",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "street.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "street"
+              "title": "New tab"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "this",
+                "query": "時間の",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -96,7 +92,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "street.md",
+                "file": "feel.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -165,7 +161,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "street.md",
+                "file": "feel.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -190,9 +186,23 @@
       "bases:Create new base": false
     }
   },
-  "active": "8e844808275cae7f",
+  "active": "73b4ed150a23e357",
   "lastOpenFiles": [
-    "Untitled 39.md",
+    "snatched a paper out.md",
+    "feel.md",
+    "feel like doing.md",
+    "feel like doing something.md",
+    "feel off.md",
+    "patient.md",
+    "I feel you.md",
+    "refer X to Y.md",
+    "pathetic.md",
+    "empathetic.md",
+    "will be off.md",
+    "batch.md",
+    "step into X.md",
+    "join me as we explore X.md",
+    "副詞 this, that.md",
     "street.md",
     "bun.md",
     "obliged.md",
@@ -201,23 +211,9 @@
     "as of X.md",
     "as to do.md",
     "of 構成要素.md",
-    "副詞 this, that.md",
     "like this·that.md",
     "in good shape.md",
     "someone is likely to do.md",
-    "had better.md",
-    "hick.md",
-    "bumpkin.md",
-    "walk (transitive).md",
-    "empirically.md",
-    "finna.md",
-    "full facial hair.md",
-    "camel.md",
-    "decide.md",
-    "total.md",
-    "literally.md",
-    "catch.md",
-    "wtf.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",
