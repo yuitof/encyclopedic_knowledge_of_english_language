@@ -4,4 +4,5 @@ poof
 寝不足で意識が消えるみたいな時に友達が言ってた(ネイティブでない)
 
 - My money just went [[poof]].
-go poof みたいな言い方もあるんだろうか？
+[[go poof]] みたいな言い方もあるんだろうか？ 👉 ありそう？
+- <…> go poof anyways
