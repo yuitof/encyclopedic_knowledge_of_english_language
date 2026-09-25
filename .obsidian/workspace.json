@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "493292bccabeb6f7",
+        "id": "d65b685cba017899",
         "type": "tabs",
         "children": [
           {
-            "id": "277ff73e80531ee5",
+            "id": "a11eec14ee0829bc",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "conjugat",
+                "query": "decide on",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -185,12 +185,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "277ff73e80531ee5",
+  "active": "a11eec14ee0829bc",
   "lastOpenFiles": [
+    "decide.md",
+    "under the influence.md",
+    "attain.md",
     "with X of Y.md",
     "There's Joey from Brooklyn..md",
-    "attain.md",
-    "under the influence.md",
     "intoxicated.md",
     "dope.md",
     "conjugation.md",
@@ -212,7 +213,6 @@
     "X the Y.md",
     "no offense.md",
     "否定文で否定語を複数回入れることで非標準な言い方ができる.md",
-    "三単現の s を飛ばすことで非標準な位言い方ができる.md",
     "Untitled",
     "Pasted image 20260823131807.png",
     "Pasted image 20260823131758.png",

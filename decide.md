@@ -9,3 +9,6 @@ decide には「決める」という訳が自然でない時がある
 
 - *A bad setup,* he decided. *The street being empty like this, I stand out conspicuous. Gotta make it fast.*
 	**まずいな、**と彼は思った。**街がこんなに空っぽじゃめだっちまう。さっさと片付けよう。**
+
+
+also see: [[decide on]]
