@@ -11,3 +11,5 @@ medication
 - I take medication twice a week.
 - This medication is used to treat my sickness.
 
+- "But, Doctor - can't you inject the [[medication]]?" "No. You will obtain longer relief in using orally. Please not to return." The doctor opened the door.
+
