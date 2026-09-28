@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "0f38035ce85c4fa5",
+        "id": "5a2a317573cba192",
         "type": "tabs",
         "children": [
           {
-            "id": "2ce7258a1d6b0b14",
+            "id": "b8113ad014e8612f",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "plug",
+                "query": "acro",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -185,8 +185,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "2ce7258a1d6b0b14",
+  "active": "b8113ad014e8612f",
   "lastOpenFiles": [
+    "acronym.md",
+    "tweak.md",
+    "patriarchy.md",
     "plug.md",
     "take over.md",
     "make noise.md",
@@ -210,9 +213,6 @@
     "caravan.md",
     "idiocracy.md",
     "pneumonoultramicroscopicsilicovolcanoconiosis.md",
-    "chargoggagoggmanchauggagoggchaubunagungamaugg.md",
-    "psychological operation.md",
-    "saying.md",
     "Snufkincomic.webp",
     "oald11_triangles.png",
     "Untitled",
