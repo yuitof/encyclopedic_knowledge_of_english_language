@@ -1,0 +1,2 @@
+FGC
+: fighting game competitor

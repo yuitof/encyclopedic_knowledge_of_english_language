@@ -1,4 +1,4 @@
 psychological operation
 : PSYOP
 
-close to brainwashing
+close to [[brainwashing]]

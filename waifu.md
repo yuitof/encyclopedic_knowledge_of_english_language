@@ -1,0 +1,2 @@
+waifu
+: wife

@@ -22,3 +22,6 @@
 [[IPA]]
 [[irs]]
 [[wtf]]
+[[istg]]
+[[AFK]]
+[[FGC]]

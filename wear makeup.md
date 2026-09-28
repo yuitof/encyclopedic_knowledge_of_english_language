@@ -1,2 +1,2 @@
-wear makeup
-: 
+wear [[makeup]]
+: メイクをする

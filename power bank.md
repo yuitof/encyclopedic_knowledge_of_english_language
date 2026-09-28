@@ -1,1 +1,2 @@
-![[Pasted image 20260707064334.png]]
+power bank
+: モバイルバッテリー![[Pasted image 20260707064334.png]]

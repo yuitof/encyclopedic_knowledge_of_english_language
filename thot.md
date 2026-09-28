@@ -1,4 +1,4 @@
 thot
-: slut
+: [[slut]]
 
 also: [[thotty]]

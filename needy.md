@@ -6,3 +6,6 @@ OALDパッと見た感じ限定用法しかないけど、叙述用法ってあ�
 
 [[動詞 + y]] の形
 [[pushy]]
+
+
+- NEEDY GIRL OVERDOSE

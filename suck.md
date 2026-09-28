@@ -9,3 +9,7 @@ suck
 :
 - suck my [[dick]]
 - sucking off
+
+
+sucker
+: 「騙されやすい人」という意味で使える

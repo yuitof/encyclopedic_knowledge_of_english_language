@@ -1,0 +1,2 @@
+Snufkin
+: ムーミンのキャラクター![[Snufkincomic.webp]]

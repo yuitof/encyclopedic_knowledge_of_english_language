@@ -6,3 +6,8 @@ nigga
 - That’s my _nigga_ for life, Ronny said.
 
 https://www.merriam-webster.com/dictionary/nigga
+
+
+
+- my nigga
+also see: [[gangy]]

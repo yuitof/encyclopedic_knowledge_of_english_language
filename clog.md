@@ -1,4 +1,2 @@
 clog
-:
-
-syn: congest
+syn: [[congest]]

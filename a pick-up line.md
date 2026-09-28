@@ -1,4 +1,4 @@
-a pick-up line
+a pick-up line / a pickup line
 : 会話を始めるのに使う事前に用意しておく一文みたいな感じ
 
 - I'm 19 and my pickup line is that you better be sharp on your feet cuz I'm here for your heart.

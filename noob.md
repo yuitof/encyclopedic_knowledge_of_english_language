@@ -1,4 +1,4 @@
 noob
-: newbie
+: [[newbie]]
 
 also less common: noobie
