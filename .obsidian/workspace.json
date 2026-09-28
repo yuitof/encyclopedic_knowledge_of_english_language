@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "6b76401874c63e7a",
+        "id": "0f38035ce85c4fa5",
         "type": "tabs",
         "children": [
           {
-            "id": "5aa66f29bc00d6a1",
+            "id": "2ce7258a1d6b0b14",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "take over",
+                "query": "plug",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,7 +72,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -184,8 +185,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "5aa66f29bc00d6a1",
+  "active": "2ce7258a1d6b0b14",
   "lastOpenFiles": [
+    "plug.md",
     "take over.md",
     "make noise.md",
     "makeup.md",
@@ -211,7 +213,6 @@
     "chargoggagoggmanchauggagoggchaubunagungamaugg.md",
     "psychological operation.md",
     "saying.md",
-    "wife.md",
     "Snufkincomic.webp",
     "oald11_triangles.png",
     "Untitled",
