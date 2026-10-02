@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "5a2a317573cba192",
+        "id": "98fd60962d634398",
         "type": "tabs",
         "children": [
           {
-            "id": "b8113ad014e8612f",
+            "id": "e84d2b2e9b1ba255",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "acro",
+                "query": "telepo",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -185,8 +185,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "b8113ad014e8612f",
+  "active": "e84d2b2e9b1ba255",
   "lastOpenFiles": [
+    "with (all) (due) respect.md",
+    "on a cold morning.md",
+    "TP.md",
+    "well thought out.md",
     "acronym.md",
     "tweak.md",
     "patriarchy.md",
@@ -209,10 +213,6 @@
     "IPA.md",
     "play hooky.md",
     "codex.md",
-    "weeb and otaku.md",
-    "caravan.md",
-    "idiocracy.md",
-    "pneumonoultramicroscopicsilicovolcanoconiosis.md",
     "Snufkincomic.webp",
     "oald11_triangles.png",
     "Untitled",
