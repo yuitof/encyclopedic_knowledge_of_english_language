@@ -3,3 +3,5 @@ genus
 
 pl: genera /ˈdʒenərə/
 なんか general に似ている。同じところから来た単語なのだろうか
+
+[[genre]]「ジャンル」とかとも似てるよね

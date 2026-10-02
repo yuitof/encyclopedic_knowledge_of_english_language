@@ -4,20 +4,95 @@
     "type": "split",
     "children": [
       {
-        "id": "98fd60962d634398",
+        "id": "076632a732675231",
         "type": "tabs",
         "children": [
           {
-            "id": "e84d2b2e9b1ba255",
+            "id": "198299185e656223",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "good.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "good"
+            }
+          },
+          {
+            "id": "cab2ceadf0d3f351",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "squirt.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "squirt"
+            }
+          },
+          {
+            "id": "74b72b385c69996a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "isle.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "isle"
+            }
+          },
+          {
+            "id": "825fbe85677b21a9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "dairy queen.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "dairy queen"
+            }
+          },
+          {
+            "id": "8d70621320989ec5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "roger.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "roger"
+            }
+          },
+          {
+            "id": "c6395452f2476be1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "shit.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "shit"
             }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -27,8 +102,9 @@
     "type": "split",
     "children": [
       {
-        "id": "4d8bb5548420cd1b",
+        "id": "0c5a938a7b089150",
         "type": "tabs",
+        "dimension": 49.41275167785235,
         "children": [
           {
             "id": "73b4ed150a23e357",
@@ -44,14 +120,21 @@
               "icon": "lucide-folder-closed",
               "title": "Files"
             }
-          },
+          }
+        ]
+      },
+      {
+        "id": "418a364ce796a46e",
+        "type": "tabs",
+        "dimension": 50.58724832214765,
+        "children": [
           {
-            "id": "48c4cd9a954656e7",
+            "id": "cdc519dcecbfda98",
             "type": "leaf",
             "state": {
               "type": "search",
               "state": {
-                "query": "telepo",
+                "query": "holy shit",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -61,23 +144,12 @@
               "icon": "lucide-search",
               "title": "Search"
             }
-          },
-          {
-            "id": "3bd47e7113543592",
-            "type": "leaf",
-            "state": {
-              "type": "bookmarks",
-              "state": {},
-              "icon": "lucide-bookmark",
-              "title": "Bookmarks"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 262.3265838623047
+    "width": 300.1828155517578
   },
   "right": {
     "id": "648a6ada0608665d",
@@ -93,6 +165,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "shit.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -148,6 +221,18 @@
               "icon": "lucide-list",
               "title": "Outline"
             }
+          },
+          {
+            "id": "8e9ade31ceaaa9bf",
+            "type": "leaf",
+            "state": {
+              "type": "footnotes",
+              "state": {
+                "file": "shit.md"
+              },
+              "icon": "lucide-file-signature",
+              "title": "Footnotes"
+            }
           }
         ]
       },
@@ -161,6 +246,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "shit.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -182,37 +268,45 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "audio-recorder:Start/stop recording": false,
+      "markdown-importer:Open format converter": false,
+      "publish:Publish changes...": false,
+      "random-note:Open random note": false,
+      "workspaces:Manage workspace layouts": false,
+      "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "e84d2b2e9b1ba255",
+  "active": "c6395452f2476be1",
   "lastOpenFiles": [
-    "with (all) (due) respect.md",
-    "on a cold morning.md",
-    "TP.md",
-    "well thought out.md",
-    "acronym.md",
-    "tweak.md",
-    "patriarchy.md",
-    "plug.md",
-    "take over.md",
-    "make noise.md",
-    "makeup.md",
-    "wear makeup.md",
-    "thou.md",
-    "consonant.md",
-    "put emphasis on vowels.md",
-    "Sonnet.md",
-    "task failed successfully.md",
-    "culture.md",
-    "choir.md",
-    "MECCHA CHAMELEON.md",
-    "suck.md",
-    "coup.md",
-    "language.md",
-    "IPA.md",
-    "play hooky.md",
-    "codex.md",
+    "holy crap.md",
+    "roger.md",
+    "negative fish.md",
+    "Taco Bell.md",
+    "dairy queen.md",
+    "insomnia.md",
+    "isle.md",
+    "squirt.md",
+    "gut.md",
+    "gross.md",
+    "good.md",
+    "you're all good.md",
+    "good at this shit.md",
+    "make sense.md",
+    "makes sense.md",
+    "wrap.md",
+    "littering.md",
+    "freak.md",
+    "sick freak.md",
+    "freaky.md",
+    "wtf.md",
+    "damned.md",
+    "-wise.md",
+    "bokeh.md",
+    "start off as Chinese accent.md",
+    "sketchy.md",
+    "Untitled.canvas",
+    "Untitled.base",
     "Snufkincomic.webp",
     "oald11_triangles.png",
     "Untitled",
@@ -228,7 +322,6 @@
     "Pasted image 20260731083952.png",
     "Pasted image 20260731083926.png",
     "Pasted image 20260731083919.png",
-    "help yourself",
-    "Untitled.canvas"
+    "help yourself"
   ]
 }

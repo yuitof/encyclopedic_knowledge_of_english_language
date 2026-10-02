@@ -6,6 +6,7 @@
 - [[Jon Stewart]] stand-up comedian
 - [[xQc]]
 - [[Snuffy]]
+- [[Notch]]
 
 #### game
 - [[Chutes and Ladders]] ボードゲーム

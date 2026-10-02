@@ -1,0 +1,2 @@
+bloody (BrE)
+: fucking (NAmE)

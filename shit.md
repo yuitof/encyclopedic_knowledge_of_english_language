@@ -12,7 +12,7 @@ shit が thing のような意味で使われる例
 - [[good at this shit]]
 - [[that shit]] も OK
 - [[random shit]]
-- holy shit
+- [[holy shit]]
 - give me the strongest shit you got
 - real shit <- ???
 - all the shit I did wrong

@@ -2,6 +2,7 @@ good
 : goodで量がたくさんみたいなことを表せる
 
 - good money
+- there is **a good chance**
 
 : 食べものが美味しいことに対して
 

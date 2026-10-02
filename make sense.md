@@ -13,5 +13,6 @@ make sense for somebody
 [[makes sense]] だけで相槌になるこれは相手が話したことが主語になって省略されてるっぽい？
 
 sense の前に a lot of とか not … any みたいなものが入ったりすることもある
+- make a lot of sense
 
 also see: [[if that makes sense]]
