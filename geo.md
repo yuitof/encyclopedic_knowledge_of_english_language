@@ -13,6 +13,7 @@
 - [[Qingdao]]
 - [[Xintiandi]]
 - [[the bund]]
+- [[Guangdong]]
 ### Korea
 - [[Jeju Island]]
 

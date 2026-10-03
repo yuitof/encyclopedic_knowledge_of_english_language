@@ -4,95 +4,44 @@
     "type": "split",
     "children": [
       {
-        "id": "076632a732675231",
+        "id": "e02a82aecbe9847b",
         "type": "tabs",
         "children": [
           {
-            "id": "198299185e656223",
+            "id": "62a8f3da3923141a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "good.md",
+                "file": "Crossing from Guangdong.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "good"
-            }
-          },
-          {
-            "id": "cab2ceadf0d3f351",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "squirt.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "squirt"
-            }
-          },
-          {
-            "id": "74b72b385c69996a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "isle.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "isle"
-            }
-          },
-          {
-            "id": "825fbe85677b21a9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "dairy queen.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "dairy queen"
-            }
-          },
-          {
-            "id": "8d70621320989ec5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "roger.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "roger"
-            }
-          },
-          {
-            "id": "c6395452f2476be1",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "shit.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "shit"
+              "title": "Crossing from Guangdong"
             }
           }
-        ],
-        "currentTab": 5
+        ]
+      },
+      {
+        "id": "a548e9974db41cbe",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1e50c0c6d5122e44",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Crossing from Guangdong.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Crossing from Guangdong"
+            }
+          }
+        ]
       }
     ],
     "direction": "vertical"
@@ -120,6 +69,19 @@
               "icon": "lucide-folder-closed",
               "title": "Files"
             }
+          },
+          {
+            "id": "0031e16a2f2a1dc0",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
           }
         ]
       },
@@ -134,7 +96,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "holy shit",
+                "query": "anaemic",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -165,7 +127,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "shit.md",
+                "file": "Crossing from Guangdong.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -246,7 +208,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "shit.md",
+                "file": "Crossing from Guangdong.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -277,34 +239,34 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "c6395452f2476be1",
+  "active": "1e50c0c6d5122e44",
   "lastOpenFiles": [
-    "holy crap.md",
-    "roger.md",
-    "negative fish.md",
-    "Taco Bell.md",
-    "dairy queen.md",
-    "insomnia.md",
-    "isle.md",
-    "squirt.md",
-    "gut.md",
-    "gross.md",
+    "ragged.md",
+    "Crossing from Guangdong.md",
+    "lotus root.md",
+    "crate.md",
+    "archon.md",
+    "anarchist.md",
+    "carriage.md",
+    "Guangdong.md",
+    "geo.md",
+    "Macau.md",
+    "confer.md",
+    "confectionery.md",
+    "commencement.md",
+    "squirrel.md",
     "good.md",
-    "you're all good.md",
-    "good at this shit.md",
-    "make sense.md",
-    "makes sense.md",
-    "wrap.md",
-    "littering.md",
-    "freak.md",
-    "sick freak.md",
-    "freaky.md",
-    "wtf.md",
-    "damned.md",
-    "-wise.md",
-    "bokeh.md",
-    "start off as Chinese accent.md",
-    "sketchy.md",
+    "squirt.md",
+    "isle.md",
+    "dairy queen.md",
+    "roger.md",
+    "peek.md",
+    "probationary period.md",
+    "peeping tom.md",
+    "peepee.md",
+    "peak.md",
+    "shit.md",
+    "holy crap.md",
     "Untitled.canvas",
     "Untitled.base",
     "Snufkincomic.webp",
