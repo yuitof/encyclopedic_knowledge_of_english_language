@@ -1,0 +1,4 @@
+bastion
+: 
+
+- Nether bastion ([[Minecraft]])

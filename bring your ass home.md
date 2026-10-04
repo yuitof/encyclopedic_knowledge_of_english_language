@@ -1,4 +1,4 @@
-bring your ass home
+bring your [[ass]] home
 家に帰れ！みたいな感じ
 ass をこういう感じで使える時がある
 

@@ -28,6 +28,7 @@
 - [[Shinano]] vrcのアバター
 - [[left 4 dead 2]]
 - [[MECCHA CHAMELEON]]
+- [[Minecraft]]
 
 #### anime, cartoon
 - [[STEINS;GATE]] アニメ

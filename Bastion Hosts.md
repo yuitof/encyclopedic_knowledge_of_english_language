@@ -1,4 +1,4 @@
-Bastion Hosts
+[[bastion|Bastion]] Hosts
 :
 
 also: Jump Host

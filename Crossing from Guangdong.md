@@ -112,7 +112,7 @@ State). And what has changed? The near-empty
 bus says enough. And so, as we approach,  
 stop-start, by land, that once familiar scene –  
 the warm, phthalo-green,[^41] South China tide –  
-I can make out rising mercury  
+I can [[make it out|make out]] rising mercury  
 pin-tips, distinct against the blue  
 as the outspread primaries at the edge  
 of a bird’s extending wing. So much  
