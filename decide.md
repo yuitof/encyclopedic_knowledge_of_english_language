@@ -10,5 +10,7 @@ decide には「決める」という訳が自然でない時がある
 - *A bad setup,* he decided. *The street being empty like this, I stand out conspicuous. Gotta make it fast.*
 	**まずいな、**と彼は思った。**街がこんなに空っぽじゃめだっちまう。さっさと片付けよう。**
 
+- … — where I could at least orient myself — or else of encountering one of the villagers. When after a while I had done neither, a weariness came over me, and I decided my best course was just to choose a cottage at random, knock on the door, and hope it would be opened by someone who remembered me.
+… <省略>… ここはひとつ、行き当たりばったりにどこかのコテージを選んで、ドアをノックし、私のことを覚えてくれている人間が開けてくれるのを期待するのが最前の手だと決めた。
 
 also see: [[decide on]]
