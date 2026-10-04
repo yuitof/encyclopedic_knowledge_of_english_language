@@ -118,7 +118,7 @@ as the outspread primaries at the edge
 of a bird’s extending wing. So much  
 taller now than when I left  
 fifteen years ago. Suddenly, I know –  
-from the Mid-Levels flat where I grew up,  
+from the Mid-Levels [[flat]] where I grew up,  
 set in the bamboo grove – from the kumquat[^42]-  
 lined windows on the twenty-fifth floor,  
 tinted to bear the condescension’s glare –  
@@ -130,7 +130,7 @@ turned always home, you can no longer see.
 
 ~
 
-Published in _Loop of Jade_ (Chatto & Windus, 2015).
+Published in Loop of Jade (Chatto & Windus, 2015).
 
 [^1]: envelop /ɪnˈveləp/: 包む
 

@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "da70ccd0199c1bf0",
+        "id": "50e562385fe1ddbb",
         "type": "tabs",
         "children": [
           {
-            "id": "4460e45d70bd4ed2",
+            "id": "9a7e5a1c43da1b62",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "pamphlet.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "pamphlet"
+              "title": "New tab"
             }
           }
         ]
@@ -76,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "novel",
+                "query": "flat",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -107,7 +103,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "pamphlet.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -188,7 +183,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "pamphlet.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -219,35 +213,35 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "4460e45d70bd4ed2",
+  "active": "9a7e5a1c43da1b62",
   "lastOpenFiles": [
-    "paperback vs. hardcover.md",
-    "pamphlet.md",
-    "novel vs. short story.md",
-    "staple.md",
-    "swing by.md",
-    "negate.md",
-    "Pasted image 20261004055554.png",
-    "porous.md",
-    "posh.md",
+    "like this·that.md",
+    "isn't that right?.md",
     "villa.md",
-    "oriental.md",
-    "fish and chips.md",
-    "ragged.md",
-    "ledge.md",
-    "decide.md",
-    "形容詞 + y.md",
-    "pint.md",
-    "bearing.md",
-    "X the Y.md",
+    "flat.md",
+    "Crossing from Guangdong.md",
+    "me too.md",
+    "go 速度.md",
+    "cramped.md",
+    "cramp.md",
+    "in front of X.md",
+    "junk.md",
+    "so be X.md",
+    "incidentally.md",
+    "flatter.md",
+    "付加疑問.md",
+    "cobble.md",
+    "clout.md",
+    "buttock.md",
+    "pamphlet.md",
+    "terrain.md",
+    "pop star.md",
+    "plan to V.md",
+    "rooster.md",
     "Shaun the sheep.md",
-    "on the nod.md",
-    "主語を省略する文.md",
-    "stash.md",
-    "so long as.md",
-    "-ball.md",
-    "fentanyl.md",
-    "dope.md",
+    "迷惑の on.md",
+    "proscribe.md",
+    "Pasted image 20261004055554.png",
     "Untitled.canvas",
     "Untitled.base",
     "Snufkincomic.webp",

@@ -1,3 +1,3 @@
-(countable and usually plural)
 buttock
-: 臀部
+(countable and usually plural)
+: 臀部 / butt
