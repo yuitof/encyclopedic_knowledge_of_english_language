@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "e38b9db9e7641c3d",
+        "id": "d75f7f49bdc6568b",
         "type": "tabs",
         "children": [
           {
-            "id": "a3eee9de060315f4",
+            "id": "1237a96094311d65",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "villa.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "villa"
             }
           }
         ]
@@ -72,7 +76,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "anaemic",
+                "query": "vill",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -103,6 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "villa.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -183,6 +188,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "villa.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -213,34 +219,34 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "a3eee9de060315f4",
+  "active": "1237a96094311d65",
   "lastOpenFiles": [
-    "Crossing from Guangdong.md",
-    "ragged.md",
-    "lotus root.md",
-    "crate.md",
-    "archon.md",
-    "anarchist.md",
-    "carriage.md",
-    "Guangdong.md",
-    "geo.md",
-    "Macau.md",
-    "confer.md",
-    "confectionery.md",
-    "commencement.md",
-    "squirrel.md",
-    "good.md",
-    "squirt.md",
-    "isle.md",
-    "dairy queen.md",
-    "roger.md",
-    "peek.md",
-    "probationary period.md",
-    "peeping tom.md",
-    "peepee.md",
-    "peak.md",
-    "shit.md",
-    "holy crap.md",
+    "X the Y.md",
+    "Shaun the sheep.md",
+    "on the nod.md",
+    "主語を省略する文.md",
+    "stash.md",
+    "so long as.md",
+    "-ball.md",
+    "fentanyl.md",
+    "dope.md",
+    "DMA.md",
+    "cramp.md",
+    "in bed.md",
+    "in your hand.md",
+    "junk.md",
+    "with X of Y.md",
+    "throw a reunion.md",
+    "junky.md",
+    "in front of X.md",
+    "wingding.md",
+    "party.md",
+    "shade.md",
+    "participle.md",
+    "quick.md",
+    "make it out.md",
+    "snatched a paper out.md",
+    "make it.md",
     "Untitled.canvas",
     "Untitled.base",
     "Snufkincomic.webp",
