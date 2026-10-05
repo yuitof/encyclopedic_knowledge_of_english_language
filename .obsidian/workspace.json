@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "f287c440579bbd73",
+        "id": "70b2b10b0e5e91c8",
         "type": "tabs",
         "children": [
           {
-            "id": "f1605a442630bcf2",
+            "id": "7de07b39ead3e09d",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "ESL",
+                "query": "likely",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -213,8 +213,18 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "f1605a442630bcf2",
+  "active": "7de07b39ead3e09d",
   "lastOpenFiles": [
+    "Have you a pen?.md",
+    "more likely than not.md",
+    "三単現の s を飛ばすことで非標準な位言い方ができる.md",
+    "me want cookie.md",
+    "brexit.md",
+    "portmanteau.md",
+    "someone is likely to do.md",
+    "had better.md",
+    "conceive.md",
+    "否定文で否定語を複数回入れることで非標準な言い方ができる.md",
     "ominous.md",
     "ESL.md",
     "lingua franca.md",
@@ -231,16 +241,6 @@
     "washed.md",
     "that's sick.md",
     "tanky.md",
-    "bring your ass home.md",
-    "obsidian.md",
-    "bastion.md",
-    "Bastion Hosts.md",
-    "cobble.md",
-    "diorite.md",
-    "sugarcane.md",
-    "Braille.md",
-    "off from.md",
-    "catch someone off guard.md",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
     "Untitled.base",
