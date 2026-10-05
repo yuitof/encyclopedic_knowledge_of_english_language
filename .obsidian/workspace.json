@@ -11,10 +11,14 @@
             "id": "7de07b39ead3e09d",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "最上級 of 倒置.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "最上級 of 倒置"
             }
           }
         ]
@@ -72,7 +76,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "likely",
+                "query": "of 最上級",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -103,6 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "最上級 of 倒置.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -183,6 +188,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "最上級 of 倒置.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -215,6 +221,7 @@
   },
   "active": "7de07b39ead3e09d",
   "lastOpenFiles": [
+    "as to do.md",
     "Have you a pen?.md",
     "more likely than not.md",
     "三単現の s を飛ばすことで非標準な位言い方ができる.md",
@@ -240,7 +247,6 @@
     "catch.md",
     "washed.md",
     "that's sick.md",
-    "tanky.md",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
     "Untitled.base",
