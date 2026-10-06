@@ -4,95 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "9e60c4227d88e833",
+        "id": "94c497367829fdee",
         "type": "tabs",
         "children": [
           {
-            "id": "7bf8611ca1f0e792",
+            "id": "f2ecc963fb3b42d1",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "dilapidated.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "dilapidated"
-            }
-          },
-          {
-            "id": "4c6f7c85694dc8bf",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "marginalized.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "marginalized"
-            }
-          },
-          {
-            "id": "8af1adc6145a0006",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "on foot.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "on foot"
-            }
-          },
-          {
-            "id": "2e0d9d02e16cfb48",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "dragonfly.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "dragonfly"
-            }
-          },
-          {
-            "id": "6fe78a1547e99a2c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "morpheme.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "morpheme"
-            }
-          },
-          {
-            "id": "a8f0fba57473eef8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "close reading.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "close reading"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 5
+        ]
       }
     ],
     "direction": "vertical"
@@ -147,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "dilapi",
+                "query": "on a cold morning",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -178,7 +103,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "close reading.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -259,7 +183,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "close reading.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -290,14 +213,19 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "a8f0fba57473eef8",
+  "active": "f2ecc963fb3b42d1",
   "lastOpenFiles": [
+    "dilapidated.md",
+    "marginalized.md",
+    "on foot.md",
+    "dragonfly.md",
     "morpheme.md",
     "close reading.md",
-    "dragonfly.md",
-    "on foot.md",
-    "marginalized.md",
-    "dilapidated.md",
+    "whatnot.md",
+    "oftentimes.md",
+    "rhyme.md",
+    "on a cold morning.md",
+    "scope creep.md",
     "最上級 of 倒置.md",
     "MP.md",
     "acronym.md",
@@ -313,11 +241,6 @@
     "conceive.md",
     "否定文で否定語を複数回入れることで非標準な言い方ができる.md",
     "ominous.md",
-    "ESL.md",
-    "lingua franca.md",
-    "Notch.md",
-    "culture.md",
-    "grief.md",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
     "Untitled.base",
