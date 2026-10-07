@@ -14,6 +14,7 @@
 - [[Xintiandi]]
 - [[the bund]]
 - [[Guangdong]]
+- [[Kowloon Walled City]]
 ### Korea
 - [[Jeju Island]]
 

@@ -1,0 +1,4 @@
+filthy
+:
+
+compare: [[naughty]], [[wicked]]

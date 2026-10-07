@@ -16,7 +16,7 @@ quarter[^4], the funereal stonework facades[^5]
 with the air of Whitehall[^6], or the Cenotaph[^7],  
 but planted on earth’s other side. Here  
 no sign of life, save for street hawkers[^8], [[solicitous]][^9],  
-arranging their slatted[^10] [[crate|crates]], stacks of bamboo  
+arranging their slatted[^10] [[crate|crates]], stacks of bamboo
 steamers[^11], battered woks[^12], to some familiar  
 inward plan. I watch the sun come up  
 through tinted plexiglas[^13]. I try to sleep  
@@ -152,7 +152,7 @@ Published in Loop of Jade (Chatto & Windus, 2015).
 
 [^10]: slat は木でできた薄くて細長い板のこと
 
-[^11]: bamboo steamer は日本語で「せいろ」になるだろうか
+[^11]: [[bamboo steamer]] は日本語で「せいろ」になるだろうか
 
 [^12]: battered wok: 使い古された鉄鍋
 

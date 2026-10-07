@@ -4,4 +4,6 @@ jade
 
 : 単純に宝石のついたアクセサリーのことかも
 
-also see: [[rock gambling]]
+also see: [[rock gambling]], [[Crossing from Guangdong|Loop of Jade]]
+
+compare: [[ore]]
