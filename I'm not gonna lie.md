@@ -7,4 +7,6 @@ also see: [[tbh]], [[ngl]]
 
 not gonna は /t/ は出さない感じで、「ッ」が入る感じ
 
-I'm を言わないで not gonna lie もよくある
+I'm を言わないで **not gonna lie** もよくある
+
+also: [[I can't lie]]

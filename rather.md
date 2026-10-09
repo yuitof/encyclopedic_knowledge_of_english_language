@@ -1,5 +1,11 @@
 rather
-:
-- considering happiness as something rather stupid
+: 
+```
+rather: 英和辞典には「幾分」とあったり「かなり」とあったり、いったいどのくらいなんだ、と思ってしまうが、まあ「かなり」に近い方が多いように思う。日本語で「ちょっと」と言いながらちょっとどころではない（「ちょっと怒ってるみたいだぜ」）ことに近いか。特に訳さなくてもいいように思える場合もある。
+
+英文精読教室 第一巻 p225 注15
+```
+
+- considering happiness as something **rather** stupid
 
 [[would you rather]]

@@ -1,4 +1,4 @@
 phantom sense
-: VRChat用語
+: [[VRChat]] 用語
 
 also see: [[phantom pain]]

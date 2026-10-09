@@ -1,0 +1,2 @@
+oblige /əˈblaɪdʒ/
+: 

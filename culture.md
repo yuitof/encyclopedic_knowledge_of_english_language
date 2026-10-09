@@ -30,6 +30,7 @@
 - [[MECCHA CHAMELEON]]
 - [[Minecraft]]
 - [[expedition 33]]
+- [[VRChat]]
 
 #### anime, cartoon
 - [[STEINS;GATE]] アニメ

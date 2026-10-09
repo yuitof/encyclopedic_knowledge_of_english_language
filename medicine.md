@@ -24,3 +24,4 @@
 [[plastic surgery]]
 [[ozempic]]
 [[diarrhea]]
+[[carpal tunnel]]
