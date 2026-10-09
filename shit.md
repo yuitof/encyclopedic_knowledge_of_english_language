@@ -19,6 +19,15 @@ shit が thing のような意味で使われる例
 - holy shit
 - [[jackshit]]
 
+- my shit
+自分がゲームでやられた時に周りに散らばる [[loot]] のことをこう言ったりする
+
+
+> We met in a fashion group chat. 
+> A fashion group chat? You do [[lowkey]] both got that [[shit]] on. I can't lie.
+
+[[I'm not gonna lie]]
+
 shit が person のような意味で使われる例
 - [[fine shyt]]
 
@@ -27,3 +36,5 @@ shit が person のような意味で使われる例
 - [[this thing]] と言う言い方もよく出会う。具体的に何かを言いたくない時とかに使えそう。
 
 - you should throw that shit away
+
+

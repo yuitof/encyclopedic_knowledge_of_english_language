@@ -21,3 +21,6 @@
 [[asthma]]
 [[arthritis]]
 [[antipyretic]]
+[[plastic surgery]]
+[[ozempic]]
+[[diarrhea]]

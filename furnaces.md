@@ -1,0 +1,4 @@
+furnaces
+: かまど
+
+[[Minecraft]]

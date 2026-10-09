@@ -29,6 +29,7 @@
 - [[left 4 dead 2]]
 - [[MECCHA CHAMELEON]]
 - [[Minecraft]]
+- [[expedition 33]]
 
 #### anime, cartoon
 - [[STEINS;GATE]] アニメ

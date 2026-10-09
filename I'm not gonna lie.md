@@ -6,3 +6,5 @@ https://www.quora.com/Why-do-people-say-Im-not-gonna-lie-instead-of-just-saying-
 also see: [[tbh]], [[ngl]]
 
 not gonna は /t/ は出さない感じで、「ッ」が入る感じ
+
+I'm を言わないで not gonna lie もよくある

@@ -3,4 +3,6 @@ cobble
 
 - cobblestone
 
+compare: [[gravel]]
+
 [[Minecraft]]
