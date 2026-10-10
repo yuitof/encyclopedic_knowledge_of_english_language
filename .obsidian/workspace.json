@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "34cda0d195788148",
+        "id": "7b9f6a85a6b088e1",
         "type": "tabs",
         "children": [
           {
-            "id": "a489337e4c665cf1",
+            "id": "43c4146046f0044d",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "the word X.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "the word X"
+              "title": "New tab"
             }
           }
         ]
@@ -76,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "word 同格",
+                "query": "what if",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -107,7 +103,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "the word X.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -188,7 +183,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "the word X.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -218,10 +212,18 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "a489337e4c665cf1",
+  "active": "43c4146046f0044d",
   "lastOpenFiles": [
-    "at age X.md",
     "the word X.md",
+    "except that.md",
+    "let one's guard down.md",
+    "what if SV ?.md",
+    "catch someone off guard.md",
+    "tick off.md",
+    "figure it out.md",
+    "put someone off.md",
+    "off-putting.md",
+    "at age X.md",
     "as to do.md",
     "will be off.md",
     "as much as.md",
@@ -238,14 +240,6 @@
     "with seconds to go before my train left without me we made one final attempt by scanning the actual ticket scanner.md",
     "really.md",
     "compared with X.md",
-    "train of thought.md",
-    "oblige.md",
-    "thing.md",
-    "I'd rather be myself.md",
-    "would you rather.md",
-    "so.md",
-    "medicine.md",
-    "can't.md",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
     "Untitled.base",
