@@ -9,4 +9,4 @@ at X もある
 
 数値計は同格のofが使われやすいイメージがある。
 
-also see: [[word X]]
+also see: [[the word X]]

@@ -3,3 +3,9 @@ as to do
 
 - The differences between colloquial and literary Welsh are so stark **as to** lack mutual intelligibility, with Welsh grammarian Gareth King asserting that they are almost two different languages in practice.
 https://en.wikipedia.org/wiki/Welsh_language
+
+- The body of a *while* can be one or more statements enclosed in braces, as in the temperature converter, or a single statement without braces, as in
+  ```
+  while (i < j)
+    i = 2 \* i;
+  ```

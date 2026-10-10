@@ -7,3 +7,10 @@ as much as
 	いま振り返って見ると、やっぱり何か、そういうことを言いたくないという気持ちもあったのだと思いますー異性間の争いとか、ゲイやレズビアンの抑圧といったことを、あからさまに語りたくないという気持ちが。異性だろうと同性だろうと、どんな人間同士の間にも、破滅につながるような権力の不均衡は生じうるのですから。
 
 also see: [[as much as I like to]]
+
+
+also see:
+- **Sad though** he was to see the end of a long tradition, the miner was realistic man.
+長い伝統が終わるのを見るのは悲しかったが、坑夫は現実的な人間であった。
+
+Sad though he was: though he was sad

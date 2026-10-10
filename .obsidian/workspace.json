@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "3cc3fd62b6d20121",
+        "id": "34cda0d195788148",
         "type": "tabs",
         "children": [
           {
-            "id": "2bcc6e15e79613b7",
+            "id": "a489337e4c665cf1",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "the word X.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "the word X"
             }
           }
         ]
@@ -72,7 +76,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "butler",
+                "query": "word 同格",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -103,6 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "the word X.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -183,6 +188,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "the word X.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -212,12 +218,22 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "2bcc6e15e79613b7",
+  "active": "a489337e4c665cf1",
   "lastOpenFiles": [
+    "at age X.md",
+    "the word X.md",
+    "as to do.md",
+    "will be off.md",
+    "as much as.md",
+    "your own kind.md",
+    "the other day.md",
+    "would have PP.md",
+    "there 構文.md",
+    "presume away.md",
+    "just now.md",
     "snatched a paper out.md",
     "rather.md",
     "idolize.md",
-    "presume away.md",
     "butler.md",
     "with seconds to go before my train left without me we made one final attempt by scanning the actual ticket scanner.md",
     "really.md",
@@ -230,16 +246,6 @@
     "so.md",
     "medicine.md",
     "can't.md",
-    "I'm not gonna lie.md",
-    "over your shoulder.md",
-    "to see if SV.md",
-    "rise (to your feet).md",
-    "demystify.md",
-    "just now.md",
-    "VRCの抜け方.md",
-    "笑い方.md",
-    "phantom sense.md",
-    "VRChat.md",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
     "Untitled.base",
