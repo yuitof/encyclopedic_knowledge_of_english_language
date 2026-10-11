@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "f609d7b18d526d4a",
+        "id": "9744ff47b8ab5dfa",
         "type": "tabs",
         "children": [
           {
-            "id": "1ff9785b15469de0",
+            "id": "c55f052df747a26d",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "redemp",
+                "query": "stand up",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,20 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "1ff9785b15469de0",
+  "active": "c55f052df747a26d",
   "lastOpenFiles": [
+    "deixis.md",
+    "major.md",
+    "lieutenant.md",
+    "colonel.md",
+    "I go where I want.md",
+    "Ali Wong.md",
+    "stand-up comedy.md",
+    "Jon Stewart.md",
+    "culture.md",
+    "VAT.md",
+    "acronym.md",
+    "insufferable.md",
     "luddite.md",
     "join the club.md",
     "redemption.md",
@@ -228,18 +240,6 @@
     "tick off.md",
     "figure it out.md",
     "put someone off.md",
-    "off-putting.md",
-    "at age X.md",
-    "as to do.md",
-    "will be off.md",
-    "as much as.md",
-    "your own kind.md",
-    "the other day.md",
-    "would have PP.md",
-    "there 構文.md",
-    "presume away.md",
-    "just now.md",
-    "snatched a paper out.md",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
     "Untitled.base",
