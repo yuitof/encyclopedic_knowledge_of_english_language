@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "9744ff47b8ab5dfa",
+        "id": "d262994807417684",
         "type": "tabs",
         "children": [
           {
-            "id": "c55f052df747a26d",
+            "id": "51c3f13141ebc109",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -212,7 +212,7 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "c55f052df747a26d",
+  "active": "51c3f13141ebc109",
   "lastOpenFiles": [
     "deixis.md",
     "major.md",
