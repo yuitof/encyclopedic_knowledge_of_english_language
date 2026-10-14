@@ -1,2 +1,2 @@
-son of a bitch
+son of a [[bitch]]
 also: [[acronym|SOB]]

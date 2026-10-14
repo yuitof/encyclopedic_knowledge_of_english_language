@@ -1,0 +1,2 @@
+collusion
+syn: conspiracy

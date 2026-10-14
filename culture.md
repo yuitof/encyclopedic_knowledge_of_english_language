@@ -31,6 +31,7 @@
 - [[Minecraft]]
 - [[expedition 33]]
 - [[VRChat]]
+- [[ddr]]
 
 #### anime, cartoon
 - [[STEINS;GATE]] アニメ
@@ -69,6 +70,7 @@
 - [[DiDi]] 中国のUber
 - [[pico]] 中国産のvrヘッドセット
 - [[SecuriMetrics]] Iris scanner 作ってる会社？？
+- [[flicker]]
 
 #### fashion
 - [[ONLY]] ファッションブランド

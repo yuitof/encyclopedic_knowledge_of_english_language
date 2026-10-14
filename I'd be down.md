@@ -7,4 +7,5 @@ I'd be down
   B: You want a [[hummer]]?  
   A: Yeah, I'd be down with that.
 - I'm so down. Let's do it
-- [[down for that]]
+
+- [[be down for that]]

@@ -1,4 +1,6 @@
 larp
+: stands for "live-action role-playing"
+
 : to pretend you like something because you want to get closed to somebody
 : (自分をよく見せようと)嘘を言う
 

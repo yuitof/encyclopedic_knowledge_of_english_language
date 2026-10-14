@@ -1,4 +1,4 @@
-Lean
+lean
 : [[shredded]]
 opp [[bulky]]
 

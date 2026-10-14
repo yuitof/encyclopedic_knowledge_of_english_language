@@ -16,3 +16,5 @@ errand
 > Bye. See you later.
 
 for I have errands は「用事があるから」という理由を表している
+
+- **run errands**
