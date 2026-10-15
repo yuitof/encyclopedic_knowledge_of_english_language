@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "8cf0af80edd99010",
+        "id": "ee71b5822ed3e67c",
         "type": "tabs",
         "children": [
           {
-            "id": "c9efda32bb807d07",
+            "id": "f5610607f14d4100",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "bitch",
+                "query": "whatever the fuc",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -87,7 +87,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 366.87189865112305
+    "width": 200
   },
   "right": {
     "id": "648a6ada0608665d",
@@ -194,7 +194,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -212,8 +212,14 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "c9efda32bb807d07",
+  "active": "f5610607f14d4100",
   "lastOpenFiles": [
+    "whatnot.md",
+    "austerity.md",
+    "deflate.md",
+    "thing.md",
+    "whatever the fuck.md",
+    "Braille.md",
     "it's brick outside.md",
     "bitch.md",
     "Puritanism.md",
@@ -234,12 +240,6 @@
     "someone is relationship with someone.md",
     "open relationship.md",
     "baddie.md",
-    "wed.md",
-    "culture.md",
-    "flicker.md",
-    "acronym.md",
-    "aka.md",
-    "rawdogging.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
