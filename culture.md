@@ -32,7 +32,7 @@
 - [[expedition 33]]
 - [[VRChat]]
 - [[ddr]]
-
+- [[insurgency sandstorm]]
 #### anime, cartoon
 - [[STEINS;GATE]] アニメ
 - [[The Elder Scrolls V Skyrim]]
