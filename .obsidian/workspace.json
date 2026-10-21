@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "7d47ca6c48fc8bc6",
+        "id": "b764966a83ecf921",
         "type": "tabs",
         "children": [
           {
-            "id": "46e117e5c0b951bb",
+            "id": "60d3e3f90b58f66c",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "complime",
+                "query": "penultimate",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,10 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "46e117e5c0b951bb",
+  "active": "60d3e3f90b58f66c",
   "lastOpenFiles": [
+    "idea.md",
+    "penultimate.md",
     "complimentary.md",
     "compliment.md",
     "上田敏.md",
@@ -238,8 +240,6 @@
     "oriental.md",
     "ts.md",
     "bra.md",
-    "tit.md",
-    "get to do.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
