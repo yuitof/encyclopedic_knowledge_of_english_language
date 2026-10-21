@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "b764966a83ecf921",
+        "id": "a3a2a27a82e92555",
         "type": "tabs",
         "children": [
           {
-            "id": "60d3e3f90b58f66c",
+            "id": "0e5277c7a05b7f66",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "penultimate",
+                "query": "austerity",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,10 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "60d3e3f90b58f66c",
+  "active": "0e5277c7a05b7f66",
   "lastOpenFiles": [
+    "austerity.md",
+    "utilitarianism.md",
     "idea.md",
     "penultimate.md",
     "complimentary.md",
@@ -238,8 +240,6 @@
     "slop.md",
     "fw.md",
     "oriental.md",
-    "ts.md",
-    "bra.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
