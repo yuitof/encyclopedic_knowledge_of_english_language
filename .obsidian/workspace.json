@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "6ff0893f59c98963",
+        "id": "e0150ffe8f8fa78c",
         "type": "tabs",
         "children": [
           {
-            "id": "445b0702e3ceb793",
+            "id": "1276a1c7b176e0b1",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "furry",
+                "query": "pigeon",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,12 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "445b0702e3ceb793",
+  "active": "1276a1c7b176e0b1",
   "lastOpenFiles": [
+    "dove.md",
+    "would that.md",
+    "haven.md",
+    "pigeon.md",
     "moron.md",
     "victorian conditions.md",
     "ephemeral.md",
@@ -236,10 +240,6 @@
     "DEI.md",
     "acronym.md",
     "deixis.md",
-    "deputy.md",
-    "the fin de siècle.md",
-    "Braille.md",
-    "lineament.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
