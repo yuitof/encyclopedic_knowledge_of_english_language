@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "e0150ffe8f8fa78c",
+        "id": "1f880688b6390644",
         "type": "tabs",
         "children": [
           {
-            "id": "1276a1c7b176e0b1",
+            "id": "ea221173ea446258",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "pigeon",
+                "query": "sycop",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,13 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "1276a1c7b176e0b1",
+  "active": "ea221173ea446258",
   "lastOpenFiles": [
+    "levity.md",
+    "sycophantic.md",
+    "there is an incongruency between something.md",
+    "incongruency.md",
+    "punch line.md",
     "dove.md",
     "would that.md",
     "haven.md",
@@ -235,11 +240,6 @@
     "penultimate.md",
     "complimentary.md",
     "compliment.md",
-    "上田敏.md",
-    "小泉八雲.md",
-    "DEI.md",
-    "acronym.md",
-    "deixis.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
