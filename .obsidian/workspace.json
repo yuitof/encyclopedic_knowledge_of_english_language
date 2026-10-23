@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "1f880688b6390644",
+        "id": "c26006350895ef9f",
         "type": "tabs",
         "children": [
           {
-            "id": "ea221173ea446258",
+            "id": "f3b2a082a83dc0b5",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -212,8 +212,10 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "ea221173ea446258",
+  "active": "f3b2a082a83dc0b5",
   "lastOpenFiles": [
+    "haven.md",
+    "heaven knows.md",
     "levity.md",
     "sycophantic.md",
     "there is an incongruency between something.md",
@@ -221,7 +223,6 @@
     "punch line.md",
     "dove.md",
     "would that.md",
-    "haven.md",
     "pigeon.md",
     "moron.md",
     "victorian conditions.md",
@@ -239,7 +240,6 @@
     "idea.md",
     "penultimate.md",
     "complimentary.md",
-    "compliment.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
