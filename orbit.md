@@ -5,3 +5,5 @@ orbit
 : 
 - 10 dudes/orbits surrounding a girl
 - orbit
+
+compare: [[trajectory]]

@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "35cebd45a935b8bb",
+        "id": "da4cf96e5af50a2b",
         "type": "tabs",
         "children": [
           {
-            "id": "52deec0d3f31688e",
+            "id": "12ab48975bc52c9e",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "asf",
+                "query": "errand",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,16 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "52deec0d3f31688e",
+  "active": "12ab48975bc52c9e",
   "lastOpenFiles": [
+    "errand.md",
+    "dih.md",
+    "diabolical.md",
+    "freaky.md",
+    "freak.md",
+    "this is frying me.md",
+    "trajectory.md",
+    "orbit.md",
     "vid.md",
     "ebullience.md",
     "this is fire.md",
@@ -232,14 +240,6 @@
     "mark my words.md",
     "ma'am.md",
     "peek.md",
-    "peeping tom.md",
-    "by following X with Y.md",
-    "grand.md",
-    "Untitled 48.md",
-    "niche.md",
-    "elite ball knowledge.md",
-    "exuberant.md",
-    "idiocracy.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
