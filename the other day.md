@@ -3,3 +3,5 @@ the other day
 
 - I know you must be curious. I [[might as well]] tell you that I decided to enter Haypasia's consciousness **the moment** I sensed your touch.
 - And **the moment** I entered, ushered in by that young lady we were following [[just now]], they[[would have PP|'d all have burst]] into applause.
+
+- that didn't work out [[I go where I want|quite the way I wanted]] but I'll take it and we got golden runes.

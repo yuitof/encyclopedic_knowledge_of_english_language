@@ -1,0 +1,2 @@
+patois
+: [[pidgin]] or [[creole]]

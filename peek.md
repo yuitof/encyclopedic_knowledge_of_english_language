@@ -7,3 +7,5 @@ syn: [[peeping tom|peep]]
 
 verb :
 - right hand peek
+
+also see: [[peek a boo]]

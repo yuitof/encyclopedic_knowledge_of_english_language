@@ -1,0 +1,4 @@
+ebullience
+: lively
+
+syn: [[exuberant]]

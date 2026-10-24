@@ -1,6 +1,8 @@
 if that
 : at most
 
+compare: [[if at all]], [[if anything]], [[if any]]
+
 ```
 I find it often after a number. What does it mean and what is _that_? It’d be nice if you could help me.
 
