@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "3485317631a0f29c",
+        "id": "35cebd45a935b8bb",
         "type": "tabs",
         "children": [
           {
-            "id": "b49c30bc0d2db1d9",
+            "id": "52deec0d3f31688e",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -212,8 +212,9 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "b49c30bc0d2db1d9",
+  "active": "52deec0d3f31688e",
   "lastOpenFiles": [
+    "vid.md",
     "ebullience.md",
     "this is fire.md",
     "perch (noun).md",
@@ -239,7 +240,6 @@
     "elite ball knowledge.md",
     "exuberant.md",
     "idiocracy.md",
-    "idiosyncratic.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
