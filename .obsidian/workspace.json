@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "da4cf96e5af50a2b",
+        "id": "efcb025e34d9e8a2",
         "type": "tabs",
         "children": [
           {
-            "id": "12ab48975bc52c9e",
+            "id": "ed08fd72aeb594c1",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "errand",
+                "query": "zodiac",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,13 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "12ab48975bc52c9e",
+  "active": "ed08fd72aeb594c1",
   "lastOpenFiles": [
+    "zodiac.md",
+    "inn.md",
+    "terrace.md",
+    "keep distance from.md",
+    "porch.md",
     "errand.md",
     "dih.md",
     "diabolical.md",
@@ -235,11 +240,6 @@
     "peek a boo.md",
     "luddite.md",
     "fidget.md",
-    "asf.md",
-    "keep your word.md",
-    "mark my words.md",
-    "ma'am.md",
-    "peek.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
