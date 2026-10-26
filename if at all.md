@@ -1,7 +1,7 @@
 if at all
-: 
+: [[if that]]
 
-compare: [[if that]], [[if anything]], [[if any]]
+compare: [[if that]], [[if anything]], [[if any]], [[at all]]
 
 ```
 To add to other responses, you’ll see a similar phrase “if that.” It means “maybe not even that,” where “that” stands for something earlier in the sentence.

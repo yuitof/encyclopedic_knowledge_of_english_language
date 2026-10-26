@@ -9,3 +9,4 @@ I'd be down
 - I'm so down. Let's do it
 
 - [[be down for that]]
+- [[be down to do]] → to 不定詞で行ける時はそっちを選ぶのが普通かも

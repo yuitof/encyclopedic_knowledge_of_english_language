@@ -1,5 +1,5 @@
-sycophantic
-: appeasing someone
+sycophantic /ˌsɪkəˈfæntɪk/
+: [[appease|appeasing]] someone
 
 - AI is designed by nature to be [[sycophantic]]
 

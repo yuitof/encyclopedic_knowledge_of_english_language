@@ -5,5 +5,6 @@ zodiac
 	the crab
 
 - [[scorpion]] 
+- [[leo]] → ライオンのやつ
 
 : [[star sign]] ともいうことができる

@@ -3,7 +3,13 @@ filler
 
 - [[let me see]]
 - [[Um]]
-- [[I don't know]], idk
+
+- [[I don't know]]
 - [[I'm not gonna lie]]
+
 - [[you know what]]
 - [[you know]]
+- [[tell you what]]
+
+- [[kind of]]
+- [[sort of]]

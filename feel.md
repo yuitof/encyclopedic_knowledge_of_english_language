@@ -21,6 +21,12 @@ agent:
 - [[I feel you]]
 - [[feel like doing]]
 
+feel like X のパターンは agent だったりするんだろうか？feel X で主語が agent なのは like がないパターンみたいな解釈はできるんだろうか？
+
+- I haven’t felt so young for years! thought Peter, escaping (only of course for an hour or so) from being precisely what he was, and feeling like a child who runs out of doors, and sees, as he runs, his old nurse waving at the wrong window.
+
+Woolf, Virginia. Mrs Dalloway (Oxford World's Classics) (p. 111). (Function). Kindle Edition. 
+
 patient:
 - [[feel off]]
 - He opened the suitcase. Two long packages in brown wrapping paper. He [[snatched a paper out|took one out]]. **It felt like meat.** He [[snatched a paper out|tore the package open]] at one end, revealing a woman's naked foot.
