@@ -1,1 +1,4 @@
-### bibliography
+bibliography
+:
+
+compare: [[reference]]

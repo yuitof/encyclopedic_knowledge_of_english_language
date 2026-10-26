@@ -1,0 +1,2 @@
+palindrome
+: 回文

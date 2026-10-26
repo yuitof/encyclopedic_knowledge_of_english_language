@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "7a20fd5284551f21",
+        "id": "bb7aedc156c09a1b",
         "type": "tabs",
         "children": [
           {
-            "id": "d1b88dafb3177484",
+            "id": "dcbc081e08e7b51b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "slut.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "slut"
+              "title": "New tab"
             }
           }
         ]
@@ -76,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "slut",
+                "query": "metapho",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -107,7 +103,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "slut.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -188,7 +183,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "slut.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -218,11 +212,26 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "d1b88dafb3177484",
+  "active": "dcbc081e08e7b51b",
   "lastOpenFiles": [
+    "appropriation.md",
+    "clasp.md",
+    "metamorphose.md",
+    "metaphorical.md",
+    "fetish.md",
+    "clutch.md",
+    "crag.md",
+    "melon and fried chicken.md",
+    "verbal.md",
+    "palindrome.md",
+    "barrel.md",
+    "diabolical.md",
+    "car park.md",
+    "Aristotle.md",
+    "bibliography.md",
+    "slut.md",
     "pimp.md",
     "prostitute.md",
-    "slut.md",
     "you guys are pretty chill.md",
     "chill.md",
     "pal.md",
@@ -231,21 +240,6 @@
     "debut.md",
     "e-pal.md",
     "gooning.md",
-    "unary binary ternary.md",
-    "trance.md",
-    "figurine.md",
-    "hell no.md",
-    "Helldivers.md",
-    "hell yeah.md",
-    "heaven.md",
-    "haven.md",
-    "get along with someone.md",
-    "voucher.md",
-    "lift.md",
-    "close-hauled.md",
-    "connoisseur.md",
-    "cringe.md",
-    "cringey.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
