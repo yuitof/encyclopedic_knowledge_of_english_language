@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "0d4a8b7d7e62ec25",
+        "id": "7a20fd5284551f21",
         "type": "tabs",
         "children": [
           {
-            "id": "fb7ce4c4f47b3eee",
+            "id": "d1b88dafb3177484",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "slut.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "slut"
             }
           }
         ]
@@ -72,7 +76,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "voucher",
+                "query": "slut",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -103,6 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "slut.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -183,6 +188,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "slut.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -212,34 +218,34 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "fb7ce4c4f47b3eee",
+  "active": "d1b88dafb3177484",
   "lastOpenFiles": [
+    "pimp.md",
+    "prostitute.md",
+    "slut.md",
+    "you guys are pretty chill.md",
+    "chill.md",
+    "pal.md",
+    "culture.md",
+    "drip creature.md",
+    "debut.md",
+    "e-pal.md",
+    "gooning.md",
+    "unary binary ternary.md",
+    "trance.md",
+    "figurine.md",
+    "hell no.md",
+    "Helldivers.md",
+    "hell yeah.md",
+    "heaven.md",
+    "haven.md",
+    "get along with someone.md",
     "voucher.md",
     "lift.md",
     "close-hauled.md",
     "connoisseur.md",
     "cringe.md",
     "cringey.md",
-    "chit-chat.md",
-    "chat.md",
-    "wide open.md",
-    "what if SV ?.md",
-    "alright.md",
-    "wdym.md",
-    "loathing.md",
-    "You have my word on it.md",
-    "README.md",
-    "it's a conversation for a different day.md",
-    "about.md",
-    "if that.md",
-    "finna.md",
-    "co-wash.md",
-    "beat the game.md",
-    "put in the effort.md",
-    "at all.md",
-    "figurine.md",
-    "if at all.md",
-    "had better.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",

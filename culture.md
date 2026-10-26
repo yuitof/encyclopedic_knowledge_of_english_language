@@ -33,6 +33,7 @@
 - [[VRChat]]
 - [[ddr]]
 - [[insurgency sandstorm]]
+- [[How to Fish]]
 #### anime, cartoon
 - [[STEINS;GATE]] アニメ
 - [[The Elder Scrolls V Skyrim]]
