@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "bb7aedc156c09a1b",
+        "id": "63990efc6fc316f7",
         "type": "tabs",
         "children": [
           {
-            "id": "dcbc081e08e7b51b",
+            "id": "a9b0fbc2eb05439f",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "metapho",
+                "query": "at most",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,15 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "dcbc081e08e7b51b",
+  "active": "a9b0fbc2eb05439f",
   "lastOpenFiles": [
+    "with (all) (due) respect.md",
+    "if that.md",
+    "as to do.md",
+    "all about.md",
+    "rooster.md",
+    "chick.md",
+    "keep distance from.md",
     "appropriation.md",
     "clasp.md",
     "metamorphose.md",
@@ -233,13 +240,6 @@
     "pimp.md",
     "prostitute.md",
     "you guys are pretty chill.md",
-    "chill.md",
-    "pal.md",
-    "culture.md",
-    "drip creature.md",
-    "debut.md",
-    "e-pal.md",
-    "gooning.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
