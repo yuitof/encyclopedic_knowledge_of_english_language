@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "63990efc6fc316f7",
+        "id": "8379c838cbe73ace",
         "type": "tabs",
         "children": [
           {
-            "id": "a9b0fbc2eb05439f",
+            "id": "aed2e993b8cacb9e",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "atm.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "atm"
             }
           }
         ]
@@ -72,7 +76,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "at most",
+                "query": "for the time being",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -103,6 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "atm.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -183,6 +188,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "atm.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -212,8 +218,21 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "a9b0fbc2eb05439f",
+  "active": "aed2e993b8cacb9e",
   "lastOpenFiles": [
+    "atm.md",
+    "for the time being.md",
+    "happen to be.md",
+    "happen to do.md",
+    "back up.md",
+    "next up.md",
+    "assert your dominance.md",
+    "alpha female.md",
+    "have not.md",
+    "hemorrhoids.md",
+    "hyacinth.md",
+    "errand.md",
+    "in doing.md",
     "with (all) (due) respect.md",
     "if that.md",
     "as to do.md",
@@ -227,19 +246,6 @@
     "metaphorical.md",
     "fetish.md",
     "clutch.md",
-    "crag.md",
-    "melon and fried chicken.md",
-    "verbal.md",
-    "palindrome.md",
-    "barrel.md",
-    "diabolical.md",
-    "car park.md",
-    "Aristotle.md",
-    "bibliography.md",
-    "slut.md",
-    "pimp.md",
-    "prostitute.md",
-    "you guys are pretty chill.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",

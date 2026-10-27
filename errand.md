@@ -10,7 +10,7 @@ errand
 > It looks cozy. You look so right now. I kind of want to sit. I want to sit.
 > It's a It's a comfy seat. You should Yeah, you should come bathe with me.
 > Yeah, maybe I'll do that.
-> And two must now awkwardly [[skedaddle|scadaddle]] as well. Do what you got for I have [[errands]].
+> And two must now awkwardly [[skedaddle|scadaddle]] as well. Do what you got for I have [[errand|errands]].
 > Oh, good. Do your errands.
 > Okay. Byebye. Mori. Mori.
 > Bye. See you later.

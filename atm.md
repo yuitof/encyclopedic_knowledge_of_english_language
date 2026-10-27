@@ -6,3 +6,5 @@ https://en.amazingtalker.com/questions/1355
 > John: "I know, me too! I am really looking forward to your birthday party. 🤩"
 
 - not atm
+
+compare: [[for now]]
