@@ -9,3 +9,5 @@ vortex
 e.g. The Milky Way
 converge -> vortex
 e.g. Toilet flushing
+
+also see: [[vorticism]]

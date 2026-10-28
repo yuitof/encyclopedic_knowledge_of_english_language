@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "52256f085a38787a",
+        "id": "608f718dc5d5be77",
         "type": "tabs",
         "children": [
           {
-            "id": "73b430d44db149d3",
+            "id": "ada4ba9f1067e5b3",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "in the street",
+                "query": "vertex",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,11 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "73b430d44db149d3",
+  "active": "ada4ba9f1067e5b3",
   "lastOpenFiles": [
+    "vertex.md",
+    "vortex.md",
+    "a motor car.md",
     "street.md",
     "as to do.md",
     "in drag.md",
@@ -237,9 +240,6 @@
     "all about.md",
     "rooster.md",
     "chick.md",
-    "keep distance from.md",
-    "appropriation.md",
-    "clasp.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
