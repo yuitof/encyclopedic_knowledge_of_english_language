@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "fc98c04ae59ff042",
+        "id": "52256f085a38787a",
         "type": "tabs",
         "children": [
           {
-            "id": "b3b770525c478f0b",
+            "id": "73b430d44db149d3",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "in drag",
+                "query": "in the street",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,11 +212,13 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "b3b770525c478f0b",
+  "active": "73b430d44db149d3",
   "lastOpenFiles": [
+    "street.md",
+    "as to do.md",
+    "in drag.md",
     "good.md",
     "bad with X.md",
-    "in drag.md",
     "atm.md",
     "for the time being.md",
     "happen to be.md",
@@ -232,14 +234,12 @@
     "in doing.md",
     "with (all) (due) respect.md",
     "if that.md",
-    "as to do.md",
     "all about.md",
     "rooster.md",
     "chick.md",
     "keep distance from.md",
     "appropriation.md",
     "clasp.md",
-    "metamorphose.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
