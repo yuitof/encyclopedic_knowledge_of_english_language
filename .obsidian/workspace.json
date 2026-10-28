@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "8379c838cbe73ace",
+        "id": "fc98c04ae59ff042",
         "type": "tabs",
         "children": [
           {
-            "id": "aed2e993b8cacb9e",
+            "id": "b3b770525c478f0b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "atm.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "atm"
+              "title": "New tab"
             }
           }
         ]
@@ -76,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "for the time being",
+                "query": "in drag",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -107,7 +103,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "atm.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -188,7 +183,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "atm.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -218,8 +212,11 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "aed2e993b8cacb9e",
+  "active": "b3b770525c478f0b",
   "lastOpenFiles": [
+    "good.md",
+    "bad with X.md",
+    "in drag.md",
     "atm.md",
     "for the time being.md",
     "happen to be.md",
@@ -243,9 +240,6 @@
     "appropriation.md",
     "clasp.md",
     "metamorphose.md",
-    "metaphorical.md",
-    "fetish.md",
-    "clutch.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",

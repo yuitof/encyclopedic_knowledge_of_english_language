@@ -7,7 +7,12 @@ good
 : 食べものが美味しいことに対して
 
 : ゲームとかが上手いことに対して
-good at X とかがあると思うけど、good 自体にこの意味がある
+[[good at X]] とかがあると思うけど、good 自体にこの意味がある
  - I'm the fucking best
+
+[[good with X]]
+- How long have you been using Linux? 20 years. So you must *be good with* tar commands?
+
+also see: [[bad with X]]
 
 opp: [[suck]]
