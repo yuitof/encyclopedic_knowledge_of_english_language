@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "60cd3bce29bab608",
+        "id": "965b1c9d50f2a36f",
         "type": "tabs",
         "children": [
           {
-            "id": "ea5fa345c48aaf43",
+            "id": "375fb2348c90a212",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -212,8 +212,9 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "ea5fa345c48aaf43",
+  "active": "375fb2348c90a212",
   "lastOpenFiles": [
+    "scavenger hunt.md",
     "looking back.md",
     "baddie.md",
     "boner.md",
@@ -239,7 +240,6 @@
     "happen to do.md",
     "back up.md",
     "next up.md",
-    "assert your dominance.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
