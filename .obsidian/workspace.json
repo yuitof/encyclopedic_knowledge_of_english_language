@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "608f718dc5d5be77",
+        "id": "60cd3bce29bab608",
         "type": "tabs",
         "children": [
           {
-            "id": "ada4ba9f1067e5b3",
+            "id": "ea5fa345c48aaf43",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "vertex",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,19 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "ada4ba9f1067e5b3",
+  "active": "ea5fa345c48aaf43",
   "lastOpenFiles": [
+    "looking back.md",
+    "baddie.md",
+    "boner.md",
+    "thrift shop.md",
+    "Vernacular.md",
+    "language laddering.md",
+    "language.md",
+    "lang.md",
+    "bone marrow.md",
+    "strand (noun).md",
+    "ounce.md",
     "vertex.md",
     "vortex.md",
     "a motor car.md",
@@ -229,17 +240,6 @@
     "back up.md",
     "next up.md",
     "assert your dominance.md",
-    "alpha female.md",
-    "have not.md",
-    "hemorrhoids.md",
-    "hyacinth.md",
-    "errand.md",
-    "in doing.md",
-    "with (all) (due) respect.md",
-    "if that.md",
-    "all about.md",
-    "rooster.md",
-    "chick.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
