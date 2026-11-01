@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "965b1c9d50f2a36f",
+        "id": "ba71f27686bea08c",
         "type": "tabs",
         "children": [
           {
-            "id": "375fb2348c90a212",
+            "id": "bec58c16739105aa",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "might as well.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "might as well"
             }
           }
         ]
@@ -72,7 +76,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "might as well",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -103,6 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "might as well.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -183,6 +188,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "might as well.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -212,8 +218,23 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "375fb2348c90a212",
+  "active": "bec58c16739105aa",
   "lastOpenFiles": [
+    "the other day.md",
+    "might as well.md",
+    "tbh.md",
+    "to be honest.md",
+    "ngl.md",
+    "acronym.md",
+    "medicine.md",
+    "stuttering.md",
+    "deskie.md",
+    "catfish.md",
+    "No Nut November.md",
+    "reticence.md",
+    "dih.md",
+    "skibidi.md",
+    "toupee.md",
     "scavenger hunt.md",
     "looking back.md",
     "baddie.md",
@@ -225,21 +246,6 @@
     "lang.md",
     "bone marrow.md",
     "strand (noun).md",
-    "ounce.md",
-    "vertex.md",
-    "vortex.md",
-    "a motor car.md",
-    "street.md",
-    "as to do.md",
-    "in drag.md",
-    "good.md",
-    "bad with X.md",
-    "atm.md",
-    "for the time being.md",
-    "happen to be.md",
-    "happen to do.md",
-    "back up.md",
-    "next up.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",

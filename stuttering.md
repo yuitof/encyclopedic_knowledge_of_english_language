@@ -1,0 +1,2 @@
+stuttering
+: also known as stammering, is a speech disorder characterized externally by involuntary repetitions and prolongations of sounds, syllables, words, or phrases as well as involuntary silent pauses called blocks in which the person who stutters is unable to produce sounds.
