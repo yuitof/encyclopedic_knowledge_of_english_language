@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "ba71f27686bea08c",
+        "id": "b8827b7caae02d08",
         "type": "tabs",
         "children": [
           {
-            "id": "bec58c16739105aa",
+            "id": "670ee583aa02f2cf",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "might as well.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "might as well"
+              "title": "New tab"
             }
           }
         ]
@@ -76,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "might as well",
+                "query": "sweat",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -107,7 +103,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "might as well.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -188,7 +183,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "might as well.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -218,10 +212,12 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "bec58c16739105aa",
+  "active": "670ee583aa02f2cf",
   "lastOpenFiles": [
-    "the other day.md",
+    "別れの挨拶.md",
+    "sweating someone's ass off.md",
     "might as well.md",
+    "the other day.md",
     "tbh.md",
     "to be honest.md",
     "ngl.md",
@@ -244,8 +240,6 @@
     "language laddering.md",
     "language.md",
     "lang.md",
-    "bone marrow.md",
-    "strand (noun).md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",

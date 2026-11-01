@@ -1,6 +1,9 @@
 sweating someone's ass off
 : 1. you just sweating a lot
-2. you [[try hard]]
+
+: 2. you [[try hard]]
+
+compare: [[work someone's ass·butt off]]
 
 rain a cat's and dog's
 
