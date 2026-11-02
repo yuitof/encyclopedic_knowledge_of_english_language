@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "c41f1260fc7a5150",
+        "id": "b5c63bf70bed96c8",
         "type": "tabs",
         "children": [
           {
-            "id": "f2202c29aa0b1c70",
+            "id": "81dc6e6e0ada27ec",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -212,9 +212,10 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "f2202c29aa0b1c70",
+  "active": "81dc6e6e0ada27ec",
   "lastOpenFiles": [
     "人 that.md",
+    "predicative.md",
     "happen to do.md",
     "Crossing from Guangdong.md",
     "get X to do.md",
@@ -239,7 +240,6 @@
     "back up.md",
     "if anything.md",
     "if it weren't for X, S would V.md",
-    "tit for tat.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
