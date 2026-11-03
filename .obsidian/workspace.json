@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "b5c63bf70bed96c8",
+        "id": "307b87de9ff5919c",
         "type": "tabs",
         "children": [
           {
-            "id": "81dc6e6e0ada27ec",
+            "id": "b93a01849d677c1b",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "人 that",
+                "query": "pun",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,12 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "81dc6e6e0ada27ec",
+  "active": "b93a01849d677c1b",
   "lastOpenFiles": [
+    "doe.md",
+    "crummy.md",
+    "deserving.md",
+    "brittle.md",
     "人 that.md",
     "predicative.md",
     "happen to do.md",
@@ -236,10 +240,6 @@
     "at all.md",
     "it's a conversation for a different day.md",
     "if that.md",
-    "happen to be.md",
-    "back up.md",
-    "if anything.md",
-    "if it weren't for X, S would V.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
