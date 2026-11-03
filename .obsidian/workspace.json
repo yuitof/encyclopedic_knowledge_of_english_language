@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "307b87de9ff5919c",
+        "id": "97888954be2768fe",
         "type": "tabs",
         "children": [
           {
-            "id": "b93a01849d677c1b",
+            "id": "533ca576dd1bc42a",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "No Nut November.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "No Nut November"
             }
           }
         ]
@@ -72,7 +76,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "pun",
+                "query": "no nut november",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -103,6 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "No Nut November.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -183,6 +188,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "No Nut November.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -212,9 +218,10 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "b93a01849d677c1b",
+  "active": "533ca576dd1bc42a",
   "lastOpenFiles": [
     "doe.md",
+    "fringe.md",
     "crummy.md",
     "deserving.md",
     "brittle.md",
@@ -239,7 +246,6 @@
     "all about.md",
     "at all.md",
     "it's a conversation for a different day.md",
-    "if that.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
