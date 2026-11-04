@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "No Nut November.md",
+                "file": "as to do.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "No Nut November"
+              "title": "as to do"
             }
           }
         ]
@@ -76,7 +76,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "no nut november",
+                "query": "such as",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -107,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "No Nut November.md",
+                "file": "as to do.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -188,7 +188,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "No Nut November.md",
+                "file": "as to do.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -220,6 +220,8 @@
   },
   "active": "533ca576dd1bc42a",
   "lastOpenFiles": [
+    "as such.md",
+    "No Nut November.md",
     "doe.md",
     "fringe.md",
     "crummy.md",
@@ -244,8 +246,6 @@
     "is it cool if S V?.md",
     "filler.md",
     "all about.md",
-    "at all.md",
-    "it's a conversation for a different day.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",

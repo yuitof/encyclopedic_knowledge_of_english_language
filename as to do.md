@@ -18,3 +18,5 @@ https://en.wikipedia.org/wiki/Welsh_language
 - the solitary ones, which people go through alone, in their bedrooms, in their offices, walking the fields and the streets of London, he had them; had left home, a mere boy, because of his mother; she lied; because he came down to tea for the fiftieth time with his hands unwashed; because he could see no future for a poet in Stroud;* and so, making a confidant of his little sister, had gone to London leaving an absurd note behind him, *such as great men have written,* and the world has read later when the story of their struggles has become famous.
 
 Woolf, Virginia. Mrs Dalloway (Oxford World's Classics) (pp. 142-143). (Function). Kindle Edition. 
+
+: これは数学の記述とかでみられる [[such that]] どのようなもの中のか説明するのに似ている
