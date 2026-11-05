@@ -10,3 +10,5 @@ cf: [[Fortnite]]
 
 : 責任があることを on someone という形で表せる
 - [[what if SV ?|What if]] somebody had died tonight? Different story, right? Because that's on you. And if you died, I feel like that's on me.
+
+これは blame X on Y の on の用法に似ている

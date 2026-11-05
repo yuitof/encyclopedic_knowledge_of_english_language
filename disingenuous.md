@@ -1,0 +1,2 @@
+disingenuous
+: lacking in candor

@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "97888954be2768fe",
+        "id": "01329fe43338582f",
         "type": "tabs",
         "children": [
           {
-            "id": "533ca576dd1bc42a",
+            "id": "7cc3bb1713b6c4a7",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "as to do.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "as to do"
+              "title": "New tab"
             }
           }
         ]
@@ -33,7 +29,7 @@
       {
         "id": "0c5a938a7b089150",
         "type": "tabs",
-        "dimension": 49.41275167785235,
+        "dimension": 20.682523267838675,
         "children": [
           {
             "id": "73b4ed150a23e357",
@@ -68,7 +64,7 @@
       {
         "id": "418a364ce796a46e",
         "type": "tabs",
-        "dimension": 50.58724832214765,
+        "dimension": 79.31747673216132,
         "children": [
           {
             "id": "cdc519dcecbfda98",
@@ -76,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "such as",
+                "query": "slang",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -91,7 +87,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 456.82502365112305
   },
   "right": {
     "id": "648a6ada0608665d",
@@ -107,7 +103,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "as to do.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -188,7 +183,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "as to do.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -218,34 +212,36 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "533ca576dd1bc42a",
+  "active": "7cc3bb1713b6c4a7",
   "lastOpenFiles": [
+    "no joke.md",
+    "slang.md",
+    "like I said.md",
+    "-ball.md",
+    "minor.md",
+    "Giffen Goods.md",
+    "adjudicate.md",
+    "haggis.md",
+    "Pasted image 20261105042555.png",
+    "Pasted image 20261105042559.png",
+    "scotch.md",
+    "Untitled 48.md",
+    "on.md",
+    "call on someone to do.md",
+    "elite ball knowledge.md",
+    "drama.md",
+    "will be off.md",
+    "be better off.md",
+    "Bungie.md",
+    "disingenuous.md",
+    "ragged.md",
+    "as to do.md",
     "as such.md",
     "No Nut November.md",
     "doe.md",
     "fringe.md",
     "crummy.md",
     "deserving.md",
-    "brittle.md",
-    "人 that.md",
-    "predicative.md",
-    "happen to do.md",
-    "Crossing from Guangdong.md",
-    "get X to do.md",
-    "get on with.md",
-    "get hold of.md",
-    "as for X.md",
-    "stuttering.md",
-    "by the way.md",
-    "acronym.md",
-    "FYI.md",
-    "if need be.md",
-    "as needed.md",
-    "porous.md",
-    "intervention.md",
-    "is it cool if S V?.md",
-    "filler.md",
-    "all about.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
@@ -261,8 +257,6 @@
     "Untitled 3",
     "Pasted image 20260801160749.png",
     "Untitled 2",
-    "Pasted image 20260731083952.png",
-    "Pasted image 20260731083926.png",
     "help yourself"
   ]
 }
