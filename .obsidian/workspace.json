@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "01329fe43338582f",
+        "id": "09fc6680ade64661",
         "type": "tabs",
         "children": [
           {
-            "id": "7cc3bb1713b6c4a7",
+            "id": "7d0043be0a96c156",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "slang",
+                "query": "disclaimer",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,10 +212,18 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "7cc3bb1713b6c4a7",
+  "active": "7d0043be0a96c156",
   "lastOpenFiles": [
-    "no joke.md",
+    "disclaimer.md",
+    "isle of wight.md",
+    "mourn.md",
+    "lewd.md",
+    "hype.md",
+    "Untitled 38.md",
+    "get on with someone.md",
+    "get along with someone.md",
     "slang.md",
+    "no joke.md",
     "like I said.md",
     "-ball.md",
     "minor.md",
@@ -234,14 +242,6 @@
     "be better off.md",
     "Bungie.md",
     "disingenuous.md",
-    "ragged.md",
-    "as to do.md",
-    "as such.md",
-    "No Nut November.md",
-    "doe.md",
-    "fringe.md",
-    "crummy.md",
-    "deserving.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
