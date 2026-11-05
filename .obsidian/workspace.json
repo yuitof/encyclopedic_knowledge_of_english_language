@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "09fc6680ade64661",
+        "id": "91a15a4f4b2e2235",
         "type": "tabs",
         "children": [
           {
-            "id": "7d0043be0a96c156",
+            "id": "17f4b7b8d007227a",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "disclaimer",
+                "query": "CPTSD",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -212,8 +212,11 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "7d0043be0a96c156",
+  "active": "17f4b7b8d007227a",
   "lastOpenFiles": [
+    "ocularcentrism.md",
+    "CPTSD.md",
+    "would that.md",
     "disclaimer.md",
     "isle of wight.md",
     "mourn.md",
@@ -239,9 +242,6 @@
     "elite ball knowledge.md",
     "drama.md",
     "will be off.md",
-    "be better off.md",
-    "Bungie.md",
-    "disingenuous.md",
     "Untitled",
     "Pasted image 20261004055554.png",
     "Untitled.canvas",
