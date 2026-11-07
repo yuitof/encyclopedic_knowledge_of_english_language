@@ -54,7 +54,7 @@
 - [[Spirited Away]]
 
 #### music
-- [[phonk]] understanding:0%, vibe:100%
+- [[phonk]]
 - [[Luo Tianyi]] 中国の初音ミク
 - [[Beyond]]
 - [[Sweets Parade]]
