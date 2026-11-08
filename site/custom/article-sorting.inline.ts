@@ -160,7 +160,7 @@ async function prepareArticleSorting() {
     const dateStatus = calendar.querySelector(".date-filter-status")!;
     dateStatus.textContent = invalid
       ? "Choose an end date on or after the start date."
-      : `${filtered.length.toLocaleString()} of ${entries.length.toLocaleString()} articles.`;
+      : `${filtered.length.toLocaleString("en-US")} of ${entries.length.toLocaleString("en-US")} articles.`;
     status.textContent = `Sorted by ${select.selectedOptions[0].textContent}.`;
     document.dispatchEvent(
       new CustomEvent("article-sections-changed", { detail: {} }),

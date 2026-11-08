@@ -57,6 +57,17 @@ try {
       result.error ?? new Error(`Quartz exited with status ${result.status}`)
     );
   await enrichSortRanks(output, publication);
+  // Format Quartz's generated folder count in the static HTML, including without JS.
+  const articleListFile = path.join(output, "articles/index.html");
+  const articleList = await fs.readFile(articleListFile, "utf8");
+  await fs.writeFile(
+    articleListFile,
+    articleList.replace(
+      /(<div class="page-listing"><p>)(\d+)(\s)/u,
+      (_, before, count, after) =>
+        `${before}${Number(count).toLocaleString("en-US")}${after}`,
+    ),
+  );
   await copyMathFonts(output);
   await copySiteAssets(output);
   await fs.writeFile(path.join(output, ".nojekyll"), "");

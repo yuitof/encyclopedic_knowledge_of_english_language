@@ -9,7 +9,7 @@ async function prepareHighlights() {
   );
   const count = section.querySelector(".collection-note-count");
   if (count)
-    count.textContent = `${notes.length.toLocaleString()} notes in the collection.`;
+    count.textContent = `${notes.length.toLocaleString("en-US")} notes in the collection.`;
   const entries = notes.filter(([, note]) => note.content.trim());
   for (let i = entries.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

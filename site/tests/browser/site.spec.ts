@@ -942,6 +942,9 @@ test("Articles retains the complete static list without JavaScript", async ({
     await expect(staticPage.locator(".page-listing .section-li")).toHaveCount(
       count,
     );
+    await expect(staticPage.locator(".page-listing > p")).toHaveText(
+      `${count.toLocaleString("en-US")} ${count === 1 ? "item" : "items"} under this folder.`,
+    );
     await expect(
       staticPage.getByRole("combobox", { name: "Sort articles" }),
     ).toBeDisabled();

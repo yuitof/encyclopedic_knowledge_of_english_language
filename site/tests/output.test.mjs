@@ -114,6 +114,16 @@ test("project pages, sort ranks and favicon are public without source filesystem
     manifest.notes.filter((entry) => entry.target.startsWith("articles/"))
       .length,
   );
+  const listing = await fs.readFile(
+    path.join(output, "articles/index.html"),
+    "utf8",
+  );
+  const articleCount = Object.keys(publication.sortRanks).length;
+  assert.ok(
+    listing.includes(
+      `<div class="page-listing"><p>${articleCount.toLocaleString("en-US")} `,
+    ),
+  );
   for (const name of ["privacy", "license"])
     assert.ok((await fs.stat(path.join(output, name + ".html"))).isFile());
   assert.ok(
