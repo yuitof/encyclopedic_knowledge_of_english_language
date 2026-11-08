@@ -84,6 +84,7 @@ export const WikiExplorer: QuartzComponent = (props) => {
       <div class="show-more-row">
         <a
           class="internal nav-show-more"
+          data-no-popover="true"
           href={`${base}/articles/?sort=modified-desc`}
         >
           Show more
