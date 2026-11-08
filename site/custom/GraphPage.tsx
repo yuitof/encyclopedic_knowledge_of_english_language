@@ -4,9 +4,15 @@ import { pathToRoot } from "../quartz/util/path";
 // @ts-ignore: Quartz imports inline scripts as strings.
 import controls from "./graph-page.inline";
 
+const graphForces = {
+  repelForce: 0.025,
+  centerForce: 0.6,
+  linkDistance: 18,
+  enableRadial: true,
+};
 const stock = Graph({
-  localGraph: { depth: -1, showTags: false, enableRadial: false },
-  globalGraph: { showTags: false },
+  localGraph: { ...graphForces, depth: -1, showTags: false },
+  globalGraph: { ...graphForces, showTags: false },
 }) as QuartzComponent;
 // Adapt the pinned official plugin's two runtime URLs; keep its graph engine unchanged.
 let runtime = [stock.afterDOMLoaded ?? ""].flat().join("\n");
@@ -22,6 +28,28 @@ for (const [remote, local] of [
     `((document.body.dataset.basepath || "") + "/static/graph/${local}")`,
   );
 }
+// Quartz's radial mode targets a ring. A zero-radius target provides inward
+// gravity instead, balanced by the existing charge and collision forces.
+const radialForce = /\.forceRadial\([^()]+\)\.strength\(\.2\)/gu;
+if ([...runtime.matchAll(radialForce)].length !== 1)
+  throw new Error("Graph gravity integration requires review");
+runtime = runtime.replace(radialForce, ".forceRadial(0).strength(.12)");
+// Fit the initial camera once after a short force warm-up. Subsequent pan/zoom
+// remains owned by Quartz, so interacting with the graph never resets the view.
+const zoomSetup = "o.select(Q.canvas).call(et)";
+if (!runtime.includes(zoomSetup))
+  throw new Error("Graph camera integration requires review");
+runtime = runtime.replace(
+  zoomSetup,
+  `${zoomSetup};if(ru.length){
+  ou.tick(100);
+  var fitBounds=ru.reduce(function(bounds,node){
+    return [Math.min(bounds[0],node.x),Math.max(bounds[1],node.x),Math.min(bounds[2],node.y),Math.max(bounds[3],node.y)];
+  },[Infinity,-Infinity,Infinity,-Infinity]);
+  var fitScale=Math.max(.25,Math.min(1,(O-48)/Math.max(1,fitBounds[1]-fitBounds[0]),(G-48)/Math.max(1,fitBounds[3]-fitBounds[2])));
+  o.select(Q.canvas).call(et.transform,o.zoomIdentity.translate(O/2,G/2).scale(fitScale).translate(-O/2-(fitBounds[0]+fitBounds[1])/2,-G/2-(fitBounds[2]+fitBounds[3])/2));
+}`,
+);
 const resizeHook = 'document.addEventListener("themechange",R)';
 if (!runtime.includes(resizeHook))
   throw new Error("Graph resize integration requires review");

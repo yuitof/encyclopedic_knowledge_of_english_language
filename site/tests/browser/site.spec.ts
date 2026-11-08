@@ -1289,3 +1289,66 @@ test("landing notebook cards use neutral headings and borders", async ({
   expect(colors.title).toBe(colors.heading);
   expect(colors.border).not.toBe("rgb(51, 102, 204)");
 });
+
+test("Graph gravity forms a circular cluster that fits the initial canvas", async ({
+  page,
+}) => {
+  // Observe the real force simulation without exposing test hooks in production.
+  await page.route("**/static/graph/d3.min.js", async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({
+      response,
+      body:
+        (await response.text()) +
+        `;{
+      const original = window.d3.forceSimulation;
+      window.d3.forceSimulation = (...args) => {
+        const simulation = original(...args);
+        window.__graphTestSimulation = simulation;
+        return simulation;
+      };
+    }`,
+    });
+  });
+  await page.goto("./graph");
+  await expect(page.locator(".graph-page .graph-container canvas")).toBeVisible(
+    { timeout: 20000 },
+  );
+  const layout = await page.evaluate(() => {
+    const simulation = (window as any).__graphTestSimulation;
+    simulation.stop().tick(200);
+    const nodes = simulation.nodes() as { x: number; y: number }[];
+    const canvas = document.querySelector<HTMLCanvasElement>(
+      ".graph-page .graph-container canvas",
+    )!;
+    const zoom = (canvas as any).__zoom;
+    const width = canvas.clientWidth,
+      height = canvas.clientHeight;
+    const bounds = nodes.reduce(
+      (box, node) => [
+        Math.min(box[0], node.x),
+        Math.max(box[1], node.x),
+        Math.min(box[2], node.y),
+        Math.max(box[3], node.y),
+      ],
+      [Infinity, -Infinity, Infinity, -Infinity],
+    );
+    return {
+      nodes: nodes.length,
+      aspect: (bounds[1] - bounds[0]) / (bounds[3] - bounds[2]),
+      left: zoom.applyX(bounds[0] + width / 2),
+      right: zoom.applyX(bounds[1] + width / 2),
+      top: zoom.applyY(bounds[2] + height / 2),
+      bottom: zoom.applyY(bounds[3] + height / 2),
+      width,
+      height,
+    };
+  });
+  expect(layout.nodes).toBeGreaterThan(0);
+  expect(layout.aspect).toBeGreaterThan(0.8);
+  expect(layout.aspect).toBeLessThan(1.25);
+  expect(layout.left).toBeGreaterThanOrEqual(0);
+  expect(layout.top).toBeGreaterThanOrEqual(0);
+  expect(layout.right).toBeLessThanOrEqual(layout.width);
+  expect(layout.bottom).toBeLessThanOrEqual(layout.height);
+});
