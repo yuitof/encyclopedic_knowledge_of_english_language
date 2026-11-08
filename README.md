@@ -17,3 +17,11 @@ record of the language and the ideas surrounding it.
 
 This is a living collection, so its contents will continue to grow and change
 as I learn.
+
+## Website development
+
+A Quartz 5 website for an explicitly selected public collection lives in [`site/`](site/README.md). Its Wikipedia-inspired interface includes full-text client search, topic navigation, article contents, backlinks and mathematical typesetting.
+
+The original collection is organized under [`vault/`](vault/): Markdown in `notes/`, images in `assets/`, and settings in `.obsidian/`. Open **`vault/`** as the Obsidian vault. They are **not automatically selected for the website**; the initial publishing manifest includes demonstration articles only. Publishing controls apply to generated Pages files, while this source repository and its history still contain the vault.
+
+Read [`site/README.md`](site/README.md) for setup, tests and the manual GitHub Pages deployment process, and [`site/docs/publication.md`](site/docs/publication.md) before approving notes or attachments. No website deployment is performed automatically by the experimental feature branch.
