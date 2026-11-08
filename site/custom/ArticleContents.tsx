@@ -24,26 +24,23 @@ export const ArticleContents: QuartzComponent = (data) => {
         (Top)
       </a>
       {entries.length > 0 && (
-        <details open>
-          <summary>On this page</summary>
-          <ul>
-            {entries.map((entry) => (
-              <li
-                style={{
-                  paddingLeft: `${Math.max(0, entry.depth - entries[0].depth)}rem`,
-                }}
+        <ul>
+          {entries.map((entry) => (
+            <li
+              style={{
+                paddingLeft: `${Math.max(0, entry.depth - entries[0].depth)}rem`,
+              }}
+            >
+              <a
+                href={`#${entry.slug}`}
+                data-section={entry.slug}
+                data-backlinks={entry.isBacklinks ? "true" : undefined}
               >
-                <a
-                  href={`#${entry.slug}`}
-                  data-section={entry.slug}
-                  data-backlinks={entry.isBacklinks ? "true" : undefined}
-                >
-                  {entry.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </details>
+                {entry.text}
+              </a>
+            </li>
+          ))}
+        </ul>
       )}
     </nav>
   );

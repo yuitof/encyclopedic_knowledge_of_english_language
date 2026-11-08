@@ -300,12 +300,11 @@ test("section contents, active heading and Explorer collapse share one sidebar s
     "aria-current",
     "location",
   );
-  const contents = page.locator(".article-contents details"),
-    summary = contents.locator("summary");
-  await summary.click();
-  await expect(contents.locator("ul")).not.toBeVisible();
-  await summary.press("Enter");
-  await expect(contents.locator("ul")).toBeVisible();
+  await expect(
+    page.locator(".article-contents details, .article-contents summary"),
+  ).toHaveCount(0);
+  await expect(page.getByText("On this page", { exact: true })).toHaveCount(0);
+  await expect(page.locator(".article-contents > ul")).toBeVisible();
   await page.locator(".article-contents a[data-section]").nth(2).click();
   await expect(
     page.locator(".article-contents a[data-section]").nth(2),

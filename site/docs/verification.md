@@ -58,3 +58,9 @@ All source vault files, publication approvals and the original checkout remain u
 The Contents `(Top)` link now targets the existing `#quartz-root` document wrapper instead of `#main-content`, so it returns to scroll position zero and includes the masthead. This uses Quartz's existing anchor navigation and native fragment fallback; no custom scrolling script was added. The accessibility Skip to article link still targets the article body.
 
 TypeScript passed. Root, repository-subpath and final default builds each passed all seven output checks. Twelve targeted desktop/tablet/mobile browser cases passed: mouse and keyboard Top activation from deep scroll, repeated activation, exact scroll position zero, masthead visibility, active-state highlighting, and continued behavior after SPA navigation. Article section links, backlinks navigation, sidebar collapse and shared scrolling also passed their targeted regressions. User AGENTS.md edits were left untouched; no remote operations occurred.
+
+## Direct Contents links
+
+Removed the nested On this page disclosure and its styling. Section links now render as a direct list below (Top), with Backlinks only when present. The outer Contents control and Explorer remain intact, including mobile behavior, the shared scrollbar, active-section highlighting and document-top navigation.
+
+TypeScript passed. Root, repository-subpath and final default builds each passed seven output checks. Twelve targeted browser cases passed across desktop/tablet/mobile: the disclosure and label are absent, the direct list is visible, section and backlinks jumps work, Explorer still collapses, and Top still reaches scroll position zero. No new client code or dependencies were added. Existing user AGENTS.md edits were left untouched.
