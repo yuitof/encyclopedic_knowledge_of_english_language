@@ -1148,7 +1148,7 @@ test("Recently updated is a plain label and its entries reopen on every reload",
   ).toBeVisible();
 });
 
-test("empty Contents and Explorer close automatically and reopen when content appears", async ({
+test("Top counts as content while empty Explorer closes automatically", async ({
   page,
 }) => {
   await page.goto("./articles/?sort=name-asc");
@@ -1158,10 +1158,12 @@ test("empty Contents and Explorer close automatically and reopen when content ap
     explorer = page.locator(".explorer-panel");
   await expect(explorer).toHaveAttribute("data-empty", "true");
   await expect(explorer).not.toHaveAttribute("open", "");
+  await openContents(page);
   await expect(contents).toHaveAttribute("open", "");
   await select.selectOption("modified-desc");
-  await expect(contents).toHaveAttribute("data-empty", "true");
-  await expect(contents).not.toHaveAttribute("open", "");
+  await expect(contents).toHaveAttribute("data-empty", "false");
+  await expect(contents).toHaveAttribute("open", "");
+  await expect(page.locator(".contents-top")).toBeVisible();
   await expect(explorer).toHaveAttribute("open", "");
   await expect(page.locator(".article-date-filter")).toBeVisible();
   await select.selectOption("created-asc");
@@ -1189,8 +1191,10 @@ test("empty Contents and Explorer close automatically and reopen when content ap
   });
   expect(emptySlug).toBeTruthy();
   await page.goto(`./${emptySlug}`);
-  await expect(contents).toHaveAttribute("data-empty", "true");
-  await expect(contents).not.toHaveAttribute("open", "");
-  await expect(page.locator(".contents-top")).toHaveCount(1);
+  await expect(contents).toHaveAttribute("data-empty", "false");
+  if (mobile(page)) await expect(contents).not.toHaveAttribute("open", "");
+  else await expect(contents).toHaveAttribute("open", "");
+  await openContents(page);
+  await expect(page.locator(".contents-top")).toBeVisible();
   await expect(explorer).toHaveAttribute("open", "");
 });

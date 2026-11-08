@@ -19,7 +19,7 @@ export const ArticleContents: QuartzComponent = (data) => {
       isBacklinks: true,
     });
   return (
-    <details class="navigation-panel contents-panel" open={entries.length > 0}>
+    <details class="navigation-panel contents-panel" open>
       <summary>Contents</summary>
       <nav class="article-contents" aria-label="Article contents">
         <a class="contents-top" href="#quartz-root">

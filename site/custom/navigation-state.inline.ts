@@ -3,7 +3,7 @@ function closeEmptyNavigationPanels() {
     ".sidebar.left > .navigation-panel",
   )) {
     const hasContent = panel.classList.contains("contents-panel")
-      ? !!panel.querySelector("a[data-section]")
+      ? !!panel.querySelector(".article-contents a")
       : !!panel.querySelector(
           ".article-date-filter:not([hidden]), .explorer-content a.nav-file-title, .nav-show-more",
         );
