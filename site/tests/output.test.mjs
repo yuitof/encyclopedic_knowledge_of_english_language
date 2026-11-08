@@ -1,4 +1,5 @@
 import { test } from "node:test";
+import { fromHtml } from "hast-util-from-html";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -128,5 +129,74 @@ test("removed catalogue is absent from output and generated navigation", async (
       "utf8",
     );
     assert.doesNotMatch(page, /href=["'][^"']*\/catalogue(?:[.#?"']|$)/u);
+  }
+});
+
+test("backlinks are emitted inside article HTML and omitted entirely when absent", async () => {
+  const index = JSON.parse(
+    await fs.readFile(path.join(output, "static/contentIndex.json"), "utf8"),
+  );
+  const notes = Object.entries(index).filter(
+    ([slug, note]) => slug.startsWith("articles/") && note.sortRanks,
+  );
+  const incoming = (slug) =>
+    notes.filter(([, note]) => note.links?.includes(slug));
+  const positive = notes.find(([slug]) => incoming(slug).length > 0);
+  const negative = notes.find(([slug]) => incoming(slug).length === 0);
+  function find(node, predicate) {
+    return [
+      ...(predicate(node) ? [node] : []),
+      ...(node.children ?? []).flatMap((child) => find(child, predicate)),
+    ];
+  }
+  for (const entry of [positive, negative].filter(Boolean)) {
+    const [slug] = entry;
+    const tree = fromHtml(
+      await fs.readFile(path.join(output, slug + ".html"), "utf8"),
+    );
+    const sections = find(
+      tree,
+      (node) =>
+        node.tagName === "section" &&
+        node.properties?.className?.includes("article-backlinks"),
+    );
+    const shortcuts = find(
+      tree,
+      (node) =>
+        node.tagName === "a" && node.properties?.dataBacklinks === "true",
+    );
+    const expected = incoming(slug);
+    assert.equal(sections.length, expected.length ? 1 : 0);
+    assert.equal(shortcuts.length, expected.length ? 1 : 0);
+    if (expected.length) {
+      const section = sections[0];
+      assert.equal(shortcuts[0].properties.href, "#" + section.properties.id);
+      assert.equal(section.children[0].tagName, "h2");
+      const article = find(tree, (node) => node.tagName === "article").find(
+        (node) => find(node, (candidate) => candidate === section).length > 0,
+      );
+      assert.ok(article, "Backlinks must be inside the article");
+      assert.equal(
+        find(section, (node) => node.tagName === "a").length,
+        expected.length,
+      );
+    }
+    const right = find(
+      tree,
+      (node) =>
+        node.tagName === "aside" &&
+        node.properties?.className?.includes("right"),
+    );
+    assert.ok(
+      right.every(
+        (node) =>
+          find(
+            node,
+            (candidate) =>
+              candidate.properties?.className?.includes("backlinks") ||
+              candidate.properties?.className?.includes("article-backlinks"),
+          ).length === 0,
+      ),
+    );
   }
 });

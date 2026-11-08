@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 for (const args of [
   ["--test", "tests/publication.test.mjs", "tests/sort-ranks.test.mjs"],
+  ["node_modules/tsx/dist/cli.mjs", "--test", "tests/backlinks.test.ts"],
   ["node_modules/typescript/bin/tsc", "--noEmit"],
   ["--test", "tests/feature-fixture.test.mjs"],
   ["scripts/test-paths.mjs"],

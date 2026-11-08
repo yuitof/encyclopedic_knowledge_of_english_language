@@ -42,3 +42,13 @@ A single **Show more** link follows the recent entries inside the articles folde
 TypeScript and the root/subpath builds passed, including all six output checks for each build. The 40-case browser coverage passed for the recent limit, dynamic 0/2/9/14-note collections (including tied and missing modification ranks), search, full article membership, appearance, sidebar controls and footer behavior. The four additional Show more navigation cases pass on desktop, tablet, 320px and 390px screens; mobile checks reopen the normally collapsed Contents panel after navigation. The final local `public/` artifact was rebuilt and verified. No subagents were used for this follow-up.
 
 Existing uncommitted user edits to `AGENTS.md` were left untouched. Work on the pending article-body arrangement controls remains paused.
+
+## Build-time article backlinks
+
+Backlinks now render directly inside the article HTML as a normal section following the original body. It uses an ordinary heading and list, inheriting existing article typography, separators, spacing and appearance settings. The matching On this page entry shares its conditional selection and unique anchor. When no published, listed source links to the article, neither generated element is present. The previous right-sidebar widget is disabled.
+
+Rendering uses a new HAST root with the original body followed by the section. Original Markdown, indexed content and transcluded source trees are not modified. Existing section/heading IDs are checked before choosing an anchor. The implementation adds no browser-side backlinks fetching or new client code; the obsolete widget's generated overflow script was removed from the reviewed resource inventory.
+
+The complete Node 24.22.2 checks passed: 19 publication/privacy cases, 2 ranking cases, 4 backlink cases, TypeScript, the temporary rich-content fixture, 7 generated-output checks for each URL layout, and 48 browser cases across desktop/tablet/mobile root and repository URLs. Backlinks-specific output checks inspect compiled HTML directly, including empty cases. Browser checks verify article placement, inherited font/list styling, the sidebar jump and active state, absence from the right sidebar, and omission of both section and shortcut on a page without backlinks. The final default artifact was rebuilt and verified separately.
+
+All source vault files, publication approvals and the original checkout remain unchanged. The user's existing AGENTS.md edits remain untouched. No subagents, remote pushes or deployments were used for this change.

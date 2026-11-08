@@ -386,3 +386,53 @@ test("hover previews omit article title while retaining the note body", async ({
     page.locator(".popover.active-popover .popover-inner"),
   ).not.toBeEmpty();
 });
+
+test("build-time backlinks match article styling and contents, with no empty sections", async ({
+  page,
+}) => {
+  await page.goto("./articles/crocodile");
+  const section = page.locator("article .article-backlinks");
+  await expect(section).toHaveCount(1);
+  await expect(section.locator("h2")).toHaveText("Backlinks");
+  await expect(
+    section.getByRole("link", { name: "rock", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    page.locator(
+      ".sidebar.right .backlinks, .sidebar.right .article-backlinks",
+    ),
+  ).toHaveCount(0);
+  expect(
+    await section.locator("h2").evaluate((e) => getComputedStyle(e).fontFamily),
+  ).toContain("Georgia");
+  expect(
+    await section.locator("ul").evaluate((e) => getComputedStyle(e).overflowY),
+  ).toBe("visible");
+  await openContents(page);
+  const shortcut = page.locator('.article-contents a[data-backlinks="true"]');
+  await expect(shortcut).toHaveText("Backlinks");
+  await shortcut.click();
+  await expect(section).toBeInViewport();
+  await expect(shortcut).toHaveAttribute("aria-current", "location");
+  const negative = await page.evaluate(async () => {
+    const index = await fetch(
+      `${document.body.dataset.basepath ?? ""}/static/contentIndex.json`,
+    ).then((r) => r.json());
+    const entries = Object.entries(index) as [
+      string,
+      { sortRanks?: object; links?: string[] },
+    ][];
+    return entries.find(
+      ([slug, note]) =>
+        slug.startsWith("articles/") &&
+        note.sortRanks &&
+        !entries.some(([, source]) => source.links?.includes(slug)),
+    )?.[0];
+  });
+  expect(negative).toBeTruthy();
+  await page.goto(`./${negative}`);
+  await expect(page.locator(".article-backlinks")).toHaveCount(0);
+  await expect(
+    page.locator('.article-contents a[data-backlinks="true"]'),
+  ).toHaveCount(0);
+});

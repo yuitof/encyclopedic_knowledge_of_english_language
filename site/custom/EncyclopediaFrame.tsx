@@ -1,5 +1,6 @@
 import type { PageFrame } from "../quartz/components/frames";
 import { pathToRoot } from "../quartz/util/path";
+import { withArticleBacklinks } from "./article-backlinks";
 
 /** Uses Quartz 5's frame registry; no changes to the renderer are needed. */
 export const EncyclopediaFrame: PageFrame = {
@@ -15,6 +16,7 @@ export const EncyclopediaFrame: PageFrame = {
     footer,
   }) {
     const home = pathToRoot(data.fileData.slug!);
+    const articleData = withArticleBacklinks(data);
     return (
       <>
         <a class="skip-link" href="#main-content">
@@ -61,7 +63,7 @@ export const EncyclopediaFrame: PageFrame = {
                 <Component {...data} />
               ))}
             </div>
-            <Content {...data} />
+            <Content {...articleData} />
             <div class="page-footer">
               {afterBody.map((Component) => (
                 <Component {...data} />

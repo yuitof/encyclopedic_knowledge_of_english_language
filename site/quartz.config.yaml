@@ -121,7 +121,7 @@ plugins:
       position: left
       priority: 30
   - source: "@quartz-community/backlinks"
-    enabled: true
+    enabled: false
     layout:
       position: right
       priority: 30

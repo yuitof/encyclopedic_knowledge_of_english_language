@@ -73,7 +73,7 @@ Rich-feature regression coverage now creates a separate temporary fixture corpus
 
 Raw HTML, unsupported metadata, alias redirects, non-raster attachments and symlinks remain rejected. Supported metadata is listed in the policy. Obsidian-specific programs such as Dataview or Templater do not run in the browser. Preserve the originals and use reviewed public-copy transformations if future formats require changes.
 
-The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks and search. Appearance controls directly above Backlinks offer small/standard/large text, standard/wide content, and automatic/light/dark color; browser-local preferences persist across navigation and reload. The standalone alphabetical catalogue has been removed. Article-specific contents and Explorer share one bounded sidebar scrollbar; wheel input over either section moves the same panel. Native disclosures collapse article sections and Explorer with mouse or keyboard. (Top) and the current Markdown section use bold themed text. Mobile navigation starts collapsed. The header links to the generated article listing. Hover previews omit the repeated article title; Quartz keeps hover windows disabled at mobile widths.
+The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks and search. Backlinks are compiled directly into a normal section after the article body, with matching heading typography and list spacing. Both this section and its “On this page” shortcut are omitted when no published, listed note links to the page; there is no empty placeholder or right-sidebar backlink widget. Appearance controls directly above Backlinks offer small/standard/large text, standard/wide content, and automatic/light/dark color; browser-local preferences persist across navigation and reload. The standalone alphabetical catalogue has been removed. Article-specific contents and Explorer share one bounded sidebar scrollbar; wheel input over either section moves the same panel. Native disclosures collapse article sections and Explorer with mouse or keyboard. (Top) and the current Markdown section use bold themed text. Mobile navigation starts collapsed. The header links to the generated article listing. Hover previews omit the repeated article title; Quartz keeps hover windows disabled at mobile widths.
 
 Quartz emits article files as `slug.html` and uses extensionless links. Dots can be part of a slug. Folder pages use `folder/index.html`; arbitrary trailing slashes on a non-folder article are unsupported. Use generated links or explicit `.html` URLs when sharing.
 
@@ -100,7 +100,8 @@ Original note/editorial text now carries **CC BY-SA 4.0** under `../CONTENT-LICE
 ## Tests
 
 ```sh
-npm run test:sort         # Six ordinal-order modes, ties, unknown dates, explicit-date validation
+npm run test:sort         # Ordinal ranks, ties, unknown dates, explicit-date validation
+npm run test:backlinks    # Conditional build-time sections, source immutability and anchor collisions
 npm run test:publication  # Selection, paths, flags, symlinks, static sources, failure paths, frozen unresolved references
 npm run test:features     # Isolated temporary rich-feature build; no public fixture pages
 npm run check:types
