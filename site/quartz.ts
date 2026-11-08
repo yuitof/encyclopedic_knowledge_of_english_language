@@ -7,6 +7,7 @@ import { EncyclopediaFrame } from "./custom/EncyclopediaFrame";
 import { HeaderSearch } from "./custom/HeaderSearch";
 import { WikiExplorer } from "./custom/WikiExplorer";
 import { ArticleContents } from "./custom/ArticleContents";
+import { ArticleSorting } from "./custom/ArticleSorting";
 import { Appearance } from "./custom/Appearance";
 import { HomeHighlights } from "./custom/HomeHighlights";
 import { SiteFooter } from "./custom/SiteFooter";
@@ -72,8 +73,11 @@ for (const page of Object.values(loaded.byPageType)) {
   page.footer = [SiteFooter];
   page.afterBody = [HomeHighlights];
 }
-for (const page of [loaded.defaults, ...Object.values(loaded.byPageType)])
+const defaultBeforeBody = loaded.defaults.beforeBody ?? [];
+for (const page of [loaded.defaults, ...Object.values(loaded.byPageType)]) {
   page.right = [Appearance, ...(page.right ?? [])];
+  page.beforeBody = [...(page.beforeBody ?? defaultBeforeBody), ArticleSorting];
+}
 // loadQuartzConfig creates a dispatcher before TS overrides; rebuild that emitter with our final layout.
 config.plugins.emitters = config.plugins.emitters.filter(
   (plugin) => plugin.name !== "PageTypeDispatcher",

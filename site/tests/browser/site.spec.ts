@@ -682,3 +682,186 @@ test("sidebars pin on shorter articles without reserving empty viewport space", 
     page.getByRole("link", { name: "yuitof’s website", exact: true }),
   ).toHaveCount(0);
 });
+
+const articleListOrder = async (page: any) =>
+  page
+    .locator(".page-listing .section-li .desc a.internal")
+    .evaluateAll((links: HTMLAnchorElement[]) =>
+      links.map((link) =>
+        decodeURIComponent(new URL(link.href).pathname)
+          .slice((document.body.dataset.basepath ?? "").length)
+          .replace(/^\//, "")
+          .replace(/\.html$/, ""),
+      ),
+    );
+const articleModes = [
+  ["name-asc", "File name (A-Z)"],
+  ["name-desc", "File name (Z-A)"],
+  ["modified-desc", "Modified time (new to old)"],
+  ["modified-asc", "Modified time (old to new)"],
+  ["created-desc", "Created time (new to old)"],
+  ["created-asc", "Created time (old to new)"],
+];
+
+test("Articles supports all six orders, keyboard control, offline changes and persistent selection", async ({
+  page,
+  context,
+}) => {
+  await page.goto("./articles/");
+  const select = page.getByRole("combobox", { name: "Sort articles" });
+  await expect(select).toBeEnabled();
+  await expect(select).toHaveValue("name-asc");
+  expect(await select.locator("option").allTextContents()).toEqual(
+    articleModes.map(([, label]) => label),
+  );
+  const orders = new Map<string, string[]>();
+  for (const [mode, label] of articleModes) {
+    const expected = await expectedOrder(page, mode);
+    orders.set(mode, expected);
+    await select.selectOption(mode);
+    await expect.poll(() => articleListOrder(page)).toEqual(expected);
+    await expect(page.locator("#article-sort-status")).toHaveText(
+      `Sorted by ${label}.`,
+    );
+  }
+  await expect
+    .poll(() => actualOrder(page))
+    .toEqual(orders.get("modified-desc")!.slice(0, 10));
+  await expect(page.locator(".sidebar .article-list-sort")).toHaveCount(0);
+  try {
+    await context.setOffline(true);
+    await select.selectOption("name-desc");
+    await expect
+      .poll(() => articleListOrder(page))
+      .toEqual(orders.get("name-desc"));
+  } finally {
+    await context.setOffline(false);
+  }
+  await select.selectOption("name-asc");
+  await select.focus();
+  // Native select type-ahead works without opening an OS-level popup menu.
+  await select.press("m");
+  await expect(select).toHaveValue("modified-desc");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(orders.get("modified-desc"));
+  await select.selectOption("created-asc");
+  await page.getByRole("link", { name: "Main page", exact: true }).click();
+  await expect(page.locator(".article-list-sort")).toHaveCount(0);
+  await openExplorer(page);
+  await page
+    .locator('.folder-container[data-folderpath="articles/index"] a')
+    .click();
+  await expect(select).toBeEnabled();
+  await expect(select).toHaveValue("created-asc");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(orders.get("created-asc"));
+  await page.reload();
+  await expect(select).toBeEnabled();
+  await expect(select).toHaveValue("created-asc");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(orders.get("created-asc"));
+  await page
+    .locator(".page-listing .section-li .desc a.internal")
+    .first()
+    .click();
+  await expect(page.locator(".article-list-sort")).toHaveCount(0);
+  await expect(page.locator("h1")).toBeVisible();
+});
+
+test("Article sorts handle date ties, unknown dates and unavailable saved preferences", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    try {
+      localStorage.setItem("article-list-order", "invalid-sort");
+    } catch {}
+  });
+  await page.route("**/static/contentIndex.json", async (route) => {
+    const response = await route.fetch();
+    const index = await response.json();
+    for (const note of Object.values(index) as any[])
+      if (note.sortRanks)
+        note.sortRanks = { ...note.sortRanks, modified: null, created: null };
+    const slugs = [
+      "caimans",
+      "crocodile",
+      "crocodile-and-alligator",
+      "culture",
+    ];
+    slugs.forEach((name, i) =>
+      Object.assign(index[`articles/${name}`].sortRanks, {
+        modified: [2, 2, 5, null][i],
+        created: [null, 3, 3, 1][i],
+      }),
+    );
+    await route.fulfill({ response, json: index });
+  });
+  await page.goto("./articles/");
+  const select = page.getByRole("combobox", { name: "Sort articles" });
+  await expect(select).toBeEnabled();
+  await expect(select).toHaveValue("name-asc");
+  for (const [mode] of articleModes) {
+    const expected = await expectedOrder(page, mode);
+    await select.selectOption(mode);
+    await expect.poll(() => articleListOrder(page)).toEqual(expected);
+  }
+  await page.addInitScript(() => {
+    const originalGet = Storage.prototype.getItem;
+    const originalSet = Storage.prototype.setItem;
+    Storage.prototype.getItem = function (key) {
+      if (key === "article-list-order") throw new Error("Storage unavailable");
+      return originalGet.call(this, key);
+    };
+    Storage.prototype.setItem = function (key, value) {
+      if (key === "article-list-order") throw new Error("Storage unavailable");
+      return originalSet.call(this, key, value);
+    };
+  });
+  await page.reload();
+  await expect(select).toBeEnabled();
+  await expect(select).toHaveValue("name-asc");
+  await select.selectOption("modified-desc");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(await expectedOrder(page, "modified-desc"));
+});
+
+test("Articles retains the complete static list without JavaScript", async ({
+  browser,
+  page,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    baseURL,
+    viewport: page.viewportSize()!,
+  });
+  try {
+    const staticPage = await context.newPage();
+    await staticPage.goto("./articles/");
+    const response = await context.request.get(
+      new URL("static/contentIndex.json", baseURL!).href,
+    );
+    const index = await response.json();
+    const count = Object.entries(index).filter(
+      ([slug, note]: any) => slug.startsWith("articles/") && note.sortRanks,
+    ).length;
+    await expect(staticPage.locator(".page-listing .section-li")).toHaveCount(
+      count,
+    );
+    await expect(
+      staticPage.getByRole("combobox", { name: "Sort articles" }),
+    ).toBeDisabled();
+    await expect(
+      staticPage.locator(".article-list-sort noscript"),
+    ).toHaveJSProperty(
+      "textContent",
+      "Enable JavaScript to change the article order.",
+    );
+  } finally {
+    await context.close();
+  }
+});

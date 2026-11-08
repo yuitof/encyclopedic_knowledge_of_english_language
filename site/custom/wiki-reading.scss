@@ -143,3 +143,26 @@
     margin-left: 0.3rem;
   }
 }
+
+.article-list-sort {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.article-list-sort select {
+  max-width: 100%;
+  padding: 0.4rem;
+  border: 1px solid var(--gray);
+  border-radius: 0;
+  color: var(--darkgray);
+  background: var(--light);
+  font: inherit;
+}
+.article-list-sort [role="status"] {
+  flex-basis: 100%;
+  color: var(--darkgray);
+  font-size: 0.8rem;
+}

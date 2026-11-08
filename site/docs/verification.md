@@ -27,7 +27,7 @@ Only explicit manifest selections reach the static site. Future approved additio
 
 ## Resume here
 
-The latest user instructions put arrangement controls in the main body of the **articles** page, while the sidebar must remain newest-modified-first. Those body controls are the next implementation task; no arrangement selector is currently shown. Reuse the generated JSON and keep counts and membership dynamic. The catalogue page must remain removed.
+The six arrangement controls in the main body of the **articles** page are now implemented; see the Article sorting verification entry below. They reuse the generated JSON, preserve dynamic membership, and keep the sidebar newest-modified-first. The catalogue page remains removed.
 
 Automatic deployment on pushes to main remains an unapplied proposal pending explicit approval after the earlier automatic-review rejection. The existing workflow is manual and continues to block the experimental feature branch. No remote operation was attempted.
 
@@ -92,3 +92,13 @@ Applied the related AGENTS.md presentation instructions: removed Around this art
 Node 24.22.2 TypeScript passed. Root, repository-subpath and default preview builds passed all seven output checks each. All 64 browser cases passed, including a new short-article mouse-wheel regression that checks both desktop sidebars, absence of unused vertical space, appearance styling and the removed footer link. Existing footer, Top, shared scrolling, search, keyboard controls and backlinks checks passed. Direct inspection of the rebuilt port-8080 preview confirmed both sidebar tops at 0px after scrolling, with natural heights of approximately 535px and 382px and the footer below them. Its screenshot was visually inspected. The existing preview process was left running.
 
 Source vault files are unchanged, and the original main HEAD remains at c785417a697c3fcf69c450b7c96d65bb0f73b4e5. An editor change to the original checkout’s .obsidian/workspace.json appeared during verification and was left untouched. User AGENTS.md edits were preserved; no subagents or remote operations were used.
+
+## Article sorting
+
+The main Articles page now has a labelled native Sort articles select with all six requested filename, modification-time and creation-time orders. It defaults to filename A-Z and stores the preference separately from the sidebar. Controls render only on the Articles folder page. Its existing complete Quartz list is reordered in place, preserving links, metadata and dynamic membership. The shared content index supplies the existing privacy-preserving ordinal ranks; missing dates stay last in either direction and ties use filename ranks. The recent-ten sidebar is unchanged.
+
+The control supports native keyboard type-ahead, announcements, offline changes after index loading, SPA navigation and reloads. Invalid or unavailable local storage falls back safely. Initializers and listeners are cleaned up during navigation. Without JavaScript, Quartz's complete static list remains available and the sorting control is disabled with a noscript explanation. No backend, dependency or additional index fetch was added. The one new generated client script was inspected and added to the approved resource hashes; existing script hashes are unchanged apart from generated sequence numbers.
+
+Node 24.22.2 checks passed: 19 publication/privacy cases plus 2 ranking cases, 4 backlinks cases, TypeScript and the rich-content fixture. Root, repository-subpath and final default builds each passed all seven output checks. The 64 existing browser cases passed. All 12 new sorting cases passed in targeted reruns after correcting native select, noscript and collapsed-folder test interactions. They cover all six complete-list orders, tied and missing dates, invalid/unavailable preferences, native keyboard selection, offline changes, sidebar independence, persistence across folder navigation and reloads, working article links and no-JavaScript membership. Coverage spans desktop, tablet and 320px/390px mobile screens. Desktop and mobile screenshots of the rebuilt live preview were inspected.
+
+The sorting task previously listed under Resume here is complete. All 2679 source vault files match their preservation baseline, and publication approvals are unchanged. Original main HEAD remains c785417a697c3fcf69c450b7c96d65bb0f73b4e5; its editor-modified .obsidian/workspace.json and user edits to AGENTS.md were left untouched. No subagents or remote operations were used.

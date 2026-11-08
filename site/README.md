@@ -89,13 +89,15 @@ At the recorded snapshot, the approved original images total **145,133,964 bytes
 
 ## Article order and landing-page selection
 
-The sidebar shows up to the 10 most recently modified articles, newest first, with deterministic filename ties and unknown dates last. A “Show more” link below them opens the full articles page. This limit applies only to sidebar links: search and the main articles page retain all approved notes. It ignores obsolete saved arrangement choices. There is no sorting control or standalone catalogue page.
+The sidebar shows up to the 10 most recently modified articles, newest first, with deterministic filename ties and unknown dates last. A “Show more” link below them opens the full articles page. This limit applies only to sidebar links: search and the main articles page retain all approved notes. The sidebar ignores saved arrangement choices. The standalone catalogue page remains removed.
+
+The full Articles page has a keyboard-accessible **Sort articles** dropdown: File name (A-Z), File name (Z-A), Modified time (new to old), Modified time (old to new), Created time (new to old), and Created time (old to new). It starts with File name (A-Z) and remembers the choice across navigation and reloads. Sorting reorders the existing complete Quartz list using the shared browser index, including offline after loading; no additional search service or request is needed. Invalid or unavailable browser storage falls back safely. Without JavaScript, the complete static list remains accessible in Quartz’s default order and the sorting control is disabled.
 
 Sorting is computed from approved source-note basenames and source filesystem modification/birth times, with explicit valid `created`/`modified` frontmatter taking precedence. Only ordinal name/created/modified ranks and `null` unknown markers enter the public index. Exact filesystem timestamps, source paths and a new basename field are not published. Unknown dates sort last in either direction; ties use deterministic filename ranks. Filesystem times can reflect a Git checkout or copy (especially in CI), not historical authorship; add reviewed explicit metadata if historical dates matter. Temporary staging timestamps are never used for sorting.
 
 The homepage samples up to `homepageMaximumNotes` nonempty real articles from the existing browser index on each load. Set this nonnegative integer in `site-settings.json` (default **6**). A compact responsive grid contains only actual selected cards, with text-only excerpts and no bulk image loading. The homepage’s displayed note count is computed from the same JSON, including empty notes; neither the list nor the count assumes a fixed corpus size.
 
-Original note/editorial text now carries **CC BY-SA 4.0** under `../CONTENT-LICENSE.md`, as requested; quoted works and third-party media retain their own rights. Software licenses remain unchanged, including Quartz MIT. The footer links local Privacy and License pages, the user-provided website and source repository. An original SVG E-in-square favicon is a reviewed site asset.
+Original note/editorial text now carries **CC BY-SA 4.0** under `../CONTENT-LICENSE.md`, as requested; quoted works and third-party media retain their own rights. Software licenses remain unchanged, including Quartz MIT. The footer links local Privacy and License pages and the source repository. An original SVG E-in-square favicon is a reviewed site asset.
 
 ## Tests
 
