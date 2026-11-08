@@ -9,6 +9,17 @@ import behavior from "./wiki-explorer.inline";
 
 // Quartz owns the tree and folder controls; the shared native panel owns collapse.
 const stock = Explorer() as QuartzComponent;
+// The outer sidebar owns scrolling. Avoid scrolling the whole document to an
+// active entry in Quartz's temporary full tree before it is reduced to ten notes.
+const activeScroll = '.scrollIntoView({behavior:"smooth"})';
+const treeBehavior = [stock.afterDOMLoaded ?? ""].flat().map((script) => {
+  if (!script.includes(activeScroll))
+    throw new Error("Explorer scroll integration requires review");
+  return script.replace(
+    activeScroll,
+    '.closest(".sidebar")?.scrollTo({top:0})',
+  );
+});
 type TreeChild = VNode<{ class?: string; "aria-expanded"?: boolean | string }>;
 export const WikiExplorer: QuartzComponent = (props) => {
   const graphLink = props.allFiles.some((file) => file.slug === "graph") ? (
@@ -61,17 +72,25 @@ export const WikiExplorer: QuartzComponent = (props) => {
         ? cloneElement(child, { "aria-expanded": undefined })
         : child,
     );
+  const base =
+    props.ctx.argv.serve || !props.cfg.baseUrl
+      ? ""
+      : new URL(`https://${props.cfg.baseUrl}`).pathname.replace(/\/$/u, "");
   return (
     <details class="navigation-panel explorer-panel" open>
       <summary>Explorer</summary>
       {graphLink}
       {cloneElement(tree, {}, ...children)}
+      <div class="show-more-row">
+        <a
+          class="internal nav-show-more"
+          href={`${base}/articles/?sort=modified-desc`}
+        >
+          Show more
+        </a>
+      </div>
     </details>
   );
 };
 WikiExplorer.css = stock.css;
-WikiExplorer.afterDOMLoaded = [
-  ...[stock.afterDOMLoaded ?? ""].flat(),
-  navigationState,
-  behavior,
-];
+WikiExplorer.afterDOMLoaded = [...treeBehavior, navigationState, behavior];

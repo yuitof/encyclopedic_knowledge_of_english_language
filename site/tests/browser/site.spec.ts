@@ -123,7 +123,7 @@ test("Explorer shows only the ten newest modified articles regardless of obsolet
   }
   await openExplorer(page);
   const recentLinks = page.locator(
-    ".explorer-content a.nav-file-title, .explorer-content a.nav-show-more",
+    ".explorer-content a.nav-file-title, .explorer-panel > .show-more-row a.nav-show-more",
   );
   await expect(recentLinks).toHaveCount(11);
   for (const mode of ["light", "dark"]) {
@@ -158,11 +158,10 @@ test("Show more follows the recent articles and opens the full list", async ({
   await expect(link).toHaveCount(1);
   await link.scrollIntoViewIfNeeded();
   await expect(link).toBeVisible();
-  await expect(
-    page.locator(
-      '.folder-container[data-folderpath="articles/index"] + .folder-outer > ul > li:last-child > a',
-    ),
-  ).toHaveText("Show more");
+  await expect(page.locator(".explorer-panel > .show-more-row > a")).toHaveText(
+    "Show more",
+  );
+  await expect(page.locator(".explorer .nav-show-more")).toHaveCount(0);
   await expect(link).toHaveAttribute(
     "href",
     /\/articles\/\?sort=modified-desc$/,
@@ -224,9 +223,15 @@ test("Show more follows the recent articles and opens the full list", async ({
       .toEqual(await expectedArticleList(page, "name-asc"));
   }
 });
-test("homepage uses the static index for varying note counts and compact snippets", async ({
+test("homepage uses the static index for snippets and keeps its compiled note count", async ({
   page,
 }) => {
+  const html = await (await page.request.get("./")).text();
+  const compiledCount =
+    /<p class="collection-note-count"[^>]*>([\d,]+ notes in the collection\.)<\/p>/u.exec(
+      html,
+    )?.[1];
+  expect(compiledCount).toBeDefined();
   for (const size of [0, 2, 9, 14]) {
     await page.route("**/static/contentIndex.json", (route) =>
       route.fulfill({
@@ -255,7 +260,7 @@ test("homepage uses the static index for varying note counts and compact snippet
     );
     await page.goto("./");
     await expect(page.locator(".collection-note-count")).toHaveText(
-      `${size} notes in the collection.`,
+      compiledCount!,
     );
     const maximum = Number(
       await page.locator(".home-highlights").getAttribute("data-maximum"),
@@ -378,6 +383,12 @@ test("section contents, active heading and Explorer collapse share one sidebar s
     height: 500,
   });
   await page.goto("./articles/culture");
+  // Show more is build-rendered now; wait for the client-loaded recent tree
+  // before measuring wheel movement through its two navigation sections.
+  await expect
+    .poll(() => actualOrder(page))
+    .toEqual((await expectedOrder(page, "modified-desc")).slice(0, 10));
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
   await openContents(page);
   await expect(page.locator(".contents-top")).toHaveAttribute(
     "aria-current",
@@ -415,6 +426,14 @@ test("section contents, active heading and Explorer collapse share one sidebar s
     page.locator(".explorer-content a.nav-file-title").first(),
   ]) {
     await target.scrollIntoViewIfNeeded();
+    // Center the wheel target within the shared panel, away from clipping edges.
+    await target.evaluate((element) => {
+      const panel = element.closest<HTMLElement>(".sidebar")!;
+      panel.scrollTop +=
+        element.getBoundingClientRect().top -
+        panel.getBoundingClientRect().top -
+        panel.clientHeight / 2;
+    });
     await target.hover();
     const sidebar = page.locator(".sidebar.left"),
       before = await sidebar.evaluate((e) => e.scrollTop),
@@ -605,7 +624,9 @@ test("sidebar pins to the window edge until the article ends", async ({
     parseFloat(getComputedStyle(element).top),
   );
   expect(offset).toBeGreaterThanOrEqual(16);
-  await expect(page.locator(".nav-show-more")).toHaveCount(1);
+  await expect
+    .poll(() => actualOrder(page))
+    .toEqual((await expectedOrder(page, "modified-desc")).slice(0, 10));
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".header-search .search-bar")).toHaveAttribute(
     "data-visible-search",
@@ -712,7 +733,9 @@ test("sidebars pin on shorter articles without reserving empty viewport space", 
   page,
 }) => {
   await page.goto("./articles/caimans");
-  await expect(page.locator(".nav-show-more")).toHaveCount(1);
+  await expect
+    .poll(() => actualOrder(page))
+    .toEqual((await expectedOrder(page, "modified-desc")).slice(0, 10));
   await page.evaluate(() => document.fonts.ready);
   const floating =
     page.viewportSize()!.width >= 1200
@@ -830,14 +853,13 @@ test("Articles supports all six orders, keyboard control, offline changes and pe
     articleModes.map(([, label]) => label),
   );
   const orders = new Map<string, string[]>();
-  for (const [mode, label] of articleModes) {
+  for (const [mode] of articleModes) {
     const expected = await expectedArticleList(page, mode);
     orders.set(mode, expected);
     await select.selectOption(mode);
     await expect.poll(() => articleListOrder(page)).toEqual(expected);
-    await expect(page.locator("#article-sort-status")).toHaveText(
-      `Sorted by ${label}.`,
-    );
+    await expect(page.locator("#article-sort-status")).toHaveCount(0);
+    await expect(page.locator(".article-sort-error")).not.toBeVisible();
   }
   await expect.poll(() => actualOrder(page)).toEqual([]);
   await expect(page.locator(".sidebar .article-list-sort")).toHaveCount(0);
@@ -977,6 +999,10 @@ test("Articles retains the complete static list without JavaScript", async ({
       "textContent",
       "Enable JavaScript to change the article order.",
     );
+    await staticPage.goto("./");
+    await expect(staticPage.locator(".collection-note-count")).toHaveText(
+      `${count.toLocaleString("en-US")} notes in the collection.`,
+    );
   } finally {
     await context.close();
   }
@@ -1058,6 +1084,10 @@ test("Articles filename groups populate Contents and date calendars filter inclu
   await expect(calendar.locator(".date-filter-title")).toHaveText(
     "Modified date",
   );
+  const compiledFolderCount = await page
+    .locator(".page-listing > p")
+    .textContent();
+  const total = compiledFolderCount!.match(/^[\d,]+/u)![0];
   const from = calendar.getByLabel("From", { exact: true }),
     to = calendar.getByLabel("To", { exact: true });
   await from.fill("2020-01-10");
@@ -1065,6 +1095,12 @@ test("Articles filename groups populate Contents and date calendars filter inclu
   await expect
     .poll(() => articleListOrder(page))
     .toEqual(["articles/caimans", "articles/crocodile"]);
+  await expect(calendar.locator(".date-filter-status")).toHaveText(
+    `2 of ${total} articles.`,
+  );
+  await expect(page.locator(".page-listing > p")).toHaveText(
+    compiledFolderCount!,
+  );
   await to.fill("2020-01-10");
   await expect.poll(() => articleListOrder(page)).toEqual(["articles/caimans"]);
   await from.fill("2020-01-11");

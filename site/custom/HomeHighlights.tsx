@@ -8,14 +8,19 @@ if (
   settings.homepageMaximumNotes < 0
 )
   throw new Error("homepageMaximumNotes must be a nonnegative integer");
-export const HomeHighlights: QuartzComponent = ({ fileData }) =>
-  fileData.slug === "index" ? (
+export const HomeHighlights: QuartzComponent = ({ fileData, allFiles }) => {
+  if (fileData.slug !== "index") return null;
+  const noteCount = allFiles.filter(
+    (file) =>
+      file.slug?.startsWith("articles/") && !file.slug.endsWith("/index"),
+  ).length;
+  return (
     <section
       class="home-highlights"
       aria-label="From the notebook"
       data-maximum={Math.max(0, Math.floor(settings.homepageMaximumNotes))}
     >
-      <p class="collection-note-count" aria-live="polite" />
+      <p class="collection-note-count">{`${noteCount.toLocaleString("en-US")} notes in the collection.`}</p>
       <div class="highlight-cards" aria-live="polite" />
       <noscript>
         <p>
@@ -25,5 +30,6 @@ export const HomeHighlights: QuartzComponent = ({ fileData }) =>
         </p>
       </noscript>
     </section>
-  ) : null;
+  );
+};
 HomeHighlights.afterDOMLoaded = behavior;

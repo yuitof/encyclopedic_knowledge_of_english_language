@@ -12,7 +12,7 @@ async function prepareArticleSorting() {
     cancelled = true;
     delete control.dataset.sortReady;
   });
-  const status = control.querySelector<HTMLElement>("[role=status]")!;
+  const error = control.querySelector<HTMLElement>(".article-sort-error")!;
   type Ranks = {
     name: number;
     modified: number | null;
@@ -27,9 +27,12 @@ async function prepareArticleSorting() {
   try {
     index = await fetchData;
   } catch {
-    if (!cancelled)
-      status.textContent =
+    if (!cancelled) {
+      error.textContent =
         "Sorting could not load. The full article list is still available.";
+      error.hidden = false;
+      select.setAttribute("aria-describedby", "article-sort-error");
+    }
     return;
   }
   if (cancelled || !control.isConnected) return;
@@ -161,7 +164,6 @@ async function prepareArticleSorting() {
     dateStatus.textContent = invalid
       ? "Choose an end date on or after the start date."
       : `${filtered.length.toLocaleString("en-US")} of ${entries.length.toLocaleString("en-US")} articles.`;
-    status.textContent = `Sorted by ${select.selectedOptions[0].textContent}.`;
     document.dispatchEvent(
       new CustomEvent("article-sections-changed", { detail: {} }),
     );

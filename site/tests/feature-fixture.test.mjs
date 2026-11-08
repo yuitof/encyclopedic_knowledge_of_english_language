@@ -66,6 +66,11 @@ test("private temporary fixture preserves rich Obsidian rendering without public
     await enrichSortRanks(output, publication);
     await copyMathFonts(output);
     await auditOutput(output, publication);
+    const homepage = await fs.readFile(path.join(output, "index.html"), "utf8");
+    assert.match(
+      homepage,
+      /<p class="collection-note-count">0 notes in the collection\.<\/p>/u,
+    );
     const math = await fs.readFile(path.join(output, "math.html"), "utf8"),
       code = await fs.readFile(path.join(output, "code.html"), "utf8");
     for (const pattern of [

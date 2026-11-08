@@ -180,7 +180,7 @@
   background: var(--light);
   font: inherit;
 }
-.article-list-sort [role="status"] {
+.article-list-sort .article-sort-error {
   flex-basis: 100%;
   color: var(--darkgray);
   font-size: 0.8rem;
@@ -264,8 +264,7 @@
 .page
   > #quartz-body
   .sidebar.left
-  .explorer
-  :is(a.nav-file-title, a.nav-show-more) {
+  :is(.explorer a.nav-file-title, a.nav-show-more) {
   color: var(--secondary);
   opacity: 1;
 }
@@ -330,4 +329,8 @@
   margin: 0;
   border: 0;
   border-radius: 0;
+}
+
+.show-more-row {
+  margin-top: 0.75rem;
 }

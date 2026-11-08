@@ -88,19 +88,6 @@ async function prepareArticleOrder() {
         heading.dataset.recentLabel = "true";
       }
       heading?.nextElementSibling?.classList.add("open");
-      const articles = explorer.querySelector<HTMLElement>(
-        '.folder-container[data-folderpath="articles/index"] + .folder-outer > ul',
-      );
-      if (articles && !articles.querySelector(":scope > .show-more-row")) {
-        const row = document.createElement("li");
-        const link = document.createElement("a");
-        row.className = "show-more-row";
-        link.className = "internal nav-show-more";
-        link.href = `${document.body.dataset.basepath ?? ""}/articles/?sort=modified-desc`;
-        link.textContent = "Show more";
-        row.append(link);
-        articles.append(row);
-      }
       document.dispatchEvent(
         new CustomEvent("article-sections-changed", { detail: {} }),
       );

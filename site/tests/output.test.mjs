@@ -127,6 +127,12 @@ test("project pages, sort ranks and favicon are public without source filesystem
       `<div class="page-listing"><p>${articleCount.toLocaleString("en-US")} `,
     ),
   );
+  const homepage = await fs.readFile(path.join(output, "index.html"), "utf8");
+  assert.ok(
+    homepage.includes(
+      `<p class="collection-note-count">${articleCount.toLocaleString("en-US")} notes in the collection.</p>`,
+    ),
+  );
   for (const name of ["privacy", "license"])
     assert.ok((await fs.stat(path.join(output, name + ".html"))).isFile());
   assert.ok(
