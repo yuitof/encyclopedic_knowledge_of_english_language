@@ -1,36 +1,42 @@
 # Verification record
 
-Verified on 8 November 2026. This is a local implementation and review record; no remote push, merge or public deployment was performed.
+Verified on 8 November 2026 after replacing the public demonstration corpus with the user's existing notes. No remote push, merge or public deployment was performed.
 
-## Executed checks
+## Current executed checks
 
 | Check | Result |
 | --- | --- |
-| Reproducible independent install | Reviewer copied source into a clean temporary checkout without vault/dependencies/caches/output; `npm ci` and Quartz 5 plugin preparation passed under actual Node 24.22.2. Lockfile bytes stayed unchanged. |
-| Publication safeguards | 16/16 tests passed under Node 24.22.2, independently rerun. Covers explicit per-file selection, private/draft flags, staged-only metadata injection, source symlinks/ancestors, unsafe references, raw HTML, collisions, trusted static inventory, stale output, output symlinks and extra static output. |
-| TypeScript | `npm run check:types` passed. |
-| Production URL layouts | Root and `/knowledge/` builds passed; four generated-output tests passed for each. |
-| Main browser suite | 9/9 Playwright tests passed: desktop 1440px, tablet 900px and mobile 390px; actual Chrome browser. |
-| Independent browser matrix | Reviewer passed 8/8 cases: root and repository subpaths at 1440, 768, 390 and 320px. Checked navigation, title/body/Japanese search, offline queries, keyboard use, math/MathML, images, code, embeds, backlinks and overflow. No page errors, failed resources, external runtime requests or WebSockets were observed. |
-| Retained upstream tests | 42/42 Quartz path, slug-collision and page-frame tests passed, including after the minimatch major upgrade; independently rerun. |
-| Vault migration | 2,584 original note files, 89 images and six configuration files accounted for. 2,677 files match original Git blob hashes byte-for-byte; app/workspace settings match their exact intended transformations. All 1,643 existing wikilinks preserved, zero local Markdown path rewrites needed. |
-| Fresh final production artifact | `npm run build` and four output tests passed after the final stylesheet changes. 117 static files; search index has 18 entries, 9,919 bytes raw and 3,758 bytes with illustrative gzip compression. |
+| Actual-corpus full suite | Independent reviewer ran `npm test` under actual Node 24.22.2: all checks below passed. |
+| Publication safeguards | 19/19 tests: explicit selection, flags, staged-only metadata, literal punctuation-bearing filenames, source/ancestor/output symlinks, collision handling, approved unresolved labels, rejection of new unknown/private references, static inventories, stale artifacts and unexpected output files. |
+| TypeScript | Passed for Quartz core and custom source. |
+| Temporary rich-feature corpus | 1/1 isolated build test passed for math HTML+MathML, highlighted code, callouts, tables, footnotes, images, heading links and transclusions. Temporary input/output removed afterward; no fixture pages in production. |
+| Production URL layouts | Root and `/knowledge/` builds passed; all four output checks passed for each. |
+| Browser matrix | 12/12 Chrome tests passed at 1440, 900, 390 and 320px across root/repository URLs. Actual-note navigation, image loading, aliases, backlinks, English title/body and Japanese search, offline-after-load queries, keyboard use, bounded mobile Explorer, dark mode and overflow checks passed. |
+| Dotted/folder routes | Browser assertions passed for `r.e.p.o.` with query/fragment, `u.s.-state` with query, and the `articles/` directory redirect, on both URL layouts. |
+| Independent full local-reference crawl | 82,972 local references across 2,588 HTML pages resolved to existing files/anchors. |
+| Asset inclusion/integrity | All 85 emitted corpus images match original SHA-256 bytes. Four unreferenced original images remain absent. |
+| Original vault preservation | All 2,679 vault files match the pre-corpus-update baseline. No original note/image/settings bytes were changed by this publication update. |
+| Text/output privacy scan | No old demonstration text/routes, source filesystem paths, Obsidian settings, Markdown sources or source maps were found in generated text output. New unknown references and future private files remain excluded by manifest-only lookup. |
+| Independent browser checks | 8/8 additional root/subpath cases passed at 1440/768/390/320px, plus 54 punctuation/dotted HTTP routes, delayed-index early typing, and final full-reference crawl. |
+| Local search timing | Browser-observed local cold initialization 216–253 ms; title queries 16–19 ms, body queries 6–8 ms, Japanese queries 36–43 ms. These local measurements are not deployment/network guarantees. |
+| Current artifact | 2,770 static files. Index: 2,586 entries, 731,734 bytes raw / 216,948 bytes gzip. |
 
-The independent clean full suite included the first 13 publication cases. The three additional builder/output regressions were then independently rerun as part of the final 16-case publication file. The last runtime change only corrects contrast for TOC links and callout labels; it does not change search, rendering or publication logic. The reviewer separately rebuilt both URL layouts after that stylesheet change, reran four output checks per build and all nine browser tests, and confirmed full-opacity TOC links, themed dark callout text and zero horizontal overflow at 1440, 390 and 320px. An independent crawl checked 705 local references across 19 generated HTML pages, including 404, with zero missing files or fragments. No P1/P2 findings remain unresolved.
+The indexed entries are 2,584 real notes plus `articles/index` and `tags/index`. The emitted alphabetical homepage is excluded from search/discovery using the official UnlistedPages transformer so its repeated title list cannot crowd actual-note matches. All 42 empty original notes remain searchable by title. Unlisted is not an access/privacy restriction.
 
-## Findings and disposition
+## Corpus mapping and review findings
 
-- **P1 privacy:** Quartz's vendor Static emitter could follow symlinks outside the manifest. Fixed with exact reviewed source inventories/hashes, ancestor/symlink checks, and strict emitted static-resource inventories. Independent negative probes verified rejection.
-- **P2 correctness:** Simplified slug checks missed Quartz index/symbol/folder collisions; reference validation used different resolution from the renderer. Fixed by using Quartz's actual slug and link utilities and aligning its shortest-link strategy.
-- **P2 metadata:** Non-boolean draft values could be approved and silently filtered later. Fixed with explicit boolean validation and regression tests. Plain Markdown now receives public metadata only in a temporary copy.
-- **P2 accessibility:** Default math emitted hidden visual HTML without accessible MathML. Enabled `htmlAndMathml`. Fixed SPA skip-link focus, preserved native Tab navigation, made mobile navigation inline/collapsible, preserved narrow-screen appearance controls, and corrected dim TOC/callout text.
-- **P2 deployment:** Added Pages-read permission for configuration and a default-branch plus explicit feature-branch exclusion guard. Deployment remains manual.
-- Build dependency findings for sharp, source-map-js and minimatch were remediated with explicit fixed-version updates, validated builds and retained upstream tests. A live `npm audit --omit=dev` reported zero listed advisories for the installed dependency graph.
+- The user-approved snapshot explicitly selects 2,584 tracked notes and only their 85 referenced raster images. Normal builds never rescan the vault. The separate snapshot command is a deliberate selection change requiring Git diff review.
+- Thirty-four question-mark filenames and `100%.md` retain their literal filesystem source names. Only staged targets/references change. Both `head on` and `head-on` have stable disambiguating hashes.
+- There are 1,326 resolved existing-body wikilink/embed occurrences and 315 explicitly frozen unresolved occurrences outside code (313 per-note raw-target approval items). The catalogue adds 2,584 resolved links. Thirteen old exact-case misses resolve through a unique case-insensitive match; two wikilink examples inside code remain literal. No unresolved target becomes a placeholder article.
+- **P2 fixed:** preview routing originally treated dots in real article slugs as file extensions and returned 404. Missing exact paths now try their `.html` sibling regardless of apparent extension; real directories redirect to their slash/index URL. Query/fragment and both deployment-path regressions passed.
+- **Search finding fixed:** the full catalogue initially dominated body search matches. The official homepage-only unlisted flag removes its duplicate text from the stock index without modifying the search engine. Actual content query `death rolls` finds the existing “Crocodile and alligator” note.
 
-## Remaining limitations
+The earlier implementation's independently verified privacy/static-source, canonical-slug, metadata, MathML, keyboard, mobile and contrast fixes remain in place. The retained Quartz path/slug/frame checks previously passed 42/42. No P1/P2 implementation findings remain open.
 
-The official Latex 1.0.0 plugin bundles KaTeX 0.16.47 internally, which dependency audit does not enumerate. The inherited low-severity advisory requiring pre-existing prototype pollution remains documented in the README; local CSS/fonts use fixed KaTeX 0.18 assets and rendering uses `trust: false`. An upstream plugin update is the preferred remedy.
+## Limits and costs
 
-328 wikilink targets were already unresolved in the tracked original collection; the migration preserves that baseline rather than inventing notes. The original checkout's 48 ignored local Markdown files were not present in HEAD and were not copied into the feature worktree. They remain in the original checkout.
+The 85 byte-preserved images total 145,133,964 bytes (about 138.4 MiB), with the largest about 18.9 MiB. Transfer cost is material on image-heavy pages; optimized reviewed web copies remain a future opt-in change. Full-index browser memory exceeds raw JSON size; compression shown here is illustrative, not a claim about Pages transfer encoding.
 
-Only sample content is approved for the generated website. Review real note text, frontmatter and image metadata before selection. Source repository/history privacy is separate from Pages artifact selection. A full assistive-technology and cross-browser audit, real-corpus performance measurement, source visibility decisions and actual deployment remain outside this local verification.
+The official Latex plugin bundles KaTeX 0.16.47, retaining the documented low-severity advisory requiring pre-existing prototype pollution. It uses `trust: false`; local CSS/fonts use fixed KaTeX 0.18 assets. A future upstream plugin update is preferred over a custom renderer fork.
+
+Original source/history privacy is separate from static publication. The original checkout's 48 ignored files were not in tracked HEAD and remain outside this feature snapshot. Current unrecorded references remain plain approved-body labels; new unreviewed references fail safely. A full assistive-technology/cross-browser audit and actual public deployment are not claimed.
