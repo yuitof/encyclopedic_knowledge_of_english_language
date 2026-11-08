@@ -1,0 +1,158 @@
+# Quartz 5 plugins and layout; custom overrides live in quartz.ts.
+configuration:
+  pageTitle: Knowledge Commons
+  pageTitleSuffix: " · Knowledge Commons"
+  enableSPA: true
+  enablePopovers: true
+  analytics: null
+  locale: en-US
+  baseUrl: example.invalid
+  ignorePatterns:
+    - .obsidian
+  theme:
+    fontOrigin: local
+    cdnCaching: false
+    typography:
+      header: Georgia
+      body: Arial
+      code: Consolas
+    colors:
+      lightMode:
+        light: "#ffffff"
+        lightgray: "#c8ccd1"
+        gray: "#72777d"
+        darkgray: "#202122"
+        dark: "#101418"
+        secondary: "#36c"
+        tertiary: "#2a4b8d"
+        highlight: transparent
+        textHighlight: "#ffedb5"
+      darkMode:
+        light: "#101418"
+        lightgray: "#54595d"
+        gray: "#a2a9b1"
+        darkgray: "#eaecf0"
+        dark: "#f8f9fa"
+        secondary: "#88a3e8"
+        tertiary: "#b0c1f0"
+        highlight: transparent
+        textHighlight: "#554b18"
+plugins:
+  - source: "@quartz-community/note-properties"
+    enabled: true
+    order: 5
+    options:
+      includeAll: false
+      includedProperties:
+        - description
+      hidePropertiesView: true
+  - source: "@quartz-community/created-modified-date"
+    enabled: true
+    order: 10
+    options:
+      priority:
+        - frontmatter
+        - filesystem
+  - source: "@quartz-community/syntax-highlighting"
+    enabled: true
+    order: 20
+    options:
+      theme:
+        light: github-light
+        dark: github-dark
+      keepBackground: false
+  - source: "@quartz-community/obsidian-flavored-markdown"
+    enabled: true
+    order: 30
+    options:
+      enableInHtmlEmbed: false
+  - source: "@quartz-community/github-flavored-markdown"
+    enabled: true
+    order: 40
+  - source: "@quartz-community/table-of-contents"
+    enabled: true
+    order: 50
+    options:
+      minEntries: 1
+      showByDefault: true
+    layout:
+      position: left
+      priority: 10
+  - source: "@quartz-community/crawl-links"
+    enabled: true
+    order: 60
+    options:
+      markdownLinkResolution: shortest
+  - source: "@quartz-community/description"
+    enabled: true
+    order: 70
+  - source: "@quartz-community/latex"
+    enabled: true
+    order: 80
+    options:
+      renderEngine: katex
+      katexOptions:
+        output: htmlAndMathml
+        trust: false
+  - source: "@quartz-community/remove-draft"
+    enabled: true
+  - source: "@quartz-community/explicit-publish"
+    enabled: true
+  - source: "@quartz-community/content-index"
+    enabled: true
+    options:
+      enableSiteMap: true
+      enableRSS: true
+  - source: "@quartz-community/content-page"
+    enabled: true
+  - source: "@quartz-community/folder-page"
+    enabled: true
+  - source: "@quartz-community/tag-page"
+    enabled: true
+  - source: "@quartz-community/explorer"
+    enabled: true
+    layout:
+      position: left
+      priority: 30
+  - source: "@quartz-community/backlinks"
+    enabled: true
+    layout:
+      position: right
+      priority: 30
+  - source: "@quartz-community/content-meta"
+    enabled: true
+    layout:
+      position: right
+      priority: 10
+  - source: "@quartz-community/darkmode"
+    enabled: true
+    layout:
+      position: right
+      priority: 20
+  - source: "@quartz-community/article-title"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 10
+  - source: "@quartz-community/tag-list"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 30
+  - source: "@quartz-community/footer"
+    enabled: true
+    options:
+      links:
+        Quartz: https://quartz.jzhao.xyz/
+    layout:
+      position: footer
+      priority: 10
+layout:
+  byPageType:
+    "404":
+      positions:
+        left: []
+        right: []
+    content: {}
+    folder: {}
+    tag: {}

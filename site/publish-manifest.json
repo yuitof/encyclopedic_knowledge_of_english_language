@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "notes": [
+    {
+      "source": "site/samples/index.md",
+      "target": "index.md"
+    },
+    {
+      "source": "site/samples/mathematics/Linear algebra.md",
+      "target": "mathematics/Linear algebra.md"
+    },
+    {
+      "source": "site/samples/programming/Binary search.md",
+      "target": "programming/Binary search.md"
+    },
+    {
+      "source": "site/samples/academic/Study notes.md",
+      "target": "academic/Study notes.md"
+    },
+    {
+      "source": "site/samples/academic/日本語の学習.md",
+      "target": "academic/日本語の学習.md"
+    }
+  ],
+  "assets": [
+    {
+      "source": "site/samples/assets/coordinate-plane.png",
+      "target": "assets/coordinate-plane.png"
+    }
+  ]
+}
