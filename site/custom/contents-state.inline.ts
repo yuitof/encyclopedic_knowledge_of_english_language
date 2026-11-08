@@ -6,10 +6,16 @@ function prepareContents() {
   );
   const top = document.querySelector<HTMLAnchorElement>(".contents-top");
   const update = () => {
+    const sidebarBottom = window.matchMedia("(max-width: 800px)").matches
+      ? (document.querySelector(".sidebar.left")?.getBoundingClientRect()
+          .bottom ?? 0)
+      : 0;
+    const readingEdge = Math.max(180, sidebarBottom + 32);
     let active: HTMLAnchorElement | undefined;
     for (const link of links) {
       const target = document.getElementById(link.dataset.section!);
-      if (target && target.getBoundingClientRect().top < 180) active = link;
+      if (target && target.getBoundingClientRect().top < readingEdge)
+        active = link;
     }
     if (
       links.length &&

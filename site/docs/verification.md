@@ -72,3 +72,13 @@ Contents and Explorer now render as sibling native disclosure panels in the left
 The complete Node 24.22.2 suite passed: 19 publication/privacy cases, 2 ranking cases, 4 backlink cases, TypeScript, the rich-content fixture, 7 output checks for each root/subpath build, and 56 browser cases across desktop, tablet and 320px/390px mobile screens. New coverage verifies sibling structure, matching computed heading styles, independent native controls and mobile defaults. Existing search, article links, folder navigation, recent articles, Show more, backlinks, Top, shared scrolling and footer checks passed. Desktop and mobile screenshots were inspected. The default local preview artifact was rebuilt and passed seven output checks. Reviewed client-script hashes were updated for the panel initializer and removal of the old single-panel mobile setup.
 
 Source vault files and publication approvals remain unchanged. The original main checkout is untouched; user edits to AGENTS.md were preserved. No subagents, pushes or deployments were used.
+
+## Sidebar pinned at the window edge
+
+The complete left sidebar now uses explicit sticky positioning at the viewport's top edge, including mobile. It follows normal document flow until reaching that edge, remains stationary while reading, and is bounded by the reading row so it cannot overlap the footer. Its opaque theme background covers article text on narrow screens. Contents and Explorer retain their independent disclosures and single shared scrollbar.
+
+A cleaned-up ResizeObserver measures the navigation height for mobile scroll padding; section targets remain visible below expanded or collapsed navigation without hardcoded panel heights. Active-section highlighting uses the same visible reading area. The existing native document-top link still reaches scroll position zero. The two changed generated client scripts were inspected and their approved hashes updated.
+
+Node 24.22.2 TypeScript checks passed. Root, repository-subpath and default preview builds each passed all seven generated-output checks. All 60 browser cases passed across desktop, tablet and 320px/390px mobile screens. New coverage checks normal movement before the boundary, pinning during further scrolling, expanded panels, visible mobile section targets and active state, return scrolling, and footer clearance. Existing search, backlinks, Top, keyboard controls and shared scrolling checks passed. Desktop/mobile previews were inspected and the final default artifact was rebuilt.
+
+All 2679 source vault files match the preservation baseline; the original main checkout remains clean at c785417a697c3fcf69c450b7c96d65bb0f73b4e5. User AGENTS.md edits remain untouched. No subagents or remote operations were used.

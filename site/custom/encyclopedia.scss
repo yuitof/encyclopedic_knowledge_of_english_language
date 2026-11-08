@@ -56,6 +56,9 @@ a.internal {
   }
   .sidebar.left {
     display: block;
+    position: sticky;
+    top: 0;
+    background: var(--light);
     overscroll-behavior-y: contain;
     // The sidebar owns scrolling; its navigation sections expand naturally.
     :is(.toc, .toc-content, .explorer, .explorer-content, .explorer-ul) {
@@ -369,6 +372,9 @@ article img {
   }
 }
 @media (max-width: 800px) {
+  html {
+    scroll-padding-top: calc(var(--navigation-height, 0px) + 1rem);
+  }
   .page {
     padding: 0 1rem;
   }
@@ -410,7 +416,6 @@ article img {
     width: 100%;
     height: auto;
     max-height: min(65dvh, 30rem);
-    position: static;
     padding: 0;
     display: block;
   }
@@ -448,7 +453,6 @@ article img {
 // The outer details panel handles mobile navigation; keep Quartz's explorer inline.
 @media (max-width: 800px) {
   .page > #quartz-body .sidebar.left:has(.explorer) {
-    position: static;
     padding: 0;
   }
   .navigation-panel .explorer .explorer-content {

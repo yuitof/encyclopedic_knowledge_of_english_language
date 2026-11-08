@@ -514,3 +514,110 @@ test("Contents and Explorer are matching independent sibling panels", async ({
   await explorer.locator(":scope > summary").press("Space");
   await expect(page.locator(".explorer-content")).toBeVisible();
 });
+
+test("sidebar pins to the window edge until the article ends", async ({
+  page,
+}) => {
+  await page.goto("./articles/culture");
+  const sidebar = page.locator(".sidebar.left");
+  await expect(page.locator(".nav-show-more")).toHaveCount(1);
+  await page.evaluate(() => document.fonts.ready);
+  await expect(page.locator(".header-search .search-bar")).toHaveAttribute(
+    "data-visible-search",
+    "true",
+  );
+  await page.evaluate(() => scrollTo(0, 0));
+  const initial = await sidebar.evaluate(
+    (element) => element.getBoundingClientRect().top,
+  );
+  expect(initial).toBeGreaterThan(30);
+  for (const y of [initial / 2, initial + 200, initial + 450, initial + 800]) {
+    await page.evaluate((y) => scrollTo(0, y), y);
+    // Measure the current row boundary, including any masthead layout changes.
+    await expect
+      .poll(() =>
+        sidebar.evaluate((element) => {
+          const rowTop = element.parentElement!.getBoundingClientRect().top;
+          return Math.abs(
+            element.getBoundingClientRect().top - Math.max(0, rowTop),
+          );
+        }),
+      )
+      .toBeLessThan(1);
+    if (y === initial / 2) {
+      expect(
+        await sidebar.evaluate(
+          (element) => element.getBoundingClientRect().top,
+        ),
+      ).toBeGreaterThan(0);
+    } else {
+      await expect
+        .poll(() =>
+          sidebar.evaluate((element) => element.getBoundingClientRect().top),
+        )
+        .toBeCloseTo(0, 0);
+    }
+  }
+  await openContents(page);
+  await openExplorer(page);
+  await expect
+    .poll(() =>
+      sidebar.evaluate((element) => element.getBoundingClientRect().top),
+    )
+    .toBeCloseTo(0, 0);
+  await expect(
+    sidebar.locator(":scope > .contents-panel > summary"),
+  ).toBeInViewport();
+  if (mobile(page)) {
+    expect(
+      await sidebar.evaluate(
+        (element) => getComputedStyle(element).backgroundColor,
+      ),
+    ).not.toBe("rgba(0, 0, 0, 0)");
+    const section = page.locator(".article-contents a[data-section]").nth(2);
+    const slug = await section.getAttribute("data-section");
+    await section.click();
+    await expect(section).toHaveAttribute("aria-current", "location");
+    await expect
+      .poll(() =>
+        page.evaluate((slug) => {
+          const heading = document
+            .getElementById(slug!)!
+            .getBoundingClientRect();
+          const sidebar = document
+            .querySelector(".sidebar.left")!
+            .getBoundingClientRect();
+          return heading.top >= sidebar.bottom && heading.top < innerHeight;
+        }, slug),
+      )
+      .toBe(true);
+  }
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const sidebar = document
+          .querySelector(".sidebar.left")!
+          .getBoundingClientRect();
+        const footer = document
+          .querySelector(".encyclopedia-footer")!
+          .getBoundingClientRect();
+        return sidebar.bottom <= footer.top + 1;
+      }),
+    )
+    .toBe(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  await expect
+    .poll(() =>
+      sidebar.evaluate((element) =>
+        Math.abs(
+          element.getBoundingClientRect().top -
+            element.parentElement!.getBoundingClientRect().top,
+        ),
+      ),
+    )
+    .toBeLessThan(1);
+  expect(
+    await sidebar.evaluate((element) => element.getBoundingClientRect().top),
+  ).toBeGreaterThan(30);
+});
