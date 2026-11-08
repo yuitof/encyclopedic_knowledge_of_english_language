@@ -41,7 +41,7 @@ export const EncyclopediaFrame: PageFrame = {
           ))}
           <nav class="header-links" aria-label="Main navigation">
             <a href={home}>Main page</a>
-            <a href={`${home}/articles/`}>Browse entries</a>
+            <a href={`${home}/articles/?sort=name-asc`}>Browse entries</a>
           </nav>
         </header>
         <div class="reading-row">

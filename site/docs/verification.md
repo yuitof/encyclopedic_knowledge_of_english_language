@@ -122,3 +122,11 @@ The sidebar Show more link now carries `?sort=modified-desc`. The Articles initi
 Node 24.22.2 TypeScript passed. Root, repository-subpath and final default builds each passed seven generated-output checks. Twelve targeted browser cases passed across desktop, tablet and 320px/390px mobile: Show more with a conflicting stored sort, complete newest-modified order, reload, later manual sorting and reload, existing six modes and preference persistence, and document-top navigation. A separate check against the running port-8080 preview opened Show more in a new tab with a stored filename-descending preference and confirmed modified-desc. The default preview artifact is refreshed.
 
 All 2679 source vault files match the preservation baseline. Original main HEAD remains c785417a697c3fcf69c450b7c96d65bb0f73b4e5; its existing editor workspace change and the feature-worktree AGENTS.md edits were left untouched. No subagents or remote operations were used.
+
+## Browse entries opens filename A-Z
+
+Browse entries now links to the Articles page with `?sort=name-asc`, using the existing URL-sort override. It opens the grouped filename A-Z view even when another order is saved. Show more continues to request modified-desc. No client scripts, dependencies or publication data changed.
+
+Node 24.22.2 TypeScript passed. Root, repository-subpath and default preview builds each passed all seven output checks. Four targeted browser cases passed across desktop, tablet and 320px/390px mobile, covering both link defaults against conflicting stored preferences, subsequent sorting/reloads and complete-list order. Desktop/tablet coverage clicks Browse entries; the compact mobile header hides that link, so mobile coverage opens its URL in a new tab and verifies filename A-Z. The default preview is rebuilt.
+
+Original main HEAD remains c785417a697c3fcf69c450b7c96d65bb0f73b4e5. Source notes, the existing Obsidian workspace change and user AGENTS.md edits were left untouched. No subagents or remote operations were used.

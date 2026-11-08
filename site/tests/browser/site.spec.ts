@@ -167,6 +167,39 @@ test("Show more follows the recent articles and opens the full list", async ({
     .poll(() => articleListOrder(page))
     .toEqual(await expectedArticleList(page, "name-asc"));
   await expect(page.locator(".nav-show-more")).toHaveCount(0);
+  await select.selectOption("modified-desc");
+  const browse = page.getByRole("link", {
+    name: "Browse entries",
+    exact: true,
+    includeHidden: true,
+  });
+  await expect(browse).toHaveAttribute("href", /\/articles\/\?sort=name-asc$/);
+  if (mobile(page)) {
+    // The compact header omits this link visually; its URL still works in a new tab.
+    const target = await browse.evaluate(
+      (link: HTMLAnchorElement) => link.href,
+    );
+    const tab = await page.context().newPage();
+    try {
+      await tab.goto(target);
+      const tabSelect = tab.getByRole("combobox", { name: "Sort articles" });
+      await expect(tabSelect).toBeEnabled();
+      await expect(tabSelect).toHaveValue("name-asc");
+      await expect
+        .poll(() => articleListOrder(tab))
+        .toEqual(await expectedArticleList(tab, "name-asc"));
+    } finally {
+      await tab.close();
+    }
+  } else {
+    await browse.click();
+    await expect(page).toHaveURL(/\/articles\/\?sort=name-asc$/);
+    await expect(select).toBeEnabled();
+    await expect(select).toHaveValue("name-asc");
+    await expect
+      .poll(() => articleListOrder(page))
+      .toEqual(await expectedArticleList(page, "name-asc"));
+  }
 });
 test("homepage uses the static index for varying note counts and compact snippets", async ({
   page,
