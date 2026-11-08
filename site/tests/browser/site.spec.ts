@@ -113,7 +113,9 @@ test("Explorer shows only the ten newest modified articles regardless of obsolet
     ).toHaveCount(0);
     await expect(page.locator('a[href*="/catalogue"]')).toHaveCount(0);
     const expected = await expectedOrder(page, "modified-desc");
-    await expect.poll(() => actualOrder(page)).toEqual(expected.slice(0, 10));
+    await expect
+      .poll(() => actualOrder(page))
+      .toEqual(route === "./articles/" ? [] : expected.slice(0, 10));
     if (route === "./articles/")
       await expect(page.locator(".page-listing .section-li")).toHaveCount(
         expected.length,
@@ -144,7 +146,7 @@ test("Show more follows the recent articles and opens the full list", async ({
   await openExplorer(page);
   await expect(
     page.getByRole("link", { name: "Show more", exact: true }),
-  ).toHaveCount(1);
+  ).toHaveCount(0);
 });
 test("homepage uses the static index for varying note counts and compact snippets", async ({
   page,
@@ -694,6 +696,31 @@ const articleListOrder = async (page: any) =>
           .replace(/\.html$/, ""),
       ),
     );
+const expectedArticleList = async (page: any, mode: string) => {
+  const order = await expectedOrder(page, mode);
+  if (!mode.startsWith("name-")) return order;
+  return page.evaluate(
+    async ({ order }) => {
+      const data = await fetch(
+        `${document.body.dataset.basepath ?? ""}/static/contentIndex.json`,
+      ).then((r) => r.json());
+      const groupOrder = (slug: string) =>
+        data[slug].sortDetails?.group ?? "other";
+      const letters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+      if (
+        order.length > 1 &&
+        data[order[0]].sortRanks.name >
+          data[order[order.length - 1]].sortRanks.name
+      )
+        letters.reverse();
+      const groups = [...letters, "symbols", "other"];
+      return order.sort(
+        (a, b) => groups.indexOf(groupOrder(a)) - groups.indexOf(groupOrder(b)),
+      );
+    },
+    { order },
+  );
+};
 const articleModes = [
   ["name-asc", "File name (A-Z)"],
   ["name-desc", "File name (Z-A)"],
@@ -716,7 +743,7 @@ test("Articles supports all six orders, keyboard control, offline changes and pe
   );
   const orders = new Map<string, string[]>();
   for (const [mode, label] of articleModes) {
-    const expected = await expectedOrder(page, mode);
+    const expected = await expectedArticleList(page, mode);
     orders.set(mode, expected);
     await select.selectOption(mode);
     await expect.poll(() => articleListOrder(page)).toEqual(expected);
@@ -724,9 +751,7 @@ test("Articles supports all six orders, keyboard control, offline changes and pe
       `Sorted by ${label}.`,
     );
   }
-  await expect
-    .poll(() => actualOrder(page))
-    .toEqual(orders.get("modified-desc")!.slice(0, 10));
+  await expect.poll(() => actualOrder(page)).toEqual([]);
   await expect(page.locator(".sidebar .article-list-sort")).toHaveCount(0);
   try {
     await context.setOffline(true);
@@ -804,7 +829,7 @@ test("Article sorts handle date ties, unknown dates and unavailable saved prefer
   await expect(select).toBeEnabled();
   await expect(select).toHaveValue("name-asc");
   for (const [mode] of articleModes) {
-    const expected = await expectedOrder(page, mode);
+    const expected = await expectedArticleList(page, mode);
     await select.selectOption(mode);
     await expect.poll(() => articleListOrder(page)).toEqual(expected);
   }
@@ -864,4 +889,110 @@ test("Articles retains the complete static list without JavaScript", async ({
   } finally {
     await context.close();
   }
+});
+
+test("Articles filename groups populate Contents and date calendars filter inclusive ranges", async ({
+  page,
+}) => {
+  await page.route("**/static/contentIndex.json", async (route) => {
+    const response = await route.fetch(),
+      index = await response.json();
+    for (const note of Object.values(index) as any[])
+      if (note.sortDetails)
+        note.sortDetails = {
+          ...note.sortDetails,
+          modified: null,
+          created: null,
+        };
+    Object.assign(index["articles/caimans"].sortDetails, {
+      modified: "2020-01-10",
+      created: "2019-02-01",
+    });
+    Object.assign(index["articles/crocodile"].sortDetails, {
+      modified: "2020-01-20",
+      created: "2019-02-02",
+    });
+    Object.assign(index["articles/culture"].sortDetails, {
+      modified: "2020-01-21",
+      created: "2019-02-03",
+    });
+    await route.fulfill({ response, json: index });
+  });
+  await page.goto("./articles/");
+  const select = page.getByRole("combobox", { name: "Sort articles" });
+  await expect(select).toBeEnabled();
+  await expect(
+    page.locator(".sidebar .explorer, .sidebar .nav-show-more"),
+  ).toHaveCount(0);
+  await openContents(page);
+  const headings = page.locator(".article-group-heading h2");
+  const names = await headings.allTextContents();
+  expect(names.slice(0, 26)).toEqual([..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"]);
+  expect(names.slice(-2)).toEqual([
+    "Symbols and numbers",
+    "日本語 and other scripts",
+  ]);
+  expect(
+    await page.locator(".article-contents a[data-section]").allTextContents(),
+  ).toEqual(names);
+  const jump = page.locator('.article-contents a[href="#article-group-m"]');
+  await jump.click();
+  await expect(page.locator("#article-group-m")).toBeInViewport();
+  await expect(jump).toHaveAttribute("aria-current", "location");
+  await page.locator(".contents-top").click();
+  await select.selectOption("name-desc");
+  expect((await headings.allTextContents()).slice(0, 26)).toEqual(
+    [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"].reverse(),
+  );
+  await select.selectOption("modified-asc");
+  await expect(headings).toHaveCount(0);
+  await expect(page.locator(".article-contents a[data-section]")).toHaveCount(
+    0,
+  );
+  await openExplorer(page);
+  const calendar = page.getByRole("form", { name: "Article date range" });
+  await expect(calendar).toBeVisible();
+  await expect(calendar.locator(".date-filter-title")).toHaveText(
+    "Modified date",
+  );
+  const from = calendar.getByLabel("From", { exact: true }),
+    to = calendar.getByLabel("To", { exact: true });
+  await from.fill("2020-01-10");
+  await to.fill("2020-01-20");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(["articles/caimans", "articles/crocodile"]);
+  await to.fill("2020-01-10");
+  await expect.poll(() => articleListOrder(page)).toEqual(["articles/caimans"]);
+  await from.fill("2020-01-11");
+  await expect(calendar.locator(".date-filter-status")).toHaveText(
+    "Choose an end date on or after the start date.",
+  );
+  await from.fill("2020-01-15");
+  await to.fill("2020-01-19");
+  await expect(page.locator(".article-empty")).toHaveText(
+    "No articles match this date range.",
+  );
+  await calendar.getByRole("button", { name: "Clear dates" }).click();
+  await expect(from).toHaveValue("");
+  await expect(to).toHaveValue("");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(await expectedOrder(page, "modified-asc"));
+  await select.selectOption("created-desc");
+  await expect(calendar.locator(".date-filter-title")).toHaveText(
+    "Created date",
+  );
+  await from.fill("2019-02-02");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(["articles/culture", "articles/crocodile"]);
+  await select.selectOption("name-asc");
+  await expect(calendar).not.toBeVisible();
+  await expect(page.locator(".page-listing .section-li")).toHaveCount(
+    (await expectedOrder(page, "name-asc")).length,
+  );
+  await page.getByRole("link", { name: "Main page", exact: true }).click();
+  await openExplorer(page);
+  await expect(page.locator(".nav-show-more")).toHaveCount(1);
 });

@@ -55,6 +55,13 @@ export async function auditOutput(output, publication) {
       throw new Error("Unexpected article in search index");
   for (const [slug, ranks] of Object.entries(publication.sortRanks ?? {})) {
     if (!Object.hasOwn(index, slug)) continue;
+    if (
+      JSON.stringify(index[slug].sortDetails) !==
+      JSON.stringify(publication.sortDetails[slug])
+    )
+      throw new Error(
+        "Public calendar details differ from approved source details",
+      );
     if (JSON.stringify(index[slug].sortRanks) !== JSON.stringify(ranks))
       throw new Error("Public sort ranks differ from approved source ranks");
     if (

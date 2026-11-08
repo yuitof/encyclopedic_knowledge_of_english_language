@@ -166,3 +166,43 @@
   color: var(--darkgray);
   font-size: 0.8rem;
 }
+
+.article-date-filter[hidden] {
+  display: none;
+}
+.article-date-filter {
+  font-size: 0.85rem;
+}
+.article-date-filter label {
+  display: block;
+  margin: 0.75rem 0 0.25rem;
+}
+.article-date-filter input {
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+  padding: 0.35rem;
+  background: var(--light);
+  color: var(--darkgray);
+  border: 1px solid var(--gray);
+  font: inherit;
+}
+.article-date-filter button {
+  margin-top: 0.75rem;
+  padding: 0.3rem;
+  background: var(--light);
+  color: var(--darkgray);
+  border: 1px solid var(--gray);
+  cursor: pointer;
+}
+.article-date-filter p {
+  line-height: 1.5;
+}
+.article-group-heading h2 {
+  font:
+    400 1.6rem Georgia,
+    serif;
+  border-bottom: 1px solid var(--lightgray);
+  padding-bottom: 0.25rem;
+  margin: 1.75rem 0 1rem;
+}

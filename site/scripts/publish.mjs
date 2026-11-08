@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import YAML from "yaml";
-import { createSortRanks } from "./sort-ranks.mjs";
+import { createSortRanks, createSortDetails } from "./sort-ranks.mjs";
 import {
   referenceLookup,
   rewriteCorpusReferences,
@@ -346,6 +346,7 @@ export async function preparePublication({
     resolvedReferences,
     approvedUnresolvedReferences: unresolvedReferences,
     sortRanks: createSortRanks(sortRecords),
+    sortDetails: createSortDetails(sortRecords),
   };
 }
 

@@ -95,6 +95,14 @@ test("project pages, sort ranks and favicon are public without source filesystem
   );
   for (const [slug, ranks] of Object.entries(publication.sortRanks)) {
     assert.deepEqual(index[slug].sortRanks, ranks);
+    assert.deepEqual(index[slug].sortDetails, publication.sortDetails[slug]);
+    assert.ok(
+      Object.values(index[slug].sortDetails).every(
+        (value) =>
+          value === null ||
+          /^(?:[A-Z]|symbols|other|\d{4}-\d{2}-\d{2})$/.test(value),
+      ),
+    );
     assert.ok(
       Object.values(ranks).every(
         (rank) => rank === null || Number.isInteger(rank),

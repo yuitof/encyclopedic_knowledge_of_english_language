@@ -18,7 +18,12 @@ async function prepareArticleSorting() {
     modified: number | null;
     created: number | null;
   };
-  let index: Record<string, { sortRanks?: Ranks }>;
+  type Details = {
+    group: string;
+    modified: string | null;
+    created: string | null;
+  };
+  let index: Record<string, { sortRanks?: Ranks; sortDetails?: Details }>;
   try {
     index = await fetchData;
   } catch {
@@ -37,7 +42,12 @@ async function prepareArticleSorting() {
           .replace(/^\//, "")
           .replace(/\.html$/, "")
       : "";
-    return { element, position, ranks: index[slug]?.sortRanks };
+    return {
+      element,
+      position,
+      ranks: index[slug]?.sortRanks,
+      details: index[slug]?.sortDetails,
+    };
   });
   const allowed = new Set(Array.from(select.options, (option) => option.value));
   const storageKey = "article-list-order";
@@ -46,6 +56,21 @@ async function prepareArticleSorting() {
     initial = localStorage.getItem(storageKey) ?? initial;
   } catch {}
   select.value = allowed.has(initial) ? initial : "name-asc";
+  const calendar = document.querySelector<HTMLFormElement>(
+    ".article-date-filter",
+  )!;
+  const from = calendar.querySelector<HTMLInputElement>("#article-date-from")!;
+  const to = calendar.querySelector<HTMLInputElement>("#article-date-to")!;
+  const contents = document.querySelector<HTMLElement>(
+    ".article-contents > ul",
+  )!;
+  const groups = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", "symbols", "other"];
+  const label = (group: string) =>
+    group === "symbols"
+      ? "Symbols and numbers"
+      : group === "other"
+        ? "日本語 and other scripts"
+        : group;
   const apply = () => {
     if (!allowed.has(select.value)) return;
     const [field, direction] = select.value.split("-") as [keyof Ranks, string];
@@ -63,10 +88,80 @@ async function prepareArticleSorting() {
         a.position - b.position
       );
     });
+    const byName = field === "name";
+    calendar.hidden = byName;
+    calendar.querySelector(".date-filter-title")!.textContent =
+      field === "created" ? "Created date" : "Modified date";
+    const dates = byName
+      ? []
+      : entries
+          .flatMap(({ details }) => (details?.[field] ? [details[field]!] : []))
+          .sort();
+    for (const input of [from, to]) {
+      input.min = dates[0] ?? "";
+      input.max = dates.at(-1) ?? "";
+    }
+    const invalid =
+      !byName && !!from.value && !!to.value && from.value > to.value;
+    to.setCustomValidity(
+      invalid ? "Choose an end date on or after the start date." : "",
+    );
+    const filtered =
+      byName || invalid
+        ? sorted
+        : sorted.filter(({ details }) => {
+            if (!from.value && !to.value) return true;
+            const day = details?.[field];
+            return (
+              !!day &&
+              (!from.value || day >= from.value) &&
+              (!to.value || day <= to.value)
+            );
+          });
     const fragment = document.createDocumentFragment();
-    for (const { element } of sorted) fragment.append(element);
-    list.append(fragment);
+    contents.replaceChildren();
+    if (byName) {
+      const letters =
+        direction === "desc"
+          ? groups.slice(0, 26).reverse()
+          : groups.slice(0, 26);
+      for (const group of [...letters, "symbols", "other"]) {
+        const members = filtered.filter(
+          ({ details }) => (details?.group ?? "other") === group,
+        );
+        if (!members.length) continue;
+        const headingRow = document.createElement("li"),
+          heading = document.createElement("h2");
+        headingRow.className = "article-group-heading";
+        heading.id = `article-group-${group.toLowerCase()}`;
+        heading.textContent = label(group);
+        headingRow.append(heading);
+        fragment.append(headingRow);
+        const item = document.createElement("li"),
+          link = document.createElement("a");
+        link.href = `#${heading.id}`;
+        link.dataset.section = heading.id;
+        link.textContent = label(group);
+        item.append(link);
+        contents.append(item);
+        for (const { element } of members) fragment.append(element);
+      }
+    } else for (const { element } of filtered) fragment.append(element);
+    if (!filtered.length) {
+      const empty = document.createElement("li");
+      empty.className = "article-empty";
+      empty.textContent = "No articles match this date range.";
+      fragment.append(empty);
+    }
+    list.replaceChildren(fragment);
+    const dateStatus = calendar.querySelector(".date-filter-status")!;
+    dateStatus.textContent = invalid
+      ? "Choose an end date on or after the start date."
+      : `${filtered.length.toLocaleString()} of ${entries.length.toLocaleString()} articles.`;
     status.textContent = `Sorted by ${select.selectedOptions[0].textContent}.`;
+    document.dispatchEvent(
+      new CustomEvent("article-sections-changed", { detail: {} }),
+    );
   };
   const change = () => {
     apply();
@@ -74,6 +169,20 @@ async function prepareArticleSorting() {
       localStorage.setItem(storageKey, select.value);
     } catch {}
   };
+  const reset = () => {
+    from.value = "";
+    to.value = "";
+    apply();
+  };
+  const preventSubmit = (event: Event) => event.preventDefault();
+  calendar.addEventListener("input", apply);
+  calendar.addEventListener("reset", reset);
+  calendar.addEventListener("submit", preventSubmit);
+  window.addCleanup(() => {
+    calendar.removeEventListener("input", apply);
+    calendar.removeEventListener("reset", reset);
+    calendar.removeEventListener("submit", preventSubmit);
+  });
   apply();
   select.disabled = false;
   control.dataset.sortReady = "ready";

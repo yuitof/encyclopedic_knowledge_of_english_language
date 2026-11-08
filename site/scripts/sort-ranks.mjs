@@ -45,10 +45,45 @@ export function createSortRanks(records) {
   }
   return result;
 }
+/** Minimal publication metadata for filename sections and inclusive UTC date filters. */
+export function createSortDetails(records) {
+  return Object.fromEntries(
+    records.map((record) => {
+      const initial = record.name
+        .replace(/\.md$/iu, "")
+        .normalize("NFKD")
+        .replace(/\p{M}/gu, "")
+        .charAt(0)
+        .toUpperCase();
+      const group = /^[A-Z]$/u.test(initial)
+        ? initial
+        : /^\p{L}/u.test(initial)
+          ? "other"
+          : "symbols";
+      const day = (field) => {
+        const value = time(
+          record[field],
+          field === "modified" ? record.mtimeMs : record.birthtimeMs,
+          field,
+        );
+        return value === null
+          ? null
+          : new Date(value).toISOString().slice(0, 10);
+      };
+      return [
+        record.slug,
+        { group, modified: day("modified"), created: day("created") },
+      ];
+    }),
+  );
+}
 export async function enrichSortRanks(output, publication) {
   const file = path.join(output, "static/contentIndex.json"),
     index = JSON.parse(await fs.readFile(file, "utf8"));
   for (const [slug, ranks] of Object.entries(publication.sortRanks ?? {}))
-    if (Object.hasOwn(index, slug)) index[slug].sortRanks = ranks;
+    if (Object.hasOwn(index, slug)) {
+      index[slug].sortRanks = ranks;
+      index[slug].sortDetails = publication.sortDetails[slug];
+    }
   await fs.writeFile(file, JSON.stringify(index));
 }

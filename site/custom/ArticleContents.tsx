@@ -25,7 +25,7 @@ export const ArticleContents: QuartzComponent = (data) => {
         <a class="contents-top" href="#quartz-root">
           (Top)
         </a>
-        {entries.length > 0 && (
+        {(entries.length > 0 || data.fileData.slug === "articles/index") && (
           <ul>
             {entries.map((entry) => (
               <li

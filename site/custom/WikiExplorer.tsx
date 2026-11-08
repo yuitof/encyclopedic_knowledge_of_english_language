@@ -10,6 +10,37 @@ import behavior from "./wiki-explorer.inline";
 const stock = Explorer() as QuartzComponent;
 type TreeChild = VNode<{ class?: string; "aria-expanded"?: boolean | string }>;
 export const WikiExplorer: QuartzComponent = (props) => {
+  if (props.fileData.slug === "articles/index")
+    return (
+      <details class="navigation-panel explorer-panel" open>
+        <summary>Explorer</summary>
+        <form
+          class="article-date-filter"
+          hidden
+          aria-label="Article date range"
+        >
+          <p class="date-filter-title" />
+          <label for="article-date-from">From</label>
+          <input
+            id="article-date-from"
+            type="date"
+            aria-describedby="article-date-help"
+          />
+          <label for="article-date-to">To</label>
+          <input
+            id="article-date-to"
+            type="date"
+            aria-describedby="article-date-help"
+          />
+          <button type="reset">Clear dates</button>
+          <p id="article-date-help">
+            Includes both dates (UTC). Articles with unknown dates are excluded
+            while filtering.
+          </p>
+          <p class="date-filter-status" role="status" />
+        </form>
+      </details>
+    );
   const tree = stock(props) as VNode<{ children: TreeChild[] }>;
   const children = tree.props.children
     .filter((child) => child.type !== "button")

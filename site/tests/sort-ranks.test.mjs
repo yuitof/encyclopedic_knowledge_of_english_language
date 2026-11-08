@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createSortRanks } from "../scripts/sort-ranks.mjs";
+import { createSortRanks, createSortDetails } from "../scripts/sort-ranks.mjs";
 const records = [
   { slug: "articles/b", name: "b.md", mtimeMs: 200, birthtimeMs: 400 },
   { slug: "articles/a", name: "a.md", mtimeMs: 200, birthtimeMs: 100 },
@@ -50,4 +50,30 @@ test("explicit valid dates override filesystem ranking while invalid dates fail"
       () => createSortRanks([{ ...records[0], created: value }]),
       /valid date/,
     );
+});
+
+test("calendar metadata uses source filename groups and UTC days without paths or clock times", () => {
+  const data = createSortDetails([
+    {
+      slug: "articles/one",
+      name: "Apple.md",
+      modified: "2020-02-29T23:00:00-02:00",
+      created: "2019-01-01",
+      mtimeMs: 1,
+      birthtimeMs: 1,
+    },
+    { slug: "articles/two", name: "École.md", mtimeMs: NaN, birthtimeMs: 0 },
+    { slug: "articles/three", name: "日本語.md", mtimeMs: 0, birthtimeMs: 0 },
+    { slug: "articles/four", name: "#1.md", mtimeMs: 0, birthtimeMs: 0 },
+  ]);
+  assert.deepEqual(data["articles/one"], {
+    group: "A",
+    modified: "2020-03-01",
+    created: "2019-01-01",
+  });
+  assert.equal(data["articles/two"].group, "E");
+  assert.equal(data["articles/three"].group, "other");
+  assert.equal(data["articles/four"].group, "symbols");
+  assert.equal(data["articles/two"].modified, null);
+  assert.doesNotMatch(JSON.stringify(data), /\.md|mtime|birthtime|T23|Apple/);
 });

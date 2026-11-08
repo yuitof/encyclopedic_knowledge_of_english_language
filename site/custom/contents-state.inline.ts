@@ -1,5 +1,5 @@
 function prepareContents() {
-  const links = Array.from(
+  let links = Array.from(
     document.querySelectorAll<HTMLAnchorElement>(
       ".article-contents a[data-section]",
     ),
@@ -18,6 +18,11 @@ function prepareContents() {
     }
   };
   const update = () => {
+    links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>(
+        ".article-contents a[data-section]",
+      ),
+    );
     const sidebarBottom = window.matchMedia("(max-width: 800px)").matches
       ? (document.querySelector(".sidebar.left")?.getBoundingClientRect()
           .bottom ?? 0)
@@ -40,24 +45,27 @@ function prepareContents() {
       active = links.find((link) => link.hash === window.location.hash);
     markActive(active);
   };
-  for (const link of [...links, ...(top ? [top] : [])]) {
-    const selectVisibleSection = (event: MouseEvent) => {
-      if (
-        event.button ||
-        event.ctrlKey ||
-        event.metaKey ||
-        event.shiftKey ||
-        event.altKey
-      )
-        return;
-      if (document.documentElement.scrollHeight <= window.innerHeight + 1)
-        markActive(link === top ? undefined : link);
-    };
-    link.addEventListener("click", selectVisibleSection);
-    window.addCleanup(() =>
-      link.removeEventListener("click", selectVisibleSection),
-    );
-  }
+  const contents = document.querySelector(".article-contents");
+  const selectVisibleSection = (event: Event) => {
+    const mouse = event as MouseEvent;
+    if (
+      mouse.button ||
+      mouse.ctrlKey ||
+      mouse.metaKey ||
+      mouse.shiftKey ||
+      mouse.altKey
+    )
+      return;
+    const link = (event.target as Element).closest<HTMLAnchorElement>("a");
+    if (link && document.documentElement.scrollHeight <= window.innerHeight + 1)
+      markActive(link === top ? undefined : link);
+  };
+  contents?.addEventListener("click", selectVisibleSection);
+  document.addEventListener("article-sections-changed", update);
+  window.addCleanup(() => {
+    contents?.removeEventListener("click", selectVisibleSection);
+    document.removeEventListener("article-sections-changed", update);
+  });
   window.addEventListener("scroll", update, { passive: true });
   update();
   window.addCleanup(() => window.removeEventListener("scroll", update));
