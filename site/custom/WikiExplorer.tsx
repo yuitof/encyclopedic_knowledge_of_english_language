@@ -12,7 +12,7 @@ type TreeChild = VNode<{ class?: string; "aria-expanded"?: boolean | string }>;
 export const WikiExplorer: QuartzComponent = (props) => {
   if (props.fileData.slug === "articles/index")
     return (
-      <details class="navigation-panel explorer-panel" open>
+      <details class="navigation-panel explorer-panel">
         <summary>Explorer</summary>
         <form
           class="article-date-filter"

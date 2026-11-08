@@ -1,4 +1,4 @@
-// Keep Quartz's tree and controls, showing only the newest modified articles.
+// Keep Quartz's generated links, with an always-expanded recent-article group.
 const recentArticleLimit = 10;
 async function prepareArticleOrder() {
   const index = (await fetchData) as Record<
@@ -67,6 +67,17 @@ async function prepareArticleOrder() {
         });
         markers.forEach((marker, i) => marker.replaceWith(sorted[i].element));
       }
+      const heading = explorer.querySelector<HTMLElement>(
+        '.folder-container[data-folderpath="articles/index"]',
+      );
+      if (heading && !heading.dataset.recentLabel) {
+        const label = document.createElement("span");
+        label.className = "recently-updated-label";
+        label.textContent = "Recently updated";
+        heading.replaceChildren(label);
+        heading.dataset.recentLabel = "true";
+      }
+      heading?.nextElementSibling?.classList.add("open");
       const articles = explorer.querySelector<HTMLElement>(
         '.folder-container[data-folderpath="articles/index"] + .folder-outer > ul',
       );
@@ -80,6 +91,9 @@ async function prepareArticleOrder() {
         row.append(link);
         articles.append(row);
       }
+      document.dispatchEvent(
+        new CustomEvent("article-sections-changed", { detail: {} }),
+      );
     };
     const observer = new MutationObserver(apply);
     observer.observe(explorer, { childList: true, subtree: true });

@@ -537,9 +537,12 @@ test("Contents and Explorer are matching independent sibling panels", async ({
   await expect(contents.locator(".explorer")).toHaveCount(0);
   await expect(page.locator(".explorer-toggle")).toHaveCount(0);
   for (const panel of [contents, explorer]) {
-    if (mobile(page)) await expect(panel).not.toHaveAttribute("open", "");
+    if (mobile(page) && panel === contents)
+      await expect(panel).not.toHaveAttribute("open", "");
     else await expect(panel).toHaveAttribute("open", "");
   }
+  await openContents(page);
+  await openExplorer(page);
   const style = (panel: any) =>
     panel.locator(":scope > summary").evaluate((element: Element) => {
       const computed = getComputedStyle(element);
@@ -833,12 +836,12 @@ test("Articles supports all six orders, keyboard control, offline changes and pe
     .poll(() => articleListOrder(page))
     .toEqual(orders.get("modified-desc"));
   await select.selectOption("created-asc");
-  await page.getByRole("link", { name: "Main page", exact: true }).click();
-  await expect(page.locator(".article-list-sort")).toHaveCount(0);
-  await openExplorer(page);
   await page
-    .locator('.folder-container[data-folderpath="articles/index"] a')
+    .locator(".page-listing .section-li .desc a.internal")
+    .first()
     .click();
+  await expect(page.locator(".article-list-sort")).toHaveCount(0);
+  await page.goBack();
   await expect(select).toBeEnabled();
   await expect(select).toHaveValue("created-asc");
   await expect
@@ -1107,4 +1110,87 @@ test("Browse entries retains filename A-Z through repeated SPA navigation", asyn
     .click();
   await expect(page.locator(".article-list-sort")).toHaveCount(0);
   await openBrowse();
+});
+
+test("Recently updated is a plain label and its entries reopen on every reload", async ({
+  page,
+}) => {
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      "fileTree",
+      JSON.stringify([
+        { path: "articles/index", collapsed: true },
+        { path: "articles", collapsed: true },
+      ]),
+    ),
+  );
+  await page.goto("./articles/culture");
+  const explorer = page.locator(".explorer-panel");
+  const group = page.locator(
+    '.folder-container[data-folderpath="articles/index"]',
+  );
+  await expect(group).toHaveText("Recently updated");
+  await expect(group.locator("a,button,svg")).toHaveCount(0);
+  await expect(explorer).toHaveAttribute("open", "");
+  await expect(
+    page.locator(".explorer-content a.nav-file-title").first(),
+  ).toBeVisible();
+  await expect
+    .poll(() => actualOrder(page))
+    .toEqual((await expectedOrder(page, "modified-desc")).slice(0, 10));
+  await explorer.locator(":scope > summary").click();
+  await expect(explorer).not.toHaveAttribute("open", "");
+  await page.reload();
+  await expect(group).toHaveText("Recently updated");
+  await expect(explorer).toHaveAttribute("open", "");
+  await expect(
+    page.locator(".explorer-content a.nav-file-title").first(),
+  ).toBeVisible();
+});
+
+test("empty Contents and Explorer close automatically and reopen when content appears", async ({
+  page,
+}) => {
+  await page.goto("./articles/?sort=name-asc");
+  const select = page.getByRole("combobox", { name: "Sort articles" });
+  await expect(select).toBeEnabled();
+  const contents = page.locator(".contents-panel"),
+    explorer = page.locator(".explorer-panel");
+  await expect(explorer).toHaveAttribute("data-empty", "true");
+  await expect(explorer).not.toHaveAttribute("open", "");
+  await expect(contents).toHaveAttribute("open", "");
+  await select.selectOption("modified-desc");
+  await expect(contents).toHaveAttribute("data-empty", "true");
+  await expect(contents).not.toHaveAttribute("open", "");
+  await expect(explorer).toHaveAttribute("open", "");
+  await expect(page.locator(".article-date-filter")).toBeVisible();
+  await select.selectOption("created-asc");
+  await expect(explorer).toHaveAttribute("open", "");
+  await select.selectOption("name-desc");
+  await expect(explorer).not.toHaveAttribute("open", "");
+  await expect(contents).toHaveAttribute("open", "");
+  await contents.locator(":scope > summary").click();
+  await select.selectOption("name-asc");
+  await expect(contents).not.toHaveAttribute("open", "");
+  const emptySlug = await page.evaluate(async () => {
+    const index = await fetch(
+      `${document.body.dataset.basepath ?? ""}/static/contentIndex.json`,
+    ).then((r) => r.json());
+    const entries = Object.entries(index) as [
+      string,
+      { content?: string; sortRanks?: object; links?: string[] },
+    ][];
+    return entries.find(
+      ([slug, note]) =>
+        note.sortRanks &&
+        !note.content?.trim() &&
+        !entries.some(([, source]) => source.links?.includes(slug)),
+    )?.[0];
+  });
+  expect(emptySlug).toBeTruthy();
+  await page.goto(`./${emptySlug}`);
+  await expect(contents).toHaveAttribute("data-empty", "true");
+  await expect(contents).not.toHaveAttribute("open", "");
+  await expect(page.locator(".contents-top")).toHaveCount(1);
+  await expect(explorer).toHaveAttribute("open", "");
 });

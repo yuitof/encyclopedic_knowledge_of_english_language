@@ -1,3 +1,18 @@
+function closeEmptyNavigationPanels() {
+  for (const panel of document.querySelectorAll<HTMLDetailsElement>(
+    ".sidebar.left > .navigation-panel",
+  )) {
+    const hasContent = panel.classList.contains("contents-panel")
+      ? !!panel.querySelector("a[data-section]")
+      : !!panel.querySelector(
+          ".article-date-filter:not([hidden]), .explorer-content a.nav-file-title, .nav-show-more",
+        );
+    if (!hasContent) panel.open = false;
+    else if (panel.dataset.empty === "true") panel.open = true;
+    panel.dataset.empty = String(!hasContent);
+  }
+}
+
 // Native disclosures provide independent mouse/keyboard controls for both sections.
 function prepareNavigationPanels() {
   const mobile = window.matchMedia("(max-width: 800px)").matches;
@@ -26,8 +41,15 @@ function prepareNavigationPanels() {
     if (mobile) panel.open = false;
     window.addCleanup(() => {
       delete panel.dataset.navigationPanel;
+      delete panel.dataset.empty;
     });
   }
+  closeEmptyNavigationPanels();
 }
 document.addEventListener("nav", prepareNavigationPanels);
 document.addEventListener("render", prepareNavigationPanels);
+
+document.addEventListener(
+  "article-sections-changed",
+  closeEmptyNavigationPanels,
+);
