@@ -37,10 +37,18 @@ const server = http.createServer(async (req, res) => {
     if (!relative || relative.endsWith("/")) relative += "index.html";
     let file = path.join(root, relative);
     try {
-      await fs.access(file);
+      const stat = await fs.stat(file);
+      if (stat.isDirectory()) {
+        const requested = new URL(req.url, "http://localhost");
+        res.writeHead(301, {
+          location: requested.pathname + "/" + requested.search,
+        });
+        res.end();
+        return;
+      }
     } catch {
-      if (!path.extname(file)) file += ".html";
-      else throw new Error("Missing");
+      // A note slug may contain dots; an apparent extension is still an article slug.
+      file += ".html";
     }
     const data = await fs.readFile(file);
     res.writeHead(200, {

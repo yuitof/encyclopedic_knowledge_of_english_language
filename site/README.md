@@ -1,6 +1,6 @@
-# Knowledge Commons — Quartz 5 site
+# English Encyclopedia — Quartz 5 site
 
-A static, Wikipedia-inspired reading interface for selected Obsidian notes. The existing vault is organized under `vault/`; only explicit per-file approvals reach the generated website. The current manifest selects **five original sample articles and one sample image**, with no existing vault notes approved.
+A static, Wikipedia-inspired reading interface for the existing English-language Obsidian collection. The current **explicit approval snapshot** contains **2,584 existing notes and their 85 referenced images**, plus an alphabetical landing page. The earlier demonstration notes and image have been removed. Original vault files remain unchanged by publication.
 
 ## Local development
 
@@ -13,111 +13,105 @@ npm run build
 npm run preview
 ```
 
-Open `http://127.0.0.1:8080/`. Preview serves the built static artifact and uses no live-reload WebSocket. After changing content or configuration, rebuild and refresh. `npm run prepare:content` validates the manifest without creating public output.
+Open `http://127.0.0.1:8080/`. Preview serves built static files without a live-reload WebSocket. Rebuild after changing content or configuration. It handles dotted article slugs, query strings, fragments and folder indexes.
 
-For a production URL, set `SITE_BASE_URL` to a host and optional repository path, without `https://`:
+For production, set a host and optional repository path without `https://`:
 
 ```sh
 SITE_BASE_URL=username.github.io/repository npm run build
-# Root-level user/organization site:
 SITE_BASE_URL=username.github.io npm run build
 ```
 
-The local fallback is `example.invalid`, deliberately unsuitable for a real deployment. The Pages workflow obtains the real URL automatically. `SITE_OUTPUT=public-review` selects a separate ignored output directory for review. Only names `public` and `public-<lowercase-name>` are accepted. These directories are generated and cleared on every build, including before a publication validation failure.
+The fallback is `example.invalid`; the Pages workflow supplies the real URL. `SITE_OUTPUT=public-review` uses a separate ignored artifact directory. Only `public` and `public-<lowercase-name>` are accepted, and the selected output is cleared on every build before validation. `npm run prepare:content` validates the selection without writing public output.
 
 ## Project map
 
 | Path | Responsibility |
 | --- | --- |
-| `../vault/notes/`, `../vault/assets/`, `../vault/.obsidian/` | Existing private collection, excluded unless explicitly approved |
+| `../vault/notes/` | The original 2,584 Markdown notes |
+| `../vault/assets/`, `../vault/.obsidian/` | Original images and Obsidian settings; open `vault/` in Obsidian |
 | `quartz/` | Pinned Quartz 5 core; see `UPSTREAM.md` and MIT license |
-| `quartz.config.yaml` | Current Quartz 5 plugin, theme, and layout declarations |
-| `quartz.ts` | Small configuration override for our frame, stock search wrapper, local math assets |
-| `custom/` | Encyclopedia frame, search presentation/accessibility adapter, modular styles |
-| `samples/` | Reviewed demonstration articles and a generated raster illustration |
-| `publish-manifest.json` | Individual approved note and attachment mappings |
-| `scripts/` | Publication validation, isolated staging, build/output audits, static preview and test orchestration |
-| `tests/` | Privacy/unit tests, generated-output checks, Playwright browser tests |
-| `trusted-*.json` | Reviewed byte inventories for vendor static files, generated plugin static files, and local math assets |
-| `public/`, `public-*/` | Ignored static artifacts; upload only the intended `public/` artifact |
-| `../.github/workflows/pages.yml` | Manually triggered GitHub Pages build and deploy |
+| `quartz.config.yaml`, `quartz.ts` | Quartz 5 plugins, layout, and small configuration overrides |
+| `custom/` | Encyclopedia frame, stock-search presentation/accessibility adapter and modular styles |
+| `content/index.md` | Alphabetical landing page generated from the reviewed snapshot |
+| `publish-manifest.json` | Explicit source/target mappings and per-note unresolved-reference approvals |
+| `scripts/` | Snapshot creation, safe staging, reference mapping, build/output audits, preview and testing |
+| `tests/` | Privacy tests, real-corpus output/browser checks and temporary rich-feature fixture |
+| `trusted-*.json` | Reviewed vendor static, generated plugin-resource and local math-resource inventories |
+| `public/`, `public-*/` | Ignored generated artifacts |
+| `../.github/workflows/pages.yml` | Manual, guarded GitHub Pages deployment |
 
-`quartz/styles/custom.scss` is the intended upstream customization entrypoint and imports `custom/encyclopedia.scss`. Other Quartz core source remains unchanged. Plugin npm packages and their transitive dependencies are pinned by `package-lock.json`. `quartz.lock.json` has an empty Git-plugin inventory because all selected plugins come from npm; `quartz plugin install --from-config` verifies those installed packages.
+Only Quartz's intended `quartz/styles/custom.scss` entrypoint is customized; it imports `custom/encyclopedia.scss`. Other core source remains unchanged. npm plugin packages are pinned by `package-lock.json`. `quartz.lock.json` has no Git plugins because the selected plugins use their Quartz 5 npm APIs.
 
-## Publication and privacy
+## Publication selection
 
-Read [the publication policy](docs/publication.md) before selecting real content.
+Read [the publication policy](docs/publication.md) before changing approvals.
 
-1. Review each note and its metadata for public suitability. The manifest is the explicit approval; the builder adds `publish: true` and a missing title only to the temporary public copy, so original notes need no compatibility edits.
-2. Approve the note explicitly with a `source` path relative to the repository root and a `target` path relative to the public collection in `publish-manifest.json`.
-3. Review and list every required raster image independently in `assets`. Approval does not traverse directories or automatically include linked files.
-4. Run validation and build; review the rendered result, search index, sitemap and RSS feed before authorizing deployment.
+The user approved replacing the demonstration corpus with the current existing collection on 8 November 2026. The committed manifest records each selected file individually. **Normal builds consume this manifest; they never discover or automatically import future vault files.** Four unreferenced original images, all Obsidian settings and the original checkout's 48 ignored notes remain outside the selection.
 
-Example mapping:
+To deliberately regenerate a selection from currently tracked notes and their referenced raster assets:
 
-```json
-{
-  "version": 1,
-  "notes": [{"source": "site/samples/index.md", "target": "index.md"}],
-  "assets": []
-}
+```sh
+npm run snapshot:corpus
 ```
 
-The standard build validates the complete selection, copies only approved files into a unique canonical OS temporary directory, runs Quartz against that directory, audits output, then removes the temporary input. This temporary directory is necessary because Quartz's file discovery respects ancestor `.gitignore` files and would skip ignored staging under this repository. It also isolates stale and concurrent build input. On failure, the builder removes its output artifact. Never invoke Quartz directly against the vault root or bypass this builder for production.
+This explicit command replaces the manifest and alphabetical landing page. Review the Git diff before accepting its new files and unresolved-reference approvals. It is never called by `npm run build` or the deployment workflow. You can instead edit individual mappings and homepage entries manually. A changed referenced filename requires a reviewed mapping update; no original note compatibility edits are needed.
 
-Privacy is scoped to the generated Pages artifact. **The vault, `.obsidian` files and earlier history remain tracked in this Git repository. Making this source repository public exposes those files regardless of the website's publication rules.** Use an appropriate private-source repository or a separately reviewed clean source repository if needed. This implementation does not rewrite existing history or change repository visibility.
+Version 2 manifest entries retain the original display title and map to URL-safe paths such as `articles/100-percent.md`. Filesystem source names are literal: `100%.md` and `Have you a pen?.md` remain valid source names. Source validation still rejects hidden paths, traversal, controls, backslashes and symlink ancestors. Target paths use stricter URL-safe checks. Both `head on.md` and `head-on.md` receive stable short hashes because Quartz otherwise gives them the same slug.
 
-The manifest is the publication decision; it does not detect private sentences in an approved note, private text in a code block, or personal metadata embedded inside an approved raster image. Review those contents and image metadata before approval. Future formats require explicit policy and tests, rather than widening the attachment filter.
+The builder copies only the listed sources into a fresh canonical OS temporary directory. It injects `publish: true` and a missing title in the temporary copy, rewrites approved links through the manifest mapping, builds Quartz, audits output and removes staging. Explicit `publish: false` or `draft: true` remains an error. A failure removes the generated artifact, so stale output cannot be uploaded accidentally. Never point raw Quartz at the vault or bypass this builder for production.
 
-## Obsidian compatibility
+There are **315 currently unresolved reference occurrences** after resolving unique case differences. Their exact raw targets are frozen per note in `approvedUnresolved`; only these approved existing-body references become escaped plain labels. Unknown embeds get an unavailable-attachment label. No placeholder article is generated. A new unresolved reference still stops publication until its target or literal label is reviewed. The old exact-case migration audit counted 328 unresolved occurrences; unique case-insensitive resolution recovers 13 of those. Two wikilink examples inside code remain literal code.
 
-Quartz 5 plugins handle Markdown, wikilinks, displayed aliases (`[[target|label]]`), heading links, backlinks, note/heading transclusions, YAML metadata, tags, callouts, tables, footnotes, highlighted code, and LaTeX rendered with KaTeX. Unicode/Japanese filenames and mixed Japanese/English article content are supported. The demonstration corpus and browser tests exercise these features.
+Privacy controls apply to the generated Pages artifact. **The Git repository and its history still contain the vault and settings.** Repository visibility is a separate decision. Review selected text and embedded image metadata before making the source or website public; these controls cannot recognize a private sentence inside an explicitly approved note.
 
-The publication preflight intentionally accepts a narrower input than Quartz: raw HTML, unsupported frontmatter, frontmatter alias redirects, non-raster attachments (SVG/PDF/audio/video), symlinks, hidden paths and links to unpublished files are rejected. Local references must resolve unambiguously under the configured `shortest` strategy; use collection-root paths for clarity. An unpublished-link error stops publication, so private note names never become generated dead links. Frontmatter's supported properties are documented in the policy.
+## Obsidian and reading features
 
-Obsidian plugins such as Dataview, Tasks, Templater and application-specific commands do not execute on this website. No arbitrary Obsidian plugin code, workspace configuration, canvas or Bases support is enabled. Export the desired result into a reviewed public Markdown copy when needed; original notes need not be rewritten.
+Quartz plugins provide Markdown, displayed wikilink aliases, backlinks, headings, note/heading transclusions, YAML metadata, tags, callouts, tables, footnotes, highlighted code and accessible KaTeX HTML+MathML. The actual corpus includes English/Japanese text, Unicode and punctuation-bearing filenames, image embeds and a long article with footnotes. Its 42 empty original notes remain real searchable entries.
 
-Quartz emits article files as `name.html` and internal navigation normally uses extensionless URLs. GitHub Pages resolves `/name`; arbitrary trailing slashes on a non-folder article (`/name/`) are not supported. Folder pages use `folder/index.html`. Use generated links or explicit `.html` URLs for sharing; there is no catch-all server redirect.
+Rich-feature regression coverage now creates a separate temporary fixture corpus for math, code, callouts, tables, footnotes and transclusions; it is built outside public artifacts and removed after testing. No demonstration article is part of the production manifest or output.
 
-## Search architecture and scale
+Raw HTML, unsupported metadata, alias redirects, non-raster attachments and symlinks remain rejected. Supported metadata is listed in the policy. Obsidian-specific programs such as Dataview or Templater do not run in the browser. Preserve the originals and use reviewed public-copy transformations if future formats require changes.
 
-The UI wraps **Quartz 5's stock `@quartz-community/search` component**, keeping its bundled FlexSearch engine, ranking, CJK tokenizer, suggestions, title/content matching, result excerpts, arrow keys, Enter, Escape, and `Ctrl/Cmd+K`. Our adapter makes its existing input always visible, preserves native Tab navigation, fixes skip-link focus with the SPA router, and adds result announcements. It implements no replacement search engine or network search API.
+The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks, search and light/dark reading. Mobile navigation starts collapsed; the large explorer stays inside a bounded scrolling area when opened. The header links to the real alphabetical catalogue.
 
-Quartz's `ContentIndex` emitter writes `static/contentIndex.json`. The HTML starts downloading that JSON with `fetchData`; the stock component builds its title/content/tag indexes in browser memory. It queries locally after loading. Current inspected npm search code bundles FlexSearch into its client script (the older plugin README's CDN statement does not match that package). KaTeX CSS and fonts are also served locally. No production backend or WebSocket is needed.
+Quartz emits article files as `slug.html` and uses extensionless links. Dots can be part of a slug. Folder pages use `folder/index.html`; arbitrary trailing slashes on a non-folder article are unsupported. Use generated links or explicit `.html` URLs when sharing.
 
-Measured sample index: **9,919 bytes raw / 3,758 bytes gzip**, **18 entries** (5 articles plus generated folder/tag pages). Gzip is an illustrative compressed size; actual Pages transfer encoding depends on hosting. Every reader loads the complete index, and browser index construction requires more memory than the JSON file. Recheck raw/gzip size, load time and browser memory as the collection grows. Investigate [Pagefind](https://pagefind.app/) as a future chunked static search alternative if full-index download or memory becomes excessive; do not replace the current engine based on corpus count alone.
+## Search and corpus size
+
+Search uses the stock **Quartz 5 `@quartz-community/search` component and bundled FlexSearch engine**. It searches note titles and bodies, updates suggestions while typing, supplies excerpts, supports Japanese and English, arrow keys, Enter, Escape, native Tab navigation and `Ctrl/Cmd+K`. Our adapter changes presentation/focus only; there is no search backend or custom ranking engine.
+
+Quartz writes `static/contentIndex.json`; the page downloads it and the client builds in-memory title/content/tag indexes. Queries run locally after loading. The full A–Z homepage is emitted but marked `unlisted` through Quartz's official UnlistedPages plugin so its repeated title list does not crowd actual-note search results. All **2,584 real notes** are indexed, including empty ones; two generated directory/tag indexes bring the JSON to **2,586 entries**. `unlisted` controls discovery, not access or privacy.
+
+Current index measurement: **731,734 bytes raw / 216,948 bytes gzip**. Compression is illustrative; actual Pages encoding depends on hosting. Browser memory exceeds raw JSON size, and every reader downloads the complete index. Re-measure load/query latency and memory as the collection grows. [Pagefind](https://pagefind.app/) remains a future option if complete-index download or memory becomes excessive; no replacement engine is needed for this measured corpus.
+
+The approved 85 original images total **145,133,964 bytes (about 138.4 MiB)**; the largest is about **18.9 MiB**. They are preserved byte-for-byte. Individual image-heavy pages therefore have a noticeable transfer cost; reviewed, optimized web copies are a future opt-in improvement.
 
 ## Tests
 
 ```sh
-npm run test:vault         # One-time historical migration audit (requires original Git history)
-npm run test:publication   # Manifest, unsafe references, symlinks, collisions, trusted static sources
-npm run check:types       # Quartz core and custom TypeScript
-npm run test:output       # Requires npm run build first
-npm run test:paths        # Builds root + /knowledge/ variants, output checks, browser matrix
-npm test                  # Publication + types + both builds/output + browser matrix
+npm run test:publication  # Selection, paths, flags, symlinks, static sources, failure paths, frozen unresolved references
+npm run test:features     # Isolated temporary rich-feature build; no public fixture pages
+npm run check:types
+npm run test:output       # Requires npm run build
+npm run test:paths        # Root + /knowledge/ builds, output checks, 1440/900/390/320px browser matrix
+npm test                 # Publication + types + temporary feature build + both URL/browser variants
+npm run test:upstream     # Retained Quartz path/slug/frame compatibility tests
+npm run test:vault        # One-time historical migration audit; requires original Git history
 ```
 
-Browser tests use installed Google Chrome on macOS when available. Else run `npx playwright install chromium`; CI installs Chromium and its system dependencies. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to a browser executable when necessary. The matrix covers desktop (1440px), tablet (900px), mobile (390px), root/subpath navigation and search, English title/content queries, Japanese queries, suggestions while typing, keyboard selection, offline-after-load queries, article rendering, images, backlinks, page overflow, skip-link focus, topic collapse and dark mode. Browser ports 4173/4174 must be free. Test traces are retained only for failures and are ignored.
+Browser tests use installed Chrome on macOS or `npx playwright install chromium`; CI installs Chromium/system dependencies. `PLAYWRIGHT_CHROMIUM_EXECUTABLE` can select a browser. Ports 4173/4174 must be free. Failure traces and generated artifacts are ignored.
 
-`test:vault` is a one-time migration verification against the recorded original commit. It requires that commit in local Git history and intentionally fails after ordinary later edits to original notes. It is separate from `npm test` and CI so normal vault development and shallow Pages checkouts remain supported.
+`test:vault` checks the original migration baseline and intentionally fails after later ordinary edits to original notes. It is separate from ongoing CI, which supports shallow Pages checkouts.
 
-The production builder also audits the vendor-static inventory before Quartz runs and rejects unexpected `static/` files afterward. The reviewed `trusted-generated-static.json` intentionally fails after changes to bundled UI/plugin resource scripts; inspect those changes and regenerate a reviewed inventory in a temporary build before accepting it. Do not automatically refresh inventories during production builds. `trusted-math.json` must be reviewed and updated after a KaTeX asset package upgrade. Inventory checks complement lockfiles; they are not a defense against a malicious source-code change that removes those checks.
+Resource inventories deliberately fail when trusted vendor files, local math assets or generated plugin scripts change. Review such changes and update inventories from a separate temporary build; production builds never refresh their own trust baseline. Inventory checks complement dependency lockfiles and do not protect against a source change that removes the checks themselves.
 
-## GitHub Pages deployment
+## Deployment and maintenance
 
-Deployment is **prepared, not performed**. No remote push or public deployment has been made by this implementation.
+GitHub Pages deployment is **prepared, not performed**. No push, merge or public deployment has occurred. After authorizing your merge/push process, set repository **Settings → Pages → GitHub Actions**, then manually run **Build and deploy English Encyclopedia** from the default branch. Both workflow jobs require the default branch and exclude `feature/quartz-wiki`; pushing this feature cannot publish.
 
-After reviewing the feature branch, explicitly authorize and perform your chosen merge/push process. In GitHub repository **Settings → Pages**, select **GitHub Actions**. Then manually run **Build and deploy Knowledge Commons** from the default branch. Both jobs require the default branch and explicitly exclude `feature/quartz-wiki`; pushing the experimental branch cannot trigger publication.
+The workflow uses Node 24, reproducible npm installation, Quartz plugins, tests, the Pages-provided base URL, a fresh audited `site/public` artifact, and official Pages Actions. The build has `contents: read` / `pages: read`; only deploy has `pages: write` / `id-token: write`. Existing environment protection remains applicable.
 
-The workflow uses Node 24, `npm ci`, Quartz plugin preparation, tests, both path variants, a fresh production build, official Pages configuration/artifact/deploy Actions, and the Pages-provided URL. The build job has `contents: read` and `pages: read`; only deployment receives `pages: write` and `id-token: write`. The uploaded directory is exactly `site/public`, with `.nojekyll`. GitHub environment protection may require an approval before the deploy job. Follow your repository's existing protections.
+See [the project audit](docs/project-audit.md), [verification record](docs/verification.md) and [upstream provenance](UPSTREAM.md). Original notes/images were moved into `vault/` during the earlier organization stage without byte edits; this corpus publication also leaves all 2,679 vault files unchanged.
 
-See [the executed verification record](docs/verification.md) for independent review findings and test evidence.
-
-## Maintenance and limitations
-
-The feature worktree organizes the original collection into `vault/notes/` (2,584 notes), `vault/assets/` (89 images), and `vault/.obsidian/` (6 configuration files). All note/image bytes are preserved. Obsidian app settings and tracked workspace paths are updated for the move. Open `vault/` as the Obsidian vault, rather than the Git repository root. The original checkout and its 48 ignored local notes remain untouched. No file was deleted merely because it appeared obsolete. See [the audit](docs/project-audit.md) for classification and [upstream provenance](UPSTREAM.md) before upgrading Quartz.
-
-Automated checks do not replace a human content review, a full assistive-technology audit, or testing every browser/Obsidian extension. The samples demonstrate functionality without publishing real notes. Public deployment, real-note approval, and domain configuration remain user decisions.
-
-Dependency audit: a live `npm audit --omit=dev` reported zero advisories for the installed dependency graph. The official Latex 1.0.0 plugin also bundles its own KaTeX **0.16.47** renderer inside compiled JavaScript; npm audit does not identify that bundled copy. It retains the upstream low-severity [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7), requiring pre-existing prototype pollution to bypass trust restrictions. Our configuration sets `trust: false`, uses reviewed source only, and performs rendering during the build. Local CSS/fonts use the fixed KaTeX 0.18 package. A future upstream Latex plugin update should align the bundled renderer and assets; no custom renderer fork is introduced here.
+A live dependency audit previously reported zero listed advisories, but the official Latex 1.0.0 plugin bundles its own **KaTeX 0.16.47** renderer. npm audit cannot enumerate that bundled copy. The inherited low [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) requires pre-existing prototype pollution to bypass trust restrictions. Rendering uses `trust: false`; local CSS/fonts use fixed KaTeX 0.18 assets. Prefer an upstream plugin update rather than a custom renderer fork.

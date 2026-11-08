@@ -21,3 +21,11 @@ The optional one-time `npm run test:vault` compares Git blob hashes against the 
 Obsidian app settings keep `alwaysUpdateLinks: true`, set `attachmentFolderPath: assets`, and set `newFileLocation: folder` / `newFileFolderPath: notes`. Tracked workspace open-file strings that match existing files now use vault-relative `notes/…` or `assets/…` paths. No ignored original files were imported. New notes/assets remain private until separately selected in the publication manifest.
 
 The original migration baseline contains 328 unresolved wikilink targets; those are pre-existing (including references outside tracked HEAD) and were preserved. The migration introduces no additional unresolved links. The historical audit is intentionally excluded from normal website CI and requires the recorded original commit in Git history.
+
+## Existing-corpus publication update
+
+At the user's request the demonstration notes/image were removed and replaced by an explicit snapshot of all 2,584 existing tracked notes and their 85 referenced original images. All 2,679 vault files remain unchanged by this update. A generated alphabetical homepage presents the actual collection. Four unreferenced images remain excluded.
+
+Thirty-four note filenames contain a question mark and one contains a percent sign. Source paths now preserve those literal names; target paths use safe canonical routes. The one source slug collision (`head on` / `head-on`) gives both entries stable hash suffixes. The old migration's 328 unresolved exact-case references become 315 unresolved reference occurrences after recovering 13 unique case differences; those exact remaining raw targets are frozen per note. Two wikilink examples inside code are kept literal. No missing target becomes a placeholder article.
+
+The catalogue is unlisted through Quartz's official plugin to avoid duplicated title-list search matches, while all actual notes, including 42 empty notes, remain indexed. Temporary tests retain rich math/code/embed coverage without public sample pages. Original source/history privacy and the original checkout's 48 ignored files remain unchanged.

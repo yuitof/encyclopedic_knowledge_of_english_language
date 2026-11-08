@@ -1,4 +1,4 @@
-name: Build and deploy Knowledge Commons
+name: Build and deploy English Encyclopedia
 
 # Explicitly opt in after review. Pushing the experimental feature branch never publishes.
 on:

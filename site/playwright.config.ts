@@ -44,6 +44,13 @@ export default defineConfig({
       },
     },
     {
+      name: "small-mobile-subpath",
+      use: {
+        viewport: { width: 320, height: 740 },
+        baseURL: "http://127.0.0.1:4173/knowledge/",
+      },
+    },
+    {
       name: "mobile-subpath",
       use: {
         viewport: { width: 390, height: 844 },

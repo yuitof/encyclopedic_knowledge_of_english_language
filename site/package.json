@@ -1,6 +1,6 @@
 {
   "name": "@jackyzha0/quartz",
-  "description": "🌱 publish your digital garden and notes as a website",
+  "description": "\ud83c\udf31 publish your digital garden and notes as a website",
   "private": true,
   "version": "5.0.0",
   "type": "module",
@@ -24,7 +24,9 @@
     "test:paths": "node scripts/test-paths.mjs",
     "preview": "node scripts/serve.mjs --port 8080",
     "test:vault": "node scripts/audit-vault.mjs",
-    "test:upstream": "tsx --test quartz/util/path.test.ts quartz/util/slugCollisions.test.ts quartz/components/frames/frames.test.ts"
+    "test:upstream": "tsx --test quartz/util/path.test.ts quartz/util/slugCollisions.test.ts quartz/components/frames/frames.test.ts",
+    "snapshot:corpus": "node scripts/snapshot-corpus.mjs",
+    "test:features": "node --test tests/feature-fixture.test.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",

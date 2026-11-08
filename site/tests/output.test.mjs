@@ -2,65 +2,87 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { slugifyFilePath } from "@quartz-community/utils";
 import { siteRoot, preparePublication } from "../scripts/publish.mjs";
 import { auditOutput } from "../scripts/verify-output.mjs";
 const output = path.join(siteRoot, process.env.SITE_OUTPUT ?? "public");
-test("output contains exactly the approved articles and assets plus Quartz generated pages", async () => {
-  const result = await auditOutput(output, await preparePublication());
-  assert.ok(result.indexEntries >= 5);
-  assert.ok(result.indexBytes > 0);
-});
-test("Obsidian features render: links, math, highlighted code, embeds, footnotes, callouts, image", async () => {
-  const math = await fs.readFile(
-      path.join(output, "mathematics/linear-algebra.html"),
-      "utf8",
-    ),
-    code = await fs.readFile(
-      path.join(output, "programming/binary-search.html"),
-      "utf8",
+const manifest = JSON.parse(
+  await fs.readFile(path.join(siteRoot, "publish-manifest.json"), "utf8"),
+);
+const note = (title) => manifest.notes.find((entry) => entry.title === title);
+const html = async (title) =>
+  fs.readFile(
+    path.join(output, slugifyFilePath(note(title).target) + ".html"),
+    "utf8",
+  );
+test("all approved existing notes including empty notes are indexed; samples are absent", async () => {
+  const publication = await preparePublication();
+  const report = await auditOutput(output, publication);
+  const index = JSON.parse(
+    await fs.readFile(path.join(output, "static/contentIndex.json"), "utf8"),
+  );
+  for (const entry of manifest.notes.filter(
+    (entry) => entry.target !== "index.md",
+  ))
+    assert.ok(
+      Object.hasOwn(index, slugifyFilePath(entry.target)),
+      `Missing note ${entry.title}`,
     );
-  for (const expression of [
-    /katex/u,
-    /<math[\s>]/u,
-    /coordinate-plane\.png/u,
-    /footnote/iu,
-    /callout/u,
-    /academic\/study-notes/u,
-  ])
-    assert.match(math, expression);
-  assert.match(code, /data-language="python"|language-python/u);
-  assert.match(code, /transclude/u);
-  assert.match(code, /Questions before conclusions/u);
+  assert.equal(publication.notes, 2585);
+  assert.equal(publication.assets, 85);
+  assert.ok(report.indexBytes > 0);
+  assert.doesNotMatch(
+    JSON.stringify(index),
+    /intervalhalving|Welcome to Knowledge Commons|A transcluded fixture paragraph/u,
+  );
 });
-test("indexes and generated output do not disclose root vault or Obsidian configuration", async () => {
+test("real notes retain Unicode titles, images, aliases, links and collision-separated routes", async () => {
+  assert.match(await html("caimans"), /<img[^>]+assets\//u);
+  assert.match(await html("CPTSD"), /第一次世界大戦/u);
+  assert.match(
+    await html("三単現の s を飛ばすことで非標準な位言い方ができる"),
+    /三単現/u,
+  );
+  const a = note("head on"),
+    b = note("head-on");
+  assert.notEqual(a.target, b.target);
+  assert.match(await html("head on"), /head on/u);
+  assert.match(await html("head-on"), /head-on/u);
+  assert.match(await html("100%"), /100%/u);
+  assert.match(await html("Have you a pen?"), /Have you a pen\?/u);
+});
+test("only approved assets/content are emitted, with no Obsidian settings, source maps or temporary fixtures", async () => {
+  const files = [];
+  async function walk(dir) {
+    for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
+      const file = path.join(dir, entry.name);
+      if (entry.isDirectory()) await walk(file);
+      else files.push(path.relative(output, file));
+    }
+  }
+  await walk(output);
+  assert.ok(
+    !files.some((file) =>
+      /\.md$|\.obsidian|publish-manifest|package-lock|feature-fixture|coordinate-plane/u.test(
+        file,
+      ),
+    ),
+  );
   const index = await fs.readFile(
     path.join(output, "static/contentIndex.json"),
     "utf8",
   );
   assert.doesNotMatch(
     index,
-    /PRIVATE_NOTE_CANARY|PRIVATE_ATTACHMENT_CANARY|\.obsidian|Crossing from Guangdong|CPTSD/u,
+    /PRIVATE_NOTE_CANARY|PRIVATE_ATTACHMENT_CANARY|\.obsidian|site\/samples/u,
   );
-  const sitemap = await fs.readFile(path.join(output, "sitemap.xml"), "utf8");
-  assert.doesNotMatch(sitemap, /\.obsidian|PRIVATE_|Crossing/u);
-  const files = [];
-  async function walk(dir) {
-    for (const e of await fs.readdir(dir, { withFileTypes: true })) {
-      if (e.isDirectory()) await walk(path.join(dir, e.name));
-      else files.push(path.relative(output, path.join(dir, e.name)));
-    }
-  }
-  await walk(output);
-  assert.ok(
-    !files.some((file) =>
-      /\.md$|\.HEIC$|\.obsidian|publish-manifest|package-lock/u.test(file),
-    ),
-  );
+  assert.ok(!files.includes("mathematics/linear-algebra.html"));
 });
-test("production JavaScript contains no live reload connection", async () => {
-  const files = await fs.readdir(output);
-  let js = "";
-  for (const file of files.filter((name) => name.endsWith(".js")))
-    js += await fs.readFile(path.join(output, file), "utf8");
-  assert.doesNotMatch(js, /new WebSocket|ws:\/\/localhost|wss:\/\//u);
+test("production client has no live reload WebSocket connection", async () => {
+  let script = "";
+  for (const file of (await fs.readdir(output)).filter((name) =>
+    name.endsWith(".js"),
+  ))
+    script += await fs.readFile(path.join(output, file), "utf8");
+  assert.doesNotMatch(script, /new WebSocket|ws:\/\/localhost|wss:\/\//u);
 });

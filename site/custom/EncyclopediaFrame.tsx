@@ -24,14 +24,14 @@ export const EncyclopediaFrame: PageFrame = {
           <a
             class="encyclopedia-brand"
             href={home}
-            aria-label="Knowledge Commons home"
+            aria-label="English Encyclopedia home"
           >
             <span class="brand-mark" aria-hidden="true">
-              K
+              E
             </span>
             <span>
-              <strong>Knowledge Commons</strong>
-              <small>An open notebook of ideas</small>
+              <strong>English Encyclopedia</strong>
+              <small>Words, usage, and connections</small>
             </span>
           </a>
           {header.map((Component) => (
@@ -39,7 +39,7 @@ export const EncyclopediaFrame: PageFrame = {
           ))}
           <nav class="header-links" aria-label="Main navigation">
             <a href={home}>Main page</a>
-            <a href={`${home}/academic/study-notes`}>About these notes</a>
+            <a href={`${home}#alphabetical-catalogue`}>Browse entries</a>
           </nav>
         </header>
         <aside class="left sidebar" aria-label="Article navigation">

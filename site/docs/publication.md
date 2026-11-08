@@ -1,31 +1,33 @@
 # Publication policy
 
-The original Obsidian collection lives under `vault/`, with `notes/`, `assets/` and `.obsidian/`. It is never a Quartz content directory. The reviewed `publish-manifest.json` is the only list of source notes/assets for the normal production builder.
+The original collection lives in `vault/notes/`, `vault/assets/` and `vault/.obsidian/`. The vault is never a raw Quartz input directory. The user approved replacing sample content with the current existing collection; the version 2 manifest is an explicit per-file snapshot of that selection.
 
-## Approved input
+## Approval and source files
 
-Every mapping selects one regular file under the repository root and gives it a public collection path. Notes must be Markdown. Plain Markdown without frontmatter is accepted. The manifest provides approval; staging adds `publish: true` and derives a missing title from the source filename. Original note bytes remain unchanged. Targets must include `index.md` for the home page. Raster images require separate entries and matching PNG/JPEG/GIF/WebP/AVIF signatures. Files are not discovered by directory recursion, graph traversal, tags, `publish` flags alone, or attachment filename similarity.
+The snapshot lists 2,584 existing notes, 85 referenced raster assets and the generated alphabetical homepage. Normal builds do not scan directories, follow reference graphs into new files, or import future notes. `npm run snapshot:corpus` is a separate deliberate operation that enumerates currently tracked notes/assets and replaces the approval manifest/homepage; review its diff before accepting a changed selection. The four unreferenced images and original checkout's 48 ignored notes are not selected.
 
-Source and target paths must be normalized Unicode NFC relative paths. Hidden segments, empty segments, traversal, backslashes, URL syntax/percent escapes, and symlinks (including any ancestor) are refused. Quartz's own canonical slug function detects naming collisions such as `index.md`/`_index.md`, `a&b.md`/`a-and-b.md`, and `foo/foo.md`/`foo/index.md`. Generated `static`, `tags` and `404` destinations are reserved.
+Filesystem names are literal and never URL-decoded. Question marks and percent signs are valid source filename characters. Hidden path segments, absolute paths, traversal, empty segments, backslashes, control characters, symlink files and symlink ancestors remain forbidden. Only individual regular files can be approved. Targets have stricter normalized Unicode/URL path checks; Quartz's canonical slug function detects collisions. Readable `articles/` routes preserve Unicode and use a stable source hash for every member of a collision group, such as `head on` / `head-on`.
 
-Supported frontmatter keys are `title`, `description`, `publish`, `draft`, `tags`, `created`, `modified`, `lang`. Frontmatter `aliases` is rejected until redirect output has a separate tested policy; displayed wikilink aliases are supported. Unknown fields, including social image/resource paths, stop the build. Notes explicitly marked private/draft cannot be selected. Review all permitted metadata as public information.
+Only matching-signature PNG/JPEG/GIF/WebP/AVIF attachments are accepted, each separately listed. No configuration, hidden directories, SVG, executable scripts, PDFs or arbitrary attachments are copied from the vault. Original text and image bytes are unchanged; temporary note copies receive public metadata and mapped references. Review source text and image metadata as public information.
 
-## References and transformed features
+## Metadata and references
 
-The validator uses a Markdown AST for ordinary links, images, definitions/reference links, raw HTML, and code boundaries, then checks Obsidian wikilinks/embeds outside code. Every local target must be separately approved and resolve to exactly one selected file using Quartz's own slug and shortest-link utilities. Percent-encoded content links are decoded before validation. Article-local heading and block links need no separate file. Links with `http`, `https`, and `mailto` protocols remain links; other protocols are rejected. Raw HTML is deliberately unsupported, covering `srcset`, iframes, scripts and hidden HTML resource references as well as ordinary HTML.
+Allowed metadata: `title`, `description`, `publish`, `draft`, `tags`, `created`, `modified`, `lang` and the boolean `unlisted`. Explicit `publish: false` / `draft: true` is rejected; non-boolean flags are rejected. Only the catalogue homepage may be unlisted, to remove its duplicate title list from search. Unlisted HTML remains accessible and is not a privacy mechanism. Unsupported metadata and alias-redirect fields stop the build; displayed wikilink aliases remain supported.
 
-A reference to an unpublished file is an error. The builder stops and removes the output; it does not emit a dead link, private filename suggestion, transclusion, index record, or sitemap entry. Error output stays in the local build/CI log; do not share logs if they contain filenames from a real reviewed selection.
+The version 2 resolver uses only manifest entries, trying exact original names first and unique case-insensitive names second. It rewrites existing notes/assets to approved targets in staging and preserves original labels/aliases. Literal `100%` and question marks are interpreted as filenames in wikilinks, while ordinary Markdown URL links can be decoded for lookup. Internal heading/block references remain supported. Raw HTML and unsafe protocols/paths are rejected.
 
-Code blocks and inline code are literal approved content, not a resource-discovery mechanism. They can contain sensitive text and must be reviewed along with prose. The image signature check is a format gate, not a metadata scrubber or malware scanner.
+There are 315 currently unresolved reference occurrences outside code after unique-case recovery of 13 earlier unresolved references. Each note freezes its approved raw unresolved targets in `approvedUnresolved`. Only those known existing-body targets become escaped plain labels, with unavailable text for an unresolved embed. They do not become links, placeholder pages, attachment imports or index records. A newly introduced unknown/unapproved reference still fails publication. Adding a private file whose name matches a frozen unresolved label never causes automatic publication; the resolver cannot read outside the manifest.
 
-## Additional static sources
+Code and inline-code wikilink examples remain literal. Footnote definitions are preserved as footnotes, not treated as file resources. All approved prose/code and image metadata still require human content review.
 
-Quartz always copies its own `quartz/static/` directory independently of Markdown filters. Therefore `trusted-static.json` pins its entire shipped file inventory and SHA-256 bytes. Unexpected or modified files and symlinks abort the normal build. `trusted-generated-static.json` pins known emitted plugin scripts/styles; the output audit rejects extra static files. `trusted-math.json` pins the packaged local KaTeX CSS/fonts. Source additions and dependency upgrades must review and update these inventories deliberately.
+## Other static resources
 
-## Output and failures
+Quartz copies vendor `quartz/static/` independently of content selection. Exact SHA-256 inventories reject changed/unexpected vendor files, symlinks and extra emitted static resources. Local KaTeX CSS/fonts have a separate reviewed inventory. Production builds never automatically accept a new resource hash. Re-review inventories after dependency/UI resource changes.
 
-A build clears only its owned generated output, validates everything, copies approved bytes into a fresh canonical OS temp directory, invokes Quartz, copies checked math font resources, validates generated output, and removes temporary content in `finally`. Any error removes the generated artifact. This prevents old approval decisions or stale staged files from surviving a later build.
+## Builds and failures
 
-Do not use raw `npx quartz build -d ..`, copy the vault into output, manually add output files, or upload test/debug artifacts. The only production artifact is a successfully audited fresh `site/public/` from `npm run build`. The workflow re-runs that command immediately before uploading.
+The builder clears its owned generated output before validation, copies only selected sources into a fresh canonical OS temporary directory, invokes Quartz, copies checked math fonts, audits output and removes staging in `finally`. A failure removes the generated artifact. Quartz respects ancestor Git ignores, so staging outside the repository also avoids silently ignored input. The only uploadable production artifact is a fresh successful `site/public/` from this process.
 
-The selection controls Pages output, not the Git repository or past history. All original vault source/history remains intact and may be visible to anyone who can read the source repository.
+Rich-format tests create a separate temporary corpus and remove it after the test. Its math/code/image/embedding fixture is absent from the production manifest and output. Never upload test/debug artifacts or use raw `quartz build -d ..` against the vault.
+
+Pages selection does not change source-repository visibility or history. All vault data remains in Git and is readable to anyone with source access. No publication/deployment has been performed by this local change.

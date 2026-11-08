@@ -234,6 +234,7 @@ test("requires boolean privacy flags so Quartz cannot silently filter approved n
       "draft: yes",
       "draft: 1",
       'publish: "true"',
+      'unlisted: "true"',
     ]) {
       await fs.writeFile(
         path.join(root, "vault/public.md"),
@@ -320,3 +321,67 @@ test("output audit rejects unexpected vendor-static files", async () => {
     await fs.rm(output, { recursive: true, force: true });
   }
 });
+
+test("literal source punctuation is mapped safely and aliases survive only in staged copies", () =>
+  fixture(async ({ root, manifest, build, output }) => {
+    manifest.version = 2;
+    manifest.notes[0].approvedUnresolved = [];
+    for (const [source, target] of [
+      ["Have you a pen?.md", "articles/question.md"],
+      ["100%.md", "articles/100-percent.md"],
+    ]) {
+      await fs.writeFile(
+        path.join(root, "vault", source),
+        "Original source body.",
+      );
+      manifest.notes.push({
+        source: "vault/" + source,
+        target,
+        approvedUnresolved: [],
+      });
+    }
+    const before = "[[Have you a pen?|A question]] and [[100%]].";
+    await fs.writeFile(path.join(root, "vault/public.md"), before);
+    await build();
+    const staged = await fs.readFile(path.join(output, "index.md"), "utf8");
+    assert.match(staged, /\[\[articles\/question\|A question\]\]/u);
+    assert.match(staged, /\[\[articles\/100-percent\|100%\]\]/u);
+    assert.equal(
+      await fs.readFile(path.join(root, "vault/public.md"), "utf8"),
+      before,
+    );
+  }));
+test("only explicitly frozen unresolved targets become labels; future/unapproved references fail", () =>
+  fixture(async ({ root, manifest, build, output }) => {
+    manifest.version = 2;
+    manifest.notes[0].approvedUnresolved = ["Missing"];
+    await fs.writeFile(
+      path.join(root, "vault/public.md"),
+      "[[Missing|Known label]]",
+    );
+    await build();
+    const staged = await fs.readFile(path.join(output, "index.md"), "utf8");
+    assert.match(staged, /Known label/u);
+    assert.doesNotMatch(staged, /\[\[|PRIVATE_NOTE_CANARY/u);
+    await fs.writeFile(
+      path.join(root, "vault/future.md"),
+      "PRIVATE_FUTURE_CANARY",
+    );
+    await fs.writeFile(path.join(root, "vault/public.md"), "[[future]]");
+    await assert.rejects(build(), /not approved/u);
+    await fs.writeFile(path.join(root, "vault/public.md"), "[[private]]");
+    await assert.rejects(build(), /not approved/u);
+  }));
+test("v2 selection excludes future files and preserves literal code and footnote definitions", () =>
+  fixture(async ({ root, manifest, build, output }) => {
+    manifest.version = 2;
+    manifest.notes[0].approvedUnresolved = [];
+    const body = "`[[private]]`\n\nA fact.[^one]\n\n[^one]: 日本語の説明\n";
+    await fs.writeFile(path.join(root, "vault/public.md"), body);
+    await fs.writeFile(path.join(root, "vault/new.md"), "PRIVATE_NEW_CANARY");
+    await build();
+    assert.deepEqual(await fs.readdir(output), ["index.md"]);
+    assert.ok(
+      (await fs.readFile(path.join(output, "index.md"), "utf8")).endsWith(body),
+    );
+  }));

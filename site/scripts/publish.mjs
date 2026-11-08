@@ -5,6 +5,10 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import YAML from "yaml";
 import {
+  referenceLookup,
+  rewriteCorpusReferences,
+} from "./corpus-references.mjs";
+import {
   slugifyFilePath,
   simplifySlug,
   transformLink,
@@ -25,6 +29,7 @@ const allowedMetadata = new Set([
   "created",
   "modified",
   "lang",
+  "unlisted",
 ]);
 const rasterExtensions = new Set([
   ".png",
@@ -57,9 +62,23 @@ export function safeRelative(value) {
   return value;
 }
 
+/** Filesystem names are literal, not URLs. Punctuation is legal; traversal is not. */
+export function safeSource(value) {
+  if (
+    typeof value !== "string" ||
+    !value ||
+    /[\\\x00-\x1f]/u.test(value) ||
+    path.posix.isAbsolute(value) ||
+    /^[A-Za-z]:\//u.test(value) ||
+    value.split("/").some((part) => !part || part.startsWith("."))
+  )
+    throw new Error("Unsafe source filesystem path");
+  return value;
+}
+
 /** Check every ancestor, including the repository root itself. Never follow a symlink. */
 export async function regularFile(root, relative) {
-  safeRelative(relative);
+  safeSource(relative);
   const absoluteRoot = path.resolve(root);
   const absolute = path.join(absoluteRoot, relative);
   let cursor = path.parse(absoluteRoot).root;
@@ -196,7 +215,7 @@ export async function preparePublication({
 } = {}) {
   const manifest = JSON.parse(await fs.readFile(manifestFile, "utf8"));
   if (
-    manifest.version !== 1 ||
+    ![1, 2].includes(manifest.version) ||
     !Array.isArray(manifest.notes) ||
     !Array.isArray(manifest.assets) ||
     manifest.notes.length === 0
@@ -206,11 +225,14 @@ export async function preparePublication({
     ...manifest.notes.map((e) => ({ ...e, kind: "note" })),
     ...manifest.assets.map((e) => ({ ...e, kind: "asset" })),
   ];
+  const lookup = manifest.version === 2 ? referenceLookup(entries) : null;
+  let resolvedReferences = 0,
+    unresolvedReferences = 0;
   const targets = new Set(),
     slugs = new Set(),
     staged = [];
   for (const entry of entries) {
-    safeRelative(entry.source);
+    safeSource(entry.source);
     safeRelative(entry.target);
     const slug = slugifyFilePath(entry.target);
     if (
@@ -240,6 +262,10 @@ export async function preparePublication({
         throw new Error("publish must be a boolean");
       if (meta.draft !== undefined && typeof meta.draft !== "boolean")
         throw new Error("draft must be a boolean");
+      if (meta.unlisted !== undefined && typeof meta.unlisted !== "boolean")
+        throw new Error("unlisted must be a boolean");
+      if (meta.unlisted === true && entry.target !== "index.md")
+        throw new Error("Only the catalogue homepage may be unlisted");
       if (Object.keys(meta).some((key) => !allowedMetadata.has(key)))
         throw new Error(
           "Unsupported frontmatter property: review metadata before publication (social images and HTML are not enabled)",
@@ -253,12 +279,25 @@ export async function preparePublication({
         throw new Error(
           "Frontmatter alias redirects are not enabled; wikilink aliases are supported",
         );
-      const body = front ? text.slice(front[0].length) : text;
-      validateReferences(body, entry.target, entries);
+      let body = front ? text.slice(front[0].length) : text;
+      if (manifest.version === 2) {
+        if (
+          !Array.isArray(entry.approvedUnresolved) ||
+          entry.approvedUnresolved.some((ref) => typeof ref !== "string")
+        )
+          throw new Error(
+            "Version 2 notes require an explicit unresolved-reference approval list",
+          );
+        const transformed = rewriteCorpusReferences(body, entry, lookup);
+        body = transformed.body;
+        resolvedReferences += transformed.resolved;
+        unresolvedReferences += transformed.unresolved;
+      } else validateReferences(body, entry.target, entries);
       // The manifest authorizes publication; transform only the temporary copy.
       const publicMeta = {
         ...meta,
-        title: meta.title ?? path.posix.basename(entry.source, ".md"),
+        title:
+          meta.title ?? entry.title ?? path.posix.basename(entry.source, ".md"),
         publish: true,
       };
       bytes = Buffer.from(`---\n${YAML.stringify(publicMeta)}---\n${body}`);
@@ -288,6 +327,8 @@ export async function preparePublication({
     notes: manifest.notes.length,
     assets: manifest.assets.length,
     files: staged.map((item) => item.target),
+    resolvedReferences,
+    approvedUnresolvedReferences: unresolvedReferences,
   };
 }
 
