@@ -121,6 +121,29 @@ test("Explorer shows only the ten newest modified articles regardless of obsolet
         expected.length,
       );
   }
+  await openExplorer(page);
+  const recentLinks = page.locator(
+    ".explorer-content a.nav-file-title, .explorer-content a.nav-show-more",
+  );
+  await expect(recentLinks).toHaveCount(11);
+  for (const mode of ["light", "dark"]) {
+    await page
+      .locator(`input[name="appearance-color"][value="${mode}"]`)
+      .check();
+    const blue = await page
+      .locator(".graph-view-link")
+      .evaluate((link) => getComputedStyle(link).color);
+    expect(
+      await recentLinks.evaluateAll((links) =>
+        links.map((link) => ({
+          color: getComputedStyle(link).color,
+          opacity: getComputedStyle(link).opacity,
+        })),
+      ),
+    ).toEqual(
+      Array.from({ length: 11 }, () => ({ color: blue, opacity: "1" })),
+    );
+  }
 });
 test("Show more follows the recent articles and opens the full list", async ({
   page,
@@ -1361,4 +1384,207 @@ test("Graph gravity forms a circular cluster that fits the initial canvas", asyn
   expect(layout.top).toBeGreaterThanOrEqual(0);
   expect(layout.right).toBeLessThanOrEqual(layout.width);
   expect(layout.bottom).toBeLessThanOrEqual(layout.height);
+});
+
+test("Graph expands inside the browser window and restores with button or Escape", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  await page.goto("./graph");
+  const canvas = page.locator(".graph-page .graph-container canvas");
+  const button = page.locator(".graph-expand-button");
+  const dialog = page.getByRole("dialog", { name: "Expanded graph view" });
+  await expect(canvas).toBeVisible({ timeout: 20000 });
+  await expect(button).toHaveAttribute("aria-expanded", "false");
+  await button.scrollIntoViewIfNeeded();
+  await button.focus();
+  const initial = await page.evaluate(() => ({
+    scroll: scrollY,
+    overflow: document.documentElement.style.overflow,
+    canvasHeight: document.querySelector<HTMLCanvasElement>(
+      ".graph-container canvas",
+    )!.clientHeight,
+  }));
+  await button.press("Enter");
+  await expect(dialog).toBeVisible();
+  await expect(button).toHaveAttribute("aria-expanded", "true");
+  await expect(button).toHaveAccessibleName("Restore graph size");
+  expect(await dialog.boundingBox()).toEqual({
+    x: 0,
+    y: 0,
+    ...page.viewportSize()!,
+  });
+  expect(await page.evaluate(() => document.fullscreenElement)).toBeNull();
+  expect(
+    await page.evaluate(() => document.documentElement.style.overflow),
+  ).toBe("hidden");
+  await expect
+    .poll(() =>
+      canvas.evaluate((element) => ({
+        width: element.clientWidth,
+        height: element.clientHeight,
+      })),
+    )
+    .toEqual(page.viewportSize());
+  await expect(button).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(button).toHaveAttribute("aria-expanded", "false");
+  await expect(button).toBeFocused();
+  expect(
+    await page.evaluate(() => document.documentElement.style.overflow),
+  ).toBe(initial.overflow);
+  expect(await page.evaluate(() => scrollY)).toBeCloseTo(initial.scroll, 0);
+  await button.click();
+  await expect(dialog).toBeVisible();
+  await button.click();
+  await expect(dialog).not.toBeVisible();
+  await expect
+    .poll(() => canvas.evaluate((element) => element.clientHeight))
+    .toBe(initial.canvasHeight);
+  // SPA cleanup must also restore scroll state when navigation occurs while expanded.
+  await button.click();
+  await expect(dialog).toBeVisible();
+  await page.evaluate(() =>
+    window.spaNavigate(
+      new URL(
+        document.body.dataset.basepath
+          ? document.body.dataset.basepath + "/"
+          : "/",
+        location.origin,
+      ),
+    ),
+  );
+  await expect(page.locator(".graph-page")).toHaveCount(0);
+  expect(
+    await page.evaluate(() => document.documentElement.style.overflow),
+  ).toBe(initial.overflow);
+  expect(await page.evaluate(() => !!document.querySelector(":modal"))).toBe(
+    false,
+  );
+});
+
+test("Graph hover alone shows a page name and dims nodes outside its neighbors", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  await page.route("**/static/graph/d3.min.js", async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({
+      response,
+      body:
+        (await response.text()) +
+        `;{
+      const original=window.d3.forceSimulation;
+      window.d3.forceSimulation=(...args)=>window.__hoverSimulation=original(...args);
+    }`,
+    });
+  });
+  await page.route("**/static/graph/pixi.min.js", async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({
+      response,
+      body:
+        (await response.text()) +
+        `;{
+      const original=window.PIXI.Application.prototype.init;
+      window.PIXI.Application.prototype.init=async function(...args){const result=await original.apply(this,args);window.__hoverApplication=this;return result;};
+    }`,
+    });
+  });
+  await page.goto("./graph");
+  const canvas = page.locator(".graph-page .graph-container canvas");
+  await expect(canvas).toBeVisible({ timeout: 20000 });
+  if (mobile(page)) await page.locator(".explorer-panel > summary").click();
+  await canvas.scrollIntoViewIfNeeded();
+  await page.evaluate(() => {
+    (window as any).__hoverSimulation.stop().tick(200);
+  });
+  const scene = () =>
+    page.evaluate(() => {
+      const containers = (window as any).__hoverApplication.stage.children[0]
+        .children;
+      return {
+        labels: containers[2].children
+          .filter((label: any) => label.alpha > 0)
+          .map((label: any) => label.text),
+        nodes: containers[1].children.map((node: any) => ({
+          id: node.label,
+          alpha: node.alpha,
+        })),
+      };
+    });
+  expect((await scene()).labels).toEqual([]);
+  const box = (await canvas.boundingBox())!;
+  const before = await canvas.evaluate((element) => (element as any).__zoom.k);
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.wheel(0, -300);
+  await expect
+    .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
+    .toBeGreaterThan(before);
+  await page.mouse.move(0, 0);
+  await expect.poll(async () => (await scene()).labels).toEqual([]);
+  const target = await page.evaluate(() => {
+    const simulation = (window as any).__hoverSimulation,
+      canvas = document.querySelector<HTMLCanvasElement>(
+        ".graph-container canvas",
+      )!,
+      zoom = (canvas as any).__zoom,
+      box = canvas.getBoundingClientRect();
+    const links = simulation.force("link").links();
+    const nodes = simulation.nodes();
+    const node = nodes.find((node: any) => {
+      const x = box.x + zoom.applyX(node.x + canvas.clientWidth / 2),
+        y = box.y + zoom.applyY(node.y + canvas.clientHeight / 2);
+      return (
+        links.some(
+          (link: any) =>
+            link.source.id === node.id || link.target.id === node.id,
+        ) &&
+        x > box.left + 20 &&
+        x < box.right - 20 &&
+        y > Math.max(box.top + 60, 160) &&
+        y < Math.min(box.bottom - 20, innerHeight - 20)
+      );
+    });
+    if (!node) throw new Error("No visible connected graph node");
+    const neighbors = new Set([node.id]);
+    for (const link of links) {
+      if (link.source.id === node.id) neighbors.add(link.target.id);
+      if (link.target.id === node.id) neighbors.add(link.source.id);
+    }
+    return {
+      title: node.text,
+      neighbors: [...neighbors],
+      x: box.x + zoom.applyX(node.x + canvas.clientWidth / 2),
+      y: box.y + zoom.applyY(node.y + canvas.clientHeight / 2),
+    };
+  });
+  await page.mouse.move(target.x, target.y);
+  await expect.poll(async () => (await scene()).labels).toEqual([target.title]);
+  const state = await scene(),
+    neighbors = new Set(target.neighbors);
+  expect(state.nodes.some((node: any) => !neighbors.has(node.id))).toBe(true);
+  expect(
+    state.nodes
+      .filter((node: any) => neighbors.has(node.id))
+      .map((node: any) => node.alpha),
+  ).toEqual(target.neighbors.map(() => 1));
+  expect(
+    state.nodes
+      .filter((node: any) => !neighbors.has(node.id))
+      .every((node: any) => node.alpha === 0.2),
+  ).toBe(true);
+  // No extra pointer event: moving nodes away must clear the hover state too.
+  await page.evaluate(() => {
+    for (const node of (window as any).__hoverSimulation.nodes()) {
+      node.x += 5000;
+      node.y += 5000;
+    }
+  });
+  await expect.poll(async () => (await scene()).labels).toEqual([]);
+  expect((await scene()).nodes.every((node: any) => node.alpha === 1)).toBe(
+    true,
+  );
+  await page.mouse.move(0, 0);
 });

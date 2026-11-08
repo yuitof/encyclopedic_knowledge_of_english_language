@@ -1,12 +1,16 @@
 import { Graph } from "@quartz-community/graph";
 import type { QuartzComponent } from "../quartz/components/types";
 import { pathToRoot } from "../quartz/util/path";
+// @ts-ignore: Quartz imports inline scripts as strings.
+import windowControls from "./graph-window.inline";
 
 const graphForces = {
   repelForce: 0.025,
   centerForce: 0.6,
   linkDistance: 18,
   enableRadial: true,
+  focusOnHover: true,
+  opacityScale: 0,
 };
 const stock = Graph({
   localGraph: { ...graphForces, depth: -1, showTags: false },
@@ -26,6 +30,20 @@ for (const [remote, local] of [
     `((document.body.dataset.basepath || "") + "/static/graph/${local}")`,
   );
 }
+// Preserve an explicit zero: labels must stay hidden during zoom and appear
+// only through Quartz's existing node-hover behavior.
+const opacityDefault = "S.opacityScale||1";
+if (!runtime.includes(opacityDefault))
+  throw new Error("Graph label-opacity integration requires review");
+runtime = runtime.replace(opacityDefault, "S.opacityScale??1");
+// Invisible text must not intercept the node underneath it. Dynamic nodes also
+// update hover when the force simulation moves them under a stationary cursor.
+const labelLayer = "nu.addChild(vu)";
+const nodeEvents = 'U.eventMode="static"';
+if (!runtime.includes(labelLayer) || !runtime.includes(nodeEvents))
+  throw new Error("Graph pointer interaction requires review");
+runtime = runtime.replace(labelLayer, `vu.eventMode="none",${labelLayer}`);
+runtime = runtime.replace(nodeEvents, 'U.eventMode="dynamic"');
 // Quartz's radial mode targets a ring. A zero-radius target provides inward
 // gravity instead, balanced by the existing charge and collision forces.
 const radialForce = /\.forceRadial\([^()]+\)\.strength\(\.2\)/gu;
@@ -59,7 +77,43 @@ export const GraphPage: QuartzComponent = (props) => {
   if (props.fileData.slug !== "graph") return null;
   return (
     <section class="graph-page" aria-label="Published note connections">
-      {stock(props)}
+      <div class="graph-window">
+        {stock(props)}
+        <button
+          type="button"
+          class="graph-expand-button"
+          hidden
+          aria-label="Expand graph to fill window"
+          title="Expand graph to fill window"
+          aria-expanded="false"
+          aria-haspopup="dialog"
+          aria-controls="graph-window-dialog"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <path
+              class="graph-expand-icon"
+              d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"
+            />
+            <path
+              class="graph-restore-icon"
+              d="M3 8h5V3M16 3v5h5M8 21v-5H3M21 16h-5v5"
+            />
+          </svg>
+        </button>
+      </div>
+      <dialog
+        id="graph-window-dialog"
+        class="graph-window-dialog"
+        aria-label="Expanded graph view"
+      />
       <p class="graph-help">
         Drag to move notes, scroll to zoom, and click a note to open it. Blank
         pages represent missing notes referenced by published articles.
@@ -80,4 +134,5 @@ GraphPage.css = stock.css;
 // Load the graph's runtime only after entering this page, including through SPA navigation.
 GraphPage.afterDOMLoaded = [
   `let graphRuntimeStarted=false;function startGraphRuntime(){if(!graphRuntimeStarted&&document.querySelector(".graph-page")){graphRuntimeStarted=true;(function(){${runtime} })();}}document.addEventListener("nav",startGraphRuntime);document.addEventListener("render",startGraphRuntime);startGraphRuntime();`,
+  windowControls,
 ];

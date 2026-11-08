@@ -259,3 +259,75 @@
   font-size: 0.9rem;
   color: var(--gray);
 }
+
+// Keep the recent-note links blue, including the active article and Show more.
+.page
+  > #quartz-body
+  .sidebar.left
+  .explorer
+  :is(a.nav-file-title, a.nav-show-more) {
+  color: var(--secondary);
+  opacity: 1;
+}
+.graph-window {
+  position: relative;
+  display: flow-root;
+}
+.graph-expand-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.5rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 4px;
+  color: var(--dark);
+  background: var(--light);
+  cursor: pointer;
+}
+.graph-expand-button[hidden] {
+  display: none;
+}
+.graph-expand-button:hover {
+  border-color: var(--gray);
+}
+.graph-expand-button .graph-restore-icon,
+.graph-expand-button[aria-expanded="true"] .graph-expand-icon {
+  display: none;
+}
+.graph-expand-button[aria-expanded="true"] .graph-restore-icon {
+  display: initial;
+}
+.graph-window-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: var(--light);
+  color: var(--dark);
+}
+.graph-window-dialog::backdrop {
+  background: var(--light);
+}
+.graph-page .graph-window-dialog .graph-window,
+.graph-page .graph-window-dialog .graph {
+  width: 100%;
+  height: 100%;
+}
+.graph-page .graph-window-dialog .graph .graph-outer {
+  height: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
