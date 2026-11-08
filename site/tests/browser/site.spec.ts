@@ -95,7 +95,7 @@ test("stock title, content and Japanese search works offline after loading", asy
   await expect(page.locator("h1")).toHaveText("caimans");
   expect(sockets).toBe(0);
 });
-test("Explorer uses newest modified order regardless of obsolete saved preferences", async ({
+test("Explorer shows only the ten newest modified articles regardless of obsolete saved preferences", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -110,13 +110,41 @@ test("Explorer uses newest modified order regardless of obsolete saved preferenc
     ).toHaveCount(0);
     await expect(page.locator('a[href*="/catalogue"]')).toHaveCount(0);
     const expected = await expectedOrder(page, "modified-desc");
-    await expect.poll(() => actualOrder(page)).toEqual(expected);
+    await expect.poll(() => actualOrder(page)).toEqual(expected.slice(0, 10));
+    if (route === "./articles/")
+      await expect(page.locator(".page-listing .section-li")).toHaveCount(
+        expected.length,
+      );
   }
+});
+test("Show more follows the recent articles and opens the full list", async ({
+  page,
+}) => {
+  await page.goto("./articles/caimans");
+  await openContents(page);
+  const link = page.getByRole("link", { name: "Show more", exact: true });
+  await expect(link).toHaveCount(1);
+  await link.scrollIntoViewIfNeeded();
+  await expect(link).toBeVisible();
+  await expect(
+    page.locator(
+      '.folder-container[data-folderpath="articles/index"] + .folder-outer > ul > li:last-child > a',
+    ),
+  ).toHaveText("Show more");
+  await link.click();
+  await expect(page).toHaveURL(/\/articles\/$/);
+  await expect(page.locator(".page-listing .section-li")).toHaveCount(
+    (await expectedOrder(page, "modified-desc")).length,
+  );
+  await openContents(page);
+  await expect(
+    page.getByRole("link", { name: "Show more", exact: true }),
+  ).toHaveCount(1);
 });
 test("homepage uses the static index for varying note counts and compact snippets", async ({
   page,
 }) => {
-  for (const size of [0, 2, 9]) {
+  for (const size of [0, 2, 9, 14]) {
     await page.route("**/static/contentIndex.json", (route) =>
       route.fulfill({
         contentType: "application/json",
@@ -131,7 +159,11 @@ test("homepage uses the static index for varying note counts and compact snippet
                 content: `Body ${i}`,
                 links: [],
                 tags: [],
-                sortRanks: { name: i, modified: i, created: i },
+                sortRanks: {
+                  name: i,
+                  modified: i === size - 1 ? null : Math.floor(i / 2),
+                  created: i,
+                },
               },
             ]),
           ),
@@ -148,6 +180,10 @@ test("homepage uses the static index for varying note counts and compact snippet
     await expect(page.locator(".highlight-cards > article")).toHaveCount(
       Math.min(size, maximum),
     );
+    await openContents(page);
+    await expect
+      .poll(() => actualOrder(page))
+      .toEqual((await expectedOrder(page, "modified-desc")).slice(0, 10));
     await page.unroute("**/static/contentIndex.json");
   }
 });
@@ -254,6 +290,10 @@ test("section contents, active heading and Explorer collapse share one sidebar s
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({
+    width: page.viewportSize()!.width,
+    height: 500,
+  });
   await page.goto("./articles/culture");
   await openContents(page);
   await expect(page.locator(".contents-top")).toHaveAttribute(
@@ -288,7 +328,7 @@ test("section contents, active heading and Explorer collapse share one sidebar s
   await expect(button).toHaveAttribute("aria-expanded", "true");
   for (const target of [
     page.locator(".article-contents a[data-section]").first(),
-    page.locator(".explorer-content a.nav-file-title").nth(10),
+    page.locator(".explorer-content a.nav-file-title").first(),
   ]) {
     await target.scrollIntoViewIfNeeded();
     await target.hover();

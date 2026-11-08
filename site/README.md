@@ -89,7 +89,7 @@ At the recorded snapshot, the approved original images total **145,133,964 bytes
 
 ## Article order and landing-page selection
 
-The sidebar always orders articles by modified time, newest first, with deterministic filename ties and unknown dates last. It ignores obsolete saved arrangement choices. There is no sorting control or standalone catalogue page.
+The sidebar shows up to the 10 most recently modified articles, newest first, with deterministic filename ties and unknown dates last. A “Show more” link below them opens the full articles page. This limit applies only to sidebar links: search and the main articles page retain all approved notes. It ignores obsolete saved arrangement choices. There is no sorting control or standalone catalogue page.
 
 Sorting is computed from approved source-note basenames and source filesystem modification/birth times, with explicit valid `created`/`modified` frontmatter taking precedence. Only ordinal name/created/modified ranks and `null` unknown markers enter the public index. Exact filesystem timestamps, source paths and a new basename field are not published. Unknown dates sort last in either direction; ties use deterministic filename ranks. Filesystem times can reflect a Git checkout or copy (especially in CI), not historical authorship; add reviewed explicit metadata if historical dates matter. Temporary staging timestamps are never used for sorting.
 

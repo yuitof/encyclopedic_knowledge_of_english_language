@@ -1,4 +1,4 @@
-# Verified checkpoint — paused
+# Verified checkpoint
 
 Verified locally on 8 November 2026. Work is paused at the user's request. No push, merge or public deployment occurred.
 
@@ -32,3 +32,13 @@ The latest user instructions put arrangement controls in the main body of the **
 Automatic deployment on pushes to main remains an unapplied proposal pending explicit approval after the earlier automatic-review rejection. The existing workflow is manual and continues to block the experimental feature branch. No remote operation was attempted.
 
 Existing documented limitations remain: filesystem times can reflect checkout/copy operations; original image sizes affect transfer costs; the upstream Latex plugin bundles the previously reported low-severity KaTeX issue; repository/history privacy is separate from the generated-site selection.
+
+## Recent sidebar follow-up
+
+The sidebar now shows at most the 10 most recently modified articles across the approved collection, newest first. Equal modification ranks use the existing filename tie-breaker; unknown dates stay last. The cap is a display limit, not a fixed corpus size. Older entries remain in the full articles page and search index.
+
+A single **Show more** link follows the recent entries inside the articles folder and opens the full articles page. Folder disclosures, the shared sidebar scrollbar, SPA navigation and root/repository URL prefixes are preserved. No publication approvals or source notes changed.
+
+TypeScript and the root/subpath builds passed, including all six output checks for each build. The 40-case browser coverage passed for the recent limit, dynamic 0/2/9/14-note collections (including tied and missing modification ranks), search, full article membership, appearance, sidebar controls and footer behavior. The four additional Show more navigation cases pass on desktop, tablet, 320px and 390px screens; mobile checks reopen the normally collapsed Contents panel after navigation. The final local `public/` artifact was rebuilt and verified. No subagents were used for this follow-up.
+
+Existing uncommitted user edits to `AGENTS.md` were left untouched. Work on the pending article-body arrangement controls remains paused.
