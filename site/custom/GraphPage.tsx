@@ -57,21 +57,28 @@ if (!runtime.includes(zoomSetup))
   throw new Error("Graph camera integration requires review");
 runtime = runtime.replace(
   zoomSetup,
-  `${zoomSetup};if(ru.length){
-  ou.tick(100);
-  var fitBounds=ru.reduce(function(bounds,node){
-    return [Math.min(bounds[0],node.x),Math.max(bounds[1],node.x),Math.min(bounds[2],node.y),Math.max(bounds[3],node.y)];
-  },[Infinity,-Infinity,Infinity,-Infinity]);
-  var fitScale=Math.max(.25,Math.min(1,(O-48)/Math.max(1,fitBounds[1]-fitBounds[0]),(G-48)/Math.max(1,fitBounds[3]-fitBounds[2])));
-  o.select(Q.canvas).call(et.transform,o.zoomIdentity.translate(O/2,G/2).scale(fitScale).translate(-O/2-(fitBounds[0]+fitBounds[1])/2,-G/2-(fitBounds[2]+fitBounds[3])/2));
-}`,
+  `${zoomSetup};
+  function fitGraphCamera(){if(!ru.length)return;
+    var fitBounds=ru.reduce(function(bounds,node){
+      return [Math.min(bounds[0],node.x),Math.max(bounds[1],node.x),Math.min(bounds[2],node.y),Math.max(bounds[3],node.y)];
+    },[Infinity,-Infinity,Infinity,-Infinity]);
+    var fitScale=Math.max(.25,Math.min(1,(O-48)/Math.max(1,fitBounds[1]-fitBounds[0]),(G-48)/Math.max(1,fitBounds[3]-fitBounds[2])));
+    et.extent([[0,0],[O,G]]);
+    o.select(Q.canvas).call(et.transform,o.zoomIdentity.translate(O/2,G/2).scale(fitScale).translate(-O/2-(fitBounds[0]+fitBounds[1])/2,-G/2-(fitBounds[2]+fitBounds[3])/2));
+  }
+  ou.tick(100);fitGraphCamera();
+  var graphResizeObserver=new ResizeObserver(function(){
+    var width=_.offsetWidth,height=Math.max(_.offsetHeight,250);
+    if(width!==O||height!==G){O=width;G=height;Q.renderer.resize(O,G);fitGraphCamera();}
+  });
+  graphResizeObserver.observe(_);`,
 );
-const resizeHook = 'document.addEventListener("themechange",R)';
-if (!runtime.includes(resizeHook))
-  throw new Error("Graph resize integration requires review");
+const graphCleanup = "function(){le=!0,ou.stop();";
+if (!runtime.includes(graphCleanup))
+  throw new Error("Graph resize cleanup integration requires review");
 runtime = runtime.replace(
-  resizeHook,
-  `${resizeHook};var resizeTimer;window.addEventListener("resize",function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(R,200)})`,
+  graphCleanup,
+  "function(){graphResizeObserver&&graphResizeObserver.disconnect();le=!0,ou.stop();",
 );
 export const GraphPage: QuartzComponent = (props) => {
   if (props.fileData.slug !== "graph") return null;

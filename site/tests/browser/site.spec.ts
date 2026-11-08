@@ -1436,6 +1436,8 @@ test("Graph expands inside the browser window and restores with button or Escape
   const dialog = page.getByRole("dialog", { name: "Expanded graph view" });
   await expect(canvas).toBeVisible({ timeout: 20000 });
   await expect(button).toHaveAttribute("aria-expanded", "false");
+  const graphSession = await page.context().newCDPSession(page);
+  await graphSession.send("Emulation.setCPUThrottlingRate", { rate: 2 });
   await button.scrollIntoViewIfNeeded();
   await button.focus();
   const initial = await page.evaluate(() => ({
