@@ -2203,14 +2203,6 @@ Search looks inside the notes as well as their titles. Browse the alphabetical c
 - [synonym](articles/synonym.md)
 - [syringe](articles/syringe.md)
 
-### Symbols and numbers
-
-- [-196](articles/-196.md)
-- [100%](articles/100-percent.md)
-- [200](articles/200.md)
-- [247](articles/247.md)
-- [310](articles/310.md)
-
 ### T
 
 - [555 timer](articles/555-timer.md)
@@ -2634,6 +2626,14 @@ Search looks inside the notes as well as their titles. Browse the alphabetical c
 
 - [zany](articles/zany.md)
 - [zodiac](articles/zodiac.md)
+
+### Symbols and numbers
+
+- [-196](articles/-196.md)
+- [100%](articles/100-percent.md)
+- [200](articles/200.md)
+- [247](articles/247.md)
+- [310](articles/310.md)
 
 ### 日本語 and other scripts
 

@@ -73,7 +73,7 @@ Rich-feature regression coverage now creates a separate temporary fixture corpus
 
 Raw HTML, unsupported metadata, alias redirects, non-raster attachments and symlinks remain rejected. Supported metadata is listed in the policy. Obsidian-specific programs such as Dataview or Templater do not run in the browser. Preserve the originals and use reviewed public-copy transformations if future formats require changes.
 
-The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks, search and light/dark reading. Mobile navigation starts collapsed; the large explorer stays inside a bounded scrolling area when opened. The header links to the real alphabetical catalogue.
+The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks, search and light/dark reading. The alphabetical catalogue stays in the left sidebar on every article, ordered A–Z, then Symbols and numbers, then 日本語 and other scripts. Article-specific contents and Explorer share one bounded sidebar scrollbar; wheel input over either section moves the same panel. Native arrows collapse and expand contents/Explorer with mouse or keyboard. Mobile navigation starts collapsed. The header links to the real alphabetical catalogue.
 
 Quartz emits article files as `slug.html` and uses extensionless links. Dots can be part of a slug. Folder pages use `folder/index.html`; arbitrary trailing slashes on a non-folder article are unsupported. Use generated links or explicit `.html` URLs when sharing.
 

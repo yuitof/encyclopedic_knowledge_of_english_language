@@ -40,3 +40,9 @@ The 85 byte-preserved images total 145,133,964 bytes (about 138.4 MiB), with the
 The official Latex plugin bundles KaTeX 0.16.47, retaining the documented low-severity advisory requiring pre-existing prototype pollution. It uses `trust: false`; local CSS/fonts use fixed KaTeX 0.18 assets. A future upstream plugin update is preferred over a custom renderer fork.
 
 Original source/history privacy is separate from static publication. The original checkout's 48 ignored files were not in tracked HEAD and remain outside this feature snapshot. Current unrecorded references remain plain approved-body labels; new unreviewed references fail safely. A full assistive-technology/cross-browser audit and actual public deployment are not claimed.
+
+## Sidebar follow-up
+
+The persistent global catalogue now appears on every page, ordered A–Z followed by Symbols and numbers and 日本語 and other scripts. The homepage uses that navigation without a duplicate TOC. Articles retain contents through h6. The single bounded left sidebar owns scrolling; TOC/Explorer wrappers and root lists have no nested scrolling, while folder-collapse clipping is retained.
+
+Twenty-eight browser cases passed across 1440/900/390/320px, including wheel input over real article contents and Explorer, unchanged child/window scroll positions, native mouse/Enter/Space section arrows, SPA return state, root/subpath catalogue anchors, and brand hover/focus. Root/subpath builds, all eight output checks and TypeScript passed. The manifest hash and vault sources are unchanged. One 653-byte navigation-state observer synchronizes Explorer button ARIA without click handlers; the only search-resource change aligns its mobile breakpoint from 799px to 800px. Both generated resources were reviewed before updating the explicit inventory.

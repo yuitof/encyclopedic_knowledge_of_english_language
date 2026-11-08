@@ -5,6 +5,7 @@ import {
 import { frameRegistry } from "./quartz/components/frames";
 import { EncyclopediaFrame } from "./custom/EncyclopediaFrame";
 import { HeaderSearch } from "./custom/HeaderSearch";
+import { CatalogueNav } from "./custom/CatalogueNav";
 import { PageTypes } from "./quartz/plugins";
 import fs from "node:fs";
 
@@ -31,9 +32,16 @@ export default config;
 const loaded = await loadQuartzLayout();
 loaded.defaults.frame = "encyclopedia";
 loaded.defaults.header = [HeaderSearch()];
+loaded.defaults.left = [CatalogueNav, ...(loaded.defaults.left ?? [])];
 for (const page of Object.values(loaded.byPageType)) {
   page.frame = "encyclopedia";
   page.header = loaded.defaults.header;
+  page.left = [
+    CatalogueNav,
+    ...(page.left ??
+      loaded.defaults.left?.filter((component) => component !== CatalogueNav) ??
+      []),
+  ];
 }
 // loadQuartzConfig creates a dispatcher before TS overrides; rebuild that emitter with our final layout.
 config.plugins.emitters = config.plugins.emitters.filter(

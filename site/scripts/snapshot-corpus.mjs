@@ -102,9 +102,14 @@ for (const note of [...notes].sort((a, b) =>
   buckets.set(bucket, [...(buckets.get(bucket) ?? []), note]);
 }
 let home = `---\ntitle: Encyclopedic Knowledge of English Language\ndescription: Words, expressions, grammar, usage, history, and culture from an evolving English-language notebook.\nunlisted: true\n---\nThis collection records discoveries about English: words and expressions, grammar and usage, history and culture, and connections to other subjects. It contains **${notes.length.toLocaleString("en-US")} existing notes** from the Obsidian collection.\n\nSearch looks inside the notes as well as their titles. Browse the alphabetical catalogue below, or follow links between related entries. Some notes are brief or empty; they are retained as part of the original collection. References without a recorded note are shown as plain text.\n\n## Alphabetical catalogue\n\n`;
-for (const [bucket, list] of [...buckets].sort(([a], [b]) =>
-  a.localeCompare(b, "en"),
-)) {
+const categoryOrder = [
+  ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  "Symbols and numbers",
+  "日本語 and other scripts",
+];
+for (const bucket of categoryOrder) {
+  const list = buckets.get(bucket);
+  if (!list) continue;
   home +=
     `\n### ${bucket}\n\n` +
     list

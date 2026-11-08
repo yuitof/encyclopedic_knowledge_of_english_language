@@ -98,9 +98,13 @@ test("keyboard skip link, bounded catalogue navigation and dark mode", async ({
     await expect(panel).toHaveAttribute("open", "");
     const explorer = page.locator(".explorer-content");
     await expect(explorer).toBeVisible();
-    expect(
-      await explorer.evaluate((e) => e.getBoundingClientRect().height),
-    ).toBeLessThanOrEqual(260);
+    const sidebar = page.locator(".sidebar.left");
+    expect(await sidebar.evaluate((e) => e.clientHeight)).toBeLessThanOrEqual(
+      480,
+    );
+    expect(await explorer.evaluate((e) => getComputedStyle(e).overflowY)).toBe(
+      "visible",
+    );
     await summary.click();
     await expect(panel).not.toHaveAttribute("open", "");
   }
@@ -113,4 +117,163 @@ test("keyboard skip link, bounded catalogue navigation and dark mode", async ({
       () => document.documentElement.scrollWidth <= window.innerWidth + 1,
     ),
   ).toBeTruthy();
+});
+
+test("persistent alphabetical groups keep canonical order and navigate to homepage anchors", async ({
+  page,
+}) => {
+  await page.goto("./articles/caimans");
+  if ((page.viewportSize()?.width ?? 1440) <= 800)
+    await page.locator(".navigation-panel > summary").click();
+  const catalogue = page.getByRole("navigation", {
+    name: "Alphabetical catalogue",
+  });
+  await expect(catalogue.getByRole("heading")).toHaveText(
+    "Alphabetical catalogue",
+  );
+  await expect(catalogue.locator("li a")).toHaveText([
+    ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "Symbols and numbers",
+    "日本語 and other scripts",
+  ]);
+  await catalogue
+    .getByRole("link", { name: "Symbols and numbers", exact: true })
+    .click();
+  await expect(page).toHaveURL(/#symbols-and-numbers$/);
+  await expect(page.locator("#symbols-and-numbers")).toBeInViewport();
+  const headings = await page.locator("article h3").allTextContents();
+  expect(headings.slice(-3)).toEqual([
+    "Z",
+    "Symbols and numbers",
+    "日本語 and other scripts",
+  ]);
+  expect(await page.locator(".sidebar.left .toc").count()).toBe(0);
+  expect(await page.locator(".catalogue-navigation").count()).toBe(1);
+  await page.goto("./articles/caimans");
+  if ((page.viewportSize()?.width ?? 1440) <= 800)
+    await page.locator(".navigation-panel > summary").click();
+  await page
+    .getByRole("navigation", { name: "Alphabetical catalogue" })
+    .getByRole("link", { name: "日本語 and other scripts", exact: true })
+    .click();
+  await expect(page).toHaveURL(
+    /#(?:%E6%97%A5%E6%9C%AC%E8%AA%9E|日本語)-and-other-scripts$/,
+  );
+  await expect(
+    page.locator('[id="日本語-and-other-scripts"]'),
+  ).toBeInViewport();
+});
+
+test("TOC and Explorer arrows respond once to mouse, Enter and Space with correct state", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./articles/culture");
+  if ((page.viewportSize()?.width ?? 1440) <= 800)
+    await page.locator(".navigation-panel > summary").click();
+  await expect
+    .poll(() => page.locator(".explorer-ul > li").count())
+    .toBeGreaterThan(1);
+  for (const [buttonSelector, contentSelector] of [
+    [".toc-header", ".toc-content"],
+    [".desktop-explorer", ".explorer-content"],
+  ]) {
+    const button = page.locator(buttonSelector),
+      content = page.locator(contentSelector);
+    await expect(button).toHaveAttribute("aria-expanded", "true");
+    const initialTransform = await button
+      .locator(".fold")
+      .evaluate((e) => getComputedStyle(e).transform);
+    await button.click();
+    await expect(button).toHaveAttribute("aria-expanded", "false");
+    await expect(content).not.toBeVisible();
+    expect(
+      await button
+        .locator(".fold")
+        .evaluate((e) => getComputedStyle(e).transform),
+    ).not.toBe(initialTransform);
+    await button.press("Enter");
+    await expect(button).toHaveAttribute("aria-expanded", "true");
+    await expect(content).toBeVisible();
+    await button.press("Space");
+    await expect(button).toHaveAttribute("aria-expanded", "false");
+    await expect(content).not.toBeVisible();
+    await button.press("Space");
+    await expect(button).toHaveAttribute("aria-expanded", "true");
+    await expect(content).toBeVisible();
+    await expect(page.locator(".catalogue-navigation")).toBeVisible();
+  }
+  await page.locator('article a[href*="drake"]').first().click();
+  await expect(page.locator("h1")).toContainText("Drake");
+  await page.goBack();
+  await expect(page.locator("h1")).toHaveText("culture");
+  if ((page.viewportSize()?.width ?? 1440) <= 800)
+    await page.locator(".navigation-panel > summary").click();
+  const button = page.locator(".desktop-explorer");
+  await expect(button).toHaveAttribute("aria-expanded", "true");
+  await button.click();
+  await expect(button).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator(".explorer-content")).not.toBeVisible();
+});
+
+test("wheel input over contents or Explorer scrolls only the shared left sidebar", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./articles/culture");
+  if ((page.viewportSize()?.width ?? 1440) <= 800)
+    await page.locator(".navigation-panel > summary").click();
+  await expect
+    .poll(() => page.locator(".explorer-ul > li").count())
+    .toBeGreaterThan(1);
+  const sidebar = page.locator(".sidebar.left");
+  for (const target of [
+    page.locator(".toc-content a").first(),
+    page.locator(".explorer-content a.nav-file-title").nth(10),
+  ]) {
+    await target.scrollIntoViewIfNeeded();
+    await target.hover();
+    const before = await sidebar.evaluate((e) => e.scrollTop),
+      windowBefore = await page.evaluate(() => window.scrollY);
+    expect(
+      await sidebar.evaluate(
+        (e) => e.scrollHeight - e.clientHeight - e.scrollTop,
+      ),
+    ).toBeGreaterThan(300);
+    await page.mouse.wheel(0, 150);
+    await expect
+      .poll(() => sidebar.evaluate((e) => e.scrollTop))
+      .toBeGreaterThan(before + 20);
+    expect(await page.evaluate(() => window.scrollY)).toBe(windowBefore);
+    const children = await page
+      .locator(
+        ".sidebar.left .toc-content,.sidebar.left .explorer-content,.sidebar.left .explorer-ul",
+      )
+      .evaluateAll((elements) =>
+        elements.map((e) => ({
+          scroll: e.scrollTop,
+          overflow: getComputedStyle(e).overflowY,
+        })),
+      );
+    expect(
+      children.every((e) => e.scroll === 0 && e.overflow === "visible"),
+    ).toBeTruthy();
+  }
+});
+
+test("brand hover stays plain while native keyboard focus remains visible", async ({
+  page,
+}) => {
+  await page.goto("./articles/caimans");
+  const brand = page.locator(".encyclopedia-brand");
+  await brand.hover();
+  expect(
+    await brand.evaluate((e) => getComputedStyle(e).textDecorationLine),
+  ).toBe("none");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await expect(brand).toBeFocused();
+  expect(
+    await brand.evaluate((e) => getComputedStyle(e).outlineStyle),
+  ).not.toBe("none");
 });

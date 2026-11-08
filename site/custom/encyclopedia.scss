@@ -56,6 +56,21 @@ a.internal {
   }
   .sidebar.left {
     display: block;
+    overscroll-behavior-y: contain;
+    // The sidebar owns scrolling; its navigation sections expand naturally.
+    :is(.toc, .toc-content, .explorer, .explorer-content, .explorer-ul) {
+      height: auto;
+      min-height: 0;
+      max-height: none;
+      overflow: visible;
+      overscroll-behavior: auto;
+      flex: none;
+      mask-image: none;
+    }
+    .toc-content.collapsed,
+    .explorer.collapsed > .explorer-content {
+      display: none;
+    }
   }
   .sidebar.right {
     display: flex;
@@ -81,6 +96,9 @@ a.internal {
   align-items: center;
   gap: 0.65rem;
   color: var(--dark);
+}
+.encyclopedia-brand:hover {
+  text-decoration: none;
 }
 .encyclopedia-brand strong {
   font-family: Georgia, serif;
@@ -195,6 +213,24 @@ article img {
 .navigation-panel .explorer {
   margin-top: 1.5rem;
 }
+.catalogue-navigation {
+  margin-bottom: 1.5rem;
+  h2 {
+    font:
+      600 0.9rem Arial,
+      sans-serif;
+    margin: 0 0 0.5rem;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    line-height: 1.6;
+  }
+}
+
 .sidebar h3,
 .sidebar button {
   font-family: Arial, sans-serif;
@@ -339,7 +375,7 @@ article img {
     justify-content: flex-start;
   }
 }
-@media (max-width: 799px) {
+@media (max-width: 800px) {
   .page {
     padding: 0 1rem;
   }
@@ -357,6 +393,9 @@ article img {
   }
   .encyclopedia-brand {
     flex: 1;
+  }
+  .encyclopedia-brand:hover {
+    text-decoration: none;
   }
   .encyclopedia-brand strong {
     font-size: 1.15rem;
@@ -376,6 +415,7 @@ article img {
   .page > #quartz-body .sidebar.left {
     width: 100%;
     height: auto;
+    max-height: min(65dvh, 30rem);
     position: static;
     padding: 0;
     display: block;
@@ -391,15 +431,6 @@ article img {
   }
   .navigation-panel[open] > summary {
     margin-bottom: 1rem;
-  }
-  .navigation-panel .explorer {
-    display: block;
-    max-height: 16rem;
-    overflow-y: auto;
-  }
-  .navigation-panel .toc {
-    max-height: 12rem;
-    overflow-y: auto;
   }
   .article-title {
     font-size: 1.9rem;
@@ -421,7 +452,7 @@ article img {
   }
 }
 // The outer details panel handles mobile navigation; keep Quartz's explorer inline.
-@media (max-width: 799px) {
+@media (max-width: 800px) {
   .page > #quartz-body .sidebar.left:has(.explorer) {
     position: static;
     padding: 0;
@@ -431,26 +462,17 @@ article img {
     width: auto;
     max-width: 100%;
     height: auto;
-    max-height: 16rem;
     padding: 0;
     margin-top: 0.5rem;
     transform: none;
     visibility: visible;
     z-index: auto;
-    overflow: auto;
-  }
-  .navigation-panel .explorer.collapsed > .explorer-content {
-    display: none;
   }
   .navigation-panel .explorer .mobile-explorer {
     display: none;
   }
   .navigation-panel .explorer button.desktop-explorer {
-    display: none;
-  }
-  .navigation-panel .explorer {
-    max-height: none;
-    overflow: visible;
+    display: flex;
   }
   html.mobile-no-scroll {
     overflow: auto;
