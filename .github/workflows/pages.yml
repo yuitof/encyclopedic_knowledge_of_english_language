@@ -1,7 +1,10 @@
 name: Build and deploy English Encyclopedia
 
-# Explicitly opt in after review. Pushing the experimental feature branch never publishes.
+# Build and deploy pushes to main; retain the manual deployment option.
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:

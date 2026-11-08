@@ -39,7 +39,7 @@ The fallback is `example.invalid`; the Pages workflow supplies the real URL. `SI
 | `tests/`                                  | Privacy tests, real-corpus output/browser checks and temporary rich-feature fixture          |
 | `trusted-*.json`                          | Reviewed vendor static, generated plugin-resource and local math-resource inventories        |
 | `public/`, `public-*/`                    | Ignored generated artifacts                                                                  |
-| `../.github/workflows/pages.yml`          | Manual, guarded GitHub Pages deployment                                                      |
+| `../.github/workflows/pages.yml`          | Main-push and manual GitHub Pages deployment                                                      |
 
 Only Quartz's intended `quartz/styles/custom.scss` entrypoint is customized; it imports `custom/encyclopedia.scss`. Other core source remains unchanged. npm plugin packages are pinned by `package-lock.json`. `quartz.lock.json` has no Git plugins because the selected plugins use their Quartz 5 npm APIs.
 
@@ -128,7 +128,7 @@ Resource inventories deliberately fail when trusted vendor files, local math ass
 
 ## Deployment and maintenance
 
-GitHub Pages deployment is **prepared, not performed**. No push, merge or public deployment has occurred. After authorizing your merge/push process, set repository **Settings → Pages → GitHub Actions**, then manually run **Build and deploy English Encyclopedia** from the default branch. Both workflow jobs require the default branch and exclude `feature/quartz-wiki`; pushing this feature cannot publish.
+Pushes to `main` automatically run **Build and deploy English Encyclopedia**: install dependencies and plugins, run the tests, build and audit the selected content, then deploy it to GitHub Pages. Merging a pull request into `main` also triggers this workflow. Manual **Run workflow** remains available through `workflow_dispatch`. Set repository **Settings → Pages → Source → GitHub Actions** and keep `main` as the default branch. Both jobs retain their default-branch guard; pushes to other branches do not trigger deployment.
 
 The workflow uses Node 24, reproducible npm installation, Quartz plugins, tests, the Pages-provided base URL, a fresh audited `site/public` artifact, and official Pages Actions. The build has `contents: read` / `pages: read`; only deploy has `pages: write` / `id-token: write`. Existing environment protection remains applicable.
 
@@ -136,4 +136,4 @@ See [the project audit](docs/project-audit.md), [verification record](docs/verif
 
 A live dependency audit previously reported zero listed advisories, but the official Latex 1.0.0 plugin bundles its own **KaTeX 0.16.47** renderer. npm audit cannot enumerate that bundled copy. The inherited low [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) requires pre-existing prototype pollution to bypass trust restrictions. Rendering uses `trust: false`; local CSS/fonts use fixed KaTeX 0.18 assets. Prefer an upstream plugin update rather than a custom renderer fork.
 
-The requested automatic remote-main-push trigger remains **blocked**: automatic approval review rejected the local workflow configuration change twice, citing the earlier requirement for approval before public deployment. The workflow remains manual and default-branch guarded. No remote action, push, merge or deployment was attempted. Explicit user approval for enabling future automatic publication is still needed. The exact reviewable configuration is in [the automatic Pages trigger proposal](docs/automatic-pages-proposal.md).
+Automatic deployment on pushes to `main` is now explicitly authorized and configured. The first push containing this workflow update starts a run. If tests or output checks fail, the deploy job does not run. Existing `github-pages` environment approval rules still apply. See [automatic Pages deployment details](docs/automatic-pages-proposal.md).
