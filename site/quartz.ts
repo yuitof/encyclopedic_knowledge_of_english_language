@@ -9,6 +9,7 @@ import { WikiExplorer } from "./custom/WikiExplorer";
 import { ArticleContents } from "./custom/ArticleContents";
 import { ArticleSorting } from "./custom/ArticleSorting";
 import { Appearance } from "./custom/Appearance";
+import { GraphPage } from "./custom/GraphPage";
 import { HomeHighlights } from "./custom/HomeHighlights";
 import { SiteFooter } from "./custom/SiteFooter";
 import { PageTypes } from "./quartz/plugins";
@@ -64,14 +65,14 @@ loaded.defaults.frame = "encyclopedia";
 loaded.defaults.header = [HeaderSearch()];
 loaded.defaults.left = [ArticleContents, WikiExplorer];
 loaded.defaults.footer = [SiteFooter];
-loaded.defaults.afterBody = [HomeHighlights];
+loaded.defaults.afterBody = [HomeHighlights, GraphPage];
 for (const page of Object.values(loaded.byPageType)) {
   page.head = customHead;
   page.frame = "encyclopedia";
   page.header = loaded.defaults.header;
   page.left = [ArticleContents, WikiExplorer];
   page.footer = [SiteFooter];
-  page.afterBody = [HomeHighlights];
+  page.afterBody = [HomeHighlights, GraphPage];
 }
 const defaultBeforeBody = loaded.defaults.beforeBody ?? [];
 for (const page of [loaded.defaults, ...Object.values(loaded.byPageType)]) {

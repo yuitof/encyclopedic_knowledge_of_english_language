@@ -1,6 +1,8 @@
 ---
 title: Privacy policy
 unlisted: true
+created: "2026-11-08T06:32:22.583Z"
+modified: "2026-11-08T06:32:22.584Z"
 ---
 This is a static website with no account system, advertising, or site analytics. Search runs in your browser after downloading the public note index.
 

@@ -711,7 +711,7 @@ test("sidebars pin on shorter articles without reserving empty viewport space", 
   }
   await page.mouse.move(
     page.viewportSize()!.width / 2,
-    page.viewportSize()!.height - 100,
+    page.viewportSize()!.height - 24,
   );
   await page.mouse.wheel(0, 300);
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(100);
@@ -1171,6 +1171,14 @@ test("Top counts as content while empty Explorer closes automatically", async ({
   await expect(select).toBeEnabled();
   const contents = page.locator(".contents-panel"),
     explorer = page.locator(".explorer-panel");
+  // Graph navigation is real content. Remove it to exercise a truly empty panel.
+  await expect(explorer.locator(".graph-view-link")).toHaveCount(1);
+  await explorer
+    .locator(".graph-navigation")
+    .evaluate((element) => element.remove());
+  await page.evaluate(() =>
+    document.dispatchEvent(new Event("article-sections-changed")),
+  );
   await expect(explorer).toHaveAttribute("data-empty", "true");
   await expect(explorer).not.toHaveAttribute("open", "");
   await openContents(page);
@@ -1212,4 +1220,72 @@ test("Top counts as content while empty Explorer closes automatically", async ({
   await openContents(page);
   await expect(page.locator(".contents-top")).toBeVisible();
   await expect(explorer).toHaveAttribute("open", "");
+});
+
+test("Graph view works through Explorer with local resources and keyboard note navigation", async ({
+  page,
+}) => {
+  const externalScripts: string[] = [],
+    graphRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/static/graph/"))
+      graphRequests.push(request.url());
+    if (
+      request.resourceType() === "script" &&
+      !request.url().startsWith("http://127.0.0.1:")
+    )
+      externalScripts.push(request.url());
+  });
+  await page.goto("./articles/culture");
+  expect(graphRequests).toEqual([]);
+  await openExplorer(page);
+  await page.getByRole("link", { name: "Graph view", exact: true }).click();
+  await expect(page).toHaveURL(/\/graph$/);
+  const graph = page.locator(".graph-page");
+  await expect(graph).toBeVisible();
+  await expect(graph.locator("canvas")).toBeVisible({ timeout: 20000 });
+  await page.reload();
+  await expect(graph.locator("canvas")).toBeVisible({ timeout: 20000 });
+  expect(
+    graphRequests.some((url) => url.endsWith("/static/graph/d3.min.js")),
+  ).toBe(true);
+  expect(
+    graphRequests.some((url) => url.endsWith("/static/graph/pixi.min.js")),
+  ).toBe(true);
+  const cfg = JSON.parse(
+    (await graph.locator(".graph-container").getAttribute("data-cfg")) ?? "{}",
+  );
+  expect(cfg.depth).toBe(-1);
+  const select = page.getByLabel("Open a note with the keyboard");
+  await select.selectOption({ label: "culture" });
+  const link = page.getByRole("link", { name: "Open selected note" });
+  await expect(link).toHaveAttribute("href", /\/articles\/culture$/);
+  await select.focus();
+  await page.keyboard.press("Tab");
+  await expect(link).toBeFocused();
+  expect(externalScripts).toEqual([]);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/articles\/culture$/);
+});
+
+test("landing notebook cards use neutral headings and borders", async ({
+  page,
+}) => {
+  await page.goto("./");
+  const title = page.locator(".highlight-cards h2 a").first();
+  await expect(title).toBeVisible();
+  const colors = await title.evaluate((element) => ({
+    title: getComputedStyle(element).color,
+    heading: getComputedStyle(document.querySelector("h1")!).color,
+    border: getComputedStyle(element.closest("article")!).borderTopColor,
+    link: getComputedStyle(document.querySelector(".encyclopedia-brand")!)
+      .color,
+  }));
+  expect(colors.title).toBe(colors.heading);
+  expect(colors.border).not.toBe("rgb(51, 102, 204)");
 });

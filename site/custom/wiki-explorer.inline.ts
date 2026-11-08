@@ -45,6 +45,16 @@ async function prepareArticleOrder() {
         : null;
     };
     const apply = () => {
+      // Missing-note placeholders belong in links/search/graph, not the recent-article list.
+      for (const folder of explorer.querySelectorAll<HTMLElement>(
+        ".folder-container[data-folderpath]",
+      ))
+        if (!folder.dataset.folderpath?.startsWith("articles/"))
+          folder.closest("li")?.remove();
+      for (const link of explorer.querySelectorAll<HTMLAnchorElement>(
+        "a.nav-file-title",
+      ))
+        if (!article(link.parentElement!)) link.closest("li")?.remove();
       for (const list of explorer.querySelectorAll<HTMLElement>(
         ".explorer-content ul",
       )) {

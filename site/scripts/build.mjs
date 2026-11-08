@@ -5,6 +5,8 @@ import { spawnSync } from "node:child_process";
 import { preparePublication, siteRoot } from "./publish.mjs";
 import { enrichSortRanks } from "./sort-ranks.mjs";
 import {
+  checkedGraphAssets,
+  copyGraphAssets,
   trustedStatic,
   trustedMath,
   copyMathFonts,
@@ -31,6 +33,7 @@ const staging = await fs.mkdtemp(
 try {
   await trustedStatic();
   await trustedMath();
+  await checkedGraphAssets();
   const publication = await preparePublication({ output: staging });
   const baseUrl = process.env.SITE_BASE_URL ?? "example.invalid";
   if (!/^[a-z\d.-]+(?::\d+)?(?:\/[\w.-]+)*\/?$/iu.test(baseUrl))
@@ -70,6 +73,7 @@ try {
   );
   await copyMathFonts(output);
   await copySiteAssets(output);
+  await copyGraphAssets(output);
   await fs.writeFile(path.join(output, ".nojekyll"), "");
   const { auditOutput } = await import("./verify-output.mjs");
   console.log(JSON.stringify(await auditOutput(output, publication), null, 2));

@@ -5,7 +5,7 @@ function closeEmptyNavigationPanels() {
     const hasContent = panel.classList.contains("contents-panel")
       ? !!panel.querySelector(".article-contents a")
       : !!panel.querySelector(
-          ".article-date-filter:not([hidden]), .explorer-content a.nav-file-title, .nav-show-more",
+          ".article-date-filter:not([hidden]), .explorer-content a.nav-file-title, .nav-show-more, .graph-view-link",
         );
     if (!hasContent) panel.open = false;
     else if (panel.dataset.empty === "true") panel.open = true;
@@ -38,7 +38,8 @@ function prepareNavigationPanels() {
   )) {
     if (panel.dataset.navigationPanel) continue;
     panel.dataset.navigationPanel = "ready";
-    if (mobile) panel.open = false;
+    if (panel.classList.contains("explorer-panel")) panel.open = true;
+    else if (mobile) panel.open = false;
     window.addCleanup(() => {
       delete panel.dataset.navigationPanel;
       delete panel.dataset.empty;

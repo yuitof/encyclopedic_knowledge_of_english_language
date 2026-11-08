@@ -1,6 +1,8 @@
 ---
 title: License
 unlisted: true
+created: "2026-11-08T06:32:22.583Z"
+modified: "2026-11-08T06:35:42.742Z"
 ---
 Original note text and original site editorial text are available under [Creative Commons Attribution–ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/). When sharing or adapting that text, give appropriate attribution, link to the license, indicate changes, and distribute adaptations under the same license, as its terms require.
 

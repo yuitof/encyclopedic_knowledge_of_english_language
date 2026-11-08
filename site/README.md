@@ -1,6 +1,6 @@
 # English Encyclopedia — Quartz 5 site
 
-A static, Wikipedia-inspired reading interface for the existing English-language Obsidian collection. The **explicit approval manifest** selects the published notes and images, plus the homepage, privacy and license pages. Collection membership and page counts come from that manifest and the generated static index. The earlier demonstration notes and image have been removed. Original vault files remain unchanged by publication.
+A static, Wikipedia-inspired reading interface for the existing English-language Obsidian collection. The **explicit approval manifest** selects the published notes and images, plus the homepage, privacy, license and Graph view pages. Collection membership and page counts come from that manifest and the generated static index. The earlier demonstration notes and image have been removed. Original vault files remain unchanged by publication.
 
 ## Local development
 
@@ -9,6 +9,7 @@ Use **Node 24 LTS** and npm **10.9.2 or newer**. From this directory:
 ```sh
 npm ci
 npx quartz plugin install --from-config
+npm run setup:hooks
 npm run build
 npm run preview
 ```
@@ -61,7 +62,7 @@ Version 2 manifest entries retain the original display title and map to URL-safe
 
 The builder copies only the listed sources into a fresh canonical OS temporary directory. It injects `publish: true` and a missing title in the temporary copy, rewrites approved links through the manifest mapping, builds Quartz, audits output and removes staging. Explicit `publish: false` or `draft: true` remains an error. A failure removes the generated artifact, so stale output cannot be uploaded accidentally. Never point raw Quartz at the vault or bypass this builder for production.
 
-There are **315 currently unresolved reference occurrences** after resolving unique case differences. Their exact raw targets are frozen per note in `approvedUnresolved`; only these approved existing-body references become escaped plain labels. Unknown embeds get an unavailable-attachment label. No placeholder article is generated. A new unresolved reference still stops publication until its target or literal label is reviewed. The old exact-case migration audit counted 328 unresolved occurrences; unique case-insensitive resolution recovers 13 of those. Two wikilink examples inside code remain literal code.
+Genuinely missing note links produce blank timestamped pages only in temporary build output. Their deterministic `missing/` routes work in HTML, search and the graph. Existing unapproved/private files are never imported or replaced by placeholders. Unsafe paths/protocols fail, and missing binary attachments are not synthesized. Reviewed unresolved wiki references to unavailable existing files or attachments retain plain-label behavior. Code examples remain literal.
 
 Privacy controls apply to the generated Pages artifact. **The Git repository and its history still contain the vault and settings.** Repository visibility is a separate decision. Review selected text and embedded image metadata before making the source or website public; these controls cannot recognize a private sentence inside an explicitly approved note.
 
@@ -73,7 +74,7 @@ Rich-feature regression coverage now creates a separate temporary fixture corpus
 
 Raw HTML, unsupported metadata, alias redirects, non-raster attachments and symlinks remain rejected. Supported metadata is listed in the policy. Obsidian-specific programs such as Dataview or Templater do not run in the browser. Preserve the originals and use reviewed public-copy transformations if future formats require changes.
 
-The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks and search. Backlinks are compiled directly into a normal section after the article body, with matching heading typography and list spacing. Both this section and its Contents shortcut are omitted when no published, listed note links to the page; there is no empty placeholder or right-sidebar backlink widget. Appearance controls in the right sidebar offer small/standard/large text, standard/wide content, and automatic/light/dark color; browser-local preferences persist across navigation and reload. The standalone alphabetical catalogue has been removed. Article-specific contents and Explorer share one bounded sidebar scrollbar; wheel input over either section moves the same panel. Both desktop sidebars size to their content, with a viewport height limit, and stay 1.5rem (24px at the default text size) below the top edge once reached while scrolling. They stop before the footer. On smaller screens, Appearance remains below the article and the left navigation stays sticky. On mobile, section jumps account for the sidebar’s measured height so headings stay visible. Contents and Explorer are separate sibling panels with matching headings and independent native mouse/keyboard disclosures. Section links appear directly under Contents. (Top) and the current Markdown section use bold themed text. On mobile, article Contents starts collapsed. Explorer opens when its recent entries load, and panels that gain content after being empty reopen. Empty panels close automatically. The Top link counts as Contents content, so a panel containing only Top remains available. Explorer closes when its calendar is hidden in filename modes. The header links to the generated article listing. Hover previews omit the repeated article title; Quartz keeps hover windows disabled at mobile widths.
+The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks and search. Backlinks are compiled directly into a normal section after the article body, with matching heading typography and list spacing. Both this section and its Contents shortcut are omitted when no published, listed note links to the page; there is no empty placeholder or right-sidebar backlink widget. Appearance controls in the right sidebar offer small/standard/large text, standard/wide content, and automatic/light/dark color; browser-local preferences persist across navigation and reload. The standalone alphabetical catalogue has been removed. Article-specific contents and Explorer share one bounded sidebar scrollbar; wheel input over either section moves the same panel. Both desktop sidebars size to their content, with a viewport height limit, and stay 1.5rem (24px at the default text size) below the top edge once reached while scrolling. They stop before the footer. On smaller screens, Appearance remains below the article and the left navigation stays sticky. On mobile, section jumps account for the sidebar’s measured height so headings stay visible. Contents and Explorer are separate sibling panels with matching headings and independent native mouse/keyboard disclosures. Section links appear directly under Contents. (Top) and the current Markdown section use bold themed text. On mobile, article Contents starts collapsed. Explorer opens when its recent entries load, and panels that gain content after being empty reopen. Empty panels close automatically. The Top link counts as Contents content, so a panel containing only Top remains available. Graph view keeps Explorer populated while its calendar is hidden in filename modes. The header links to the generated article listing. Hover previews omit the repeated article title; Quartz keeps hover windows disabled at mobile widths.
 
 Quartz emits article files as `slug.html` and uses extensionless links. Dots can be part of a slug. Folder pages use `folder/index.html`; arbitrary trailing slashes on a non-folder article are unsupported. Use generated links or explicit `.html` URLs when sharing.
 
@@ -95,7 +96,7 @@ Article counts use comma thousands separators consistently on the landing page, 
 
 The full Articles page has a keyboard-accessible **Sort articles** dropdown: File name (A-Z), File name (Z-A), Modified time (new to old), Modified time (old to new), Created time (new to old), and Created time (old to new). Ordinary visits start with File name (A-Z) or the remembered preference. Browse entries explicitly uses `?sort=name-asc`, overriding any remembered sort. Its link includes the deployment path from the site configuration so Quartz’s SPA URL rebasing preserves the sort query across repeated navigation. Show more uses `?sort=modified-desc`, so its destination remains newest-modified-first on reload and when opened in another tab. Changing the dropdown updates that explicit URL order as well as the saved preference. Sorting reorders the existing complete Quartz list using the shared browser index, including offline after loading; no additional search service or request is needed. Invalid or unavailable browser storage falls back safely. Without JavaScript, the complete static list remains accessible in Quartz’s default order and the sorting control is disabled.
 
-Sorting is computed from approved source-note basenames and source filesystem modification/birth times, with explicit valid `created`/`modified` frontmatter taking precedence. The public index contains ordinal name/created/modified ranks, the filename’s initial-letter group, UTC calendar days for created/modified filtering, and `null` unknown markers. Exact filesystem timestamps, source paths and a new basename field are not published. Unknown dates sort last in either direction; ties use deterministic filename ranks. Filesystem times can reflect a Git checkout or copy (especially in CI), not historical authorship; add reviewed explicit metadata if historical dates matter. Temporary staging timestamps are never used for sorting.
+Sorting uses approved source-note basenames and dates. Explicit `created`/`modified` metadata wins; absent fields use the earliest/latest Git commit dates (following renames). Untracked files fall back to filesystem birth/modification dates. CI fetches full history. Only ordinal ranks and UTC calendar days are added to the search index; source paths are excluded. Build timestamps come from original files/history, never temporary staging files.
 
 Filename modes divide the full list into headings for populated A–Z groups, followed by Symbols and numbers and 日本語 and other scripts. Descending mode reverses the letter groups and their members; the two final groups remain at the end. Empty groups are omitted. Contents links to these headings and highlights the section in view. Accented Latin initials are normalized to their base letter; other scripts share the final group.
 
@@ -110,7 +111,7 @@ Original note/editorial text now carries **CC BY-SA 4.0** under `../CONTENT-LICE
 ```sh
 npm run test:sort         # Ordinal ranks, ties, unknown dates, explicit-date validation
 npm run test:backlinks    # Conditional build-time sections, source immutability and anchor collisions
-npm run test:publication  # Selection, paths, flags, symlinks, static sources, failure paths, frozen unresolved references
+npm run test:publication  # Selection, paths, flags, symlinks, static sources, failure paths, missing-note placeholders and private-file exclusion
 npm run test:features     # Isolated temporary rich-feature build; no public fixture pages
 npm run check:types
 npm run test:output       # Requires npm run build
@@ -122,7 +123,7 @@ npm run test:vault        # One-time historical migration audit; requires origin
 
 Browser tests use installed Chrome on macOS or `npx playwright install chromium`; CI installs Chromium/system dependencies. `PLAYWRIGHT_CHROMIUM_EXECUTABLE` can select a browser. Ports 4173/4174 must be free. Failure traces and generated artifacts are ignored.
 
-`test:vault` checks the original migration baseline and intentionally fails after later ordinary edits to original notes. It is separate from ongoing CI, which supports shallow Pages checkouts.
+`test:vault` checks the original migration baseline and intentionally fails after later ordinary edits to original notes. It is separate from ongoing CI, which fetches full history for date fallback.
 
 Resource inventories deliberately fail when trusted vendor files, local math assets or generated plugin scripts change. Review such changes and update inventories from a separate temporary build; production builds never refresh their own trust baseline. Inventory checks complement dependency lockfiles and do not protect against a source change that removes the checks themselves.
 
@@ -137,3 +138,17 @@ See [the project audit](docs/project-audit.md), [verification record](docs/verif
 A live dependency audit previously reported zero listed advisories, but the official Latex 1.0.0 plugin bundles its own **KaTeX 0.16.47** renderer. npm audit cannot enumerate that bundled copy. The inherited low [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) requires pre-existing prototype pollution to bypass trust restrictions. Rendering uses `trust: false`; local CSS/fonts use fixed KaTeX 0.18 assets. Prefer an upstream plugin update rather than a custom renderer fork.
 
 Automatic deployment on pushes to `main` is now explicitly authorized and configured. The first push containing this workflow update starts a run. If tests or output checks fail, the deploy job does not run. Existing `github-pages` environment approval rules still apply. See [automatic Pages deployment details](docs/automatic-pages-proposal.md).
+
+## Timestamps and missing notes
+
+`npm run lint:timestamps` checks notes under `../vault/notes/` and `content/`. `npm run fix:timestamps` adds only absent `created`/`modified` fields using source filesystem dates, preserving existing fields and file modification times. Invalid date fields require manual correction. `npm run setup:hooks` installs the repository pre-commit hook; it fills missing fields, then asks you to review/stage those additions before retrying the commit. It never stages unrelated edits. CI checks timestamps without changing source files.
+
+Builds independently fill missing dates in **temporary Markdown copies**, using Git history first. They never edit, commit or push source Markdown. Missing-note dates derive from the referring approved notes, so tracked/explicit source dates produce stable output. Placeholders are never written into the vault or committed. See [the publication policy](docs/publication.md).
+
+## Graph view
+
+Explorer links to `/graph`, including repository subpaths. This page uses the existing Quartz 5 Graph plugin with the full published graph, pan, zoom, dragging and clickable nodes. It includes approved indexed notes and generated missing-note placeholders. A labelled native note selector and Open selected note link provide keyboard navigation; the Articles page remains available without JavaScript. The graph canvas requires browser graphics support.
+
+D3 7.9.0 and PixiJS 8.6.6 browser distributions and licenses are copied from locked npm dependencies to `static/graph/`, with hashes reviewed in `trusted-graph.json`. They load only after entering Graph view and require no CDN or graph backend. The small adapter replaces the plugin's default CDN URLs and rerenders after resizing; it fails for review if the pinned plugin's integration points change. Large collections can make the force graph expensive; search and the Articles list remain available to find a note.
+
+Landing notebook cards use neutral article-title colors and gray top borders, including readable dark-mode colors.

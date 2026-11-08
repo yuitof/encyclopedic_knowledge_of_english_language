@@ -43,7 +43,9 @@ export async function verifyStaticOutput(output, names) {
   );
   const approved = { ...inventory, ...generated };
   const siteAssets = await checkedSiteAssets();
+  const graphAssets = await checkedGraphAssets();
   const allowed = new Set([
+    ...Object.values(graphAssets).map((asset) => "static/graph/" + asset.name),
     ...Object.keys(approved).map((name) => "static/" + name),
     "static/contentIndex.json",
     ...Object.keys(siteAssets).map(
@@ -56,7 +58,11 @@ export async function verifyStaticOutput(output, names) {
     if (
       name !== "static/contentIndex.json" &&
       digest(await fs.readFile(path.join(output, name))) !==
-        (approved[name.slice(7)] ?? siteAssets["custom/" + name.slice(7)])
+        (approved[name.slice(7)] ??
+          siteAssets["custom/" + name.slice(7)] ??
+          Object.values(graphAssets).find(
+            (asset) => "static/graph/" + asset.name === name,
+          )?.sha256)
     )
       throw new Error("Trusted static output bytes changed");
   }
@@ -122,4 +128,27 @@ export async function copySiteAssets(output) {
       path.join(output, "static", path.basename(source)),
     );
   }
+}
+
+export async function checkedGraphAssets() {
+  const inventory = JSON.parse(
+    await fs.readFile(path.join(siteRoot, "trusted-graph.json"), "utf8"),
+  );
+  for (const [source, asset] of Object.entries(inventory)) {
+    const file = await regularFile(siteRoot, source);
+    if (
+      !/^[a-zA-Z0-9.-]+$/u.test(asset.name) ||
+      digest(await fs.readFile(file)) !== asset.sha256
+    )
+      throw new Error("Modified graph runtime resource");
+  }
+  return inventory;
+}
+export async function copyGraphAssets(output) {
+  await fs.mkdir(path.join(output, "static/graph"), { recursive: true });
+  for (const [source, asset] of Object.entries(await checkedGraphAssets()))
+    await fs.copyFile(
+      path.join(siteRoot, source),
+      path.join(output, "static/graph", asset.name),
+    );
 }

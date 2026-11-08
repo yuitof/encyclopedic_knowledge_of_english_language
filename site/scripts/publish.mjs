@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import YAML from "yaml";
+import { noteDates } from "./note-timestamps.mjs";
+import { missingNotes } from "./missing-notes.mjs";
 import { createSortRanks, createSortDetails } from "./sort-ranks.mjs";
 import {
   referenceLookup,
@@ -226,6 +228,11 @@ export async function preparePublication({
     ...manifest.notes.map((e) => ({ ...e, kind: "note" })),
     ...manifest.assets.map((e) => ({ ...e, kind: "asset" })),
   ];
+  const generated =
+    manifest.version === 2
+      ? await missingNotes(root, entries, regularFile)
+      : [];
+  entries.push(...generated);
   const lookup = manifest.version === 2 ? referenceLookup(entries) : null;
   let resolvedReferences = 0,
     unresolvedReferences = 0;
@@ -234,7 +241,7 @@ export async function preparePublication({
     staged = [];
   const sortRecords = [];
   for (const entry of entries) {
-    safeSource(entry.source);
+    if (!entry.generated) safeSource(entry.source);
     safeRelative(entry.target);
     const slug = slugifyFilePath(entry.target);
     if (
@@ -246,6 +253,10 @@ export async function preparePublication({
       throw new Error("Duplicate or reserved publication target");
     targets.add(entry.target);
     slugs.add(slug);
+    if (entry.generated) {
+      staged.push({ target: entry.target, bytes: entry.bytes });
+      continue;
+    }
     const source = await regularFile(root, entry.source);
     let bytes = await fs.readFile(source);
     if (entry.kind === "note") {
@@ -268,7 +279,9 @@ export async function preparePublication({
         throw new Error("unlisted must be a boolean");
       if (
         meta.unlisted === true &&
-        !["index.md", "privacy.md", "license.md"].includes(entry.target)
+        !["index.md", "privacy.md", "license.md", "graph.md"].includes(
+          entry.target,
+        )
       )
         throw new Error("Only approved project pages may be unlisted");
       if (Object.keys(meta).some((key) => !allowedMetadata.has(key)))
@@ -284,6 +297,7 @@ export async function preparePublication({
         throw new Error(
           "Frontmatter alias redirects are not enabled; wikilink aliases are supported",
         );
+      const dates = await noteDates(root, entry.source, meta);
       let body = front ? text.slice(front[0].length) : text;
       if (manifest.version === 2) {
         if (
@@ -305,13 +319,14 @@ export async function preparePublication({
           name: path.posix.basename(entry.source),
           mtimeMs: stat.mtimeMs,
           birthtimeMs: stat.birthtimeMs,
-          created: meta.created,
-          modified: meta.modified,
+          created: dates.created,
+          modified: dates.modified,
         });
       }
       // The manifest authorizes publication; transform only the temporary copy.
       const publicMeta = {
         ...meta,
+        ...dates,
         title:
           meta.title ?? entry.title ?? path.posix.basename(entry.source, ".md"),
         publish: true,
@@ -340,7 +355,8 @@ export async function preparePublication({
     }
   }
   return {
-    notes: manifest.notes.length,
+    notes: manifest.notes.length + generated.length,
+    generatedNotes: generated.map((entry) => entry.target),
     assets: manifest.assets.length,
     files: staged.map((item) => item.target),
     resolvedReferences,

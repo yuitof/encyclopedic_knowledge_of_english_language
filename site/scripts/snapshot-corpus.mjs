@@ -84,7 +84,7 @@ const manifest = {
   ],
   assets,
 };
-for (const name of ["privacy", "license"])
+for (const name of ["privacy", "license", "graph"])
   manifest.notes.push({
     source: `site/content/${name}.md`,
     target: `${name}.md`,

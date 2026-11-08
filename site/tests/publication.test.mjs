@@ -351,7 +351,7 @@ test("literal source punctuation is mapped safely and aliases survive only in st
       before,
     );
   }));
-test("only explicitly frozen unresolved targets become labels; future/unapproved references fail", () =>
+test("missing notes get staged placeholders; existing unapproved references still fail", () =>
   fixture(async ({ root, manifest, build, output }) => {
     manifest.version = 2;
     manifest.notes[0].approvedUnresolved = ["Missing"];
@@ -362,7 +362,8 @@ test("only explicitly frozen unresolved targets become labels; future/unapproved
     await build();
     const staged = await fs.readFile(path.join(output, "index.md"), "utf8");
     assert.match(staged, /Known label/u);
-    assert.doesNotMatch(staged, /\[\[|PRIVATE_NOTE_CANARY/u);
+    assert.match(staged, /\[\[missing\/note-[a-f0-9]+\|Known label\]\]/u);
+    assert.doesNotMatch(staged, /PRIVATE_NOTE_CANARY/u);
     await fs.writeFile(
       path.join(root, "vault/future.md"),
       "PRIVATE_FUTURE_CANARY",
@@ -384,4 +385,58 @@ test("v2 selection excludes future files and preserves literal code and footnote
     assert.ok(
       (await fs.readFile(path.join(output, "index.md"), "utf8")).endsWith(body),
     );
+  }));
+
+test("missing note aliases, Markdown links and embeds share timestamped blank pages without source writes", () =>
+  fixture(async ({ root, manifest, build, output }) => {
+    manifest.version = 2;
+    manifest.notes[0].approvedUnresolved = [];
+    const body =
+      "---\ncreated: 2001-02-03\nmodified: 2020-04-05\n---\n[[未作成|Japanese]] [[未作成.md]] ![[未作成]] [note](%E6%9C%AA%E4%BD%9C%E6%88%90.md) `[[ignore]]`";
+    await fs.writeFile(path.join(root, "vault/public.md"), body);
+    const result = await build();
+    assert.equal(result.generatedNotes.length, 1);
+    const generated = await fs.readFile(
+      path.join(output, result.generatedNotes[0]),
+      "utf8",
+    );
+    assert.match(generated, /created: 2001-02-03/u);
+    assert.match(generated, /modified: 2020-04-05/u);
+    assert.equal(generated.split("---\n").at(-1), "");
+    const page = await fs.readFile(path.join(output, "index.md"), "utf8");
+    assert.match(page, /missing\/note-/u);
+    assert.match(page, /`\[\[ignore\]\]`/u);
+    assert.equal(
+      await fs.readFile(path.join(root, "vault/public.md"), "utf8"),
+      body,
+    );
+    assert.deepEqual((await build()).generatedNotes, result.generatedNotes);
+  }));
+test("private files and attachments never become placeholder publications", () =>
+  fixture(async ({ root, manifest, build, output }) => {
+    manifest.version = 2;
+    manifest.notes[0].approvedUnresolved = [
+      "private",
+      "private.png",
+      "missing.png",
+    ];
+    await fs.writeFile(
+      path.join(root, "vault/public.md"),
+      "[[private]] ![[private.png]] ![[missing.png]]",
+    );
+    assert.deepEqual((await build()).generatedNotes, []);
+    const page = await fs.readFile(path.join(output, "index.md"), "utf8");
+    assert.doesNotMatch(
+      page,
+      /PRIVATE_NOTE_CANARY|PRIVATE_ATTACHMENT_CANARY|\[\[/u,
+    );
+    assert.match(page, /attachment unavailable/u);
+    await fs.writeFile(path.join(root, "vault/public.md"), "[[../escape]]");
+    await assert.rejects(build(), /Unsafe/u);
+    await fs.symlink(
+      path.join(root, "vault/private.md"),
+      path.join(root, "vault/linked.md"),
+    );
+    await fs.writeFile(path.join(root, "vault/public.md"), "[[linked]]");
+    await assert.rejects(build(), /not approved/u);
   }));

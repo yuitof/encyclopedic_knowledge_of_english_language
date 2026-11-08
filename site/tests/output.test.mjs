@@ -29,7 +29,10 @@ test("all approved existing notes including empty notes are indexed; samples are
       Object.hasOwn(index, slugifyFilePath(entry.target)),
       `Missing note ${entry.title}`,
     );
-  assert.equal(publication.notes, manifest.notes.length);
+  assert.equal(
+    publication.notes,
+    manifest.notes.length + publication.generatedNotes.length,
+  );
   assert.equal(publication.assets, manifest.assets.length);
   assert.ok(report.indexBytes > 0);
   assert.doesNotMatch(

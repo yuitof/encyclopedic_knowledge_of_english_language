@@ -11,6 +11,7 @@ export function referenceLookup(entries) {
   for (const entry of entries) {
     const basename = path.posix.basename(entry.source);
     for (const key of new Set([
+      ...(entry.referenceKeys ?? []),
       entry.source,
       basename,
       basename.replace(/\.md$/u, ""),
@@ -84,7 +85,7 @@ export function contentReferences(body) {
   }
   return { wiki, links };
 }
-function rejectUnsafeReference(raw) {
+export function rejectUnsafeReference(raw) {
   if (
     /[\\\x00-\x1f]/u.test(raw) ||
     raw.startsWith("/") ||

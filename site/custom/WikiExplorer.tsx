@@ -1,4 +1,5 @@
 import { cloneElement, type VNode } from "preact";
+import { pathToRoot } from "../quartz/util/path";
 import { Explorer } from "@quartz-community/explorer";
 import type { QuartzComponent } from "../quartz/components/types";
 // @ts-ignore: Quartz imports inline scripts as strings.
@@ -10,6 +11,16 @@ import behavior from "./wiki-explorer.inline";
 const stock = Explorer() as QuartzComponent;
 type TreeChild = VNode<{ class?: string; "aria-expanded"?: boolean | string }>;
 export const WikiExplorer: QuartzComponent = (props) => {
+  const graphLink = props.allFiles.some((file) => file.slug === "graph") ? (
+    <nav class="graph-navigation" aria-label="Graph navigation">
+      <a
+        class="graph-view-link"
+        href={`${pathToRoot(props.fileData.slug!)}/graph`}
+      >
+        Graph view
+      </a>
+    </nav>
+  ) : null;
   if (props.fileData.slug === "articles/index")
     return (
       <details class="navigation-panel explorer-panel">
@@ -39,6 +50,7 @@ export const WikiExplorer: QuartzComponent = (props) => {
           </p>
           <p class="date-filter-status" role="status" />
         </form>
+        {graphLink}
       </details>
     );
   const tree = stock(props) as VNode<{ children: TreeChild[] }>;
@@ -53,6 +65,7 @@ export const WikiExplorer: QuartzComponent = (props) => {
     <details class="navigation-panel explorer-panel" open>
       <summary>Explorer</summary>
       {cloneElement(tree, {}, ...children)}
+      {graphLink}
     </details>
   );
 };

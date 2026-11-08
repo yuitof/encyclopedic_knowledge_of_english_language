@@ -77,7 +77,7 @@
 }
 .highlight-cards > article {
   border: 1px solid var(--lightgray);
-  border-top: 3px solid var(--secondary);
+  border-top: 3px solid var(--gray);
   padding: 1rem;
   min-width: 0;
 }
@@ -211,4 +211,43 @@
   color: var(--darkgray);
   font-weight: 400;
   margin: 0.4rem 0;
+}
+
+.highlight-cards h2 a {
+  color: var(--dark);
+}
+.graph-navigation {
+  margin: 0.75rem 0 0;
+}
+.graph-page {
+  min-width: 0;
+}
+.graph-page .graph > h3,
+.graph-page .global-graph-icon {
+  display: none;
+}
+.graph-page .graph .graph-outer {
+  height: clamp(24rem, 65vh, 48rem);
+}
+.graph-page .graph .graph-container {
+  width: 100%;
+  height: 100%;
+}
+.graph-help {
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+.graph-note-browser {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+.graph-note-browser select {
+  max-width: 100%;
+  min-width: 0;
+  padding: 0.5rem;
+  background: var(--light);
+  color: var(--dark);
 }
