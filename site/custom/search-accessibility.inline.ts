@@ -5,8 +5,6 @@ function prepareVisibleSearch() {
   const skipToArticle = (event: MouseEvent) => { event.preventDefault(); event.stopImmediatePropagation(); main?.focus(); main?.scrollIntoView() }
   skip?.addEventListener("click", skipToArticle, true)
   window.addCleanup(() => skip?.removeEventListener("click", skipToArticle, true))
-  const navigation = document.querySelector<HTMLDetailsElement>(".navigation-panel")
-  if (navigation && window.matchMedia("(max-width: 800px)").matches) navigation.open = false
   const input = document.querySelector<HTMLInputElement>(".header-search .search-bar")
   const button = document.querySelector<HTMLButtonElement>(".header-search .search-button")
   const container = document.querySelector<HTMLElement>(".header-search .search-container")

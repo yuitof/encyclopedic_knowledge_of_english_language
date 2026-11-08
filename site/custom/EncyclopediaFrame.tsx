@@ -46,12 +46,9 @@ export const EncyclopediaFrame: PageFrame = {
         </header>
         <div class="reading-row">
           <aside class="left sidebar" aria-label="Article navigation">
-            <details class="navigation-panel" open>
-              <summary>Contents</summary>
-              {left.map((Component) => (
-                <Component {...data} />
-              ))}
-            </details>
+            {left.map((Component) => (
+              <Component {...data} />
+            ))}
           </aside>
           <main id="main-content" class="center" tabIndex={-1}>
             <div class="article-toolbar">

@@ -218,8 +218,11 @@ article img {
 .navigation-panel .toc {
   display: block !important;
 }
-.navigation-panel .explorer {
+.navigation-panel + .navigation-panel {
   margin-top: 1.5rem;
+}
+.navigation-panel .explorer {
+  margin-top: 0;
 }
 .sidebar h3,
 .sidebar button {
@@ -458,12 +461,6 @@ article img {
     transform: none;
     visibility: visible;
     z-index: auto;
-  }
-  .navigation-panel .explorer .mobile-explorer {
-    display: none;
-  }
-  .navigation-panel .explorer button.desktop-explorer {
-    display: flex;
   }
   html.mobile-no-scroll {
     overflow: auto;

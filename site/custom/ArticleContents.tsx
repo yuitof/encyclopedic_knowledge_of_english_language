@@ -19,30 +19,33 @@ export const ArticleContents: QuartzComponent = (data) => {
       isBacklinks: true,
     });
   return (
-    <nav class="article-contents" aria-label="Article contents">
-      <a class="contents-top" href="#quartz-root">
-        (Top)
-      </a>
-      {entries.length > 0 && (
-        <ul>
-          {entries.map((entry) => (
-            <li
-              style={{
-                paddingLeft: `${Math.max(0, entry.depth - entries[0].depth)}rem`,
-              }}
-            >
-              <a
-                href={`#${entry.slug}`}
-                data-section={entry.slug}
-                data-backlinks={entry.isBacklinks ? "true" : undefined}
+    <details class="navigation-panel contents-panel" open>
+      <summary>Contents</summary>
+      <nav class="article-contents" aria-label="Article contents">
+        <a class="contents-top" href="#quartz-root">
+          (Top)
+        </a>
+        {entries.length > 0 && (
+          <ul>
+            {entries.map((entry) => (
+              <li
+                style={{
+                  paddingLeft: `${Math.max(0, entry.depth - entries[0].depth)}rem`,
+                }}
               >
-                {entry.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </nav>
+                <a
+                  href={`#${entry.slug}`}
+                  data-section={entry.slug}
+                  data-backlinks={entry.isBacklinks ? "true" : undefined}
+                >
+                  {entry.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </nav>
+    </details>
   );
 };
 ArticleContents.afterDOMLoaded = state;

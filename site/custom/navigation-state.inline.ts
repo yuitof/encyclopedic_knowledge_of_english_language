@@ -1,32 +1,16 @@
-// Quartz owns toggle clicks. Mirror its state onto the visible native buttons.
-function synchronizeNavigationState() {
-  for (const explorer of document.querySelectorAll<HTMLElement>(
-    ".sidebar.left .explorer",
+// Native disclosures provide independent mouse/keyboard controls for both sections.
+function prepareNavigationPanels() {
+  const mobile = window.matchMedia("(max-width: 800px)").matches;
+  for (const panel of document.querySelectorAll<HTMLDetailsElement>(
+    ".sidebar.left > .navigation-panel",
   )) {
-    if (explorer.dataset.navigationState) continue;
-    explorer.dataset.navigationState = "true";
-    const content = explorer.querySelector<HTMLElement>(".explorer-content");
-    const update = () => {
-      const expanded = String(!explorer.classList.contains("collapsed"));
-      for (const button of explorer.querySelectorAll<HTMLButtonElement>(
-        ".explorer-toggle",
-      )) {
-        button.setAttribute("aria-expanded", expanded);
-        if (content?.id) button.setAttribute("aria-controls", content.id);
-      }
-      content?.setAttribute("aria-expanded", expanded);
-    };
-    update();
-    const observer = new MutationObserver(update);
-    observer.observe(explorer, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+    if (panel.dataset.navigationPanel) continue;
+    panel.dataset.navigationPanel = "ready";
+    if (mobile) panel.open = false;
     window.addCleanup(() => {
-      observer.disconnect();
-      delete explorer.dataset.navigationState;
+      delete panel.dataset.navigationPanel;
     });
   }
 }
-document.addEventListener("nav", synchronizeNavigationState);
-document.addEventListener("render", synchronizeNavigationState);
+document.addEventListener("nav", prepareNavigationPanels);
+document.addEventListener("render", prepareNavigationPanels);

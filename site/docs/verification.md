@@ -64,3 +64,11 @@ TypeScript passed. Root, repository-subpath and final default builds each passed
 Removed the nested On this page disclosure and its styling. Section links now render as a direct list below (Top), with Backlinks only when present. The outer Contents control and Explorer remain intact, including mobile behavior, the shared scrollbar, active-section highlighting and document-top navigation.
 
 TypeScript passed. Root, repository-subpath and final default builds each passed seven output checks. Twelve targeted browser cases passed across desktop/tablet/mobile: the disclosure and label are absent, the direct list is visible, section and backlinks jumps work, Explorer still collapses, and Top still reaches scroll position zero. No new client code or dependencies were added. Existing user AGENTS.md edits were left untouched.
+
+## Independent sidebar panels
+
+Contents and Explorer now render as sibling native disclosure panels in the left sidebar. Both use the same heading, separator, spacing and arrow styling. Each opens or closes independently using mouse, Enter or Space; both start collapsed on mobile. Quartz still owns the existing file tree and folder controls, with its redundant top-level toggle buttons removed by the custom wrapper. A single outer sidebar scrollbar remains in use.
+
+The complete Node 24.22.2 suite passed: 19 publication/privacy cases, 2 ranking cases, 4 backlink cases, TypeScript, the rich-content fixture, 7 output checks for each root/subpath build, and 56 browser cases across desktop, tablet and 320px/390px mobile screens. New coverage verifies sibling structure, matching computed heading styles, independent native controls and mobile defaults. Existing search, article links, folder navigation, recent articles, Show more, backlinks, Top, shared scrolling and footer checks passed. Desktop and mobile screenshots were inspected. The default local preview artifact was rebuilt and passed seven output checks. Reviewed client-script hashes were updated for the panel initializer and removal of the old single-panel mobile setup.
+
+Source vault files and publication approvals remain unchanged. The original main checkout is untouched; user edits to AGENTS.md were preserved. No subagents, pushes or deployments were used.

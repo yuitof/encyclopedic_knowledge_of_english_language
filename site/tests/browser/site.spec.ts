@@ -1,11 +1,14 @@
 import { test, expect } from "@playwright/test";
 const mobile = (page: any) => (page.viewportSize()?.width ?? 1440) <= 800;
 async function openContents(page: any) {
-  if (mobile(page)) {
-    const details = page.locator(".navigation-panel");
-    if (!(await details.getAttribute("open")))
-      await details.locator(":scope > summary").click();
-  }
+  const panel = page.locator(".contents-panel");
+  if (!(await panel.evaluate((element: HTMLDetailsElement) => element.open)))
+    await panel.locator(":scope > summary").click();
+}
+async function openExplorer(page: any) {
+  const panel = page.locator(".explorer-panel");
+  if (!(await panel.evaluate((element: HTMLDetailsElement) => element.open)))
+    await panel.locator(":scope > summary").click();
 }
 const expectedOrder = async (page: any, mode: string) =>
   page.evaluate(async (mode) => {
@@ -122,6 +125,7 @@ test("Show more follows the recent articles and opens the full list", async ({
 }) => {
   await page.goto("./articles/caimans");
   await openContents(page);
+  await openExplorer(page);
   const link = page.getByRole("link", { name: "Show more", exact: true });
   await expect(link).toHaveCount(1);
   await link.scrollIntoViewIfNeeded();
@@ -137,6 +141,7 @@ test("Show more follows the recent articles and opens the full list", async ({
     (await expectedOrder(page, "modified-desc")).length,
   );
   await openContents(page);
+  await openExplorer(page);
   await expect(
     page.getByRole("link", { name: "Show more", exact: true }),
   ).toHaveCount(1);
@@ -319,12 +324,14 @@ test("section contents, active heading and Explorer collapse share one sidebar s
       .locator(".active-section")
       .evaluate((e) => getComputedStyle(e).color),
   ).toBe("rgb(16, 20, 24)");
-  const button = page.locator(".desktop-explorer");
+  await openExplorer(page);
+  const explorer = page.locator(".explorer-panel");
+  const button = explorer.locator(":scope > summary");
   await button.click();
-  await expect(button).toHaveAttribute("aria-expanded", "false");
+  await expect(explorer).not.toHaveAttribute("open", "");
   await expect(page.locator(".explorer-content")).not.toBeVisible();
   await button.press("Space");
-  await expect(button).toHaveAttribute("aria-expanded", "true");
+  await expect(explorer).toHaveAttribute("open", "");
   for (const target of [
     page.locator(".article-contents a[data-section]").first(),
     page.locator(".explorer-content a.nav-file-title").first(),
@@ -454,10 +461,56 @@ test("Top reaches document zero including the masthead with mouse and keyboard",
     await expect(page.locator(".encyclopedia-header")).toBeInViewport();
     await expect(top).toHaveAttribute("aria-current", "location");
   }
+  await openExplorer(page);
   await page.locator(".nav-show-more").click();
   await expect(page).toHaveURL(/\/articles\/$/);
   await openContents(page);
   await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
   await top.click();
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+});
+
+test("Contents and Explorer are matching independent sibling panels", async ({
+  page,
+}) => {
+  await page.goto("./articles/culture");
+  const contents = page.locator(".contents-panel");
+  const explorer = page.locator(".explorer-panel");
+  await expect(page.locator(".sidebar.left > .navigation-panel")).toHaveCount(
+    2,
+  );
+  await expect(contents.locator(".explorer")).toHaveCount(0);
+  await expect(page.locator(".explorer-toggle")).toHaveCount(0);
+  for (const panel of [contents, explorer]) {
+    if (mobile(page)) await expect(panel).not.toHaveAttribute("open", "");
+    else await expect(panel).toHaveAttribute("open", "");
+  }
+  const style = (panel: any) =>
+    panel.locator(":scope > summary").evaluate((element: Element) => {
+      const computed = getComputedStyle(element);
+      return [
+        computed.fontFamily,
+        computed.fontSize,
+        computed.fontWeight,
+        computed.color,
+        computed.padding,
+        computed.borderBottom,
+        computed.listStyleType,
+      ];
+    });
+  expect(await style(contents)).toEqual(await style(explorer));
+  await openContents(page);
+  await openExplorer(page);
+  await contents.locator(":scope > summary").click();
+  await expect(contents).not.toHaveAttribute("open", "");
+  await expect(explorer).toHaveAttribute("open", "");
+  await expect(page.locator(".explorer-content")).toBeVisible();
+  await contents.locator(":scope > summary").press("Enter");
+  await expect(page.locator(".contents-top")).toBeVisible();
+  await explorer.locator(":scope > summary").click();
+  await expect(explorer).not.toHaveAttribute("open", "");
+  await expect(contents).toHaveAttribute("open", "");
+  await expect(page.locator(".contents-top")).toBeVisible();
+  await explorer.locator(":scope > summary").press("Space");
+  await expect(page.locator(".explorer-content")).toBeVisible();
 });
