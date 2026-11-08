@@ -1,6 +1,7 @@
 // Vector-inspired reading interface, with original identity and system fonts.
 :root {
   color-scheme: light;
+  --sidebar-top: 1.5rem;
 }
 :root[saved-theme="dark"] {
   color-scheme: dark;
@@ -49,9 +50,9 @@ a.internal {
   .sidebar {
     padding: 0;
     position: sticky;
-    top: 0;
+    top: var(--sidebar-top);
     height: auto;
-    max-height: calc(100dvh - 1rem);
+    max-height: calc(100dvh - var(--sidebar-top) - 1rem);
     overflow-y: auto;
     gap: 1rem;
     align-self: start;
@@ -373,7 +374,9 @@ article img {
 }
 @media (max-width: 800px) {
   html {
-    scroll-padding-top: calc(var(--navigation-height, 0px) + 1rem);
+    scroll-padding-top: calc(
+      var(--navigation-height, 0px) + var(--sidebar-top) + 1rem
+    );
   }
   .page {
     padding: 0 1rem;

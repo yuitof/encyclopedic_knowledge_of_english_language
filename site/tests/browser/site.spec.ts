@@ -575,6 +575,10 @@ test("sidebar pins to the window edge until the article ends", async ({
 }) => {
   await page.goto("./articles/culture");
   const sidebar = page.locator(".sidebar.left");
+  const offset = await sidebar.evaluate((element) =>
+    parseFloat(getComputedStyle(element).top),
+  );
+  expect(offset).toBeGreaterThanOrEqual(16);
   await expect(page.locator(".nav-show-more")).toHaveCount(1);
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".header-search .search-bar")).toHaveAttribute(
@@ -594,7 +598,8 @@ test("sidebar pins to the window edge until the article ends", async ({
         sidebar.evaluate((element) => {
           const rowTop = element.parentElement!.getBoundingClientRect().top;
           return Math.abs(
-            element.getBoundingClientRect().top - Math.max(0, rowTop),
+            element.getBoundingClientRect().top -
+              Math.max(parseFloat(getComputedStyle(element).top), rowTop),
           );
         }),
       )
@@ -610,7 +615,7 @@ test("sidebar pins to the window edge until the article ends", async ({
         .poll(() =>
           sidebar.evaluate((element) => element.getBoundingClientRect().top),
         )
-        .toBeCloseTo(0, 0);
+        .toBeCloseTo(offset, 0);
     }
   }
   await openContents(page);
@@ -619,7 +624,7 @@ test("sidebar pins to the window edge until the article ends", async ({
     .poll(() =>
       sidebar.evaluate((element) => element.getBoundingClientRect().top),
     )
-    .toBeCloseTo(0, 0);
+    .toBeCloseTo(offset, 0);
   await expect(
     sidebar.locator(":scope > .contents-panel > summary"),
   ).toBeInViewport();
@@ -708,11 +713,15 @@ test("sidebars pin on shorter articles without reserving empty viewport space", 
   await page.mouse.wheel(0, 300);
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(100);
   for (const panel of await floating.all()) {
+    const offset = await panel.evaluate((element) =>
+      parseFloat(getComputedStyle(element).top),
+    );
+    expect(offset).toBeGreaterThanOrEqual(16);
     await expect
       .poll(() =>
         panel.evaluate((element) => element.getBoundingClientRect().top),
       )
-      .toBeCloseTo(0, 0);
+      .toBeCloseTo(offset, 0);
   }
   await expect(
     page.getByText("Around this article", { exact: true }),
