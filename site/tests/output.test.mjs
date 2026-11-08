@@ -7,8 +7,10 @@ import { slugifyFilePath } from "@quartz-community/utils";
 import { siteRoot, preparePublication } from "../scripts/publish.mjs";
 import { auditOutput } from "../scripts/verify-output.mjs";
 const output = path.join(siteRoot, process.env.SITE_OUTPUT ?? "public");
-const manifest = JSON.parse(
-  await fs.readFile(path.join(siteRoot, "publish-manifest.json"), "utf8"),
+const { discoverVault } = await import("../scripts/discover-vault.mjs");
+const manifest = await discoverVault(
+  path.dirname(siteRoot),
+  process.env.VAULT_ROOT ?? path.join(siteRoot, "../.vault-data"),
 );
 const note = (title) => manifest.notes.find((entry) => entry.title === title);
 const html = async (title) =>

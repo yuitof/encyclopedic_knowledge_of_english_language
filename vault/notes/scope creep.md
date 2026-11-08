@@ -1,8 +1,0 @@
----
-created: "2026-10-06T07:48:23.661216Z"
-modified: "2026-10-06T08:09:20.815747Z"
----
-scope creep
-: サグラダファミリア化
-
-- IF A CODER WRITES 'HELLO UNIVERSE' ARE THEY [[ambitious|AMBITIOUS]] OR JUST HAVE SCOPE CREEP?

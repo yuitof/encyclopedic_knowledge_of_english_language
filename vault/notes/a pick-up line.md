@@ -1,9 +1,0 @@
----
-created: "2026-09-14T05:05:35.007937Z"
-modified: "2026-09-28T13:54:37.236494Z"
----
-a pick-up line / a pickup line
-: 会話を始めるのに使う事前に用意しておく一文みたいな感じ
-
-- I'm 19 and my pickup line is that you better be sharp on your feet cuz I'm here for your heart.
-- Um, I would tell you another pickup line that I have. Okay. I know you're ranked 127, but you're number one in my heart always.

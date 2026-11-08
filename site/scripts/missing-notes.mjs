@@ -47,7 +47,7 @@ export async function missingNotes(root, entries, regularFile) {
     existing = await existingNames(root, entries),
     generated = new Map();
   for (const entry of entries.filter((item) => item.kind === "note")) {
-    const source = await regularFile(root, entry.source);
+    const source = await regularFile(entry.sourceRoot ?? root, entry.source);
     const { body, meta } = splitNote(await fs.readFile(source, "utf8"));
     const { wiki, links } = contentReferences(body);
     for (const ref of [
@@ -96,7 +96,11 @@ export async function missingNotes(root, entries, regularFile) {
       )
         continue;
       const canonical = key(name.replace(/\.md$/iu, ""));
-      const dates = await noteDates(root, entry.source, meta);
+      const dates = await noteDates(
+        entry.sourceRoot ?? root,
+        entry.source,
+        meta,
+      );
       if (!generated.has(canonical)) {
         const hash = createHash("sha256")
           .update(canonical)

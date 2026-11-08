@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import YAML from "yaml";
+import { discoverVault } from "./discover-vault.mjs";
 import { noteDates } from "./note-timestamps.mjs";
 import { missingNotes } from "./missing-notes.mjs";
 import { createSortRanks, createSortDetails } from "./sort-ranks.mjs";
@@ -213,12 +214,17 @@ function validRaster(bytes, extension) {
 /** Fully validate in memory before writing a single staged file. */
 export async function preparePublication({
   root = repositoryRoot,
-  manifestFile = path.join(siteRoot, "publish-manifest.json"),
+  manifestFile,
+  vaultRoot = root === repositoryRoot
+    ? (process.env.VAULT_ROOT ?? path.join(root, ".vault-data"))
+    : root,
   output,
 } = {}) {
-  const manifest = JSON.parse(await fs.readFile(manifestFile, "utf8"));
+  const manifest = manifestFile
+    ? JSON.parse(await fs.readFile(manifestFile, "utf8"))
+    : await discoverVault(root, path.resolve(vaultRoot));
   if (
-    ![1, 2].includes(manifest.version) ||
+    ![1, 2, 3].includes(manifest.version) ||
     !Array.isArray(manifest.notes) ||
     !Array.isArray(manifest.assets) ||
     manifest.notes.length === 0
@@ -229,11 +235,9 @@ export async function preparePublication({
     ...manifest.assets.map((e) => ({ ...e, kind: "asset" })),
   ];
   const generated =
-    manifest.version === 2
-      ? await missingNotes(root, entries, regularFile)
-      : [];
+    manifest.version >= 2 ? await missingNotes(root, entries, regularFile) : [];
   entries.push(...generated);
-  const lookup = manifest.version === 2 ? referenceLookup(entries) : null;
+  const lookup = manifest.version >= 2 ? referenceLookup(entries) : null;
   let resolvedReferences = 0,
     unresolvedReferences = 0;
   const targets = new Set(),
@@ -257,7 +261,8 @@ export async function preparePublication({
       staged.push({ target: entry.target, bytes: entry.bytes });
       continue;
     }
-    const source = await regularFile(root, entry.source);
+    const sourceRoot = entry.sourceRoot ?? root;
+    const source = await regularFile(sourceRoot, entry.source);
     let bytes = await fs.readFile(source);
     if (entry.kind === "note") {
       if (!entry.source.endsWith(".md") || !entry.target.endsWith(".md"))
@@ -297,17 +302,20 @@ export async function preparePublication({
         throw new Error(
           "Frontmatter alias redirects are not enabled; wikilink aliases are supported",
         );
-      const dates = await noteDates(root, entry.source, meta);
+      const dates = await noteDates(sourceRoot, entry.source, meta);
       let body = front ? text.slice(front[0].length) : text;
-      if (manifest.version === 2) {
+      if (manifest.version >= 2) {
         if (
-          !Array.isArray(entry.approvedUnresolved) ||
-          entry.approvedUnresolved.some((ref) => typeof ref !== "string")
+          manifest.version === 2 &&
+          (!Array.isArray(entry.approvedUnresolved) ||
+            entry.approvedUnresolved.some((ref) => typeof ref !== "string"))
         )
           throw new Error(
             "Version 2 notes require an explicit unresolved-reference approval list",
           );
-        const transformed = rewriteCorpusReferences(body, entry, lookup);
+        const transformed = rewriteCorpusReferences(body, entry, lookup, {
+          automatic: manifest.version === 3,
+        });
         body = transformed.body;
         resolvedReferences += transformed.resolved;
         unresolvedReferences += transformed.unresolved;

@@ -1,6 +1,4 @@
 #!/bin/sh
-set -eu
-# The archived original worktree has no site/ and remains unaffected.
-if [ -f site/scripts/lint-timestamps.mjs ]; then
-  node site/scripts/lint-timestamps.mjs --fix --pre-commit
-fi
+# Local timestamp enforcement is deferred while GitHub repair is evaluated.
+# The CI workflow repairs missing fields using full Git history.
+exit 0

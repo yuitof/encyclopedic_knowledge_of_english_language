@@ -93,7 +93,12 @@ export function rejectUnsafeReference(raw) {
   )
     throw new Error("Unsafe local content reference");
 }
-export function rewriteCorpusReferences(body, note, lookup) {
+export function rewriteCorpusReferences(
+  body,
+  note,
+  lookup,
+  { automatic = false } = {},
+) {
   const { wiki, links } = contentReferences(body),
     changes = [];
   let resolved = 0,
@@ -114,6 +119,13 @@ export function rewriteCorpusReferences(body, note, lookup) {
       });
       resolved++;
     } else {
+      if (
+        automatic &&
+        /\.(?:png|jpe?g|gif|webp|avif|svg)$/iu.test(ref.raw.split("#")[0])
+      ) {
+        unresolved++;
+        continue;
+      }
       if (!approved.has(ref.raw))
         throw new Error(
           "Reference is not approved: select its target or explicitly review this unresolved reference",
@@ -134,6 +146,15 @@ export function rewriteCorpusReferences(body, note, lookup) {
     if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/iu.test(raw))
       throw new Error("Unsupported link protocol");
     const match = lookup(raw, true);
+    if (
+      !match &&
+      automatic &&
+      /\.(?:png|jpe?g|gif|webp|avif|svg)$/iu.test(raw.split("#")[0])
+    ) {
+      rejectUnsafeReference(decodeURIComponent(raw));
+      unresolved++;
+      continue;
+    }
     if (!match) throw new Error(`Unapproved local Markdown reference: ${raw}`);
     rejectUnsafeReference(raw);
     const start = node.position.start.offset,

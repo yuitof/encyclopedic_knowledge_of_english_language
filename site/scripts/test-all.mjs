@@ -1,11 +1,11 @@
 import { spawnSync } from "node:child_process";
 for (const args of [
-  ["scripts/lint-timestamps.mjs"],
   [
     "--test",
     "tests/publication.test.mjs",
     "tests/sort-ranks.test.mjs",
     "tests/timestamps.test.mjs",
+    "tests/vault-workflow.test.mjs",
   ],
   ["node_modules/tsx/dist/cli.mjs", "--test", "tests/backlinks.test.ts"],
   ["node_modules/typescript/bin/tsc", "--noEmit"],

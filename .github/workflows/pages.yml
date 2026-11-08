@@ -1,48 +1,62 @@
 name: Build and deploy English Encyclopedia
 
-# Build and deploy pushes to main; retain the manual deployment option.
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
 
+# Serialize both code and data builds through the same shared workflow.
 concurrency:
   group: github-pages
   cancel-in-progress: false
 
 jobs:
   build:
-    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && github.ref != 'refs/heads/feature/quartz-wiki'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/vault'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pages: read
+    env:
+      VAULT_ROOT: ${{ github.workspace }}/data
     defaults:
       run:
-        working-directory: site
+        working-directory: website/site
     steps:
-      - uses: actions/checkout@v6
+      - name: Check out website code
+        uses: actions/checkout@v6
         with:
+          ref: main
+          path: website
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check out vault data and full history
+        uses: actions/checkout@v6
+        with:
+          ref: vault
+          path: data
           fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
           cache: npm
-          cache-dependency-path: site/package-lock.json
+          cache-dependency-path: website/site/package-lock.json
+      - run: npm ci
+      - name: Validate vault, repair missing timestamps and commit to vault
+        run: node scripts/repair-vault-timestamps.mjs --push
+      - name: Prepare Quartz plugins
+        run: npx quartz plugin install --from-config
+      - run: npx playwright install --with-deps chromium
+      - name: Validate publication, types, rendering, search and URL layouts
+        run: npm test
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v6
-      - run: npm ci
-      - name: Prepare Quartz 5 plugins
-        run: npx quartz plugin install --from-config
-      - run: npx playwright install --with-deps chromium
-      - name: Validate publication, types, rendering, search and both URL layouts
-        run: npm test
-      - name: Set production base URL from GitHub Pages
+      - name: Set production base URL
         env:
           PAGES_URL: ${{ steps.pages.outputs.base_url }}
         run: |
@@ -51,16 +65,15 @@ jobs:
           const url = new URL(process.env.PAGES_URL)
           fs.appendFileSync(process.env.GITHUB_ENV, `SITE_BASE_URL=${url.host}${url.pathname.replace(/\/$/, '')}\n`)
           JS
-      - name: Build selected public content
+      - name: Build public content
         run: npm run build
       - name: Verify production artifact
         run: npm run test:output
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: site/public
+          path: website/site/public
   deploy:
     needs: build
-    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && github.ref != 'refs/heads/feature/quartz-wiki'
     runs-on: ubuntu-latest
     permissions:
       pages: write

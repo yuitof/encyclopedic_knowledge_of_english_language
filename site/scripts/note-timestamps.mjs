@@ -38,12 +38,17 @@ export function addMissingTimestamps(text, dates) {
 export function commitDates(root, source) {
   const result = spawnSync(
     "git",
-    ["-C", root, "log", "--follow", "--format=%cI", "--", source],
+    ["-C", root, "log", "--follow", "--format=%cI%x09%s", "--", source],
     { encoding: "utf8" },
   );
   const dates =
     result.status === 0
-      ? result.stdout.trim().split(/\r?\n/u).filter(validTimestamp)
+      ? result.stdout
+          .trim()
+          .split(/\r?\n/u)
+          .filter((line) => !line.endsWith("\tRepair missing note timestamps"))
+          .map((line) => line.split("\t")[0])
+          .filter(validTimestamp)
       : [];
   return dates.length ? { created: dates.at(-1), modified: dates[0] } : null;
 }
@@ -51,7 +56,7 @@ export async function noteDates(
   root,
   source,
   meta,
-  { filesystemOnly = false } = {},
+  { filesystemOnly = false, requireHistory = false } = {},
 ) {
   for (const field of ["created", "modified"])
     if (meta[field] !== undefined && !validTimestamp(meta[field]))
@@ -60,6 +65,10 @@ export async function noteDates(
     return { created: meta.created, modified: meta.modified };
   const stat = await fs.stat(path.join(root, source));
   const history = filesystemOnly ? null : commitDates(root, source);
+  if (requireHistory && !history)
+    throw new Error(
+      `No commit history for ${source}; full history is required`,
+    );
   const fallback = {
     created:
       history?.created ??
