@@ -1,2 +1,13 @@
-# Ignore files and directories whose names start with "Untitle"
+# Original vault convention
 Untitle*
+# Website dependencies and generated output
+site/node_modules/
+site/.quartz/
+site/.publish/
+site/public/
+site/public-*/
+site/test-results/
+site/playwright-report/
+site/*.tsbuildinfo
+.DS_Store
+site/quartz/.quartz-cache/
