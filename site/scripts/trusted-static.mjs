@@ -54,7 +54,7 @@ export async function verifyStaticOutput(output, names) {
   ]);
   for (const name of names.filter((name) => name.startsWith("static/"))) {
     if (!allowed.has(name))
-      throw new Error("Unexpected static output; refusing publication");
+      throw new Error(`Unexpected static output: ${name}; refusing publication`);
     if (
       name !== "static/contentIndex.json" &&
       digest(await fs.readFile(path.join(output, name))) !==

@@ -44,6 +44,9 @@ function prepareGraphWindow() {
   };
   const toggle = () => {
     if (dialog.open) {
+      // Restore synchronously: close events are queued, so a rapid reopen must
+      // not leave the frame in the dialog or resize it against stale geometry.
+      restore();
       dialog.close();
       return;
     }
@@ -57,13 +60,16 @@ function prepareGraphWindow() {
     redraw();
   };
   button.addEventListener("click", toggle);
-  dialog.addEventListener("close", restore);
+  const closed = () => {
+    if (!dialog.open) restore();
+  };
+  dialog.addEventListener("close", closed);
   window.addCleanup(() => {
     disposed = true;
     if (dialog.open) dialog.close();
     restore();
     button.removeEventListener("click", toggle);
-    dialog.removeEventListener("close", restore);
+    dialog.removeEventListener("close", closed);
     origin.remove();
     delete frame.dataset.windowReady;
   });
