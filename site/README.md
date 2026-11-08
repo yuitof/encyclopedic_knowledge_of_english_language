@@ -112,6 +112,8 @@ After reviewing the feature branch, explicitly authorize and perform your chosen
 
 The workflow uses Node 24, `npm ci`, Quartz plugin preparation, tests, both path variants, a fresh production build, official Pages configuration/artifact/deploy Actions, and the Pages-provided URL. The build job has `contents: read` and `pages: read`; only deployment receives `pages: write` and `id-token: write`. The uploaded directory is exactly `site/public`, with `.nojekyll`. GitHub environment protection may require an approval before the deploy job. Follow your repository's existing protections.
 
+See [the executed verification record](docs/verification.md) for independent review findings and test evidence.
+
 ## Maintenance and limitations
 
 The feature worktree organizes the original collection into `vault/notes/` (2,584 notes), `vault/assets/` (89 images), and `vault/.obsidian/` (6 configuration files). All note/image bytes are preserved. Obsidian app settings and tracked workspace paths are updated for the move. Open `vault/` as the Obsidian vault, rather than the Git repository root. The original checkout and its 48 ignored local notes remain untouched. No file was deleted merely because it appeared obsolete. See [the audit](docs/project-audit.md) for classification and [upstream provenance](UPSTREAM.md) before upgrading Quartz.
