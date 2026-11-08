@@ -4,7 +4,7 @@ The original collection lives in `vault/notes/`, `vault/assets/` and `vault/.obs
 
 ## Approval and source files
 
-The snapshot lists 2,584 existing notes, 85 referenced raster assets and the generated alphabetical homepage. Normal builds do not scan directories, follow reference graphs into new files, or import future notes. `npm run snapshot:corpus` is a separate deliberate operation that enumerates currently tracked notes/assets and replaces the approval manifest/homepage; review its diff before accepting a changed selection. The four unreferenced images and original checkout's 48 ignored notes are not selected.
+The snapshot lists 2,584 existing notes, 85 referenced raster assets and the explicitly selected homepage, dedicated catalogue, Privacy and License pages. Normal builds do not scan directories, follow reference graphs into new files, or import future notes. `npm run snapshot:corpus` is a separate deliberate operation that enumerates currently tracked notes/assets and replaces the approval manifest/homepage; review its diff before accepting a changed selection. The four unreferenced images and original checkout's 48 ignored notes are not selected.
 
 Filesystem names are literal and never URL-decoded. Question marks and percent signs are valid source filename characters. Hidden path segments, absolute paths, traversal, empty segments, backslashes, control characters, symlink files and symlink ancestors remain forbidden. Only individual regular files can be approved. Targets have stricter normalized Unicode/URL path checks; Quartz's canonical slug function detects collisions. Readable `articles/` routes preserve Unicode and use a stable source hash for every member of a collision group, such as `head on` / `head-on`.
 
@@ -12,7 +12,7 @@ Only matching-signature PNG/JPEG/GIF/WebP/AVIF attachments are accepted, each se
 
 ## Metadata and references
 
-Allowed metadata: `title`, `description`, `publish`, `draft`, `tags`, `created`, `modified`, `lang` and the boolean `unlisted`. Explicit `publish: false` / `draft: true` is rejected; non-boolean flags are rejected. Only the catalogue homepage may be unlisted, to remove its duplicate title list from search. Unlisted HTML remains accessible and is not a privacy mechanism. Unsupported metadata and alias-redirect fields stop the build; displayed wikilink aliases remain supported.
+Allowed metadata: `title`, `description`, `publish`, `draft`, `tags`, `created`, `modified`, `lang` and the boolean `unlisted`. Explicit `publish: false` / `draft: true` is rejected; non-boolean flags are rejected. Only explicitly approved project pages may be unlisted, to remove its duplicate title list from search. Unlisted HTML remains accessible and is not a privacy mechanism. Unsupported metadata and alias-redirect fields stop the build; displayed wikilink aliases remain supported.
 
 The version 2 resolver uses only manifest entries, trying exact original names first and unique case-insensitive names second. It rewrites existing notes/assets to approved targets in staging and preserves original labels/aliases. Literal `100%` and question marks are interpreted as filenames in wikilinks, while ordinary Markdown URL links can be decoded for lookup. Internal heading/block references remain supported. Raw HTML and unsafe protocols/paths are rejected.
 
@@ -31,3 +31,9 @@ The builder clears its owned generated output before validation, copies only sel
 Rich-format tests create a separate temporary corpus and remove it after the test. Its math/code/image/embedding fixture is absent from the production manifest and output. Never upload test/debug artifacts or use raw `quartz build -d ..` against the vault.
 
 Pages selection does not change source-repository visibility or history. All vault data remains in Git and is readable to anyone with source access. No publication/deployment has been performed by this local change.
+
+## Ordinal ordering and browser preferences
+
+The build privately compares original approved basenames and source filesystem times (or explicit valid frontmatter dates), then adds only ordinal sort ranks to existing approved index records. No exact filesystem timestamps, absolute paths or added basename field is emitted. Unknown dates remain `null` and sort last. Source timestamps can reflect checkout/copy operations and are not asserted to be historical authorship dates. Temporary staging times do not determine order.
+
+Appearance and article-order preferences stay in browser local storage. The homepage selects only existing nonempty public index entries; it does not discover additional vault content. The SVG favicon is byte-pinned separately in `trusted-site-assets.json`. The original vault-note/image approval entries and known-unresolved whitelists are unchanged; only three explicitly selected project-page mappings were added.
