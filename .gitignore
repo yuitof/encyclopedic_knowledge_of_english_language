@@ -1,13 +1,23 @@
-# Original vault convention
+# Existing vault convention
 Untitle*
-# Website dependencies and generated output
-site/node_modules/
-site/.quartz/
-site/.publish/
-site/public/
-site/public-*/
-site/test-results/
-site/playwright-report/
-site/*.tsbuildinfo
+
+# Installed website dependencies and plugins
+/site/node_modules/
+/site/.quartz/
+
+# Generated website: HTML, CSS, JavaScript, images and search indexes
+/site/public/
+/site/public-*/
+
+# Quartz build/content caches and temporary publishing input
+/site/.quartz-cache/
+/site/quartz/.quartz-cache/
+/site/.publish/
+
+# TypeScript and browser-test output
+/site/*.tsbuildinfo
+/site/test-results/
+/site/playwright-report/
+
+# macOS metadata
 .DS_Store
-site/quartz/.quartz-cache/
