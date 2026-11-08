@@ -242,3 +242,81 @@ test("requires boolean privacy flags so Quartz cannot silently filter approved n
       await assert.rejects(build(), /boolean/);
     }
   }));
+
+test("failed builds remove stale artifacts before publication", async () => {
+  const { spawnSync } = await import("node:child_process");
+  const { randomUUID } = await import("node:crypto");
+  const { siteRoot } = await import("../scripts/publish.mjs");
+  const outputName = `public-policy-${randomUUID()}`;
+  const output = path.join(siteRoot, outputName);
+  await fs.mkdir(output);
+  await fs.writeFile(
+    path.join(output, "stale-private.html"),
+    "STALE_PRIVATE_CANARY",
+  );
+  try {
+    const result = spawnSync(process.execPath, ["scripts/build.mjs"], {
+      cwd: siteRoot,
+      env: {
+        ...process.env,
+        SITE_OUTPUT: outputName,
+        SITE_BASE_URL: "https://invalid.example/",
+      },
+      encoding: "utf8",
+    });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /SITE_BASE_URL/);
+    await assert.rejects(fs.stat(output), { code: "ENOENT" });
+  } finally {
+    await fs.rm(output, { recursive: true, force: true });
+  }
+});
+
+test("output symlinks are rejected without altering their private target", async () => {
+  const { spawnSync } = await import("node:child_process");
+  const { randomUUID } = await import("node:crypto");
+  const { siteRoot } = await import("../scripts/publish.mjs");
+  const secret = await fs.mkdtemp(
+    path.join(await fs.realpath(os.tmpdir()), "quartz-output-secret-"),
+  );
+  const outputName = `public-policy-${randomUUID()}`;
+  const output = path.join(siteRoot, outputName);
+  await fs.writeFile(path.join(secret, "private.txt"), "PRIVATE_OUTPUT_CANARY");
+  await fs.symlink(secret, output);
+  try {
+    const result = spawnSync(process.execPath, ["scripts/build.mjs"], {
+      cwd: siteRoot,
+      env: { ...process.env, SITE_OUTPUT: outputName },
+      encoding: "utf8",
+    });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /Output cannot be a symlink/);
+    assert.equal(
+      await fs.readFile(path.join(secret, "private.txt"), "utf8"),
+      "PRIVATE_OUTPUT_CANARY",
+    );
+  } finally {
+    await fs.unlink(output);
+    await fs.rm(secret, { recursive: true, force: true });
+  }
+});
+
+test("output audit rejects unexpected vendor-static files", async () => {
+  const { auditOutput } = await import("../scripts/verify-output.mjs");
+  const output = await fs.mkdtemp(
+    path.join(await fs.realpath(os.tmpdir()), "quartz-audit-output-"),
+  );
+  try {
+    await fs.mkdir(path.join(output, "static"));
+    await fs.writeFile(
+      path.join(output, "static", "leaked.txt"),
+      "PRIVATE_STATIC_OUTPUT_CANARY",
+    );
+    await assert.rejects(
+      auditOutput(output, { files: ["index.md"] }),
+      /Unexpected static output/,
+    );
+  } finally {
+    await fs.rm(output, { recursive: true, force: true });
+  }
+});

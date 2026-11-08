@@ -456,3 +456,15 @@ article img {
     overflow: auto;
   }
 }
+// Keep navigation and callout labels readable in both color schemes.
+.navigation-panel .toc-content > li > a {
+  color: var(--secondary);
+  opacity: 1;
+}
+.navigation-panel .toc-content > li > a.in-view {
+  opacity: 1;
+  font-weight: 600;
+}
+.callout-title > .callout-title-inner > p {
+  color: var(--darkgray);
+}
