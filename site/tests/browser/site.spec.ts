@@ -407,11 +407,11 @@ test("home shows compact randomized real snippets and footer policies and E icon
   page,
 }) => {
   await page.goto("./");
-  await expect(page.locator(".highlight-cards > article")).toHaveCount(6);
+  await expect(page.locator(".highlight-cards > article")).toHaveCount(9);
   const first = await page.locator(".highlight-cards a").allTextContents();
-  expect(new Set(first).size).toBe(6);
+  expect(new Set(first).size).toBe(9);
   await page.reload();
-  await expect(page.locator(".highlight-cards > article")).toHaveCount(6);
+  await expect(page.locator(".highlight-cards > article")).toHaveCount(9);
   expect(
     await page.locator(".highlight-cards a").allTextContents(),
   ).not.toEqual(first);
