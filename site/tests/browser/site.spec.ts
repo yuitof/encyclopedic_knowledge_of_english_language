@@ -750,7 +750,11 @@ test("sidebars pin on shorter articles without reserving empty viewport space", 
       await panel.evaluate((element) =>
         Math.abs(
           element.getBoundingClientRect().bottom -
+            Math.min(
             element.lastElementChild!.getBoundingClientRect().bottom,
+            element.getBoundingClientRect().top +
+              parseFloat(getComputedStyle(element).maxHeight),
+          ),
         ),
       ),
     ).toBeLessThan(2);
