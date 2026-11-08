@@ -30,7 +30,7 @@ jobs:
           cache-dependency-path: site/package-lock.json
       - name: Configure Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - run: npm ci
       - name: Prepare Quartz 5 plugins
         run: npx quartz plugin install --from-config
