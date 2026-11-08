@@ -436,3 +436,29 @@ test("build-time backlinks match article styling and contents, with no empty sec
     page.locator('.article-contents a[data-backlinks="true"]'),
   ).toHaveCount(0);
 });
+
+test("Top reaches document zero including the masthead with mouse and keyboard", async ({
+  page,
+}) => {
+  await page.goto("./articles/culture");
+  await openContents(page);
+  const top = page.locator(".contents-top");
+  await expect(top).toHaveAttribute("href", "#quartz-root");
+  for (const activation of ["click", "Enter"]) {
+    await page.evaluate(() =>
+      scrollTo(0, document.documentElement.scrollHeight),
+    );
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
+    if (activation === "click") await top.click();
+    else await top.press("Enter");
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+    await expect(page.locator(".encyclopedia-header")).toBeInViewport();
+    await expect(top).toHaveAttribute("aria-current", "location");
+  }
+  await page.locator(".nav-show-more").click();
+  await expect(page).toHaveURL(/\/articles\/$/);
+  await openContents(page);
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await top.click();
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+});

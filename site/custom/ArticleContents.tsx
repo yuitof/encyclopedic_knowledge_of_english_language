@@ -20,7 +20,7 @@ export const ArticleContents: QuartzComponent = (data) => {
     });
   return (
     <nav class="article-contents" aria-label="Article contents">
-      <a class="contents-top" href="#main-content">
+      <a class="contents-top" href="#quartz-root">
         (Top)
       </a>
       {entries.length > 0 && (

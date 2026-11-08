@@ -52,3 +52,9 @@ Rendering uses a new HAST root with the original body followed by the section. O
 The complete Node 24.22.2 checks passed: 19 publication/privacy cases, 2 ranking cases, 4 backlink cases, TypeScript, the temporary rich-content fixture, 7 generated-output checks for each URL layout, and 48 browser cases across desktop/tablet/mobile root and repository URLs. Backlinks-specific output checks inspect compiled HTML directly, including empty cases. Browser checks verify article placement, inherited font/list styling, the sidebar jump and active state, absence from the right sidebar, and omission of both section and shortcut on a page without backlinks. The final default artifact was rebuilt and verified separately.
 
 All source vault files, publication approvals and the original checkout remain unchanged. The user's existing AGENTS.md edits remain untouched. No subagents, remote pushes or deployments were used for this change.
+
+## Document-top navigation fix
+
+The Contents `(Top)` link now targets the existing `#quartz-root` document wrapper instead of `#main-content`, so it returns to scroll position zero and includes the masthead. This uses Quartz's existing anchor navigation and native fragment fallback; no custom scrolling script was added. The accessibility Skip to article link still targets the article body.
+
+TypeScript passed. Root, repository-subpath and final default builds each passed all seven output checks. Twelve targeted desktop/tablet/mobile browser cases passed: mouse and keyboard Top activation from deep scroll, repeated activation, exact scroll position zero, masthead visibility, active-state highlighting, and continued behavior after SPA navigation. Article section links, backlinks navigation, sidebar collapse and shared scrolling also passed their targeted regressions. User AGENTS.md edits were left untouched; no remote operations occurred.
