@@ -10,6 +10,7 @@ for (const args of [
   ["node_modules/tsx/dist/cli.mjs", "--test", "tests/backlinks.test.ts"],
   ["node_modules/typescript/bin/tsc", "--noEmit"],
   ["--test", "tests/feature-fixture.test.mjs"],
+  ["--test", "tests/social-image.test.mjs"],
   ["scripts/test-paths.mjs"],
 ]) {
   const result = spawnSync(process.execPath, args, { stdio: "inherit" });

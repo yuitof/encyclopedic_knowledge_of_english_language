@@ -14,7 +14,7 @@ import { HomeHighlights } from "./custom/HomeHighlights";
 import { SiteFooter } from "./custom/SiteFooter";
 import { PageTypes } from "./quartz/plugins";
 import fs from "node:fs";
-import { createElement } from "preact";
+import { createElement, Fragment } from "preact";
 
 frameRegistry.register("encyclopedia", EncyclopediaFrame, "local:encyclopedia");
 const config = await loadQuartzConfig();
@@ -38,14 +38,50 @@ if (latex)
 export default config;
 const loaded = await loadQuartzLayout();
 const originalHead = loaded.defaults.head!;
+const socialImageMeta = new Set([
+  "og:image",
+  "og:image:url",
+  "og:image:secure_url",
+  "og:image:type",
+  "og:image:width",
+  "og:image:height",
+  "og:image:alt",
+  "twitter:image",
+  "twitter:image:alt",
+]);
 const customHead: typeof originalHead = (props) => {
   const node = originalHead(props);
-  const originalIcon = (node.props.children as any[])
-    .flat()
-    .find((child: any) => child?.props?.rel === "icon");
-  const children = (node.props.children as any[])
-    .flat()
-    .filter((child: any) => child?.props?.rel !== "icon");
+  // Quartz groups social tags inside Preact fragments; unwrap them before
+  // replacing the shared image so old/default tags cannot be duplicated.
+  const flatten = (value: any): any[] =>
+    Array.isArray(value)
+      ? value.flatMap(flatten)
+      : value?.type === Fragment
+        ? flatten(value.props.children)
+        : [value];
+  const head = flatten(node.props.children);
+  const originalIcon = head.find((child) => child?.props?.rel === "icon");
+  const children = head.filter(
+    (child) =>
+      child?.props?.rel !== "icon" &&
+      !socialImageMeta.has(child?.props?.property ?? child?.props?.name),
+  );
+  const base =
+    `https://${props.cfg.baseUrl || "example.invalid"}`.replace(/\/+$/u, "") +
+    "/";
+  const image = new URL("static/english-encyclopedia-og.png", base).href;
+  const alt = "English Encyclopedia — Words, usage, and connections";
+  const metadata = {
+    "og:image": image,
+    "og:image:url": image,
+    "og:image:secure_url": image,
+    "og:image:type": "image/png",
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:image:alt": alt,
+    "twitter:image": image,
+    "twitter:image:alt": alt,
+  };
   return createElement(
     "head",
     {},
@@ -54,10 +90,16 @@ const customHead: typeof originalHead = (props) => {
       rel: "icon",
       type: "image/svg+xml",
       href: String(originalIcon?.props.href ?? "./static/icon.png").replace(
-        /icon\.png$/,
+        /icon\.png$/u,
         "favicon.svg",
       ),
     }),
+    ...Object.entries(metadata).map(([key, content]) =>
+      createElement("meta", {
+        [key.startsWith("twitter:") ? "name" : "property"]: key,
+        content,
+      }),
+    ),
   );
 };
 loaded.defaults.head = customHead;
