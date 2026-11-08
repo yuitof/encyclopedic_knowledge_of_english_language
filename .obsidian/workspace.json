@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "60dfd52e17657608",
+        "id": "fa74de76ff020034",
         "type": "tabs",
         "children": [
           {
-            "id": "0986ec951af4ba26",
+            "id": "aacc15d2b0c4861c",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -72,7 +72,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "get along with",
+                "query": "pan out",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -87,7 +87,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 744.6328239440918
   },
   "right": {
     "id": "648a6ada0608665d",
@@ -212,8 +212,10 @@
       "zk-prefixer:Create new unique note": false
     }
   },
-  "active": "0986ec951af4ba26",
+  "active": "aacc15d2b0c4861c",
   "lastOpenFiles": [
+    "pan out.md",
+    "crop up.md",
     "get on with someone.md",
     "rizz.md",
     "phonk.md",
@@ -238,8 +240,6 @@
     "like I said.md",
     "-ball.md",
     "minor.md",
-    "Giffen Goods.md",
-    "adjudicate.md",
     "Pasted image 20261105042555.png",
     "Pasted image 20261105042559.png",
     "Untitled",
