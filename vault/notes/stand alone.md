@@ -1,3 +1,7 @@
+---
+created: "2026-10-07T03:00:19.615882Z"
+modified: "2026-10-07T03:05:21.729324Z"
+---
 stand alone
 : [[league|in a league of someone's own]]
 

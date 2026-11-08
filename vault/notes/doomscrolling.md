@@ -1,3 +1,7 @@
+---
+created: "2026-08-11T06:33:00.032337Z"
+modified: "2026-08-11T06:33:00.032456Z"
+---
 doomscrolling
 : YouTube ShortsとかInstagramのReelとかを見ることにも言えるけど、Twitterとかで過激なニュースを見るようなことにも使えるらしい。
 

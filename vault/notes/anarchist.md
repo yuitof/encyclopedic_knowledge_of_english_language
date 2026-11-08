@@ -1,3 +1,7 @@
+---
+created: "2026-08-11T06:33:00.033564Z"
+modified: "2026-10-03T02:29:18.830515Z"
+---
 anarchist
 : a person who believes that laws and governments are not necessary
 

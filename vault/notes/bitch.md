@@ -1,3 +1,7 @@
+---
+created: "2026-10-14T17:34:33.905605Z"
+modified: "2026-10-14T17:36:51.275880Z"
+---
 bitch
 : the female of the dog or some other carnivorous mammals (merriam-webster)
 

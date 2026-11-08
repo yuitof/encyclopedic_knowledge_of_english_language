@@ -1,3 +1,7 @@
+---
+created: "2026-07-18T13:35:22.778271Z"
+modified: "2026-07-22T14:12:36.216865Z"
+---
 head off
 : to go to another place 
 VRCを抜けるときに言える

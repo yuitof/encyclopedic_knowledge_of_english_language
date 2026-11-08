@@ -1,3 +1,7 @@
+---
+created: "2026-08-04T00:00:20.976215Z"
+modified: "2026-08-08T15:41:46.801273Z"
+---
 link up (with someone)
 : [[meet up]]
 

@@ -1,3 +1,7 @@
+---
+created: "2026-08-09T14:53:53.303668Z"
+modified: "2026-10-26T00:01:10.971851Z"
+---
 sycophantic /ˌsɪkəˈfæntɪk/
 : [[appease|appeasing]] someone
 

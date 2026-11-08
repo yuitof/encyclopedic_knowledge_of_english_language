@@ -1,3 +1,7 @@
+---
+created: "2026-07-24T17:44:13.716925Z"
+modified: "2026-09-16T16:22:38.925083Z"
+---
 after
 : after が want みたいな意味を表すパターンがあるという話をしていたが、これは be after doing something で to be going to do something soon; to be intending to do something soon という意味の時のことだったりするのだろうか？
 

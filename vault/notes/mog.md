@@ -1,3 +1,7 @@
+---
+created: "2026-07-27T08:18:00.418840Z"
+modified: "2026-09-13T19:02:33.291100Z"
+---
 mog
 : _Mog_ is a humorous Internet slang term meaning “to outclass,” especially when describing one person as appearing far more attractive than another. It was originally used to praise one man as being taller, more muscular, or more stereotypically handsome in direct comparison to another man.
 

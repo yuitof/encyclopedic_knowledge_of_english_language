@@ -1,3 +1,7 @@
+---
+created: "2026-08-08T13:00:51.967998Z"
+modified: "2026-09-25T07:59:24.029552Z"
+---
 hit the road
 : to reach a place
 

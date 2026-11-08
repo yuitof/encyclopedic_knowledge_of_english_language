@@ -1,3 +1,7 @@
+---
+created: "2026-07-19T08:20:22.399905Z"
+modified: "2026-07-19T08:21:34.751201Z"
+---
 Goated with the sauce
 : Greatest Of All Time
 ソースって美味しいものにかけてさらに美味しくするものじゃん？だからGoatedのさらに上見たいな。別にGoatedとの違いを感じない話者もいる

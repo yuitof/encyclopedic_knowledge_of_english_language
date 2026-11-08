@@ -1,3 +1,7 @@
+---
+created: "2026-08-12T14:20:40.793664Z"
+modified: "2026-10-11T01:42:13.703318Z"
+---
 insufferable
 : too annoying
 

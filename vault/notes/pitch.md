@@ -1,3 +1,7 @@
+---
+created: "2026-07-18T06:31:02.038993Z"
+modified: "2026-07-18T06:36:23.530286Z"
+---
 pitch
 : to try to persuade somebody to buy something, to give you something or to make a business deal with you
 

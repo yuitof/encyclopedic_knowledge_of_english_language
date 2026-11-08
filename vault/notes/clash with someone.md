@@ -1,3 +1,7 @@
+---
+created: "2026-08-20T17:37:09.488445Z"
+modified: "2026-09-17T04:41:40.493509Z"
+---
 clash with someone
 : 
 

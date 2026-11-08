@@ -1,3 +1,7 @@
+---
+created: "2026-10-09T03:45:51.012331Z"
+modified: "2026-10-09T03:52:58.756677Z"
+---
 crunch time
 : a critical moment or period (as near the end of a game) when decisive action is needed
 

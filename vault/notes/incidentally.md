@@ -1,3 +1,7 @@
+---
+created: "2026-08-12T05:56:04.760740Z"
+modified: "2026-10-04T12:45:33.212774Z"
+---
 incidentally
 syn: by the way
 

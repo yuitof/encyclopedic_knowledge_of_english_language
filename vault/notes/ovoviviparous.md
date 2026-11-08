@@ -1,3 +1,7 @@
+---
+created: "2026-08-12T03:45:43.522732Z"
+modified: "2026-08-12T04:10:30.355964Z"
+---
 ovoviviparous
 : producing eggs that develop within the maternal body (as of various fishes or reptiles) and hatch within or immediately after release from the parent
 	ここにある as of ってas + of で「例えば魚とか爬虫類とかの体」っていうことかな？この as って as if とかの形でも見る気がする。辞書の定義でよく使われるというのは確かにそうかも cf: [[puffed]]

@@ -1,3 +1,7 @@
+---
+created: "2026-09-20T07:34:43.067304Z"
+modified: "2026-09-20T08:08:29.266998Z"
+---
 do and, doing, do
 : The Monkey's Paw でめっちゃこの形の文章出てくる
 

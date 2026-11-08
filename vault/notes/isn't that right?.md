@@ -1,3 +1,7 @@
+---
+created: "2026-09-17T11:22:04.068243Z"
+modified: "2026-10-04T14:11:26.136796Z"
+---
 isn't that right?
 - Just remember, it's easy to die, Lain. Isn't that right?
 共感を促すとき否定の形で聞いたりする

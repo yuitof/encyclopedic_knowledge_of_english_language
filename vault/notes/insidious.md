@@ -1,3 +1,7 @@
+---
+created: "2026-07-27T11:35:13.962922Z"
+modified: "2026-07-27T11:36:17.122427Z"
+---
 insidious
 : spreading gradually or without being noticed, but causing serious harm
 

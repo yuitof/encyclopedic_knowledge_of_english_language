@@ -1,3 +1,7 @@
+---
+created: "2026-07-25T05:08:46.363835Z"
+modified: "2026-07-25T05:11:28.770683Z"
+---
 co-wash
 : Usually refers to washing with a cleansing conditioner - basically a conditioner that's intended to be used alone instead of with a shampoo, and does more to clean your hair than a regular conditioner would. This is a lot less drying than using shampoo, so if that's a problem you run in to its worth a try!
 

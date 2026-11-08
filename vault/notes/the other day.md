@@ -1,3 +1,7 @@
+---
+created: "2026-09-15T13:37:37.174433Z"
+modified: "2026-10-24T13:42:38.737427Z"
+---
 the other day
 : the系は前置詞なしでいいのが多い。this系も同じ [[this entire time]] など
 

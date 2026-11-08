@@ -1,3 +1,7 @@
+---
+created: "2026-08-24T18:54:55.685674Z"
+modified: "2026-08-24T18:57:21.423489Z"
+---
 bust out
 : to take (something) from the place where it is stored so that it can be used **:** to break out
 

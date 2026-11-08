@@ -1,3 +1,7 @@
+---
+created: "2026-09-28T14:15:36.895107Z"
+modified: "2026-10-02T05:00:03.526613Z"
+---
 with (all) (due) respect
 : used as a polite or formal way of saying that one disagrees with someone 
 

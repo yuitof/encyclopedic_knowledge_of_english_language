@@ -1,3 +1,7 @@
+---
+created: "2026-09-25T09:37:35.727728Z"
+modified: "2026-09-25T09:42:53.825486Z"
+---
 what does that have to do with anything?
 : have something to do with X の something は anything とか nothing とかそもそも have to do with だけでも使えるけど、それが疑問詞になって前に来て「なんの関係があるのか」聞いてる
 

@@ -1,3 +1,7 @@
+---
+created: "2026-08-01T05:22:59.337188Z"
+modified: "2026-09-23T10:51:17.953039Z"
+---
 out there
 : 「世の中に」ぐらいの意味で
 - There be X out there

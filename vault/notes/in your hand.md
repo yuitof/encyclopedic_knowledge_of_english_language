@@ -1,3 +1,7 @@
+---
+created: "2026-10-04T02:45:23.143095Z"
+modified: "2026-10-04T03:01:10.982084Z"
+---
 in your hand
 
 - He picked up the dropper in his left hand.

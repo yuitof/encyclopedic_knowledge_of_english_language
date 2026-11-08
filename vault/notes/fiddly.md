@@ -1,3 +1,7 @@
+---
+created: "2026-08-25T20:12:15.738094Z"
+modified: "2026-08-25T20:12:48.620817Z"
+---
 fiddly
 : difficult to do or use because small objects are involved
 

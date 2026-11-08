@@ -1,3 +1,7 @@
+---
+created: "2026-07-24T12:47:47.885209Z"
+modified: "2026-07-24T12:51:17.742868Z"
+---
 work up
 : to develop or improve something with some effort
 

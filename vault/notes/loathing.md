@@ -1,3 +1,7 @@
+---
+created: "2026-07-24T12:31:39.937507Z"
+modified: "2026-10-26T00:46:21.250215Z"
+---
 loathing
 : a strong feeling of hating somebody/something
 

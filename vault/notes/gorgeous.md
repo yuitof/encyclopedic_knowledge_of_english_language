@@ -1,3 +1,7 @@
+---
+created: "2026-07-07T08:52:48.778337Z"
+modified: "2026-07-07T08:56:51.362899Z"
+---
 gorgeous
 
 splendidly or showily brilliant or magnificent

@@ -1,3 +1,7 @@
+---
+created: "2026-07-21T13:02:28.635541Z"
+modified: "2026-08-09T16:10:34.240407Z"
+---
 基本的に up はなしで [[open to somebody]] でいい
 
 open up to (verb)

@@ -1,3 +1,7 @@
+---
+created: "2026-07-22T22:22:10.689331Z"
+modified: "2026-11-05T07:29:08.055456Z"
+---
 CPTSD
 : short for Complex Post-Traumatic Stress Disorder
 

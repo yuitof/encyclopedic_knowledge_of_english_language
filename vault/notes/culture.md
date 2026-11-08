@@ -1,3 +1,7 @@
+---
+created: "2026-07-10T23:32:12.602548Z"
+modified: "2026-11-07T03:40:25.009316Z"
+---
 #### celebrity
 - [[Ace Taffy Ch.]] 中国のVTuber
 - [[Drake (musician)]] ラッパー

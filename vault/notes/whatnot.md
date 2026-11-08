@@ -1,3 +1,7 @@
+---
+created: "2026-10-05T13:01:41.974415Z"
+modified: "2026-10-05T13:03:07.910112Z"
+---
 whatnot
 : an informal “etc.”
 

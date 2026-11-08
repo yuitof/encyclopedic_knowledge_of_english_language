@@ -1,3 +1,7 @@
+---
+created: "2026-07-11T05:21:42.695695Z"
+modified: "2026-10-26T00:08:05.896200Z"
+---
 disciple /dɪˈsaɪpl/
 : a person who believes in and follows the teachings of a religious or political leader
 

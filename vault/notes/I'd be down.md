@@ -1,3 +1,7 @@
+---
+created: "2026-08-12T07:58:22.510866Z"
+modified: "2026-10-25T23:50:15.173507Z"
+---
 I'd be down
 : an expression of interest and approval of an idea that one hasn't considered before, or [[ovoviviparous|as to]] hint that you want to do something that hasn't been suggested yet.
 

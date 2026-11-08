@@ -1,3 +1,7 @@
+---
+created: "2026-08-20T15:32:24.767905Z"
+modified: "2026-10-07T05:39:09.911968Z"
+---
 jade
 : 石の中にある緑色の宝石
 - there's uh some like rust or grime and then there's randomly just like pieces of jade sticking out

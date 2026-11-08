@@ -1,3 +1,7 @@
+---
+created: "2026-09-25T09:17:14.957990Z"
+modified: "2026-09-25T09:27:58.713498Z"
+---
 whine
 noun: 情けない声
 - Danny's voice shot up to a hysterical [[grate on|grating]] whine.

@@ -1,3 +1,7 @@
+---
+created: "2026-09-28T13:55:34.692230Z"
+modified: "2026-09-28T13:57:01.523593Z"
+---
 institute a commission of lunacy
 : 精神鑑定をする
 

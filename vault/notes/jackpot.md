@@ -1,3 +1,7 @@
+---
+created: "2026-08-02T13:08:45.946109Z"
+modified: "2026-10-02T13:54:27.887883Z"
+---
 jackpot
 : an impressive often unexpected success or reward
 

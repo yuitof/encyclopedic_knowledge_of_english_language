@@ -1,3 +1,7 @@
+---
+created: "2026-07-07T08:56:56.963756Z"
+modified: "2026-09-28T15:44:16.670065Z"
+---
 Belgium /ˈbeldʒəm/
 Demonym: Belgian /ˈbeldʒən/
 

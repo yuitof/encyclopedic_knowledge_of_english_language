@@ -1,3 +1,7 @@
+---
+created: "2026-07-15T16:03:45.840571Z"
+modified: "2026-10-26T01:59:36.247784Z"
+---
 gooning (slang)
 : ~~prolonged masterbation~~ trance of masterbation
 

@@ -1,3 +1,7 @@
+---
+created: "2026-09-16T09:24:00.892189Z"
+modified: "2026-09-28T14:51:57.259577Z"
+---
 get someone's ass to X
 : 
 

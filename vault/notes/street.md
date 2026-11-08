@@ -1,3 +1,7 @@
+---
+created: "2026-08-15T20:24:25.064479Z"
+modified: "2026-10-28T04:04:55.802870Z"
+---
 street
 
 - don't speak English [[in the street]]

@@ -1,3 +1,7 @@
+---
+created: "2026-09-12T06:52:28.128996Z"
+modified: "2026-10-04T02:16:27.223492Z"
+---
 rite
 : a ceremony performed by a particular group of people, often for religious purposes
 

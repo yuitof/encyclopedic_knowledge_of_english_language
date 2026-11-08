@@ -1,3 +1,7 @@
+---
+created: "2026-08-07T15:32:56.662896Z"
+modified: "2026-09-24T07:40:10.325742Z"
+---
 learn a thing or two
 : 
 - I think Japan could learn a thing or two

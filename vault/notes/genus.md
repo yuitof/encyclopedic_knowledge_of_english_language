@@ -1,3 +1,7 @@
+---
+created: "2026-07-18T06:41:07.701316Z"
+modified: "2026-10-02T13:57:26.191642Z"
+---
 genus
 : a class, kind, or group marked by common characteristics or by one common characteristic
 

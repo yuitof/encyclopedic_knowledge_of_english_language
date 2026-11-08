@@ -1,3 +1,7 @@
+---
+created: "2026-08-13T05:32:52.993820Z"
+modified: "2026-08-13T05:33:23.234898Z"
+---
 regime
 : a method or system of organizing or managing something
 

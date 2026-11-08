@@ -1,3 +1,7 @@
+---
+created: "2026-07-26T11:40:58.906647Z"
+modified: "2026-10-02T17:12:42.833684Z"
+---
 make sense to somebody
 : they understand it
 

@@ -1,3 +1,7 @@
+---
+created: "2026-07-19T09:39:59.644232Z"
+modified: "2026-08-12T14:29:53.443703Z"
+---
 vietnamese
 : Demonyms of Vietnam
 

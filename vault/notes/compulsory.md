@@ -1,3 +1,7 @@
+---
+created: "2026-07-29T08:49:56.946669Z"
+modified: "2026-08-11T03:41:29.881123Z"
+---
 compulsory class /kəmˈpʌlsəri/
 : ストレスは com の部分に置かれる？
 

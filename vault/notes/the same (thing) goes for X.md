@@ -1,3 +1,7 @@
+---
+created: "2026-08-25T15:40:00.838955Z"
+modified: "2026-09-24T15:06:44.059202Z"
+---
 the same (thing) goes for X
 :
 

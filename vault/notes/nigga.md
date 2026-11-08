@@ -1,3 +1,7 @@
+---
+created: "2026-07-25T11:22:49.115518Z"
+modified: "2026-09-28T13:45:49.297669Z"
+---
 nigga
 : used as a pronunciation spelling of _nigger_
 

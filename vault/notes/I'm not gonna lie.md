@@ -1,3 +1,7 @@
+---
+created: "2026-08-01T15:15:22.218575Z"
+modified: "2026-10-09T12:47:15.458787Z"
+---
 I'm not gonna lie
 : “I'm not gonna lie” functions as a pragmatic device, not a literal truth-statement. It signals stance, politeness management, credibility, and the speaker’s intent for how the upcoming utterance should be received. Key reasons people use it:
 

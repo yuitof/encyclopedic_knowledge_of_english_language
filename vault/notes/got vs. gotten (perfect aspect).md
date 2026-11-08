@@ -1,3 +1,7 @@
+---
+created: "2026-07-25T07:27:00.344423Z"
+modified: "2026-09-22T08:22:27.883432Z"
+---
 got vs. gotten (perfect aspect)
 僕
 	get の過去分詞が got か gotten かっていう問題あると思うんだけど、多分「慣れてくる」という意味で have gotten used to X の形で使われるときは gotten になる場合が多い気がする。なんかこのパターンのときはこれなんだよなー、何でだろう？have の意味での have got の場合は got だしね。gotta って書くぐらいだし

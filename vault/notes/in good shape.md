@@ -1,3 +1,7 @@
+---
+created: "2026-08-11T06:33:00.033351Z"
+modified: "2026-09-25T04:51:10.234937Z"
+---
 in good shape
 : [[likely]] to win, the odds of winning are very high
 

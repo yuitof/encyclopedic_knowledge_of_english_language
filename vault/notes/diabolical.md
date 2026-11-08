@@ -1,3 +1,7 @@
+---
+created: "2026-10-24T15:30:17.110212Z"
+modified: "2026-10-26T04:27:54.275889Z"
+---
 diabolical
 : evil, [[devilish]]
 

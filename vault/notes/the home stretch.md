@@ -1,3 +1,7 @@
+---
+created: "2026-08-24T18:52:56.350552Z"
+modified: "2026-08-24T18:53:35.313432Z"
+---
 the home stretch
 : the last part of an activity, etc. when it is nearly completed
 

@@ -1,3 +1,7 @@
+---
+created: "2026-09-25T08:01:35.105356Z"
+modified: "2026-10-04T03:23:10.469837Z"
+---
 with X of Y
 : The [[junk|Junky]]'s Christmas という小説によく出てくる
 

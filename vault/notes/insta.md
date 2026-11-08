@@ -1,3 +1,7 @@
+---
+created: "2026-09-25T11:57:37.455490Z"
+modified: "2026-09-25T12:00:57.434204Z"
+---
 insta
 : instant, quickly, immediately
 - insta-block

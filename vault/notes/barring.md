@@ -1,3 +1,7 @@
+---
+created: "2026-07-09T02:40:42.633352Z"
+modified: "2026-07-09T02:41:15.459266Z"
+---
 barring
 : except for
 Technically it could apply to heterosexual acts as well but it doesn't make any sense there since obviously the woman is not capable to penetrate the man barring sex toys.

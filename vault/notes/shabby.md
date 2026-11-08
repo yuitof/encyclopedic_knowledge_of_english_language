@@ -1,3 +1,7 @@
+---
+created: "2026-07-22T18:19:17.402662Z"
+modified: "2026-07-23T16:06:51.625296Z"
+---
 shabby
 ~~: stupid~~
 - ~~you are shabby~~

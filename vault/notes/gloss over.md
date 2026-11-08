@@ -1,3 +1,7 @@
+---
+created: "2026-08-11T09:53:09.646045Z"
+modified: "2026-08-11T09:54:22.485440Z"
+---
 gloss over
 : to avoid talking about something unpleasant or embarrassing by not dealing with it in detail
 

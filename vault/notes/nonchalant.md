@@ -1,3 +1,7 @@
+---
+created: "2026-09-28T14:26:35.127882Z"
+modified: "2026-09-28T14:28:15.984308Z"
+---
 nonchalant
 : having an air of easy unconcern or indifference
 

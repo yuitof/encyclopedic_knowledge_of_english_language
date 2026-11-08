@@ -1,3 +1,7 @@
+---
+created: "2026-07-16T14:24:11.291011Z"
+modified: "2026-07-16T14:25:05.923880Z"
+---
 qwen
 : 中国のAI
 Qwen/Qwen3-VL-30B-A3B-Instruct

@@ -1,3 +1,7 @@
+---
+created: "2026-07-11T11:58:54.561747Z"
+modified: "2026-07-11T12:02:51.910560Z"
+---
 cap: a lie
 capping: lying
 

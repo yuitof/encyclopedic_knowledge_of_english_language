@@ -1,3 +1,7 @@
+---
+created: "2026-09-25T07:34:53.593815Z"
+modified: "2026-10-09T04:08:22.575224Z"
+---
 clutch
 : Clutch is a sports term that refers to the phenomenon where athletes excel under pressure, commonly known as "in the clutch". (wikipedia)
 

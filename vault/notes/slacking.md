@@ -1,3 +1,7 @@
+---
+created: "2026-08-03T12:38:01.346482Z"
+modified: "2026-09-25T08:59:46.209589Z"
+---
 slacking
 : being lazy
 

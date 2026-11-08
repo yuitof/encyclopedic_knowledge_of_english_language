@@ -1,3 +1,7 @@
+---
+created: "2026-09-22T08:51:03.588192Z"
+modified: "2026-10-09T06:55:36.365134Z"
+---
 have to be doing
 : have to が should の時もある
 

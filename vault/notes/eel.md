@@ -1,3 +1,7 @@
+---
+created: "2026-07-18T04:54:35.635313Z"
+modified: "2026-07-18T04:59:49.442239Z"
+---
 eel
 : うなぎという意味で使える freshwater eel
 saltwater eel はあなご

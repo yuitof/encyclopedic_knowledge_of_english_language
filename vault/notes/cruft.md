@@ -1,3 +1,7 @@
+---
+created: "2026-09-28T09:25:27.051117Z"
+modified: "2026-09-28T09:26:03.239186Z"
+---
 cruft
 : unwanted and unnecessary (computer related) stuff
 

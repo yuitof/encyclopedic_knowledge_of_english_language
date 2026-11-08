@@ -1,3 +1,7 @@
+---
+created: "2026-08-24T19:03:16.462964Z"
+modified: "2026-08-24T19:05:25.346130Z"
+---
 push past that
 : To deal with or resolve some particular difficulty, hindrance, or impediment in order to continue to proceed or make progress.
 

@@ -1,3 +1,7 @@
+---
+created: "2026-10-22T07:16:42.592897Z"
+modified: "2026-11-05T05:33:12.408268Z"
+---
 would that
 : wish (by following it with subjunctive mood)
 

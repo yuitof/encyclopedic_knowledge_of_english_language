@@ -1,3 +1,7 @@
+---
+created: "2026-08-02T13:43:04.631676Z"
+modified: "2026-08-02T13:46:40.230136Z"
+---
 boom and bust
 : a situation in which a period of rapid economic growth is followed by one of sudden decline
 

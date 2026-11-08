@@ -1,3 +1,7 @@
+---
+created: "2026-08-03T13:14:07.576277Z"
+modified: "2026-09-16T12:44:17.881156Z"
+---
 mechanics
 : function
 

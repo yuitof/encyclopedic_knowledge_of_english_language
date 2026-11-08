@@ -1,3 +1,7 @@
+---
+created: "2026-09-16T09:07:05.966008Z"
+modified: "2026-09-16T09:13:18.679721Z"
+---
 Germany /ˈdʒɜːrməni/
 Demonym: German
 

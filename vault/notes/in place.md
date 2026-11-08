@@ -1,3 +1,7 @@
+---
+created: "2026-08-05T12:53:16.704530Z"
+modified: "2026-08-05T12:53:53.368455Z"
+---
 in place
 : established, instituted, or operational
 

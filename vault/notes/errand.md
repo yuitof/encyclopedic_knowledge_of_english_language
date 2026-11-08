@@ -1,3 +1,7 @@
+---
+created: "2026-10-09T08:01:42.791942Z"
+modified: "2026-10-27T02:43:27.394300Z"
+---
 errand
 
 > She just accidentally [[headbutt|headbutted]] me. It's fine.

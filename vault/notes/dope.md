@@ -1,3 +1,7 @@
+---
+created: "2026-08-01T05:30:00.389984Z"
+modified: "2026-09-25T08:14:49.522466Z"
+---
 dope
 : a stupid person
 

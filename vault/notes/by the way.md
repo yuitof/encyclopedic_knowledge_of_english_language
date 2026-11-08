@@ -1,3 +1,7 @@
+---
+created: "2026-11-02T02:57:35.288608Z"
+modified: "2026-11-02T02:58:51.973988Z"
+---
 by the way
 : [[btw]] in short
 

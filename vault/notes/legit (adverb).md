@@ -1,3 +1,7 @@
+---
+created: "2026-07-25T05:07:15.215317Z"
+modified: "2026-07-25T05:10:35.467444Z"
+---
 legit (adverb)
 
 - I legit dont wash my hair every day, like ar all... no water no nothing...

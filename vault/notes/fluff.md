@@ -1,3 +1,7 @@
+---
+created: "2026-08-13T05:41:04.757570Z"
+modified: "2026-08-13T05:43:13.178328Z"
+---
 fluff
 : Here, “fluff” means unnecessary complexity, extra details, or superficial stuff surrounding the core idea. (ChatGPT)
 

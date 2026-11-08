@@ -1,3 +1,7 @@
+---
+created: "2026-07-25T13:23:01.564159Z"
+modified: "2026-07-25T13:27:55.555702Z"
+---
 take out
 : [[takeaway]], also works
 

@@ -1,3 +1,7 @@
+---
+created: "2026-07-27T11:59:17.653598Z"
+modified: "2026-08-01T12:49:05.044331Z"
+---
 portmanteau
 
 : a large suitcase

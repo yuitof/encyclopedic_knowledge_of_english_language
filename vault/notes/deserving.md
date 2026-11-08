@@ -1,3 +1,7 @@
+---
+created: "2026-08-06T16:14:25.857904Z"
+modified: "2026-08-06T16:18:14.494526Z"
+---
 deserving
 : いいことに対しても悪いことに対しても使えそう？？？
 - be deserving of something

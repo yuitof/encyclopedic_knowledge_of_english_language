@@ -1,3 +1,7 @@
+---
+created: "2026-08-13T05:22:15.271206Z"
+modified: "2026-09-25T10:42:59.417897Z"
+---
 take the edge off
 : to make something unpleasant have less of an effect on someone
 - But I could fire you, if that would [[take the edge off]].

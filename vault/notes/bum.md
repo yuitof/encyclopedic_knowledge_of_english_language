@@ -1,3 +1,7 @@
+---
+created: "2026-07-17T16:12:34.087116Z"
+modified: "2026-07-28T14:40:05.174762Z"
+---
 bum
 : shut-in, someone who doesn't work or go outside
 : someone who doesn't 

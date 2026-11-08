@@ -1,3 +1,7 @@
+---
+created: "2026-07-18T16:08:14.860806Z"
+modified: "2026-10-23T13:38:36.928286Z"
+---
 I'm gonna eat shit
 -> I'm gonna eat food
 

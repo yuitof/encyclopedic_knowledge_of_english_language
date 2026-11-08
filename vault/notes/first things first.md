@@ -1,3 +1,7 @@
+---
+created: "2026-08-12T06:27:53.470464Z"
+modified: "2026-08-12T06:30:57.109956Z"
+---
 first things first
 : 
 

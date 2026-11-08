@@ -1,3 +1,7 @@
+---
+created: "2026-09-14T05:38:22.581206Z"
+modified: "2026-10-09T04:19:30.885651Z"
+---
 total (verb)
 :  to damage a car very badly, so that it is not worth repairing it
 

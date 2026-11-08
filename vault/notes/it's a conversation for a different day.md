@@ -1,3 +1,7 @@
+---
+created: "2026-08-01T14:08:55.936979Z"
+modified: "2026-10-26T00:44:31.898336Z"
+---
 it's a conversation for a different day
 : we discuss it later
 

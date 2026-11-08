@@ -1,3 +1,7 @@
+---
+created: "2026-08-11T03:34:19.973512Z"
+modified: "2026-08-11T03:40:49.082857Z"
+---
 don't threaten me with a good time
 : I'd say the basic intention of the phrase is to show that you're dismissing the other person's threat by not taking it seriously, instead humorously choosing to interpret their threat as something desirable and therefore ineffective as a threat.
 

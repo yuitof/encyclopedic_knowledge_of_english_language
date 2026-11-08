@@ -1,3 +1,7 @@
+---
+created: "2026-09-13T19:44:18.994247Z"
+modified: "2026-10-04T13:30:52.836910Z"
+---
 make it out
 
 - I can barely [[make it]] out

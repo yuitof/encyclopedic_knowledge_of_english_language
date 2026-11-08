@@ -1,3 +1,7 @@
+---
+created: "2026-07-16T14:09:57.180945Z"
+modified: "2026-07-16T14:15:14.411889Z"
+---
 finna
 : going to, about to
 - finna be on later you better still be on gangy

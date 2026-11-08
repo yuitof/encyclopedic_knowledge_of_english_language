@@ -1,3 +1,7 @@
+---
+created: "2026-07-11T12:36:26.610922Z"
+modified: "2026-07-11T12:36:41.304951Z"
+---
 shake out
 to [change](https://dictionary.cambridge.org/us/dictionary/english/change "change") over a [period](https://dictionary.cambridge.org/us/dictionary/english/period "period") of [time](https://dictionary.cambridge.org/us/dictionary/english/time "time") before a [final](https://dictionary.cambridge.org/us/dictionary/english/final "final") [result](https://dictionary.cambridge.org/us/dictionary/english/result "result") is [known](https://dictionary.cambridge.org/us/dictionary/english/known "known"):
 

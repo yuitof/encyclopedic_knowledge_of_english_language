@@ -1,3 +1,7 @@
+---
+created: "2026-08-05T13:16:25.673863Z"
+modified: "2026-08-05T13:16:59.461568Z"
+---
 scratch the surface of X
 : ちょっとだけ触る
 
