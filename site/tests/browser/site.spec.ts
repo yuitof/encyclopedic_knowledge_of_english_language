@@ -965,13 +965,18 @@ test("Articles filename groups populate Contents and date calendars filter inclu
   await page.route("**/static/contentIndex.json", async (route) => {
     const response = await route.fetch(),
       index = await response.json();
-    for (const note of Object.values(index) as any[])
+    // The calendar and sorter share one fixture: never retain real-note ranks
+    // beside synthetic dates, which can reverse the expected order in CI.
+    for (const note of Object.values(index) as any[]) {
       if (note.sortDetails)
         note.sortDetails = {
           ...note.sortDetails,
           modified: null,
           created: null,
         };
+      if (note.sortRanks)
+        note.sortRanks = { ...note.sortRanks, modified: null, created: null };
+    }
     Object.assign(index["articles/caimans"].sortDetails, {
       modified: "2020-01-10",
       created: "2019-02-01",
@@ -983,6 +988,13 @@ test("Articles filename groups populate Contents and date calendars filter inclu
     Object.assign(index["articles/culture"].sortDetails, {
       modified: "2020-01-21",
       created: "2019-02-03",
+    });
+    // Both sample date fields increase in this order; preserve filename ranks.
+    ["caimans", "crocodile", "culture"].forEach((name, rank) => {
+      Object.assign(index[`articles/${name}`].sortRanks, {
+        modified: rank,
+        created: rank,
+      });
     });
     await route.fulfill({ response, json: index });
   });
