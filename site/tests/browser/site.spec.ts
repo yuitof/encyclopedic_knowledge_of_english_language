@@ -1049,3 +1049,53 @@ test("Articles filename groups populate Contents and date calendars filter inclu
   await openExplorer(page);
   await expect(page.locator(".nav-show-more")).toHaveCount(1);
 });
+
+test("Browse entries retains filename A-Z through repeated SPA navigation", async ({
+  page,
+}) => {
+  await page.addInitScript(() =>
+    localStorage.setItem("article-list-order", "created-desc"),
+  );
+  await page.goto("./articles/?sort=modified-desc");
+  const select = page.getByRole("combobox", { name: "Sort articles" });
+  await expect(select).toBeEnabled();
+  const browse = page.getByRole("link", {
+    name: "Browse entries",
+    exact: true,
+    includeHidden: true,
+  });
+  const openBrowse = async () => {
+    await expect(browse).toHaveAttribute(
+      "href",
+      /^\/(?:knowledge\/)?articles\/\?sort=name-asc$/,
+    );
+    if (mobile(page))
+      await browse.evaluate((link: HTMLAnchorElement) => link.click());
+    else await browse.click();
+    await expect(page).toHaveURL(/\/articles\/\?sort=name-asc$/);
+    await expect(select).toBeEnabled();
+    await expect(select).toHaveValue("name-asc");
+    await expect
+      .poll(() => articleListOrder(page))
+      .toEqual(await expectedArticleList(page, "name-asc"));
+    // This link was previously stripped to /articles/ by Quartz's URL rebasing.
+    await expect(browse).toHaveAttribute(
+      "href",
+      /^\/(?:knowledge\/)?articles\/\?sort=name-asc$/,
+    );
+  };
+  for (const mode of ["modified-asc", "created-desc", "name-desc"]) {
+    await select.selectOption(mode);
+    await openBrowse();
+  }
+  await select.selectOption("modified-desc");
+  await page.getByRole("link", { name: "Main page", exact: true }).click();
+  await expect(page.locator(".article-list-sort")).toHaveCount(0);
+  await openBrowse();
+  await page
+    .locator(".page-listing .section-li .desc a.internal")
+    .first()
+    .click();
+  await expect(page.locator(".article-list-sort")).toHaveCount(0);
+  await openBrowse();
+});

@@ -16,6 +16,12 @@ export const EncyclopediaFrame: PageFrame = {
     footer,
   }) {
     const home = pathToRoot(data.fileData.slug!);
+    // Quartz rebases relative hrefs during SPA navigation and drops their query.
+    // Use the same deployment prefix as renderPage so the sort survives rebasing.
+    const base =
+      data.ctx.argv.serve || !data.cfg.baseUrl
+        ? ""
+        : new URL(`https://${data.cfg.baseUrl}`).pathname.replace(/\/$/, "");
     const articleData = withArticleBacklinks(data);
     return (
       <>
@@ -41,7 +47,7 @@ export const EncyclopediaFrame: PageFrame = {
           ))}
           <nav class="header-links" aria-label="Main navigation">
             <a href={home}>Main page</a>
-            <a href={`${home}/articles/?sort=name-asc`}>Browse entries</a>
+            <a href={`${base}/articles/?sort=name-asc`}>Browse entries</a>
           </nav>
         </header>
         <div class="reading-row">
