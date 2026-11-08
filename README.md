@@ -26,4 +26,4 @@ The original collection is organized under [`vault/`](vault/): Markdown in `note
 
 Read [`site/README.md`](site/README.md) for setup, tests and the manual GitHub Pages deployment process, and [`site/docs/publication.md`](site/docs/publication.md) before approving notes or attachments. No website deployment is performed automatically by the experimental feature branch.
 
-The reading interface also offers persistent text/width/color controls, a newest-modified-first sidebar, a generated article listing, and a configurable selection of real-note snippets on the main page. Original note/editorial text uses [CC BY-SA 4.0](CONTENT-LICENSE.md); software and third-party material retain their own licenses.
+The reading interface also offers persistent text/width/color controls, a newest-modified-first sidebar, a generated article listing, and a configurable selection of real-note snippets on the main page. Original note/editorial text uses [CC BY-SA 4.0](LICENSE); see [the content license notice](CONTENT-LICENSE.md) for attribution and scope. Software and third-party material retain their own licenses.
