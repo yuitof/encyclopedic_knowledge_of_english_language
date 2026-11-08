@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import YAML from "yaml";
+import { createSortRanks } from "./sort-ranks.mjs";
 import {
   referenceLookup,
   rewriteCorpusReferences,
@@ -231,6 +232,7 @@ export async function preparePublication({
   const targets = new Set(),
     slugs = new Set(),
     staged = [];
+  const sortRecords = [];
   for (const entry of entries) {
     safeSource(entry.source);
     safeRelative(entry.target);
@@ -264,8 +266,13 @@ export async function preparePublication({
         throw new Error("draft must be a boolean");
       if (meta.unlisted !== undefined && typeof meta.unlisted !== "boolean")
         throw new Error("unlisted must be a boolean");
-      if (meta.unlisted === true && entry.target !== "index.md")
-        throw new Error("Only the catalogue homepage may be unlisted");
+      if (
+        meta.unlisted === true &&
+        !["index.md", "catalogue.md", "privacy.md", "license.md"].includes(
+          entry.target,
+        )
+      )
+        throw new Error("Only approved project pages may be unlisted");
       if (Object.keys(meta).some((key) => !allowedMetadata.has(key)))
         throw new Error(
           "Unsupported frontmatter property: review metadata before publication (social images and HTML are not enabled)",
@@ -293,6 +300,17 @@ export async function preparePublication({
         resolvedReferences += transformed.resolved;
         unresolvedReferences += transformed.unresolved;
       } else validateReferences(body, entry.target, entries);
+      if (entry.target.startsWith("articles/")) {
+        const stat = await fs.stat(source);
+        sortRecords.push({
+          slug,
+          name: path.posix.basename(entry.source),
+          mtimeMs: stat.mtimeMs,
+          birthtimeMs: stat.birthtimeMs,
+          created: meta.created,
+          modified: meta.modified,
+        });
+      }
       // The manifest authorizes publication; transform only the temporary copy.
       const publicMeta = {
         ...meta,
@@ -329,6 +347,7 @@ export async function preparePublication({
     files: staged.map((item) => item.target),
     resolvedReferences,
     approvedUnresolvedReferences: unresolvedReferences,
+    sortRanks: createSortRanks(sortRecords),
   };
 }
 

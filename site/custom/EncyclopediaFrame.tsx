@@ -39,12 +39,12 @@ export const EncyclopediaFrame: PageFrame = {
           ))}
           <nav class="header-links" aria-label="Main navigation">
             <a href={home}>Main page</a>
-            <a href={`${home}#alphabetical-catalogue`}>Browse entries</a>
+            <a href={`${home}/catalogue`}>Browse entries</a>
           </nav>
         </header>
         <aside class="left sidebar" aria-label="Article navigation">
           <details class="navigation-panel" open>
-            <summary>Contents & topics</summary>
+            <summary>Contents</summary>
             {left.map((Component) => (
               <Component {...data} />
             ))}
@@ -55,7 +55,7 @@ export const EncyclopediaFrame: PageFrame = {
             <span>Article</span>
             <span>Read</span>
           </div>
-          <div class="page-header popover-hint">
+          <div class="page-header">
             {beforeBody.map((Component) => (
               <Component {...data} />
             ))}

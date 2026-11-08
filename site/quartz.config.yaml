@@ -116,7 +116,7 @@ plugins:
   - source: "@quartz-community/tag-page"
     enabled: true
   - source: "@quartz-community/explorer"
-    enabled: true
+    enabled: false
     layout:
       position: left
       priority: 30
@@ -126,12 +126,12 @@ plugins:
       position: right
       priority: 30
   - source: "@quartz-community/content-meta"
-    enabled: true
+    enabled: false
     layout:
       position: right
       priority: 10
   - source: "@quartz-community/darkmode"
-    enabled: true
+    enabled: false
     layout:
       position: right
       priority: 20
@@ -146,7 +146,7 @@ plugins:
       position: beforeBody
       priority: 30
   - source: "@quartz-community/footer"
-    enabled: true
+    enabled: false
     options:
       links:
         Quartz: https://quartz.jzhao.xyz/

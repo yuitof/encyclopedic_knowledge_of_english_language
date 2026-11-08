@@ -53,6 +53,17 @@ export async function auditOutput(output, publication) {
       )
     )
       throw new Error("Unexpected article in search index");
+  for (const [slug, ranks] of Object.entries(publication.sortRanks ?? {})) {
+    if (!Object.hasOwn(index, slug)) continue;
+    if (JSON.stringify(index[slug].sortRanks) !== JSON.stringify(ranks))
+      throw new Error("Public sort ranks differ from approved source ranks");
+    if (
+      Object.keys(index[slug].sortRanks).some(
+        (key) => !["name", "created", "modified"].includes(key),
+      )
+    )
+      throw new Error("Unexpected sort metadata");
+  }
   if (!names.includes("index.html")) throw new Error("Missing home page");
   return {
     files: names.length,

@@ -16067,6 +16067,24 @@
       "target": "articles/高所恐怖症.md",
       "title": "高所恐怖症",
       "approvedUnresolved": []
+    },
+    {
+      "source": "site/content/catalogue.md",
+      "target": "catalogue.md",
+      "title": "Alphabetical catalogue",
+      "approvedUnresolved": []
+    },
+    {
+      "source": "site/content/privacy.md",
+      "target": "privacy.md",
+      "title": "Privacy policy",
+      "approvedUnresolved": []
+    },
+    {
+      "source": "site/content/license.md",
+      "target": "license.md",
+      "title": "License",
+      "approvedUnresolved": []
     }
   ],
   "assets": [

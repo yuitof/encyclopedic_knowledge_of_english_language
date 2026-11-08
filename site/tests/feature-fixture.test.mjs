@@ -6,6 +6,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { preparePublication, siteRoot } from "../scripts/publish.mjs";
 import { auditOutput } from "../scripts/verify-output.mjs";
+import { enrichSortRanks } from "../scripts/sort-ranks.mjs";
 import { copyMathFonts } from "../scripts/trusted-static.mjs";
 
 test("private temporary fixture preserves rich Obsidian rendering without public demo articles", async () => {
@@ -62,6 +63,7 @@ test("private temporary fixture preserves rich Obsidian rendering without public
       },
     );
     assert.equal(result.status, 0, result.stdout + result.stderr);
+    await enrichSortRanks(output, publication);
     await copyMathFonts(output);
     await auditOutput(output, publication);
     const math = await fs.readFile(path.join(output, "math.html"), "utf8"),

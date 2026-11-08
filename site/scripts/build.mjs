@@ -3,10 +3,12 @@ import path from "node:path";
 import os from "node:os";
 import { spawnSync } from "node:child_process";
 import { preparePublication, siteRoot } from "./publish.mjs";
+import { enrichSortRanks } from "./sort-ranks.mjs";
 import {
   trustedStatic,
   trustedMath,
   copyMathFonts,
+  copySiteAssets,
 } from "./trusted-static.mjs";
 
 process.chdir(siteRoot);
@@ -54,7 +56,9 @@ try {
     throw (
       result.error ?? new Error(`Quartz exited with status ${result.status}`)
     );
+  await enrichSortRanks(output, publication);
   await copyMathFonts(output);
+  await copySiteAssets(output);
   await fs.writeFile(path.join(output, ".nojekyll"), "");
   const { auditOutput } = await import("./verify-output.mjs");
   console.log(JSON.stringify(await auditOutput(output, publication), null, 2));

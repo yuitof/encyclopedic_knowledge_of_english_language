@@ -26,7 +26,8 @@
     "test:vault": "node scripts/audit-vault.mjs",
     "test:upstream": "tsx --test quartz/util/path.test.ts quartz/util/slugCollisions.test.ts quartz/components/frames/frames.test.ts",
     "snapshot:corpus": "node scripts/snapshot-corpus.mjs",
-    "test:features": "node --test tests/feature-fixture.test.mjs"
+    "test:features": "node --test tests/feature-fixture.test.mjs",
+    "test:sort": "node --test tests/sort-ranks.test.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",

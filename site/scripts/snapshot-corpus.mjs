@@ -118,7 +118,19 @@ for (const bucket of categoryOrder) {
     "\n";
 }
 await fs.mkdir(path.join(siteRoot, "content"), { recursive: true });
-await fs.writeFile(path.join(siteRoot, "content/index.md"), home);
+await fs.writeFile(
+  path.join(siteRoot, "content/catalogue.md"),
+  home.replace(
+    "title: Encyclopedic Knowledge of English Language",
+    "title: Alphabetical catalogue",
+  ),
+);
+for (const name of ["catalogue", "privacy", "license"])
+  manifest.notes.push({
+    source: `site/content/${name}.md`,
+    target: `${name}.md`,
+    approvedUnresolved: [],
+  });
 await fs.writeFile(
   path.join(siteRoot, "publish-manifest.json"),
   JSON.stringify(manifest, null, 2) + "\n",

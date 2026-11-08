@@ -1,0 +1,169 @@
+:root {
+  --reading-size: 1rem;
+}
+:root[data-text="small"] {
+  --reading-size: 0.875rem;
+}
+:root[data-text="large"] {
+  --reading-size: 1.125rem;
+}
+.page article {
+  font-size: var(--reading-size);
+}
+:root[data-width="wide"] .page {
+  max-width: 1900px;
+}
+:root[data-width="wide"] .page > #quartz-body .center {
+  max-width: none;
+}
+:root[data-width="wide"] .page > #quartz-body {
+  grid-template-columns: 205px minmax(0, 1fr) 190px;
+}
+.appearance-panel {
+  border-bottom: 1px solid var(--lightgray);
+  padding-bottom: 1rem;
+}
+.appearance-panel > summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+}
+.appearance-panel fieldset {
+  border: 0;
+  border-top: 1px solid var(--lightgray);
+  padding: 0.6rem 0;
+  margin: 0.25rem 0;
+  min-width: 0;
+}
+.appearance-panel legend {
+  padding: 0 0.3rem 0 0;
+  font-weight: 600;
+}
+.appearance-panel label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.4rem 0;
+}
+.appearance-panel input {
+  accent-color: var(--secondary);
+}
+.article-contents {
+  margin-bottom: 1.5rem;
+}
+.article-contents details > summary {
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0.5rem 0;
+}
+.article-contents ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+.article-contents li {
+  line-height: 1.5;
+}
+.article-contents a {
+  color: var(--secondary);
+}
+.page > #quartz-body .sidebar.left .article-contents a.active-section {
+  color: var(--dark);
+  font-weight: 700;
+}
+.catalogue-navigation summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.article-sort-label {
+  display: block;
+  margin: 0.8rem 0;
+  font-size: 0.8rem;
+}
+.article-sort {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 0.45rem 0.2rem;
+  color: var(--dark);
+  background: var(--light);
+  border: 1px solid var(--gray);
+}
+.home-highlights {
+  margin: 1.5rem 0;
+}
+.highlight-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 1rem;
+}
+.highlight-cards > article {
+  border: 1px solid var(--lightgray);
+  border-top: 3px solid var(--secondary);
+  padding: 1rem;
+  min-width: 0;
+}
+.highlight-cards h2 {
+  font:
+    400 1.35rem Georgia,
+    serif;
+  border: 0;
+  margin: 0 0 0.5rem;
+}
+.highlight-cards p {
+  line-height: 1.5;
+  font-size: 0.95rem;
+  margin: 0;
+}
+.site-footer nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.popover .article-title {
+  display: none;
+}
+@media (max-width: 1199px) {
+  :root[data-width="wide"] .page > #quartz-body {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+}
+@media (max-width: 800px) {
+  .page {
+    padding: 0 0.875rem;
+  }
+  .encyclopedia-header {
+    border-bottom: 1px solid var(--lightgray);
+    padding-bottom: 1rem;
+  }
+  .brand-mark {
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.7rem;
+  }
+  .encyclopedia-brand small {
+    font-size: 0.65rem;
+  }
+  .article-toolbar {
+    font-size: 0.75rem;
+  }
+  .appearance-panel {
+    width: 100%;
+  }
+  .appearance-panel fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1rem;
+  }
+  .appearance-panel label {
+    margin: 0.25rem 0;
+  }
+  .highlight-cards {
+    grid-template-columns: 1fr;
+  }
+  .article-contents ul {
+    margin-left: 0.3rem;
+  }
+}

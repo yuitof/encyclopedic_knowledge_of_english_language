@@ -21,14 +21,14 @@ test("all approved existing notes including empty notes are indexed; samples are
   const index = JSON.parse(
     await fs.readFile(path.join(output, "static/contentIndex.json"), "utf8"),
   );
-  for (const entry of manifest.notes.filter(
-    (entry) => entry.target !== "index.md",
+  for (const entry of manifest.notes.filter((entry) =>
+    entry.target.startsWith("articles/"),
   ))
     assert.ok(
       Object.hasOwn(index, slugifyFilePath(entry.target)),
       `Missing note ${entry.title}`,
     );
-  assert.equal(publication.notes, 2585);
+  assert.equal(publication.notes, 2588);
   assert.equal(publication.assets, 85);
   assert.ok(report.indexBytes > 0);
   assert.doesNotMatch(
@@ -85,4 +85,31 @@ test("production client has no live reload WebSocket connection", async () => {
   ))
     script += await fs.readFile(path.join(output, file), "utf8");
   assert.doesNotMatch(script, /new WebSocket|ws:\/\/localhost|wss:\/\//u);
+});
+
+test("project pages, sort ranks and favicon are public without source filesystem metadata", async () => {
+  const publication = await preparePublication();
+  const index = JSON.parse(
+    await fs.readFile(path.join(output, "static/contentIndex.json"), "utf8"),
+  );
+  for (const [slug, ranks] of Object.entries(publication.sortRanks)) {
+    assert.deepEqual(index[slug].sortRanks, ranks);
+    assert.ok(
+      Object.values(ranks).every(
+        (rank) => rank === null || Number.isInteger(rank),
+      ),
+    );
+  }
+  assert.equal(Object.keys(publication.sortRanks).length, 2584);
+  for (const name of ["catalogue", "privacy", "license"])
+    assert.ok((await fs.stat(path.join(output, name + ".html"))).isFile());
+  assert.ok(
+    (
+      await fs.readFile(path.join(output, "static/favicon.svg"), "utf8")
+    ).includes(">E</text>"),
+  );
+  assert.doesNotMatch(
+    JSON.stringify(index),
+    /birthtime|mtimeMs|vault\/notes|fileName/u,
+  );
 });

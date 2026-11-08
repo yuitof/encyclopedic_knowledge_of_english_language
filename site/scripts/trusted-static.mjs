@@ -42,9 +42,13 @@ export async function verifyStaticOutput(output, names) {
     ),
   );
   const approved = { ...inventory, ...generated };
+  const siteAssets = await checkedSiteAssets();
   const allowed = new Set([
     ...Object.keys(approved).map((name) => "static/" + name),
     "static/contentIndex.json",
+    ...Object.keys(siteAssets).map(
+      (source) => "static/" + path.basename(source),
+    ),
   ]);
   for (const name of names.filter((name) => name.startsWith("static/"))) {
     if (!allowed.has(name))
@@ -52,7 +56,7 @@ export async function verifyStaticOutput(output, names) {
     if (
       name !== "static/contentIndex.json" &&
       digest(await fs.readFile(path.join(output, name))) !==
-        approved[name.slice(7)]
+        (approved[name.slice(7)] ?? siteAssets["custom/" + name.slice(7)])
     )
       throw new Error("Trusted static output bytes changed");
   }
@@ -97,5 +101,25 @@ export async function verifyMathOutput(output, names) {
       digest(await fs.readFile(path.join(output, name))) !== inventory[name]
     )
       throw new Error("Unexpected math output resource");
+  }
+}
+
+export async function checkedSiteAssets() {
+  const inventory = JSON.parse(
+    await fs.readFile(path.join(siteRoot, "trusted-site-assets.json"), "utf8"),
+  );
+  for (const [source, hash] of Object.entries(inventory)) {
+    const file = await regularFile(siteRoot, source);
+    if (digest(await fs.readFile(file)) !== hash)
+      throw new Error("Modified site static asset");
+  }
+  return inventory;
+}
+export async function copySiteAssets(output) {
+  for (const source of Object.keys(await checkedSiteAssets())) {
+    await fs.copyFile(
+      path.join(siteRoot, source),
+      path.join(output, "static", path.basename(source)),
+    );
   }
 }
