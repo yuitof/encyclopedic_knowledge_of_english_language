@@ -46,3 +46,10 @@ The current version 2 publication manifest freezes the user-approved existing co
         └── 高所恐怖症
 
 ```
+
+- Remove the page of "alphabetical catalogue"
+-
+- No it's not what I wanted. The arrangement rules of the side bar is the last modified time. The functionality to change it is implemented only on the body part of "articles"
+- The number of pages is subject to change. Do not hard code.
+- The new articles will be added later. Since github pages don't allow server computation, make a json file containing the list of them for example using functionality of quartz.
+-

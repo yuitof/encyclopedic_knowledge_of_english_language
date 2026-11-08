@@ -28,8 +28,8 @@ test("all approved existing notes including empty notes are indexed; samples are
       Object.hasOwn(index, slugifyFilePath(entry.target)),
       `Missing note ${entry.title}`,
     );
-  assert.equal(publication.notes, 2588);
-  assert.equal(publication.assets, 85);
+  assert.equal(publication.notes, manifest.notes.length);
+  assert.equal(publication.assets, manifest.assets.length);
   assert.ok(report.indexBytes > 0);
   assert.doesNotMatch(
     JSON.stringify(index),
@@ -100,8 +100,12 @@ test("project pages, sort ranks and favicon are public without source filesystem
       ),
     );
   }
-  assert.equal(Object.keys(publication.sortRanks).length, 2584);
-  for (const name of ["catalogue", "privacy", "license"])
+  assert.equal(
+    Object.keys(publication.sortRanks).length,
+    manifest.notes.filter((entry) => entry.target.startsWith("articles/"))
+      .length,
+  );
+  for (const name of ["privacy", "license"])
     assert.ok((await fs.stat(path.join(output, name + ".html"))).isFile());
   assert.ok(
     (
@@ -112,4 +116,17 @@ test("project pages, sort ranks and favicon are public without source filesystem
     JSON.stringify(index),
     /birthtime|mtimeMs|vault\/notes|fileName/u,
   );
+});
+
+test("removed catalogue is absent from output and generated navigation", async () => {
+  await assert.rejects(fs.stat(path.join(output, "catalogue.html")), {
+    code: "ENOENT",
+  });
+  for (const entry of manifest.notes) {
+    const page = await fs.readFile(
+      path.join(output, slugifyFilePath(entry.target) + ".html"),
+      "utf8",
+    );
+    assert.doesNotMatch(page, /href=["'][^"']*\/catalogue(?:[.#?"']|$)/u);
+  }
 });

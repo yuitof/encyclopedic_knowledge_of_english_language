@@ -39,40 +39,42 @@ export const EncyclopediaFrame: PageFrame = {
           ))}
           <nav class="header-links" aria-label="Main navigation">
             <a href={home}>Main page</a>
-            <a href={`${home}/catalogue`}>Browse entries</a>
+            <a href={`${home}/articles/`}>Browse entries</a>
           </nav>
         </header>
-        <aside class="left sidebar" aria-label="Article navigation">
-          <details class="navigation-panel" open>
-            <summary>Contents</summary>
-            {left.map((Component) => (
+        <div class="reading-row">
+          <aside class="left sidebar" aria-label="Article navigation">
+            <details class="navigation-panel" open>
+              <summary>Contents</summary>
+              {left.map((Component) => (
+                <Component {...data} />
+              ))}
+            </details>
+          </aside>
+          <main id="main-content" class="center" tabIndex={-1}>
+            <div class="article-toolbar">
+              <span>Article</span>
+              <span>Read</span>
+            </div>
+            <div class="page-header">
+              {beforeBody.map((Component) => (
+                <Component {...data} />
+              ))}
+            </div>
+            <Content {...data} />
+            <div class="page-footer">
+              {afterBody.map((Component) => (
+                <Component {...data} />
+              ))}
+            </div>
+          </main>
+          <aside class="right sidebar" aria-label="Related information">
+            <h2 class="sidebar-title">Around this article</h2>
+            {right.map((Component) => (
               <Component {...data} />
             ))}
-          </details>
-        </aside>
-        <main id="main-content" class="center" tabIndex={-1}>
-          <div class="article-toolbar">
-            <span>Article</span>
-            <span>Read</span>
-          </div>
-          <div class="page-header">
-            {beforeBody.map((Component) => (
-              <Component {...data} />
-            ))}
-          </div>
-          <Content {...data} />
-          <div class="page-footer">
-            {afterBody.map((Component) => (
-              <Component {...data} />
-            ))}
-          </div>
-        </main>
-        <aside class="right sidebar" aria-label="Related information">
-          <h2 class="sidebar-title">Around this article</h2>
-          {right.map((Component) => (
-            <Component {...data} />
-          ))}
-        </aside>
+          </aside>
+        </div>
         <div class="encyclopedia-footer">
           {footer.map((Component) => (
             <Component {...data} />

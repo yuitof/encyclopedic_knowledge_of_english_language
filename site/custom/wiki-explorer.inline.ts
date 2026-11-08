@@ -10,26 +10,11 @@ async function prepareArticleOrder() {
       };
     }
   >;
-  const allowed = new Set([
-    "name-asc",
-    "name-desc",
-    "modified-desc",
-    "modified-asc",
-    "created-desc",
-    "created-asc",
-  ]);
-  let mode = "modified-desc";
-  try {
-    const stored = localStorage.getItem("article-order");
-    if (stored && allowed.has(stored)) mode = stored;
-  } catch {}
   for (const explorer of document.querySelectorAll<HTMLElement>(
     ".sidebar.left .explorer",
   )) {
     if (explorer.dataset.articleOrder) continue;
     explorer.dataset.articleOrder = "true";
-    const select = explorer.querySelector<HTMLSelectElement>(".article-sort");
-    if (select) select.value = mode;
     const rank = (element: Element) => {
       const href = element.querySelector<HTMLAnchorElement>(
         ":scope > a.nav-file-title",
@@ -49,19 +34,15 @@ async function prepareArticleOrder() {
           (element) => rank(element) !== null,
         );
         if (files.length < 2) continue;
-        const [field, direction] = mode.split("-") as [
-          "name" | "modified" | "created",
-          string,
-        ];
         const sorted = [...files].sort((a, b) => {
           const x = rank(a)!,
             y = rank(b)!,
-            av = x[field],
-            bv = y[field];
+            av = x.modified,
+            bv = y.modified;
           if (av === null && bv !== null) return 1;
           if (bv === null && av !== null) return -1;
           const delta = av === null || bv === null ? 0 : av - bv;
-          return delta * (direction === "desc" ? -1 : 1) || x.name - y.name;
+          return -delta || x.name - y.name;
         });
         if (files.every((element, i) => element === sorted[i])) continue;
         const positions = files.map((element) => {
@@ -75,18 +56,8 @@ async function prepareArticleOrder() {
     const observer = new MutationObserver(apply);
     observer.observe(explorer, { childList: true, subtree: true });
     apply();
-    const change = () => {
-      if (!select || !allowed.has(select.value)) return;
-      mode = select.value;
-      try {
-        localStorage.setItem("article-order", mode);
-      } catch {}
-      apply();
-    };
-    select?.addEventListener("change", change);
     window.addCleanup(() => {
       observer.disconnect();
-      select?.removeEventListener("change", change);
       delete explorer.dataset.articleOrder;
     });
   }

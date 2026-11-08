@@ -15,13 +15,12 @@ export const HomeHighlights: QuartzComponent = ({ fileData }) =>
       aria-label="From the notebook"
       data-maximum={Math.max(0, Math.floor(settings.homepageMaximumNotes))}
     >
+      <p class="collection-note-count" aria-live="polite" />
       <div class="highlight-cards" aria-live="polite" />
       <noscript>
         <p>
           Browse the{" "}
-          <a href={`${pathToRoot(fileData.slug!)}/catalogue`}>
-            alphabetical catalogue
-          </a>{" "}
+          <a href={`${pathToRoot(fileData.slug!)}/articles/`}>article list</a>{" "}
           to explore all notes.
         </p>
       </noscript>

@@ -268,9 +268,7 @@ export async function preparePublication({
         throw new Error("unlisted must be a boolean");
       if (
         meta.unlisted === true &&
-        !["index.md", "catalogue.md", "privacy.md", "license.md"].includes(
-          entry.target,
-        )
+        !["index.md", "privacy.md", "license.md"].includes(entry.target)
       )
         throw new Error("Only approved project pages may be unlisted");
       if (Object.keys(meta).some((key) => !allowedMetadata.has(key)))

@@ -16069,12 +16069,6 @@
       "approvedUnresolved": []
     },
     {
-      "source": "site/content/catalogue.md",
-      "target": "catalogue.md",
-      "title": "Alphabetical catalogue",
-      "approvedUnresolved": []
-    },
-    {
       "source": "site/content/privacy.md",
       "target": "privacy.md",
       "title": "Privacy policy",

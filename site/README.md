@@ -1,6 +1,6 @@
 # English Encyclopedia — Quartz 5 site
 
-A static, Wikipedia-inspired reading interface for the existing English-language Obsidian collection. The current **explicit approval snapshot** contains **2,584 existing notes and their 85 referenced images**, plus explicitly selected homepage, catalogue, privacy and license pages. The earlier demonstration notes and image have been removed. Original vault files remain unchanged by publication.
+A static, Wikipedia-inspired reading interface for the existing English-language Obsidian collection. The **explicit approval manifest** selects the published notes and images, plus the homepage, privacy and license pages. Collection membership and page counts come from that manifest and the generated static index. The earlier demonstration notes and image have been removed. Original vault files remain unchanged by publication.
 
 ## Local development
 
@@ -26,20 +26,20 @@ The fallback is `example.invalid`; the Pages workflow supplies the real URL. `SI
 
 ## Project map
 
-| Path | Responsibility |
-| --- | --- |
-| `../vault/notes/` | The original 2,584 Markdown notes |
-| `../vault/assets/`, `../vault/.obsidian/` | Original images and Obsidian settings; open `vault/` in Obsidian |
-| `quartz/` | Pinned Quartz 5 core; see `UPSTREAM.md` and MIT license |
-| `quartz.config.yaml`, `quartz.ts` | Quartz 5 plugins, layout, and small configuration overrides |
-| `custom/` | Encyclopedia frame, stock-search presentation/accessibility adapter and modular styles |
-| `content/` | Compact homepage, dedicated alphabetical catalogue and policy/license pages |
-| `publish-manifest.json` | Explicit source/target mappings and per-note unresolved-reference approvals |
-| `scripts/` | Snapshot creation, safe staging, reference mapping, build/output audits, preview and testing |
-| `tests/` | Privacy tests, real-corpus output/browser checks and temporary rich-feature fixture |
-| `trusted-*.json` | Reviewed vendor static, generated plugin-resource and local math-resource inventories |
-| `public/`, `public-*/` | Ignored generated artifacts |
-| `../.github/workflows/pages.yml` | Manual, guarded GitHub Pages deployment |
+| Path                                      | Responsibility                                                                               |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `../vault/notes/`                         | Original Markdown notes                                                                      |
+| `../vault/assets/`, `../vault/.obsidian/` | Original images and Obsidian settings; open `vault/` in Obsidian                             |
+| `quartz/`                                 | Pinned Quartz 5 core; see `UPSTREAM.md` and MIT license                                      |
+| `quartz.config.yaml`, `quartz.ts`         | Quartz 5 plugins, layout, and small configuration overrides                                  |
+| `custom/`                                 | Encyclopedia frame, stock-search presentation/accessibility adapter and modular styles       |
+| `content/`                                | Compact homepage and policy/license pages                                                    |
+| `publish-manifest.json`                   | Explicit source/target mappings and per-note unresolved-reference approvals                  |
+| `scripts/`                                | Snapshot creation, safe staging, reference mapping, build/output audits, preview and testing |
+| `tests/`                                  | Privacy tests, real-corpus output/browser checks and temporary rich-feature fixture          |
+| `trusted-*.json`                          | Reviewed vendor static, generated plugin-resource and local math-resource inventories        |
+| `public/`, `public-*/`                    | Ignored generated artifacts                                                                  |
+| `../.github/workflows/pages.yml`          | Manual, guarded GitHub Pages deployment                                                      |
 
 Only Quartz's intended `quartz/styles/custom.scss` entrypoint is customized; it imports `custom/encyclopedia.scss`. Other core source remains unchanged. npm plugin packages are pinned by `package-lock.json`. `quartz.lock.json` has no Git plugins because the selected plugins use their Quartz 5 npm APIs.
 
@@ -47,7 +47,7 @@ Only Quartz's intended `quartz/styles/custom.scss` entrypoint is customized; it 
 
 Read [the publication policy](docs/publication.md) before changing approvals.
 
-The user approved replacing the demonstration corpus with the current existing collection on 8 November 2026. The committed manifest records each selected file individually. **Normal builds consume this manifest; they never discover or automatically import future vault files.** Four unreferenced original images, all Obsidian settings and the original checkout's 48 ignored notes remain outside the selection.
+The user approved replacing the demonstration corpus with the existing collection on 8 November 2026. The committed manifest records each selected file individually. **Normal builds consume this manifest; they never discover or automatically import future vault files.** Four unreferenced original images, all Obsidian settings and the original checkout's 48 ignored notes remain outside the selection.
 
 To deliberately regenerate a selection from currently tracked notes and their referenced raster assets:
 
@@ -55,7 +55,7 @@ To deliberately regenerate a selection from currently tracked notes and their re
 npm run snapshot:corpus
 ```
 
-This explicit command replaces the manifest and dedicated alphabetical catalogue. Review the Git diff before accepting its new files and unresolved-reference approvals. It is never called by `npm run build` or the deployment workflow. You can instead edit individual mappings and homepage entries manually. A changed referenced filename requires a reviewed mapping update; no original note compatibility edits are needed.
+This explicit command replaces the manifest. Review the Git diff before accepting its new files and unresolved-reference approvals. It is never called by `npm run build` or the deployment workflow. You can instead edit individual mappings manually; the next build regenerates the static index and article listing. A changed referenced filename requires a reviewed mapping update; no original note compatibility edits are needed.
 
 Version 2 manifest entries retain the original display title and map to URL-safe paths such as `articles/100-percent.md`. Filesystem source names are literal: `100%.md` and `Have you a pen?.md` remain valid source names. Source validation still rejects hidden paths, traversal, controls, backslashes and symlink ancestors. Target paths use stricter URL-safe checks. Both `head on.md` and `head-on.md` receive stable short hashes because Quartz otherwise gives them the same slug.
 
@@ -73,7 +73,7 @@ Rich-feature regression coverage now creates a separate temporary fixture corpus
 
 Raw HTML, unsupported metadata, alias redirects, non-raster attachments and symlinks remain rejected. Supported metadata is listed in the policy. Obsidian-specific programs such as Dataview or Templater do not run in the browser. Preserve the originals and use reviewed public-copy transformations if future formats require changes.
 
-The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks and search. Appearance controls directly above Backlinks offer small/standard/large text, standard/wide content, and automatic/light/dark color; browser-local preferences persist across navigation and reload. The alphabetical catalogue sits inside Explorer above the articles folder on every page, ordered A–Z, then Symbols and numbers, then 日本語 and other scripts. Article-specific contents and Explorer share one bounded sidebar scrollbar; wheel input over either section moves the same panel. Native disclosures collapse article sections and Explorer with mouse or keyboard. (Top) and the current Markdown section use bold themed text. Mobile navigation starts collapsed. The header links to the dedicated alphabetical catalogue. Hover previews omit the repeated article title; Quartz keeps hover windows disabled at mobile widths.
+The responsive layout supplies serif headings, blue links, article contents/topic navigation, backlinks and search. Appearance controls directly above Backlinks offer small/standard/large text, standard/wide content, and automatic/light/dark color; browser-local preferences persist across navigation and reload. The standalone alphabetical catalogue has been removed. Article-specific contents and Explorer share one bounded sidebar scrollbar; wheel input over either section moves the same panel. Native disclosures collapse article sections and Explorer with mouse or keyboard. (Top) and the current Markdown section use bold themed text. Mobile navigation starts collapsed. The header links to the generated article listing. Hover previews omit the repeated article title; Quartz keeps hover windows disabled at mobile widths.
 
 Quartz emits article files as `slug.html` and uses extensionless links. Dots can be part of a slug. Folder pages use `folder/index.html`; arbitrary trailing slashes on a non-folder article are unsupported. Use generated links or explicit `.html` URLs when sharing.
 
@@ -81,19 +81,19 @@ Quartz emits article files as `slug.html` and uses extensionless links. Dots can
 
 Search uses the stock **Quartz 5 `@quartz-community/search` component and bundled FlexSearch engine**. It searches note titles and bodies, updates suggestions while typing, supplies excerpts, supports Japanese and English, arrow keys, Enter, Escape, native Tab navigation and `Ctrl/Cmd+K`. Our adapter changes presentation/focus only; there is no search backend or custom ranking engine.
 
-Quartz writes `static/contentIndex.json`; the page downloads it and the client builds in-memory title/content/tag indexes. Queries run locally after loading. The dedicated A–Z catalogue and compact homepage are emitted but marked `unlisted` through Quartz's official UnlistedPages plugin so its repeated title list does not crowd actual-note search results. All **2,584 real notes** are indexed, including empty ones; two generated directory/tag indexes bring the JSON to **2,586 entries**. `unlisted` controls discovery, not access or privacy.
+Quartz writes `static/contentIndex.json`; the page downloads it and the client builds in-memory title/content/tag indexes. Queries run locally after loading. The compact homepage and policy pages are marked `unlisted` through Quartz's official UnlistedPages plugin. All selected notes are indexed, including empty ones; generated directory/tag pages may add records. Counts are derived from the index rather than assumed. `unlisted` controls discovery, not access or privacy.
 
 Current index measurement: **875,692 bytes raw / 248,160 bytes gzip**. Compression is illustrative; actual Pages encoding depends on hosting. Local independent browser measurements observed cold initialization of 216–253 ms and queries of 6–43 ms, depending on query type; deployed network/device performance will vary. Browser memory exceeds raw JSON size, and every reader downloads the complete index. Re-measure load/query latency and memory as the collection grows. [Pagefind](https://pagefind.app/) remains a future option if complete-index download or memory becomes excessive; no replacement engine is needed for this measured corpus.
 
-The approved 85 original images total **145,133,964 bytes (about 138.4 MiB)**; the largest is about **18.9 MiB**. They are preserved byte-for-byte. Individual image-heavy pages therefore have a noticeable transfer cost; reviewed, optimized web copies are a future opt-in improvement.
+At the recorded snapshot, the approved original images total **145,133,964 bytes (about 138.4 MiB)**; the largest is about **18.9 MiB**. They are preserved byte-for-byte. Individual image-heavy pages therefore have a noticeable transfer cost; reviewed, optimized web copies are a future opt-in improvement.
 
 ## Article order and landing-page selection
 
-The Explorer defaults to **Modified time(new to old)**. The articles folder page alone exposes six native select options for filename, modified time and created time in both directions. Selection persists locally and affects article order on other pages without adding controls there. Folder structure, collapse state and link nodes remain intact.
+The sidebar always orders articles by modified time, newest first, with deterministic filename ties and unknown dates last. It ignores obsolete saved arrangement choices. There is no sorting control or standalone catalogue page.
 
 Sorting is computed from approved source-note basenames and source filesystem modification/birth times, with explicit valid `created`/`modified` frontmatter taking precedence. Only ordinal name/created/modified ranks and `null` unknown markers enter the public index. Exact filesystem timestamps, source paths and a new basename field are not published. Unknown dates sort last in either direction; ties use deterministic filename ranks. Filesystem times can reflect a Git checkout or copy (especially in CI), not historical authorship; add reviewed explicit metadata if historical dates matter. Temporary staging timestamps are never used for sorting.
 
-The homepage samples up to `homepageMaximumNotes` nonempty real articles from the existing browser index on each load. Set this nonnegative integer in `site-settings.json` (default **6**). A compact responsive grid contains only actual selected cards, with text-only excerpts and no bulk image loading. The full catalogue has its own page.
+The homepage samples up to `homepageMaximumNotes` nonempty real articles from the existing browser index on each load. Set this nonnegative integer in `site-settings.json` (default **6**). A compact responsive grid contains only actual selected cards, with text-only excerpts and no bulk image loading. The homepage’s displayed note count is computed from the same JSON, including empty notes; neither the list nor the count assumes a fixed corpus size.
 
 Original note/editorial text now carries **CC BY-SA 4.0** under `../CONTENT-LICENSE.md`, as requested; quoted works and third-party media retain their own rights. Software licenses remain unchanged, including Quartz MIT. The footer links local Privacy and License pages, the user-provided website and source repository. An original SVG E-in-square favicon is a reviewed site asset.
 

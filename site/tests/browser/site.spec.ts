@@ -7,14 +7,6 @@ async function openContents(page: any) {
       await details.locator(":scope > summary").click();
   }
 }
-const modes = [
-  "name-asc",
-  "name-desc",
-  "modified-desc",
-  "modified-asc",
-  "created-desc",
-  "created-asc",
-];
 const expectedOrder = async (page: any, mode: string) =>
   page.evaluate(async (mode) => {
     const data = await fetch(
@@ -103,74 +95,110 @@ test("stock title, content and Japanese search works offline after loading", asy
   await expect(page.locator("h1")).toHaveText("caimans");
   expect(sockets).toBe(0);
 });
-test("dedicated catalogue stays inside Explorer above articles in canonical order", async ({
+test("Explorer uses newest modified order regardless of obsolete saved preferences", async ({
   page,
 }) => {
-  await page.goto("./articles/caimans");
-  await openContents(page);
-  const catalogue = page.getByRole("navigation", {
-    name: "Alphabetical catalogue",
+  await page.addInitScript(() => {
+    localStorage.setItem("article-order", "name-desc");
+    localStorage.setItem("catalogue-order", "created-asc");
   });
-  await expect(catalogue).toBeVisible();
-  await expect(
-    page.locator(".explorer-content .catalogue-navigation"),
-  ).toBeVisible();
-  await expect(catalogue.locator("li a")).toHaveText([
-    ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "Symbols and numbers",
-    "日本語 and other scripts",
-  ]);
-  await catalogue
-    .getByRole("link", { name: "Symbols and numbers", exact: true })
-    .click();
-  await expect(page).toHaveURL(/\/catalogue#symbols-and-numbers$/);
-  await expect(page.locator("#symbols-and-numbers")).toBeInViewport();
-  expect(
-    (await page.locator("article h3").allTextContents()).slice(-3),
-  ).toEqual(["Z", "Symbols and numbers", "日本語 and other scripts"]);
-  await page.goto("./articles/caimans");
-  await openContents(page);
-  await page
-    .getByRole("navigation", { name: "Alphabetical catalogue" })
-    .getByRole("link", { name: "日本語 and other scripts", exact: true })
-    .click();
-  await expect(
-    page.locator('[id="日本語-and-other-scripts"]'),
-  ).toBeInViewport();
-});
-test("six article orders persist with missing dates last and filename tie breaks", async ({
-  page,
-}) => {
-  await page.goto("./articles/");
-  await openContents(page);
-  const select = page.getByLabel("Arrange articles");
-  await expect(select).toBeVisible();
-  await expect(select).toHaveValue("modified-desc");
-  await expect
-    .poll(() => page.locator(".explorer-content a.nav-file-title").count())
-    .toBe(2584);
-  await expect(select.locator("option")).toHaveText([
-    "File name(A-Z)",
-    "File name(Z-A)",
-    "Modified time(new to old)",
-    "Modified time(old to new)",
-    "Created time(new to old)",
-    "Created time(old to new)",
-  ]);
-  for (const mode of modes) {
-    await select.selectOption(mode);
-    const expected = await expectedOrder(page, mode);
+  for (const route of ["./", "./articles/", "./articles/caimans"]) {
+    await page.goto(route);
+    await openContents(page);
+    await expect(
+      page.locator(".article-sort, .catalogue-navigation"),
+    ).toHaveCount(0);
+    await expect(page.locator('a[href*="/catalogue"]')).toHaveCount(0);
+    const expected = await expectedOrder(page, "modified-desc");
     await expect.poll(() => actualOrder(page)).toEqual(expected);
   }
-  await page.reload();
-  await openContents(page);
-  await expect(page.getByLabel("Arrange articles")).toHaveValue("created-asc");
-  await page.goto("./articles/caimans");
-  await openContents(page);
-  await expect(page.getByLabel("Arrange articles")).toHaveCount(0);
-  await expect
-    .poll(() => actualOrder(page))
-    .toEqual(await expectedOrder(page, "created-asc"));
+});
+test("homepage uses the static index for varying note counts and compact snippets", async ({
+  page,
+}) => {
+  for (const size of [0, 2, 9]) {
+    await page.route("**/static/contentIndex.json", (route) =>
+      route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify(
+          Object.fromEntries(
+            Array.from({ length: size }, (_, i) => [
+              `articles/note-${i}`,
+              {
+                slug: `articles/note-${i}`,
+                filePath: `articles/note-${i}.md`,
+                title: `Note ${i}`,
+                content: `Body ${i}`,
+                links: [],
+                tags: [],
+                sortRanks: { name: i, modified: i, created: i },
+              },
+            ]),
+          ),
+        ),
+      }),
+    );
+    await page.goto("./");
+    await expect(page.locator(".collection-note-count")).toHaveText(
+      `${size} notes in the collection.`,
+    );
+    const maximum = Number(
+      await page.locator(".home-highlights").getAttribute("data-maximum"),
+    );
+    await expect(page.locator(".highlight-cards > article")).toHaveCount(
+      Math.min(size, maximum),
+    );
+    await page.unroute("**/static/contentIndex.json");
+  }
+});
+test("footer starts after both sidebars and its links remain clickable", async ({
+  page,
+}) => {
+  for (const width of ["standard", "wide"]) {
+    await page.addInitScript(
+      (width) =>
+        localStorage.setItem("reading-appearance", JSON.stringify({ width })),
+      width,
+    );
+    for (const route of [
+      "./articles/caimans",
+      "./articles/culture",
+      "./",
+      "./privacy",
+    ]) {
+      await page.goto(route);
+      await page.evaluate(() =>
+        scrollTo(0, document.documentElement.scrollHeight),
+      );
+      await expect
+        .poll(() =>
+          page.evaluate(() => {
+            const footer = document
+              .querySelector(".encyclopedia-footer")!
+              .getBoundingClientRect();
+            return Array.from(document.querySelectorAll(".sidebar")).every(
+              (sidebar) =>
+                sidebar.getBoundingClientRect().bottom <= footer.top + 1,
+            );
+          }),
+        )
+        .toBe(true);
+      const privacy = page
+        .getByRole("navigation", { name: "Footer" })
+        .getByRole("link", { name: "Privacy policy" });
+      await expect(privacy).toBeInViewport();
+      expect(
+        await privacy.evaluate((link) => {
+          const r = link.getBoundingClientRect();
+          return link.contains(
+            document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2),
+          );
+        }),
+      ).toBe(true);
+      await privacy.click();
+      await expect(page.locator("h1")).toHaveText("Privacy policy");
+    }
+  }
 });
 test("appearance text width and color preferences persist, including automatic color", async ({
   page,

@@ -2,14 +2,15 @@ async function prepareHighlights() {
   const section = document.querySelector<HTMLElement>(".home-highlights");
   if (!section || section.dataset.ready) return;
   section.dataset.ready = "true";
-  const entries = Object.entries(
+  const notes = Object.entries(
     (await fetchData) as Record<string, { title: string; content: string }>,
   ).filter(
-    ([slug, note]) =>
-      slug.startsWith("articles/") &&
-      !slug.endsWith("/index") &&
-      note.content.trim(),
+    ([slug]) => slug.startsWith("articles/") && !slug.endsWith("/index"),
   );
+  const count = section.querySelector(".collection-note-count");
+  if (count)
+    count.textContent = `${notes.length.toLocaleString()} notes in the collection.`;
+  const entries = notes.filter(([, note]) => note.content.trim());
   for (let i = entries.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [entries[i], entries[j]] = [entries[j], entries[i]];

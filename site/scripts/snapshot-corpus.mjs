@@ -5,11 +5,7 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { slugifyFilePath } from "@quartz-community/utils";
 import { repositoryRoot, siteRoot, regularFile } from "./publish.mjs";
-import {
-  contentReferences,
-  referenceLookup,
-  escapeLabel,
-} from "./corpus-references.mjs";
+import { contentReferences, referenceLookup } from "./corpus-references.mjs";
 const tracked = execFileSync(
   "git",
   ["ls-files", "-z", "vault/notes", "vault/assets"],
@@ -88,44 +84,7 @@ const manifest = {
   ],
   assets,
 };
-const buckets = new Map();
-for (const note of [...notes].sort((a, b) =>
-  a.title.localeCompare(b.title, "en", { sensitivity: "base" }),
-)) {
-  const first = note.title
-    .normalize("NFKD")
-    .match(/[A-Za-z]/u)?.[0]
-    ?.toUpperCase();
-  const bucket = /^[\x00-\x7f]/u.test(note.title)
-    ? (first ?? "Symbols and numbers")
-    : "日本語 and other scripts";
-  buckets.set(bucket, [...(buckets.get(bucket) ?? []), note]);
-}
-let home = `---\ntitle: Encyclopedic Knowledge of English Language\ndescription: Words, expressions, grammar, usage, history, and culture from an evolving English-language notebook.\nunlisted: true\n---\nThis collection records discoveries about English: words and expressions, grammar and usage, history and culture, and connections to other subjects. It contains **${notes.length.toLocaleString("en-US")} existing notes** from the Obsidian collection.\n\nSearch looks inside the notes as well as their titles. Browse the alphabetical catalogue below, or follow links between related entries. Some notes are brief or empty; they are retained as part of the original collection. References without a recorded note are shown as plain text.\n\n## Alphabetical catalogue\n\n`;
-const categoryOrder = [
-  ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-  "Symbols and numbers",
-  "日本語 and other scripts",
-];
-for (const bucket of categoryOrder) {
-  const list = buckets.get(bucket);
-  if (!list) continue;
-  home +=
-    `\n### ${bucket}\n\n` +
-    list
-      .map((note) => `- [${escapeLabel(note.title)}](${note.target})`)
-      .join("\n") +
-    "\n";
-}
-await fs.mkdir(path.join(siteRoot, "content"), { recursive: true });
-await fs.writeFile(
-  path.join(siteRoot, "content/catalogue.md"),
-  home.replace(
-    "title: Encyclopedic Knowledge of English Language",
-    "title: Alphabetical catalogue",
-  ),
-);
-for (const name of ["catalogue", "privacy", "license"])
+for (const name of ["privacy", "license"])
   manifest.notes.push({
     source: `site/content/${name}.md`,
     target: `${name}.md`,
