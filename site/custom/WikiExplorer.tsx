@@ -25,6 +25,7 @@ export const WikiExplorer: QuartzComponent = (props) => {
     return (
       <details class="navigation-panel explorer-panel">
         <summary>Explorer</summary>
+        {graphLink}
         <form
           class="article-date-filter"
           hidden
@@ -50,7 +51,6 @@ export const WikiExplorer: QuartzComponent = (props) => {
           </p>
           <p class="date-filter-status" role="status" />
         </form>
-        {graphLink}
       </details>
     );
   const tree = stock(props) as VNode<{ children: TreeChild[] }>;
@@ -64,8 +64,8 @@ export const WikiExplorer: QuartzComponent = (props) => {
   return (
     <details class="navigation-panel explorer-panel" open>
       <summary>Explorer</summary>
-      {cloneElement(tree, {}, ...children)}
       {graphLink}
+      {cloneElement(tree, {}, ...children)}
     </details>
   );
 };

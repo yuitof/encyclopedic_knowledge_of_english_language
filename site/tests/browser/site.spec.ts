@@ -1222,7 +1222,7 @@ test("Top counts as content while empty Explorer closes automatically", async ({
   await expect(explorer).toHaveAttribute("open", "");
 });
 
-test("Graph view works through Explorer with local resources and keyboard note navigation", async ({
+test("Graph view works through Explorer with local resources and normal navigation", async ({
   page,
 }) => {
   const externalScripts: string[] = [],
@@ -1239,6 +1239,16 @@ test("Graph view works through Explorer with local resources and keyboard note n
   await page.goto("./articles/culture");
   expect(graphRequests).toEqual([]);
   await openExplorer(page);
+  await expect(page.locator(".recently-updated-label")).toBeVisible();
+  expect(
+    await page.locator(".explorer-panel").evaluate((panel) => {
+      const graph = panel.querySelector(".graph-view-link")!;
+      const recent = panel.querySelector(".recently-updated-label")!;
+      return !!(
+        graph.compareDocumentPosition(recent) & Node.DOCUMENT_POSITION_FOLLOWING
+      );
+    }),
+  ).toBe(true);
   await page.getByRole("link", { name: "Graph view", exact: true }).click();
   await expect(page).toHaveURL(/\/graph$/);
   const graph = page.locator(".graph-page");
@@ -1256,21 +1266,21 @@ test("Graph view works through Explorer with local resources and keyboard note n
     (await graph.locator(".graph-container").getAttribute("data-cfg")) ?? "{}",
   );
   expect(cfg.depth).toBe(-1);
-  const select = page.getByLabel("Open a note with the keyboard");
-  await select.selectOption({ label: "culture" });
-  const link = page.getByRole("link", { name: "Open selected note" });
-  await expect(link).toHaveAttribute("href", /\/articles\/culture$/);
-  await select.focus();
-  await page.keyboard.press("Tab");
-  await expect(link).toBeFocused();
+  await expect(
+    graph.locator("select, .graph-note-browser, .graph-selected-note"),
+  ).toHaveCount(0);
+  await expect(
+    page.getByText("Open a note with the keyboard", { exact: true }),
+  ).toHaveCount(0);
   expect(externalScripts).toEqual([]);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  await page.getByRole("link", { name: "Main page", exact: true }).focus();
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/\/articles\/culture$/);
+  await expect(page).toHaveURL(/\/(?:knowledge\/)?$/);
 });
 
 test("landing notebook cards use neutral headings and borders", async ({
