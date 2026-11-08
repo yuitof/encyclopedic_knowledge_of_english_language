@@ -621,3 +621,64 @@ test("sidebar pins to the window edge until the article ends", async ({
     await sidebar.evaluate((element) => element.getBoundingClientRect().top),
   ).toBeGreaterThan(30);
 });
+
+test("sidebars pin on shorter articles without reserving empty viewport space", async ({
+  page,
+}) => {
+  await page.goto("./articles/caimans");
+  await expect(page.locator(".nav-show-more")).toHaveCount(1);
+  await page.evaluate(() => document.fonts.ready);
+  const floating =
+    page.viewportSize()!.width >= 1200
+      ? page.locator(".sidebar")
+      : page.locator(".sidebar.left");
+  await page.evaluate(() => scrollTo(0, 0));
+  for (const panel of await floating.all()) {
+    expect(
+      await panel.evaluate((element) => element.getBoundingClientRect().top),
+    ).toBeGreaterThan(30);
+    expect(
+      await panel.evaluate((element) =>
+        Math.abs(
+          element.getBoundingClientRect().bottom -
+            element.lastElementChild!.getBoundingClientRect().bottom,
+        ),
+      ),
+    ).toBeLessThan(2);
+  }
+  await page.mouse.move(
+    page.viewportSize()!.width / 2,
+    page.viewportSize()!.height - 100,
+  );
+  await page.mouse.wheel(0, 300);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(100);
+  for (const panel of await floating.all()) {
+    await expect
+      .poll(() =>
+        panel.evaluate((element) => element.getBoundingClientRect().top),
+      )
+      .toBeCloseTo(0, 0);
+  }
+  await expect(
+    page.getByText("Around this article", { exact: true }),
+  ).toHaveCount(0);
+  const appearance = page.locator(".appearance-panel");
+  expect(
+    await appearance.evaluate(
+      (element) => getComputedStyle(element).borderBottomWidth,
+    ),
+  ).toBe("0px");
+  for (const legend of await appearance.locator("legend").all()) {
+    expect(
+      await legend.evaluate((element) => getComputedStyle(element).fontWeight),
+    ).toBe("400");
+    expect(
+      await legend.evaluate(
+        (element) => getComputedStyle(element).borderBottomWidth,
+      ),
+    ).toBe("1px");
+  }
+  await expect(
+    page.getByRole("link", { name: "yuitof’s website", exact: true }),
+  ).toHaveCount(0);
+});

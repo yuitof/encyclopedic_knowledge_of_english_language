@@ -48,16 +48,16 @@ a.internal {
   }
   .sidebar {
     padding: 0;
-    top: 1.5rem;
-    height: calc(100vh - 3rem);
+    position: sticky;
+    top: 0;
+    height: auto;
+    max-height: calc(100dvh - 1rem);
     overflow-y: auto;
     gap: 1rem;
     align-self: start;
   }
   .sidebar.left {
     display: block;
-    position: sticky;
-    top: 0;
     background: var(--light);
     overscroll-behavior-y: contain;
     // The sidebar owns scrolling; its navigation sections expand naturally.

@@ -11,7 +11,6 @@ export const SiteFooter: QuartzComponent = ({ fileData }) => (
     <nav aria-label="Footer">
       <a href={`${pathToRoot(fileData.slug!)}/privacy`}>Privacy policy</a>
       <a href={`${pathToRoot(fileData.slug!)}/license`}>License</a>
-      <a href="https://www.yuitof.com/">yuitof’s website</a>
       <a href="https://github.com/yuitof/encyclopedic_knowledge_of_english_language">
         Source on GitHub
       </a>

@@ -20,7 +20,6 @@
   grid-template-columns: 205px minmax(0, 1fr) 190px;
 }
 .appearance-panel {
-  border-bottom: 1px solid var(--lightgray);
   padding-bottom: 1rem;
 }
 .appearance-panel > summary {
@@ -30,14 +29,16 @@
 }
 .appearance-panel fieldset {
   border: 0;
-  border-top: 1px solid var(--lightgray);
   padding: 0.6rem 0;
   margin: 0.25rem 0;
   min-width: 0;
 }
 .appearance-panel legend {
-  padding: 0 0.3rem 0 0;
-  font-weight: 600;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 0 0.4rem;
+  border-bottom: 1px solid var(--lightgray);
+  font-weight: 400;
 }
 .appearance-panel label {
   display: flex;

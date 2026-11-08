@@ -68,7 +68,6 @@ export const EncyclopediaFrame: PageFrame = {
             </div>
           </main>
           <aside class="right sidebar" aria-label="Related information">
-            <h2 class="sidebar-title">Around this article</h2>
             {right.map((Component) => (
               <Component {...data} />
             ))}
