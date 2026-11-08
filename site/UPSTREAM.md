@@ -1,7 +1,0 @@
-# Quartz upstream
-
-Vendored Quartz **5.0.0**, repository https://github.com/jackyzha0/quartz, branch `v5`, commit `97a2d05f80c4c50534959b1d0d41cc4b3895625e`. MIT license retained in `LICENSE.txt`. Core `quartz/`, declarations, TypeScript configuration and bootstrap `quartz.ts` came from that revision. Custom code lives in `custom/`, `scripts/`, `tests/`, YAML configuration and the supported custom stylesheet entrypoint. Upstream core remains unchanged apart from `quartz/styles/custom.scss`, its intended customization entrypoint.
-
-Plugins use the actual Quartz 5 npm package APIs. `package-lock.json` pins those packages; `quartz.lock.json` records Quartz's plugin installation. To upgrade, review upstream changes, update in this directory, reinstall with npm and Quartz, then rerun publication, type, output and browser checks. Do not use `quartz sync` in this vault repository: it combines Git operations outside our isolation workflow.
-
-References consulted: [Quartz 5](https://quartz.jzhao.xyz/), [plugins](https://quartz.jzhao.xyz/plugins/), [configuration](https://quartz.jzhao.xyz/configuration), [search](https://quartz.jzhao.xyz/features/full-text-search), [hosting](https://quartz.jzhao.xyz/hosting), [Vector 2022 design](https://www.mediawiki.org/wiki/Skin:Vector/2022/Design_documentation), [GitHub custom Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
