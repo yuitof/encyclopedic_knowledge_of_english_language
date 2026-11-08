@@ -55,6 +55,9 @@ async function prepareArticleSorting() {
   try {
     initial = localStorage.getItem(storageKey) ?? initial;
   } catch {}
+  // An explicit incoming order (such as Show more) overrides the saved preference.
+  const requested = new URL(window.location.href).searchParams.get("sort");
+  if (requested && allowed.has(requested)) initial = requested;
   select.value = allowed.has(initial) ? initial : "name-asc";
   const calendar = document.querySelector<HTMLFormElement>(
     ".article-date-filter",
@@ -165,6 +168,11 @@ async function prepareArticleSorting() {
   };
   const change = () => {
     apply();
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("sort")) {
+      url.searchParams.set("sort", select.value);
+      history.replaceState(history.state, "", url);
+    }
     try {
       localStorage.setItem(storageKey, select.value);
     } catch {}

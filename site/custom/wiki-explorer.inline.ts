@@ -75,7 +75,7 @@ async function prepareArticleOrder() {
         const link = document.createElement("a");
         row.className = "show-more-row";
         link.className = "internal nav-show-more";
-        link.href = `${document.body.dataset.basepath ?? ""}/articles/`;
+        link.href = `${document.body.dataset.basepath ?? ""}/articles/?sort=modified-desc`;
         link.textContent = "Show more";
         row.append(link);
         articles.append(row);

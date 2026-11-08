@@ -125,6 +125,9 @@ test("Explorer shows only the ten newest modified articles regardless of obsolet
 test("Show more follows the recent articles and opens the full list", async ({
   page,
 }) => {
+  await page.addInitScript(() =>
+    localStorage.setItem("article-list-order", "created-asc"),
+  );
   await page.goto("./articles/caimans");
   await openContents(page);
   await openExplorer(page);
@@ -137,16 +140,33 @@ test("Show more follows the recent articles and opens the full list", async ({
       '.folder-container[data-folderpath="articles/index"] + .folder-outer > ul > li:last-child > a',
     ),
   ).toHaveText("Show more");
+  await expect(link).toHaveAttribute(
+    "href",
+    /\/articles\/\?sort=modified-desc$/,
+  );
   await link.click();
-  await expect(page).toHaveURL(/\/articles\/$/);
+  await expect(page).toHaveURL(/\/articles\/\?sort=modified-desc$/);
   await expect(page.locator(".page-listing .section-li")).toHaveCount(
     (await expectedOrder(page, "modified-desc")).length,
   );
-  await openContents(page);
-  await openExplorer(page);
-  await expect(
-    page.getByRole("link", { name: "Show more", exact: true }),
-  ).toHaveCount(0);
+  const select = page.getByRole("combobox", { name: "Sort articles" });
+  await expect(select).toBeEnabled();
+  await expect(select).toHaveValue("modified-desc");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(await expectedOrder(page, "modified-desc"));
+  await page.reload();
+  await expect(select).toBeEnabled();
+  await expect(select).toHaveValue("modified-desc");
+  await select.selectOption("name-asc");
+  await expect(page).toHaveURL(/\?sort=name-asc$/);
+  await page.reload();
+  await expect(select).toBeEnabled();
+  await expect(select).toHaveValue("name-asc");
+  await expect
+    .poll(() => articleListOrder(page))
+    .toEqual(await expectedArticleList(page, "name-asc"));
+  await expect(page.locator(".nav-show-more")).toHaveCount(0);
 });
 test("homepage uses the static index for varying note counts and compact snippets", async ({
   page,
@@ -465,7 +485,7 @@ test("Top reaches document zero including the masthead with mouse and keyboard",
   }
   await openExplorer(page);
   await page.locator(".nav-show-more").click();
-  await expect(page).toHaveURL(/\/articles\/$/);
+  await expect(page).toHaveURL(/\/articles\/\?sort=modified-desc$/);
   await openContents(page);
   await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
   await top.click();
