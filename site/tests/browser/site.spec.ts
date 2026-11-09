@@ -1638,6 +1638,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
       const transform = edge.worldTransform;
       return {
         diameter: node.getBounds().width,
+        baseDiameter: node.getLocalBounds().width,
         titleHeight: label.getBounds().height,
         titleOpacity: label.alpha,
         zoom: (document.querySelector(".graph-container canvas") as any).__zoom
@@ -2056,6 +2057,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
     .toBe(50);
   const extreme = await screenSizes();
+  expect(extreme.diameter / extreme.baseDiameter).toBeCloseTo(8.408, 3);
   await page.mouse.wheel(0, 500);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
@@ -2066,8 +2068,8 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   expect(halfDiameterRatio).toBeLessThan(Math.SQRT1_2);
   const halfTitleRatio =
     (await screenSizes()).titleHeight / extreme.titleHeight;
-  expect(halfTitleRatio).toBeGreaterThan(0.5);
-  expect(halfTitleRatio).toBeLessThan(0.56);
+  expect(halfTitleRatio).toBeGreaterThan(0.84);
+  expect(halfTitleRatio).toBeLessThan(0.87);
   await expect
     .poll(async () => (await screenSizes()).thickness)
     .toBeCloseTo(originalSizes.thickness, 2);
@@ -2078,6 +2080,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
     .toBeCloseTo(1, 2);
   const scales = [await screenSizes()];
+  expect(scales[0].diameter / scales[0].baseDiameter).toBeCloseTo(1, 3);
   for (const zoom of [2, 4, 8, 16, 32, 50]) {
     await page.mouse.wheel(0, -500);
     await settleZoom();
@@ -2099,7 +2102,8 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     );
   expect(growth[0]).toBeGreaterThan(0.49);
   expect(growth[0]).toBeLessThan(0.6);
-  expect(growth.at(-1)!).toBeGreaterThan(0.9);
+  expect(growth.at(-1)!).toBeGreaterThan(0.65);
+  expect(growth.at(-1)!).toBeLessThan(0.75);
   for (let i = 1; i < growth.length; i++) {
     expect(growth[i]).toBeGreaterThanOrEqual(growth[i - 1] - 0.001);
     expect(growth[i] - growth[i - 1]).toBeLessThan(0.2);
@@ -2438,11 +2442,11 @@ test.describe("Graph rendering quality", () => {
     }
     for (const sample of fontCurve.slice(0, 3))
       expect(sample.size).toBeCloseTo(8, 2);
-    expect(fontCurve.find((sample) => sample.zoom === 16)!.size).toBeCloseTo(
-      9.514,
+    expect(fontCurve.find((sample) => sample.zoom === 32)!.size).toBeCloseTo(
+      8.316,
       2,
     );
-    expect(fontCurve.at(-1)!.size).toBeCloseTo(25.07, 2);
+    expect(fontCurve.at(-1)!.size).toBeCloseTo(9.514, 2);
     const fontGrowth = fontCurve
       .slice(1)
       .map(
@@ -2451,8 +2455,8 @@ test.describe("Graph rendering quality", () => {
           Math.log(sample.zoom / fontCurve[i].zoom),
       );
     expect(fontGrowth[0]).toBeLessThan(0.001);
-    expect(fontGrowth.at(-1)!).toBeGreaterThan(0.96);
-    expect(fontGrowth.at(-1)!).toBeLessThan(1);
+    expect(fontGrowth.at(-1)!).toBeGreaterThan(0.44);
+    expect(fontGrowth.at(-1)!).toBeLessThan(0.5);
     for (let i = 1; i < fontGrowth.length; i++) {
       expect(fontGrowth[i]).toBeGreaterThanOrEqual(fontGrowth[i - 1]);
       expect(fontGrowth[i] - fontGrowth[i - 1]).toBeLessThan(0.4);
