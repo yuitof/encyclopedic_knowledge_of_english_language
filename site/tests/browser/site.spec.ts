@@ -2451,11 +2451,11 @@ test.describe("Graph rendering quality", () => {
     // client coordinate so the extreme zoom-out case can be hovered reliably.
     for (const [zoom, hoveredSize] of [
       [0.15, 8],
-      [1, 8.00049],
-      [8, 9.51366],
-      [12, 12.55316],
-      [16, 16.24435],
-      [50, 50.00819],
+      [1, 8.0001],
+      [8, 8.36877],
+      [12, 9.51366],
+      [16, 11.42553],
+      [50, 33.36095],
     ]) {
       await canvas.evaluate((view, zoom) => {
         const app = (window as any).__qualityApp,

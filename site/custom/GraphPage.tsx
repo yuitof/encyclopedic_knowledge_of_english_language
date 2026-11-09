@@ -160,8 +160,8 @@ runtime = runtime.replace(
     // Smoothly increase logarithmic growth from 1/2 to 1 around 12x.
     return Math.sqrt(zoom)*Math.pow((144+zoom*zoom)/145,.25);
   }
-  // Hovered font size in screen pixels: an 8px floor, transitioning around 8x.
-  function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/8,4),.25);}
+  // Hovered font size in screen pixels: a low-zoom floor, smoothly becoming linear.
+  function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/12,4),.25);}
   function graphSetTitleSize(node){
     var normal=j.k/2,hover=graphTitleSize(j.k);
     var size=normal+(hover-normal)*(node.hoverAmount||0);
