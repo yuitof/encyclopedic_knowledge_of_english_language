@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    {
+      "id": "frontmatter-modified-date",
+      "name": "Update modified date",
+      "version": "1.5.4",
+      "repository": "https://github.com/alangrainger/obsidian-frontmatter-modified-date",
+      "release": "https://github.com/alangrainger/obsidian-frontmatter-modified-date/releases/tag/1.5.4",
+      "files": {
+        "main.js": "aa29527461992636d15b34833b743584feda5e3c3c01419840acb551124169ea",
+        "manifest.json": "24ed2417f3bf0607bf51211f41fc14704abe0292cc1fc73569fbf73353687732",
+        "LICENSE": "75d4e6b2feaaace7b201e3f367052c9bb3c8201ab05d8b81091e2d3c1c15032f"
+      }
+    }
+  ]
+}
