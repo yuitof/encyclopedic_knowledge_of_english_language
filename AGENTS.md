@@ -91,18 +91,36 @@
 <!-- - As for certain vertices, the name and the vertex are not center-aligned. Fix it. -->
 
 - As for the room between a vertex and its name
-  low zoom: make sure names do not overlap the cursor
+from the center, radius + X/zoom, which is size to the screen
+  <!-- low zoom: make sure names do not overlap the cursor
   very high zoom: make sure the text do not overlap the vertex.
-  What function do you think is good for it?
+  What function do you think is good for it? -->
 
-<!-- $A(r)=\left(\frac{r}{1.35}\right)^{\log_2(1.3)}
-\approx\left(\frac{r}{1.35}\right)^{0.379}$ -->
+$A(r)=\left(\frac{r}{1.35}\right)^{\log_2(1.3)}
+\approx\left(\frac{r}{1.35}\right)^{0.379}$
 
 $S(z,r)=
-\underbrace{8\left(1+\left(\frac{z}{16}\right)^4\right)^{1/4}}_{\text{size determined by zoom}}
-\times
-\underbrace{\left(\frac{r}{1.35}\right)^{\log_2(1.3)}}_{\text{vertex-size multiplier}}$
+8\left(1+\left(\frac{z}{16}\right)^4\right)^{1/4}\times\left(\frac{r}{1.35}\right)^{\log_2(1.3)}$
 
 <!-- - During 8x and 16x, when the cursor is over a vertex, -->
 <!--
 - When the cursor is over a vertex, change the its name's font size to what we've already implemented from z/2 * (the multiplier from the base radius) -->
+
+<!-- - as for the name size animation when the vertex is hovered, not that changing to z/2 \* (the multiplier from the base radius), but $8\left(1+\left(\frac{z}{8}\right)^4\right)^{1/4}\times\left(\frac{r}{1.35}\right)^{\log_2(1.3)}$ -->
+
+$S(z,r)=A(r)\begin{cases}
+8 & z\le12\\[3pt]
+8+\dfrac{(z-12)^2}{32} & 12<z<20\\[6pt]
+z/2 & z\ge20
+\end{cases}$
+
+$S_{\text{default}}(z,r)=A(r)\begin{cases}
+8 & 8\le z\le12\\[3pt]
+8+\dfrac{(z-12)^2}{32} & 12<z<20\\[6pt]
+z/2 & z\ge20
+\end{cases}
+$
+
+$M(r)=\left(\frac{r}{1.35}\right)^{\log_2(1.3)}$
+
+$\left(1+\left(\frac{z}{12}\right)^8\right)^{1/8}$
