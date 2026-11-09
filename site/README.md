@@ -12,6 +12,8 @@ git clone --recurse-submodules https://github.com/yuitof/encyclopedic_knowledge_
 
 For an existing clone, run `git submodule update --init --recursive` from its root. Open `.vault-data/vault/` in Obsidian.
 
+The data submodule includes **Update modified date 1.5.4**, its MIT license, and shared timestamp settings. In Obsidian's **Settings → Community plugins**, review and exit Restricted mode if you want community plugins to run, refresh the plugin list if needed, and enable **Update modified date**. It uses `created`/`modified`, typing-only updates, and a 10-second delay. Each installation makes its own Restricted mode decision; cloning does not disable it. See the [vault setup instructions](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/blob/vault/README.md) for details. Per-device layouts, caches, and trash are ignored; plugin files and shared settings are versioned.
+
 Local builds also initialize `.vault-data` automatically if it is absent or empty, using the recorded commit. An existing checkout is used as-is, including local edits; builds never pull, switch branches or reset it. If `VAULT_ROOT` is set, that checkout must already contain `vault/notes/` and is never initialized automatically.
 
 Submodule initialization checks out the recorded commit with a detached HEAD. Before editing notes, switch to the data branch and pull its latest changes:
