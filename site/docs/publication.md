@@ -2,15 +2,17 @@
 
 ## Branches
 
-`main` holds the website code. `vault` holds `vault/notes/`, `vault/assets/`, Obsidian settings, the content license, and a small Actions caller. Git history is retained on both branches; removing a directory from the current tree does not erase history.
+`main` holds the website code. `vault` holds `vault/notes/`, `vault/assets/`, Obsidian settings, the content license, and a small Actions caller. `sample-vault` holds an independent starter collection with example notes and shared editor setup. Git history is retained; creating a fresh sample branch does not erase collection history elsewhere in the repository.
 
 Every nonhidden Markdown file under `vault/notes/` is selected automatically on every build. There is no per-note approval manifest. Referenced supported PNG/JPEG/GIF/WebP/AVIF images under `vault/assets/` are included after signature validation. Unreferenced attachments and Obsidian settings are excluded from the generated website. All pushed notes must be suitable for publication; `publish: false` and `draft: true` are validation errors rather than silent exclusions.
 
 Local builds read `.vault-data/` by default, or a checkout root specified by `VAULT_ROOT`. This root contains `vault/notes/` and `vault/assets/`, not just their contents. Website project pages come from `main`'s `site/content/`.
 
-`.vault-data` is a submodule pointing to this repository's `vault` branch. Recursive cloning downloads both code and the recorded data commit. The branch setting supports explicit `git submodule update --remote .vault-data`; ordinary submodule updates use the recorded commit. The Pages workflow still checks out the latest `vault` branch separately so a data push does not require updating the pin on `main`.
+`.vault-data` is a submodule pinned to this repository's `sample-vault` branch. Recursive cloning checks out code and the recorded sample commit. Explicit `git submodule update --remote .vault-data` follows sample-vault. Live content is edited in a separate vault checkout and selected locally with `VAULT_ROOT`; absent that variable, the default is always `.vault-data`. The Pages workflow still checks out the latest `vault` branch separately so a data push never requires changing the sample pin on `main`.
 
 Local publication initializes the default submodule only when its directory is absent or empty. Existing checkouts, including uncommitted notes, are used without fetching or changing revisions. An incomplete populated checkout or invalid explicit `VAULT_ROOT` fails with an actionable error. CI places its separate full-history data checkout at `website/.vault-data`, repairs missing dates there, and builds from that repaired revision.
+
+CI also checks out main recursively in a separate read-only job and runs tests without `VAULT_ROOT`, verifying the pinned starter collection. Both sample and live jobs must pass before Pages deployment. Sample output audits assert the expected example notes, referenced image, missing-note placeholder and exclusion of templates/editor settings; the sample browser suite checks root/subpath navigation, search, image rendering and graph rendering. Live checks retain the full real-collection browser suite. The `sample-vault.json` marker selects the test profile only; it does not affect production selection or publication policy.
 
 ## Timestamps
 

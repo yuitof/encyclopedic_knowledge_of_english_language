@@ -1,4 +1,4 @@
 [submodule ".vault-data"]
 	path = .vault-data
 	url = https://github.com/yuitof/encyclopedic_knowledge_of_english_language.git
-	branch = vault
+	branch = sample-vault

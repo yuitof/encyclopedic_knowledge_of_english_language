@@ -49,6 +49,13 @@ test("vault pushes call the shared workflow with permission to repair and push t
     (step) => step.run === "npm run build",
   );
   assert.ok(repairIndex >= 0 && repairIndex < buildIndex);
+  const sample = shared.jobs.sample;
+  assert.equal(sample.permissions.contents, "read");
+  assert.equal(sample.env?.VAULT_ROOT, undefined);
+  assert.equal(sample.steps[0].with.submodules, "recursive");
+  assert.equal(sample.steps[0].with.ref, "main");
+  assert.ok(sample.steps.some((step) => step.run === "npm test"));
+  assert.deepEqual(shared.jobs.deploy.needs, ["build", "sample"]);
 });
 
 function git(root, args, date) {

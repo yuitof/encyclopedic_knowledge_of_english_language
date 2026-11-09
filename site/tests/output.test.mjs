@@ -9,10 +9,18 @@ import { auditOutput } from "../scripts/verify-output.mjs";
 import { ensureVaultCheckout } from "../scripts/vault-checkout.mjs";
 const output = path.join(siteRoot, process.env.SITE_OUTPUT ?? "public");
 const { discoverVault } = await import("../scripts/discover-vault.mjs");
-const manifest = await discoverVault(
+const vaultRoot = await ensureVaultCheckout(
   path.dirname(siteRoot),
-  await ensureVaultCheckout(path.dirname(siteRoot), process.env.VAULT_ROOT),
+  process.env.VAULT_ROOT,
 );
+const sample = await fs.stat(path.join(vaultRoot, "sample-vault.json")).then(
+  () => true,
+  (error) => {
+    if (error.code === "ENOENT") return false;
+    throw error;
+  },
+);
+const manifest = await discoverVault(path.dirname(siteRoot), vaultRoot);
 const note = (title) => manifest.notes.find((entry) => entry.title === title);
 const html = async (title) =>
   fs.readFile(
@@ -43,21 +51,47 @@ test("all approved existing notes including empty notes are indexed; samples are
     /intervalhalving|Welcome to Knowledge Commons|A transcluded fixture paragraph/u,
   );
 });
-test("real notes retain Unicode titles, images, aliases, links and collision-separated routes", async () => {
-  assert.match(await html("caimans"), /<img[^>]+assets\//u);
-  assert.match(await html("CPTSD"), /第一次世界大戦/u);
-  assert.match(
-    await html("三単現の s を飛ばすことで非標準な位言い方ができる"),
-    /三単現/u,
-  );
-  const a = note("head on"),
-    b = note("head-on");
-  assert.notEqual(a.target, b.target);
-  assert.match(await html("head on"), /head on/u);
-  assert.match(await html("head-on"), /head-on/u);
-  assert.match(await html("100%"), /100%/u);
-  assert.match(await html("Have you a pen?"), /Have you a pen\?/u);
-});
+test(
+  "real notes retain Unicode titles, images, aliases, links and collision-separated routes",
+  { skip: sample },
+  async () => {
+    assert.match(await html("caimans"), /<img[^>]+assets\//u);
+    assert.match(await html("CPTSD"), /第一次世界大戦/u);
+    assert.match(
+      await html("三単現の s を飛ばすことで非標準な位言い方ができる"),
+      /三単現/u,
+    );
+    const a = note("head on"),
+      b = note("head-on");
+    assert.notEqual(a.target, b.target);
+    assert.match(await html("head on"), /head on/u);
+    assert.match(await html("head-on"), /head-on/u);
+    assert.match(await html("100%"), /100%/u);
+    assert.match(await html("Have you a pen?"), /Have you a pen\?/u);
+  },
+);
+test(
+  "starter output contains only sample notes, referenced image and a generated missing page",
+  { skip: !sample },
+  async () => {
+    assert.deepEqual(
+      manifest.notes
+        .filter((note) => note.target.startsWith("articles/"))
+        .map((note) => note.title)
+        .sort(),
+      ["Linking notes", "Welcome", "Writing notes"],
+    );
+    assert.equal(manifest.assets.length, 1);
+    assert.match(await html("Welcome"), /assets\/note-connections\.png/u);
+    const publication = await preparePublication();
+    assert.equal(publication.generatedNotes.length, 1);
+    assert.ok(
+      !publication.files.some((file) =>
+        /templates|\.obsidian|sample-vault\.json/u.test(file),
+      ),
+    );
+  },
+);
 test("only approved assets/content are emitted, with no Obsidian settings, source maps or temporary fixtures", async () => {
   const files = [];
   async function walk(dir) {
@@ -144,7 +178,16 @@ test("project pages, sort ranks and favicon are public without source filesystem
     ).includes(">E</text>"),
   );
   assert.doesNotMatch(
-    JSON.stringify(index),
+    // Article text may legitimately explain source folder names. Check emitted
+    // metadata, rather than treating ordinary prose as a metadata leak.
+    JSON.stringify(
+      Object.fromEntries(
+        Object.entries(index).map(([slug, { content, ...metadata }]) => [
+          slug,
+          metadata,
+        ]),
+      ),
+    ),
     /birthtime|mtimeMs|vault\/notes|fileName/u,
   );
 });

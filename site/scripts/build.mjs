@@ -2,7 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 import { spawnSync } from "node:child_process";
-import { preparePublication, siteRoot } from "./publish.mjs";
+import { preparePublication, siteRoot, repositoryRoot } from "./publish.mjs";
+import { ensureVaultCheckout } from "./vault-checkout.mjs";
 import { enrichSortRanks } from "./sort-ranks.mjs";
 import {
   checkedGraphAssets,
@@ -34,7 +35,14 @@ try {
   await trustedStatic();
   await trustedMath();
   await checkedGraphAssets();
-  const publication = await preparePublication({ output: staging });
+  const vaultRoot = await ensureVaultCheckout(
+    repositoryRoot,
+    process.env.VAULT_ROOT,
+  );
+  console.log(
+    `Building content from ${vaultRoot}${process.env.VAULT_ROOT === undefined ? " (default .vault-data)" : " (VAULT_ROOT)"}`,
+  );
+  const publication = await preparePublication({ output: staging, vaultRoot });
   const baseUrl = process.env.SITE_BASE_URL ?? "example.invalid";
   if (!/^[a-z\d.-]+(?::\d+)?(?:\/[\w.-]+)*\/?$/iu.test(baseUrl))
     throw new Error(

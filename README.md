@@ -24,13 +24,13 @@ A Quartz 5 website for an explicitly selected public collection lives in [`site/
 
 The original collection lives on the **`vault` branch**, under `vault/notes/`, `vault/assets/` and `vault/.obsidian/`. Every note pushed there is automatically included in the website after validation. Open the data branch's `vault/` folder in Obsidian. Website code lives on **`main`**.
 
-Download the website and its data together:
+Download the website and its starter collection together:
 
 ```sh
 git clone --recurse-submodules https://github.com/yuitof/encyclopedic_knowledge_of_english_language.git
 ```
 
-The data is checked out in the `.vault-data` submodule. For an existing clone, run `git submodule update --init --recursive`. See the local development instructions below before editing or updating the data.
+The `.vault-data` submodule pins a commit on **sample-vault**, containing example notes, an image and templates. Local builds and timestamp formatting use it when `VAULT_ROOT` is unset. Keep the actual **vault** branch in a separate checkout and set `VAULT_ROOT` when building or formatting that collection. GitHub Actions deploys the latest **vault** branch, independently of the sample pin. For an existing clone, run `git submodule update --init --recursive` after saving any work in its old data checkout. See the local development instructions below before editing or updating data.
 
 The vault includes **Update modified date 1.5.4** and shared `created`/`modified` settings. Open `.vault-data/vault/` in Obsidian, then enable the plugin in **Settings → Community plugins** after reviewing Restricted mode. Device-specific workspace layouts, caches, and trash are ignored.
 

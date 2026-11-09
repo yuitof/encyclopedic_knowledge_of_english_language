@@ -15,6 +15,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  sample:
+    name: Verify default sample checkout
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/vault'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: website/site
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          path: website
+          submodules: recursive
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: website/site/package-lock.json
+      - run: npm ci
+      - run: npx quartz plugin install --from-config
+      - run: npx playwright install --with-deps chromium
+      # No VAULT_ROOT: exercise the pinned sample exactly as a new clone does.
+      - run: npm run lint:timestamps
+      - run: npm test
   build:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/vault'
     runs-on: ubuntu-latest
@@ -75,7 +103,7 @@ jobs:
         with:
           path: website/site/public
   deploy:
-    needs: build
+    needs: [build, sample]
     runs-on: ubuntu-latest
     permissions:
       pages: write

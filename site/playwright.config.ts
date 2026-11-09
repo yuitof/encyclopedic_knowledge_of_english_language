@@ -1,11 +1,17 @@
 import { defineConfig } from "@playwright/test";
 import fs from "node:fs";
+import path from "node:path";
+const vaultRoot = path.resolve(
+  process.env.VAULT_ROOT ?? path.join(import.meta.dirname, "../.vault-data"),
+);
+const sample = fs.existsSync(path.join(vaultRoot, "sample-vault.json"));
 const chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const executablePath =
   process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ??
   (fs.existsSync(chrome) ? chrome : undefined);
 export default defineConfig({
   testDir: "./tests/browser",
+  testMatch: sample ? "sample.spec.ts" : "site.spec.ts",
   fullyParallel: false,
   workers: 1,
   timeout: 30000,

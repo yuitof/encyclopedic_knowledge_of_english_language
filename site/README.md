@@ -4,28 +4,29 @@ A static Wikipedia-inspired interface for the English-language Obsidian collecti
 
 ## Local development
 
-Use Node 24 and npm 10.9.2 or newer. Download website code and its pinned data revision in one command:
+Use Node 24 and npm 10.9.2 or newer. Download website code and its pinned sample collection in one command:
 
 ```sh
 git clone --recurse-submodules https://github.com/yuitof/encyclopedic_knowledge_of_english_language.git
 ```
 
-For an existing clone, run `git submodule update --init --recursive` from its root. Open `.vault-data/vault/` in Obsidian.
+For an existing clone, run `git submodule update --init --recursive` from its root. `.vault-data` is pinned to **sample-vault**, with three example notes, an image and a template outside the published notes folder. With `VAULT_ROOT` unset, builds and timestamp formatting default to this checkout.
 
-The data submodule includes **Update modified date 1.5.4**, its MIT license, and shared timestamp settings. In Obsidian's **Settings → Community plugins**, review and exit Restricted mode if you want community plugins to run, refresh the plugin list if needed, and enable **Update modified date**. It uses `created`/`modified`, typing-only updates, and a 10-second delay. Each installation makes its own Restricted mode decision; cloning does not disable it. See the [vault setup instructions](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/blob/vault/README.md) for details. Per-device layouts, caches, and trash are ignored; plugin files and shared settings are versioned.
+The data submodule includes **Update modified date 1.5.4**, its MIT license, and shared timestamp settings. In Obsidian's **Settings → Community plugins**, review and exit Restricted mode if you want community plugins to run, refresh the plugin list if needed, and enable **Update modified date**. It uses `created`/`modified`, typing-only updates, and a 10-second delay. Each installation makes its own Restricted mode decision; cloning does not disable it. See the [sample setup instructions](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/blob/sample-vault/README.md) for details. Per-device layouts, caches, and trash are ignored; plugin files and shared settings are versioned.
 
 Local builds also initialize `.vault-data` automatically if it is absent or empty, using the recorded commit. An existing checkout is used as-is, including local edits; builds never pull, switch branches or reset it. If `VAULT_ROOT` is set, that checkout must already contain `vault/notes/` and is never initialized automatically.
 
-Submodule initialization checks out the recorded commit with a detached HEAD. Before editing notes, switch to the data branch and pull its latest changes:
+Keep actual content in a separate checkout of **vault**. From the website repository root:
 
 ```sh
-git -C .vault-data switch vault
-git -C .vault-data pull --ff-only origin vault
+git clone --branch vault --single-branch https://github.com/yuitof/encyclopedic_knowledge_of_english_language.git ../english-vault
 ```
 
-If the local branch does not exist, use `git -C .vault-data switch -c vault --track origin/vault`. Commit notes inside `.vault-data` and push with `git -C .vault-data push origin vault`. Pull there again after GitHub's timestamp repair commits. Finish or save local edits before switching revisions.
+Open `../english-vault/vault/` in Obsidian to edit live notes. Commit and push from `../english-vault` to `origin vault`, then pull again after automatic timestamp repairs. This separate checkout never changes the website's recorded sample pin.
 
-The website records a specific vault commit. To advance that pin to the latest `vault` revision, run `git submodule update --remote .vault-data`, then review and commit `.vault-data` in the website checkout. This does not push note changes. GitHub Pages continues to build from the latest remote `vault` branch independently of the recorded submodule pin.
+The website records a specific **sample-vault** commit. Use `git submodule update --remote .vault-data` only to deliberately update the sample, then review and commit that pin. `--remote-submodules` follows sample-vault too. GitHub Pages always uses the latest remote **vault** branch independently of the sample pin. A recursive clone can still download other history from this repository; the sample is not a privacy boundary.
+
+To deploy a new collection in your own repository, create its `vault` branch from `sample-vault`, add the caller workflow from `site/workflows/vault-publish.yml`, and change that workflow's repository reference and `.gitmodules` URL to your repository. Keep the caller's source copy on main synchronized. Configure Pages and permissions as described in the wiki.
 
 If `.vault-data` is still an older Git worktree, move it aside first with `git worktree move .vault-data ../vault-data-worktree`, then initialize the submodule. The old checkout and any local edits remain in that sibling directory; transfer any intended edits before using the new checkout.
 
@@ -40,11 +41,13 @@ npm run preview
 
 Preview is at `http://127.0.0.1:8080/`. Rebuild after changes. To use another data checkout, set `VAULT_ROOT=/absolute/path/to/data-checkout` (the directory containing `vault/`). For production set `SITE_BASE_URL=username.github.io/repository` without a scheme. `SITE_OUTPUT=public-review` selects a separate ignored artifact directory.
 
+For the separate live checkout, from `site/` use `VAULT_ROOT=/absolute/path/to/english-vault npm run build` and the same prefix for `npm run lint:timestamps`, `npm run fix:timestamps`, or `npm test`. Builds print the selected source directory. Without that prefix the sample is used. Tests select starter checks for the sample marker and the full collection browser matrix for the live checkout; both are required by CI before deployment.
+
 ## Project map
 
 | Path | Purpose |
 | --- | --- |
-| `.vault-data/` (submodule) | Pinned data checkout; tracks the vault branch for remote updates |
+| `.vault-data/` (submodule) | Pinned starter checkout; tracks sample-vault for explicit remote updates |
 | `quartz/` | Pinned upstream Quartz 5 core |
 | `quartz.config.yaml`, `quartz.ts` | Plugins, theme and custom layout |
 | `custom/` | Reading frame, navigation, search adaptation, appearance, sorting and graph |

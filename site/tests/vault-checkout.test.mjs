@@ -62,6 +62,15 @@ test("build initializes the pinned vault once and preserves later local edits an
     try {
       const checkout = await ensureVaultCheckout(website);
       assert.equal(git(checkout, "rev-parse", "HEAD"), pinned);
+      // Commits made in the separate live checkout do not move the sample pin.
+      await fs.writeFile(
+        path.join(data, "vault/notes/Example.md"),
+        "Live edit",
+      );
+      commit(data);
+      assert.equal(await ensureVaultCheckout(website, data), data);
+      assert.equal(git(checkout, "rev-parse", "HEAD"), pinned);
+      assert.equal(git(website, "status", "--porcelain"), "");
       git(checkout, "checkout", "--detach", latest);
       const note = path.join(checkout, "vault/notes/Example.md");
       await fs.writeFile(note, "Unsaved local work");
