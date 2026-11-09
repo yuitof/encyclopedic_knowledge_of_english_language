@@ -155,11 +155,11 @@ runtime = runtime.replace(
 runtime = runtime.replace(
   "function Ke(){",
   `function graphNodeSize(zoom){
-    // Smoothly increase logarithmic growth from 1/2 to 1 around 50x.
-    return Math.sqrt(zoom)*Math.pow((2500+zoom*zoom)/2501,.25);
+    // Smoothly increase logarithmic growth from 1/2 to 1 around 16x.
+    return Math.sqrt(zoom)*Math.pow((256+zoom*zoom)/257,.25);
   }
   // Nominal font size in screen pixels: a low-zoom floor, smoothly becoming linear.
-  function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/50,4),.25);}
+  function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/16,4),.25);}
   var graphLabelTextureLimit=Q.renderer.gl?Q.renderer.gl.getParameter(Q.renderer.gl.MAX_TEXTURE_SIZE)
     :Q.renderer.gpu?.device?.limits?.maxTextureDimension2D||8192;
   function graphRefreshLabelQuality(){
@@ -180,7 +180,7 @@ runtime = runtime.replace(
     }
   }
   function graphLabelOpacity(zoom){
-    var progress=Math.max(0,Math.min(1,Math.log2(zoom/4)/3));
+    var progress=Math.max(0,Math.min(1,Math.log2(zoom/8)));
     return progress*progress*(3-2*progress);
   }function Ke(){`,
 );

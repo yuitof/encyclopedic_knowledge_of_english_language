@@ -93,6 +93,16 @@
 - As for the room between a vertex and its name
   low zoom: make sure names do not overlap the cursor
   very high zoom: make sure the text do not overlap the vertex.
+  What function do you think is good for it?
 
-$A(r)=\left(\frac{r}{1.35}\right)^{\log_2(1.3)}
-\approx\left(\frac{r}{1.35}\right)^{0.379}$
+<!-- $A(r)=\left(\frac{r}{1.35}\right)^{\log_2(1.3)}
+\approx\left(\frac{r}{1.35}\right)^{0.379}$ -->
+
+$S(z,r)=
+\underbrace{8\left(1+\left(\frac{z}{16}\right)^4\right)^{1/4}}_{\text{size determined by zoom}}
+\times
+\underbrace{\left(\frac{r}{1.35}\right)^{\log_2(1.3)}}_{\text{vertex-size multiplier}}$
+
+<!-- - During 8x and 16x, when the cursor is over a vertex, -->
+
+- When the cursor is over a vertex, change the its name's font size to what we've already implemented from z/2 \* (the multiplier from the base radius)

@@ -2057,7 +2057,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
     .toBe(50);
   const extreme = await screenSizes();
-  expect(extreme.diameter / extreme.baseDiameter).toBeCloseTo(8.408, 3);
+  expect(extreme.diameter / extreme.baseDiameter).toBeCloseTo(12.796, 3);
   await page.mouse.wheel(0, 500);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
@@ -2068,8 +2068,8 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   expect(halfDiameterRatio).toBeLessThan(Math.SQRT1_2);
   const halfTitleRatio =
     (await screenSizes()).titleHeight / extreme.titleHeight;
-  expect(halfTitleRatio).toBeGreaterThan(0.84);
-  expect(halfTitleRatio).toBeLessThan(0.87);
+  expect(halfTitleRatio).toBeGreaterThan(0.5);
+  expect(halfTitleRatio).toBeLessThan(0.56);
   await expect
     .poll(async () => (await screenSizes()).thickness)
     .toBeCloseTo(originalSizes.thickness, 2);
@@ -2102,16 +2102,14 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     );
   expect(growth[0]).toBeGreaterThan(0.49);
   expect(growth[0]).toBeLessThan(0.6);
-  expect(growth.at(-1)!).toBeGreaterThan(0.65);
-  expect(growth.at(-1)!).toBeLessThan(0.75);
+  expect(growth.at(-1)!).toBeGreaterThan(0.9);
   for (let i = 1; i < growth.length; i++) {
     expect(growth[i]).toBeGreaterThanOrEqual(growth[i - 1] - 0.001);
     expect(growth[i] - growth[i - 1]).toBeLessThan(0.2);
   }
   expect(scales[2].titleOpacity).toBeCloseTo(0, 8);
-  expect(scales[3].titleOpacity).toBeGreaterThan(0);
-  expect(scales[3].titleOpacity).toBeLessThan(scales[4].titleOpacity);
-  expect(scales[4].titleOpacity).toBeLessThan(scales[5].titleOpacity);
+  expect(scales[3].titleOpacity).toBeCloseTo(0, 8);
+  expect(scales[4].titleOpacity).toBeCloseTo(1, 8);
   expect(scales[5].titleOpacity).toBeCloseTo(1, 8);
   // A direction reversal should discard the pending tail, and reduced motion should settle directly.
   await page.mouse.wheel(0, 300);
@@ -2426,8 +2424,8 @@ test.describe("Graph rendering quality", () => {
       }, id);
     // One connection gives the reference vertex-size factor of 1. Measure the
     // actual scene scale after camera zoom, including when labels are hidden.
-    const fontCurve: { zoom: number; size: number }[] = [];
-    for (const zoom of [0.15, 1, 2, 4, 8, 16, 20, 32, 45, 50]) {
+    const fontCurve: { zoom: number; size: number; opacity: number }[] = [];
+    for (const zoom of [0.15, 1, 2, 4, 8, 12, 16, 20, 32, 45, 50]) {
       await focus("articles/reference", zoom);
       await page.evaluate(
         () =>
@@ -2435,18 +2433,24 @@ test.describe("Graph rendering quality", () => {
             requestAnimationFrame(() => resolve()),
           ),
       );
-      fontCurve.push({
-        zoom,
-        size: (await quality("articles/reference")).screenFont,
-      });
+      const state = await quality("articles/reference");
+      fontCurve.push({ zoom, size: state.screenFont, opacity: state.alpha });
     }
     for (const sample of fontCurve.slice(0, 3))
       expect(sample.size).toBeCloseTo(8, 2);
-    expect(fontCurve.find((sample) => sample.zoom === 32)!.size).toBeCloseTo(
-      8.316,
+    expect(fontCurve.find((sample) => sample.zoom === 16)!.size).toBeCloseTo(
+      9.514,
       2,
     );
-    expect(fontCurve.at(-1)!.size).toBeCloseTo(9.514, 2);
+    expect(fontCurve.at(-1)!.size).toBeCloseTo(25.07, 2);
+    for (const sample of fontCurve.filter((sample) => sample.zoom <= 8))
+      expect(sample.opacity).toBe(0);
+    expect(fontCurve.find((sample) => sample.zoom === 12)!.opacity).toBeCloseTo(
+      0.626,
+      3,
+    );
+    for (const sample of fontCurve.filter((sample) => sample.zoom >= 16))
+      expect(sample.opacity).toBe(1);
     const fontGrowth = fontCurve
       .slice(1)
       .map(
@@ -2455,8 +2459,8 @@ test.describe("Graph rendering quality", () => {
           Math.log(sample.zoom / fontCurve[i].zoom),
       );
     expect(fontGrowth[0]).toBeLessThan(0.001);
-    expect(fontGrowth.at(-1)!).toBeGreaterThan(0.44);
-    expect(fontGrowth.at(-1)!).toBeLessThan(0.5);
+    expect(fontGrowth.at(-1)!).toBeGreaterThan(0.96);
+    expect(fontGrowth.at(-1)!).toBeLessThan(1);
     for (let i = 1; i < fontGrowth.length; i++) {
       expect(fontGrowth[i]).toBeGreaterThanOrEqual(fontGrowth[i - 1]);
       expect(fontGrowth[i] - fontGrowth[i - 1]).toBeLessThan(0.4);
