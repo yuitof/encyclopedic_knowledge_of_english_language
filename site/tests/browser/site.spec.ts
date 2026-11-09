@@ -2130,3 +2130,155 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   );
   await page.mouse.move(0, 0);
 });
+
+test.describe("Graph text quality", () => {
+  test.use({ deviceScaleFactor: 2 });
+  test("visible names are rerasterized sharply at extreme zoom", async ({
+    page,
+  }, testInfo) => {
+    test.setTimeout(60000);
+    await page.route("**/static/contentIndex.json", (route) =>
+      route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          "articles/quality": {
+            title: "English sample text",
+            content: "",
+            tags: [],
+            links: ["articles/japanese", "articles/distant"],
+          },
+          "articles/japanese": {
+            title: "日本語の見出し",
+            content: "",
+            tags: [],
+            links: ["articles/quality"],
+          },
+          "articles/distant": {
+            title: "Offscreen title",
+            content: "",
+            tags: [],
+            links: [],
+          },
+        }),
+      }),
+    );
+    await page.route("**/static/graph/d3.min.js", async (route) => {
+      const response = await route.fetch();
+      await route.fulfill({
+        response,
+        body:
+          (await response.text()) +
+          `;{
+        const zoom=window.d3.zoom,simulation=window.d3.forceSimulation;
+        window.d3.zoom=(...args)=>window.__qualityZoom=zoom(...args);
+        window.d3.forceSimulation=(...args)=>window.__qualitySimulation=simulation(...args);
+      }`,
+      });
+    });
+    await page.route("**/static/graph/pixi.min.js", async (route) => {
+      const response = await route.fetch();
+      await route.fulfill({
+        response,
+        body:
+          (await response.text()) +
+          `;{
+        const init=window.PIXI.Application.prototype.init;
+        window.PIXI.Application.prototype.init=async function(...args){const result=await init.apply(this,args);window.__qualityApp=this;return result;};
+      }`,
+      });
+    });
+    await page.goto("./graph");
+    const canvas = page.locator(".graph-page .graph-container canvas");
+    await expect(canvas).toBeVisible({ timeout: 20000 });
+    await page.evaluate(() => {
+      const sim = (window as any).__qualitySimulation;
+      sim.stop();
+      for (const node of sim.nodes()) {
+        node.x =
+          node.id === "articles/quality"
+            ? 0
+            : node.id === "articles/japanese"
+              ? 2000
+              : -2000;
+        node.y = 0;
+      }
+    });
+    const focus = async (id: string, zoom: number) => {
+      await page.evaluate(
+        ({ id, zoom }) => {
+          const app = (window as any).__qualityApp,
+            d3 = (window as any).d3,
+            view = app.canvas;
+          const label = app.stage.children[0].children[1].children.find(
+            (label: any) => label.label === id,
+          );
+          const point = label.position;
+          d3.select(view).call(
+            (window as any).__qualityZoom.transform,
+            d3.zoomIdentity
+              .translate(
+                view.clientWidth / 2 - point.x * zoom,
+                view.clientHeight / 2 - point.y * zoom,
+              )
+              .scale(zoom),
+          );
+        },
+        { id, zoom },
+      );
+    };
+    const quality = (id: string) =>
+      page.evaluate((id) => {
+        const app = (window as any).__qualityApp,
+          canvas = app.canvas;
+        const label = app.stage.children[0].children[1].children.find(
+          (label: any) => label.label === id,
+        );
+        const zoom = canvas.__zoom.k,
+          scale = label.scale.y * zoom;
+        const texture =
+          app.renderer.renderPipes.text._gpuText[label.uid]?.texture;
+        return {
+          visible: label.renderable,
+          alpha: label.alpha,
+          resolution: label.resolution,
+          required: scale * devicePixelRatio,
+          textureResolution: texture?.source.resolution ?? 0,
+          pixelHeight: texture?.source.pixelHeight ?? 0,
+          height: label.getBounds().height,
+          font: label.style.fontSize,
+        };
+      }, id);
+    // Normal zoom and high zoom must keep the same font styling and layout rules.
+    await focus("articles/quality", 1);
+    const normalFont = (await quality("articles/quality")).font;
+    for (const id of ["articles/quality", "articles/japanese"]) {
+      for (const zoom of [64, 256]) {
+        // The below-node offset changes with zoom; center again after that update.
+        await focus(id, zoom);
+        await page.waitForTimeout(80);
+        await focus(id, zoom);
+        await expect
+          .poll(async () => {
+            const state = await quality(id);
+            return (
+              state.visible &&
+              state.alpha > 0 &&
+              state.resolution >= state.required &&
+              state.textureResolution >= state.required &&
+              state.pixelHeight >= state.height * 2
+            );
+          })
+          .toBe(true);
+        expect((await quality(id)).font).toBe(normalFont);
+      }
+    }
+    await canvas.screenshot({ path: testInfo.outputPath("extreme-zoom.png") });
+    const offscreen = await quality("articles/distant");
+    expect(offscreen.visible).toBe(false);
+    expect(offscreen.resolution).toBeLessThanOrEqual(8);
+    await focus("articles/quality", 1);
+    await page.waitForTimeout(80);
+    await focus("articles/quality", 1);
+    expect((await quality("articles/quality")).font).toBe(normalFont);
+  });
+});

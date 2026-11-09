@@ -147,6 +147,25 @@ runtime = runtime.replace(
     return Math.sqrt(zoom)*Math.pow((256+zoom*zoom)/257,.25);
   }
   function graphTitleSize(zoom){return Math.sqrt(zoom);}
+  var graphLabelTextureLimit=Q.renderer.gl?Q.renderer.gl.getParameter(Q.renderer.gl.MAX_TEXTURE_SIZE)
+    :Q.renderer.gpu?.device?.limits?.maxTextureDimension2D||8192;
+  function graphRefreshLabelQuality(){
+    var pixelRatio=window.devicePixelRatio||1,baseResolution=pixelRatio*4;
+    for(var node of P){
+      var label=node.label,screenScale=label.scale.x*j.k;
+      var x=j.x+label.position.x*j.k,y=j.y+label.position.y*j.k;
+      var halfWidth=node.titleWidth*screenScale/2,height=node.titleHeight*screenScale;
+      var visible=label.alpha>0&&x+halfWidth>=-16&&x-halfWidth<=O+16&&y+height>=-16&&y<=G+16;
+      if(label.renderable!==visible)label.renderable=visible;
+      if(!visible)continue;
+      var needed=Math.max(baseResolution,Math.pow(2,Math.ceil(Math.log2(pixelRatio*screenScale*1.25))));
+      var limit=graphLabelTextureLimit/Math.ceil(Math.max(node.titleWidth,node.titleHeight)+4);
+      var resolution=Math.min(needed,limit);
+      // Increase detail before bitmap magnification; retain a little headroom
+      // when zooming out so wheel movement near a boundary does not thrash textures.
+      if(label.resolution<resolution||label.resolution>resolution*2.5)label.resolution=resolution;
+    }
+  }
   function graphLabelOpacity(zoom){
     var progress=Math.max(0,Math.min(1,Math.log2(zoom/4)/3));
     return progress*progress*(3-2*progress);
@@ -194,13 +213,22 @@ for (const fragment of [titleFont, titleAnchor, titlePosition, nodeRecord])
     throw new Error("Graph title placement integration requires review");
 runtime = runtime.replace(
   nodeRecord,
-  "P.push({simulationData:iu,gfx:U,label:Du,color:De,alpha:1,active:!1,radius:Tu*.45})",
+  "P.push({simulationData:iu,gfx:U,label:Du,color:De,alpha:1,active:!1,radius:Tu*.45,titleWidth:Du.getLocalBounds().width,titleHeight:Du.getLocalBounds().height})",
 );
 runtime = runtime.replace(titleFont, "fontSize:We*5.04");
 runtime = runtime.replace(titleAnchor, "Du.label=ae,Du.anchor.set(.5,0)");
 runtime = runtime.replace(
   titlePosition,
   "l.label.position.set(F+O/2,v+G/2+(l.radius*1.06+3+1.5*(l.hoverAmount||0))*graphLayoutScale)",
+);
+
+// Refresh after positions and zoom transforms, before the next render frame.
+const labelFrame = "requestAnimationFrame(se)}}";
+if (!runtime.includes(labelFrame))
+  throw new Error("Graph adaptive text rendering integration requires review");
+runtime = runtime.replace(
+  labelFrame,
+  "graphRefreshLabelQuality();requestAnimationFrame(se)}}",
 );
 
 // Quartz's radial mode targets a ring. A zero-radius target provides inward

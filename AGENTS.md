@@ -78,4 +78,6 @@
 
 - I'm talking about the overall size of each name size. -->
 
-- when you zoom to an extreme extent, the characters start to get blured.
+<!-- - When you zoom to an extreme extent, the characters start to get blured. Fix it -->
+
+- In the extreme zoom-in and zoom-out, change the zooming sensitivity to pinch gesture like the sigmoid function. I'm not sure if this works out the way I wanted. So make sure to commit in advance and be able to revert the change.
