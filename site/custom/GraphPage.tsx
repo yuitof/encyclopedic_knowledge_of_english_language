@@ -159,13 +159,13 @@ runtime = runtime.replace(
 runtime = runtime.replace(
   "function Ke(){",
   `function graphNodeSize(zoom){
-    // Smoothly increase logarithmic growth from 1/2 to 1 around 12x.
-    return Math.sqrt(zoom)*Math.pow((144+zoom*zoom)/145,.25);
+    // Smoothly increase logarithmic growth from 1/2 to 1 around 9x.
+    return Math.sqrt(zoom)*Math.pow((81+zoom*zoom)/82,.25);
   }
   // Hovered font size in screen pixels: a low-zoom floor, smoothly becoming linear.
-  function graphTitleSize(zoom){return 8*Math.sqrt(1+Math.pow(zoom/12,2));}
+  function graphTitleSize(zoom){return 8*Math.sqrt(1+Math.pow(zoom/9,2));}
   // Unhovered font size in screen pixels, using the requested eighth-root curve.
-  function graphDefaultTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/12,8),1/8);}
+  function graphDefaultTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/9,8),1/8);}
   function graphSetTitleSize(node){
     var normal=graphDefaultTitleSize(j.k),hover=graphTitleSize(j.k);
     var size=normal+(hover-normal)*(node.hoverAmount||0);

@@ -2066,7 +2066,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
     .toBe(50);
   const extreme = await screenSizes();
-  expect(extreme.diameter / extreme.baseDiameter).toBeCloseTo(14.612, 3);
+  expect(extreme.diameter / extreme.baseDiameter).toBeCloseTo(16.7486, 3);
   await page.mouse.wheel(0, 500);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
@@ -2457,7 +2457,7 @@ test.describe("Graph rendering quality", () => {
     // One connection gives the reference vertex-size factor of 1. Measure the
     // actual scene scale after camera zoom, including when labels are hidden.
     const fontCurve: { zoom: number; size: number; opacity: number }[] = [];
-    for (const zoom of [0.15, 1, 2, 4, 6, 8, 10, 12, 16, 20, 32, 45, 50]) {
+    for (const zoom of [0.15, 1, 2, 4, 6, 8, 9, 10, 12, 16, 20, 32, 45, 50]) {
       await focus("articles/reference", zoom);
       await page.evaluate(
         () =>
@@ -2471,18 +2471,19 @@ test.describe("Graph rendering quality", () => {
     const defaultSizes = new Map([
       [0.15, 8],
       [1, 8],
-      [8, 8.03837],
-      [10, 8.21186],
-      [12, 8.72406],
-      [16, 10.79465],
-      [50, 33.33338],
+      [8, 8.33598],
+      [9, 8.72406],
+      [10, 9.2957],
+      [12, 10.79465],
+      [16, 14.23996],
+      [50, 44.44445],
     ]);
     for (const sample of fontCurve.filter((sample) =>
       defaultSizes.has(sample.zoom),
     ))
       expect(sample.size).toBeCloseTo(defaultSizes.get(sample.zoom)!, 5);
     for (const sample of fontCurve.filter((sample) => sample.zoom <= 4))
-      expect(sample.size).toBeCloseTo(8, 3);
+      expect(sample.size).toBeCloseTo(8, 2);
     for (const sample of fontCurve.filter((sample) => sample.zoom <= 6))
       expect(sample.opacity).toBe(0);
     expect(fontCurve.find((sample) => sample.zoom === 8)!.opacity).toBeCloseTo(
@@ -2498,12 +2499,13 @@ test.describe("Graph rendering quality", () => {
     // Use real pointer movement, placing even a subpixel circle on an integer
     // client coordinate so the extreme zoom-out case can be hovered reliably.
     for (const [zoom, hoveredSize] of [
-      [0.15, 8.00062],
-      [1, 8.02773],
-      [8, 9.6148],
-      [12, 11.31371],
-      [16, 13.33333],
-      [50, 34.27989],
+      [0.15, 8.00111],
+      [1, 8.04923],
+      [8, 10.70364],
+      [9, 11.31371],
+      [12, 13.33333],
+      [16, 16.31783],
+      [50, 45.15871],
     ]) {
       const normalSize = defaultSizes.get(zoom)!;
       await canvas.evaluate((view, zoom) => {
