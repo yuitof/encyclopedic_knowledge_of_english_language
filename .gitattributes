@@ -1,0 +1,5 @@
+# Preserve the exact upstream release bytes and their recorded checksums.
+/vault/.obsidian/plugins/frontmatter-modified-date/main.js -text -whitespace
+/vault/.obsidian/plugins/frontmatter-modified-date/manifest.json -text
+/vault/.obsidian/plugins/frontmatter-modified-date/LICENSE -text
+/vault/.obsidian/plugins/frontmatter-modified-date/data.json text eol=lf

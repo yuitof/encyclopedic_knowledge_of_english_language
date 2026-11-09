@@ -1,0 +1,10 @@
+{
+  "frontmatterProperty": "modified",
+  "createdDateProperty": "created",
+  "momentFormat": "YYYY-MM-DD[T]HH:mm:ssZ",
+  "useKeyupEvents": true,
+  "onlyUpdateExisting": false,
+  "storeHistoryLog": false,
+  "timeout": 10,
+  "excludedFolders": []
+}

@@ -1,0 +1,7 @@
+.DS_Store
+
+# Per-device Obsidian layout and temporary data; keep shared plugin settings.
+/vault/.obsidian/workspace.json
+/vault/.obsidian/workspace-mobile.json
+/vault/.obsidian/cache/
+/vault/.trash/
