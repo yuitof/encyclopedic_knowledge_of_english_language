@@ -161,7 +161,7 @@ runtime = runtime.replace(
     return Math.sqrt(zoom)*Math.pow((144+zoom*zoom)/145,.25);
   }
   // Hovered font size in screen pixels: a low-zoom floor, smoothly becoming linear.
-  function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/12,4),.25);}
+  function graphTitleSize(zoom){return 8*Math.sqrt(1+Math.pow(zoom/12,2));}
   // Unhovered font size in screen pixels, using the requested eighth-root curve.
   function graphDefaultTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/12,8),1/8);}
   function graphSetTitleSize(node){

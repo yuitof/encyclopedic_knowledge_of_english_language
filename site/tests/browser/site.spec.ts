@@ -2465,12 +2465,12 @@ test.describe("Graph rendering quality", () => {
     // Use real pointer movement, placing even a subpixel circle on an integer
     // client coordinate so the extreme zoom-out case can be hovered reliably.
     for (const [zoom, hoveredSize] of [
-      [0.15, 8],
-      [1, 8.0001],
-      [8, 8.36877],
-      [12, 9.51366],
-      [16, 11.42553],
-      [50, 33.36095],
+      [0.15, 8.00062],
+      [1, 8.02773],
+      [8, 9.6148],
+      [12, 11.31371],
+      [16, 13.33333],
+      [50, 34.27989],
     ]) {
       const normalSize = defaultSizes.get(zoom)!;
       await canvas.evaluate((view, zoom) => {
