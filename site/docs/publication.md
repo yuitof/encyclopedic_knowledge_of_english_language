@@ -8,6 +8,10 @@ Every nonhidden Markdown file under `vault/notes/` is selected automatically on 
 
 Local builds read `.vault-data/` by default, or a checkout root specified by `VAULT_ROOT`. This root contains `vault/notes/` and `vault/assets/`, not just their contents. Website project pages come from `main`'s `site/content/`.
 
+`.vault-data` is a submodule pointing to this repository's `vault` branch. Recursive cloning downloads both code and the recorded data commit. The branch setting supports explicit `git submodule update --remote .vault-data`; ordinary submodule updates use the recorded commit. The Pages workflow still checks out the latest `vault` branch separately so a data push does not require updating the pin on `main`.
+
+Local publication initializes the default submodule only when its directory is absent or empty. Existing checkouts, including uncommitted notes, are used without fetching or changing revisions. An incomplete populated checkout or invalid explicit `VAULT_ROOT` fails with an actionable error. CI places its separate full-history data checkout at `website/.vault-data`, repairs missing dates there, and builds from that repaired revision.
+
 ## Timestamps
 
 Explicit valid `created` and `modified` fields always win. GitHub Actions checks out complete data history, fills only missing fields from first/latest note commits (`git log --follow`), and commits the repaired files back to `vault`. Rename detection is subject to Git's similarity heuristics. Commit dates approximate history; they cannot reconstruct dates before the note's first Git import. The known timestamp-only bot commits are ignored when recovering dates.

@@ -21,6 +21,3 @@ Untitle*
 
 # macOS metadata
 .DS_Store
-
-# Separate data branch checkout (git worktree)
-/.vault-data/

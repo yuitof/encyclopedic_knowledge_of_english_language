@@ -22,7 +22,7 @@ jobs:
       contents: write
       pages: read
     env:
-      VAULT_ROOT: ${{ github.workspace }}/data
+      VAULT_ROOT: ${{ github.workspace }}/website/.vault-data
     defaults:
       run:
         working-directory: website/site
@@ -34,11 +34,13 @@ jobs:
           path: website
           fetch-depth: 0
           persist-credentials: false
-      - name: Check out vault data and full history
+      # Deploy current vault data even when main pins an older submodule commit.
+      # The separate checkout supplies full history and write credentials only here.
+      - name: Check out latest vault data at the submodule path
         uses: actions/checkout@v6
         with:
           ref: vault
-          path: data
+          path: website/.vault-data
           fetch-depth: 0
       - uses: actions/setup-node@v6
         with:

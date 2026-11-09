@@ -56,7 +56,11 @@ export async function noteDates(
   root,
   source,
   meta,
-  { filesystemOnly = false, requireHistory = false } = {},
+  {
+    filesystemOnly = false,
+    requireHistory = false,
+    filesystemForUntrackedOnly = false,
+  } = {},
 ) {
   for (const field of ["created", "modified"])
     if (meta[field] !== undefined && !validTimestamp(meta[field]))
@@ -64,8 +68,37 @@ export async function noteDates(
   if (meta.created !== undefined && meta.modified !== undefined)
     return { created: meta.created, modified: meta.modified };
   const stat = await fs.stat(path.join(root, source));
+  let tracked = false;
+  if (filesystemForUntrackedOnly) {
+    const result = spawnSync(
+      "git",
+      ["-C", root, "ls-files", "--error-unmatch", "--", source],
+      { encoding: "utf8" },
+    );
+    if (result.error) throw result.error;
+    tracked = result.status === 0;
+    if (
+      !tracked &&
+      result.status !== 1 &&
+      !result.stderr.includes("not a git repository")
+    )
+      throw new Error(
+        `Cannot inspect Git tracking for ${source}: ${result.stderr}`,
+      );
+    if (tracked) {
+      const shallow = spawnSync(
+        "git",
+        ["-C", root, "rev-parse", "--is-shallow-repository"],
+        { encoding: "utf8" },
+      );
+      if (shallow.status !== 0 || shallow.stdout.trim() !== "false")
+        throw new Error(
+          `Full Git history is required to fill timestamps for ${source}`,
+        );
+    }
+  }
   const history = filesystemOnly ? null : commitDates(root, source);
-  if (requireHistory && !history)
+  if ((requireHistory || tracked) && !history)
     throw new Error(
       `No commit history for ${source}; full history is required`,
     );

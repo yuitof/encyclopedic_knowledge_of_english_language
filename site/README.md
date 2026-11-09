@@ -4,14 +4,28 @@ A static Wikipedia-inspired interface for the English-language Obsidian collecti
 
 ## Local development
 
-Use Node 24 and npm 10.9.2 or newer. From the repository root, create a data checkout once:
+Use Node 24 and npm 10.9.2 or newer. Download website code and its pinned data revision in one command:
 
 ```sh
-git fetch origin vault
-git worktree add .vault-data vault
+git clone --recurse-submodules https://github.com/yuitof/encyclopedic_knowledge_of_english_language.git
 ```
 
-If no local `vault` branch exists, use `git worktree add -b vault .vault-data origin/vault`. Open `.vault-data/vault/` in Obsidian. Pull changes in that worktree after GitHub's timestamp repair commits.
+For an existing clone, run `git submodule update --init --recursive` from its root. Open `.vault-data/vault/` in Obsidian.
+
+Local builds also initialize `.vault-data` automatically if it is absent or empty, using the recorded commit. An existing checkout is used as-is, including local edits; builds never pull, switch branches or reset it. If `VAULT_ROOT` is set, that checkout must already contain `vault/notes/` and is never initialized automatically.
+
+Submodule initialization checks out the recorded commit with a detached HEAD. Before editing notes, switch to the data branch and pull its latest changes:
+
+```sh
+git -C .vault-data switch vault
+git -C .vault-data pull --ff-only origin vault
+```
+
+If the local branch does not exist, use `git -C .vault-data switch -c vault --track origin/vault`. Commit notes inside `.vault-data` and push with `git -C .vault-data push origin vault`. Pull there again after GitHub's timestamp repair commits. Finish or save local edits before switching revisions.
+
+The website records a specific vault commit. To advance that pin to the latest `vault` revision, run `git submodule update --remote .vault-data`, then review and commit `.vault-data` in the website checkout. This does not push note changes. GitHub Pages continues to build from the latest remote `vault` branch independently of the recorded submodule pin.
+
+If `.vault-data` is still an older Git worktree, move it aside first with `git worktree move .vault-data ../vault-data-worktree`, then initialize the submodule. The old checkout and any local edits remain in that sibling directory; transfer any intended edits before using the new checkout.
 
 From `site/`:
 
@@ -28,7 +42,7 @@ Preview is at `http://127.0.0.1:8080/`. Rebuild after changes. To use another da
 
 | Path | Purpose |
 | --- | --- |
-| `.vault-data/` (ignored) | Local checkout of the vault branch |
+| `.vault-data/` (submodule) | Pinned data checkout; tracks the vault branch for remote updates |
 | `quartz/` | Pinned upstream Quartz 5 core |
 | `quartz.config.yaml`, `quartz.ts` | Plugins, theme and custom layout |
 | `custom/` | Reading frame, navigation, search adaptation, appearance, sorting and graph |
@@ -58,9 +72,11 @@ Browser tests use installed Chrome on macOS or Playwright Chromium. CI installs 
 
 The earlier local hook implementation is retained for later evaluation but is not required or installed by this setup. Timestamp repair is performed by GitHub Actions before the tests/build. Existing explicit values are never overwritten or refreshed automatically.
 
+For local timestamp checks, run `npm run lint:timestamps` from `site/`. Use `npm run fix:timestamps` to fill missing fields in `.vault-data/vault/notes/` and the website's `site/content/` pages. `VAULT_ROOT` can select another data checkout. Both existing fields are preserved; a missing field uses the note's first/latest relevant Git commits. Filesystem dates are used only when no history exists and the file is untracked. A staged new file without any commit history, or a tracked file in a shallow checkout, produces an error instead of using checkout dates. Format new files before staging, or commit them and run the formatter afterward. Formatting preserves note bodies and filesystem modification times and does not stage, commit or push changes.
+
 ## Deployment
 
-Push either branch to run validation, timestamp repair and Pages deployment. Both triggers use website code from main and data from vault. The GitHub Actions bot uses the built-in token to commit only missing timestamp fields. Its push does not start a second workflow. Permission failures and repeated concurrent edits stop deployment safely.
+Push either branch to run validation, timestamp repair and Pages deployment. Both triggers use website code from main and the latest data from vault, checked out with full history into `website/.vault-data`. CI deliberately uses the latest branch rather than the pinned local revision so a notes-only push deploys immediately. The GitHub Actions bot uses the built-in token to commit only missing timestamp fields. Its push does not start a second workflow. Permission failures and repeated concurrent edits stop deployment safely.
 
 Keep `main` as the default branch and **Settings → Pages → Source → GitHub Actions**. The bot needs permission to push to `vault`; applicable branch rules must allow that push. No separate generated hosting branch is required.
 

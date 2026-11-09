@@ -4,12 +4,52 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 import { spawnSync } from "node:child_process";
+import YAML from "yaml";
 import {
   repairTimestamps,
   repairAndPush,
 } from "../scripts/repair-vault-timestamps.mjs";
 import { preparePublication } from "../scripts/publish.mjs";
 import { splitNote } from "../scripts/note-timestamps.mjs";
+
+test("vault pushes call the shared workflow with permission to repair and push timestamps", async () => {
+  const caller = YAML.parse(
+    await fs.readFile(
+      new URL("../workflows/vault-publish.yml", import.meta.url),
+      "utf8",
+    ),
+  );
+  const shared = YAML.parse(
+    await fs.readFile(
+      new URL("../../.github/workflows/pages.yml", import.meta.url),
+      "utf8",
+    ),
+  );
+  assert.deepEqual(caller.on.push.branches, ["vault"]);
+  assert.match(
+    caller.jobs.publish.uses,
+    /\/\.github\/workflows\/pages\.yml@main$/,
+  );
+  assert.equal(caller.jobs.publish.permissions.contents, "write");
+  assert.ok(Object.hasOwn(shared.on, "workflow_call"));
+  const build = shared.jobs.build;
+  assert.ok(build.if.includes("refs/heads/vault"));
+  assert.equal(build.permissions.contents, "write");
+  const checkout = build.steps.find((step) => step.with?.ref === "vault");
+  assert.equal(checkout.with["fetch-depth"], 0);
+  assert.notEqual(checkout.with["persist-credentials"], false);
+  assert.equal(
+    build.env.VAULT_ROOT,
+    "${{ github.workspace }}/" + checkout.with.path,
+  );
+  const repairIndex = build.steps.findIndex(
+    (step) => step.run === "node scripts/repair-vault-timestamps.mjs --push",
+  );
+  const buildIndex = build.steps.findIndex(
+    (step) => step.run === "npm run build",
+  );
+  assert.ok(repairIndex >= 0 && repairIndex < buildIndex);
+});
 
 function git(root, args, date) {
   const result = spawnSync(
@@ -139,6 +179,27 @@ test("bot push retries a concurrent edit without overwriting it; subsequent runs
       },
     });
     assert.equal(checks, 2);
+    assert.equal(git(remote, ["rev-parse", "refs/heads/vault"]), result.commit);
+    assert.equal(
+      git(remote, ["log", "-1", "--format=%an"]),
+      "github-actions[bot]",
+    );
+    assert.equal(
+      git(remote, ["log", "-1", "--format=%s"]),
+      "Repair missing note timestamps",
+    );
+    const pushedNote = splitNote(
+      git(remote, ["show", "vault:vault/notes/First.md"]),
+    );
+    assert.equal(
+      Date.parse(pushedNote.meta.created),
+      Date.parse("2001-01-01T12:00:00Z"),
+    );
+    assert.equal(
+      Date.parse(pushedNote.meta.modified),
+      Date.parse("2004-01-01T12:00:00Z"),
+    );
+    assert.equal(pushedNote.body, "Newer user edit");
     const parsed = splitNote(
       await fs.readFile(path.join(bot, "vault/notes/First.md"), "utf8"),
     );
@@ -150,6 +211,7 @@ test("bot push retries a concurrent edit without overwriting it; subsequent runs
     const again = await repairAndPush(bot);
     assert.deepEqual(again.changed, []);
     assert.equal(again.commit, result.commit);
+    assert.equal(git(remote, ["rev-parse", "refs/heads/vault"]), result.commit);
     // If a timestamp is removed later, repair-only commits must not replace its historical date.
     await fs.writeFile(
       path.join(bot, "vault/notes/First.md"),

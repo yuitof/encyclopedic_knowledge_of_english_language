@@ -6,6 +6,7 @@ import remarkParse from "remark-parse";
 import YAML from "yaml";
 import { discoverVault } from "./discover-vault.mjs";
 import { noteDates } from "./note-timestamps.mjs";
+import { ensureVaultCheckout } from "./vault-checkout.mjs";
 import { missingNotes } from "./missing-notes.mjs";
 import { createSortRanks, createSortDetails } from "./sort-ranks.mjs";
 import {
@@ -215,11 +216,13 @@ function validRaster(bytes, extension) {
 export async function preparePublication({
   root = repositoryRoot,
   manifestFile,
-  vaultRoot = root === repositoryRoot
-    ? (process.env.VAULT_ROOT ?? path.join(root, ".vault-data"))
-    : root,
+  vaultRoot,
   output,
 } = {}) {
+  vaultRoot ??=
+    root === repositoryRoot && !manifestFile
+      ? await ensureVaultCheckout(root, process.env.VAULT_ROOT)
+      : root;
   const manifest = manifestFile
     ? JSON.parse(await fs.readFile(manifestFile, "utf8"))
     : await discoverVault(root, path.resolve(vaultRoot));

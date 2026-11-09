@@ -6,6 +6,7 @@ for (const args of [
     "tests/sort-ranks.test.mjs",
     "tests/timestamps.test.mjs",
     "tests/vault-workflow.test.mjs",
+    "tests/vault-checkout.test.mjs",
   ],
   ["node_modules/tsx/dist/cli.mjs", "--test", "tests/backlinks.test.ts"],
   ["node_modules/typescript/bin/tsc", "--noEmit"],

@@ -6,11 +6,12 @@ import path from "node:path";
 import { slugifyFilePath } from "@quartz-community/utils";
 import { siteRoot, preparePublication } from "../scripts/publish.mjs";
 import { auditOutput } from "../scripts/verify-output.mjs";
+import { ensureVaultCheckout } from "../scripts/vault-checkout.mjs";
 const output = path.join(siteRoot, process.env.SITE_OUTPUT ?? "public");
 const { discoverVault } = await import("../scripts/discover-vault.mjs");
 const manifest = await discoverVault(
   path.dirname(siteRoot),
-  process.env.VAULT_ROOT ?? path.join(siteRoot, "../.vault-data"),
+  await ensureVaultCheckout(path.dirname(siteRoot), process.env.VAULT_ROOT),
 );
 const note = (title) => manifest.notes.find((entry) => entry.title === title);
 const html = async (title) =>
