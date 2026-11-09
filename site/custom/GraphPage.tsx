@@ -1,4 +1,5 @@
-import { graphMomentum } from "./graph-momentum";
+import { graphMomentum, graphZoomLimits } from "./graph-momentum";
+import { graphCircles } from "./graph-circles";
 import { Graph } from "@quartz-community/graph";
 import type { QuartzComponent } from "../quartz/components/types";
 import { pathToRoot } from "../quartz/util/path";
@@ -62,14 +63,25 @@ const nodeFocus =
   "function Ke(){for(var i=0;i<P.length;i++){var l=P[i],F=1;_u!==null&&Oe&&(F=l.active?1:.2),l.gfx.alpha=F}}";
 const linkFocus =
   "function Ve(){for(var i=0;i<I.length;i++){var l=I[i],F=1;_u!==null&&(F=l.active?1:.2),l.alpha=F,l.color=l.active?ue:ee}}";
-const nodeFill = "U.fill({color:ie?He:De})";
-const nodeCircle = "U.circle(0,0,Tu)";
+const nodeCircle =
+  "var U=new a.Graphics;U.circle(0,0,Tu),U.fill({color:ie?He:De}),ie&&U.stroke({width:2,color:Qu})";
+const circleSetup = "var P=[],I=[],_u=null";
 const frameLoop = "function se(){if(!le){";
-for (const fragment of [nodeFocus, linkFocus, nodeFill, frameLoop, nodeCircle])
+for (const fragment of [
+  nodeFocus,
+  linkFocus,
+  frameLoop,
+  nodeCircle,
+  circleSetup,
+])
   if (!runtime.includes(fragment))
     throw new Error("Graph color transition integration requires review");
-runtime = runtime.replace(nodeCircle, "U.circle(0,0,Tu*.45)");
-runtime = runtime.replace(nodeFill, "U.fill({color:0xffffff}),U.tint=ie?He:De");
+runtime = runtime.replace(circleSetup, `${graphCircles};${circleSetup}`);
+// Tag nodes are disabled above; article nodes use a shared analytic-circle batch.
+runtime = runtime.replace(
+  nodeCircle,
+  "var U=graphCreateCircle(Tu*.45);U.tint=ie?He:De",
+);
 runtime = runtime.replace(
   nodeFocus,
   `
@@ -180,7 +192,10 @@ runtime = runtime.replace(
   dragHit,
   "if(J<(gu*.45*graphNodeSize(j.k)*(1+.06*(P[v].hoverAmount||0))+5)/j.k)",
 );
-runtime = runtime.replace(zoomExtent, ".scaleExtent([.25,256])");
+runtime = runtime.replace(
+  zoomExtent,
+  `.scaleExtent([${graphZoomLimits.minimum},${graphZoomLimits.maximum}])`,
+);
 const labelFocus =
   "function qe(){for(var i=1/Vu,l=i*1.1,F=0;F<P.length;F++){var v=P[F];_u===v.simulationData.id?(v.label.alpha=1,v.label.scale.set(l)):v.label.scale.set(i)}}";
 const zoomLabels =
@@ -201,8 +216,9 @@ runtime = runtime.replace(
 }`,
 );
 runtime = runtime.replace(zoomLabels, "qe();");
-// Reserve space below the normal vertex; hover travel is a fixed zoom-scaled
-// distance, independent of that vertex's radius or connectivity.
+// Center the visible glyphs, including multiline titles, rather than the text
+// texture's empty margins. Leave 0.7em below the circle; hover travel remains a
+// fixed zoom-scaled distance, independent of vertex size or connectivity.
 const titleFont = "fontSize:We*15";
 const titleAnchor = "Du.anchor.set(.5,1.2)";
 const titlePosition = "l.label.position.set(F+O/2,v+G/2)";
@@ -215,11 +231,11 @@ runtime = runtime.replace(
   nodeRecord,
   "P.push({simulationData:iu,gfx:U,label:Du,color:De,alpha:1,active:!1,radius:Tu*.45,titleWidth:Du.getLocalBounds().width,titleHeight:Du.getLocalBounds().height})",
 );
-runtime = runtime.replace(titleFont, "fontSize:We*5.04");
+runtime = runtime.replace(titleFont, 'fontSize:We*5.04,align:"center",trim:!0');
 runtime = runtime.replace(titleAnchor, "Du.label=ae,Du.anchor.set(.5,0)");
 runtime = runtime.replace(
   titlePosition,
-  "l.label.position.set(F+O/2,v+G/2+(l.radius*1.06+3+1.5*(l.hoverAmount||0))*graphLayoutScale)",
+  "l.label.position.set(F+O/2,v+G/2+(l.radius+1.5*(l.hoverAmount||0))*graphLayoutScale+.7*l.label.style.fontSize*l.label.scale.y)",
 );
 
 // Refresh after positions and zoom transforms, before the next render frame.
@@ -251,7 +267,7 @@ runtime = runtime.replace(
     var fitBounds=ru.reduce(function(bounds,node){
       return [Math.min(bounds[0],node.x),Math.max(bounds[1],node.x),Math.min(bounds[2],node.y),Math.max(bounds[3],node.y)];
     },[Infinity,-Infinity,Infinity,-Infinity]);
-    var fitScale=Math.max(.25,Math.min(1,(O-48)/Math.max(1,fitBounds[1]-fitBounds[0]),(G-48)/Math.max(1,fitBounds[3]-fitBounds[2])));
+    var fitScale=Math.max(${graphZoomLimits.minimum},Math.min(1,(O-48)/Math.max(1,fitBounds[1]-fitBounds[0]),(G-48)/Math.max(1,fitBounds[3]-fitBounds[2])));
     et.extent([[0,0],[O,G]]);
     o.select(Q.canvas).call(et.transform,o.zoomIdentity.translate(O/2,G/2).scale(fitScale).translate(-O/2-(fitBounds[0]+fitBounds[1])/2,-G/2-(fitBounds[2]+fitBounds[3])/2));
   }
@@ -270,7 +286,7 @@ if (!runtime.includes(graphCleanup))
   throw new Error("Graph resize cleanup integration requires review");
 runtime = runtime.replace(
   graphCleanup,
-  'function(){typeof graphDisposeMomentum==="function"&&graphDisposeMomentum();graphResizeObserver&&graphResizeObserver.disconnect();graphRefit&&window.removeEventListener("graph-window-change",graphRefit);le=!0,ou.stop();',
+  'function(){typeof graphDisposeMomentum==="function"&&graphDisposeMomentum();graphResizeObserver&&graphResizeObserver.disconnect();graphRefit&&window.removeEventListener("graph-window-change",graphRefit);le=!0,ou.stop();graphDisposeCircles();',
 );
 export const GraphPage: QuartzComponent = (props) => {
   if (props.fileData.slug !== "graph") return null;

@@ -80,4 +80,12 @@
 
 <!-- - When you zoom to an extreme extent, the characters start to get blured. Fix it -->
 
-- In the extreme zoom-in and zoom-out, change the zooming sensitivity to pinch gesture like the sigmoid function. I'm not sure if this works out the way I wanted. So make sure to commit in advance and be able to revert the change.
+<!-- - In the extreme zoom-in and zoom-out, change the zooming sensitivity to pinch gesture like the sigmoid function. I'm not sure if this works out the way I wanted. So make sure to commit in advance and be able to revert the change. -->
+
+<!-- - When the zooming sensitivity reachs the point where it's close enough to zero, make it not be able to zoom further. -->
+<!-- - I can make out each circle consists of several vertices and edges. I prefer smooth round circle. Let me ask you if it is possible to specify circle in svg instead of just increasing the number of vertices. -->
+
+<!-- - As users zoom extremely, the current stopping point is too late. Make zooming stop a little before. -->
+
+- Get the name of a vertex a little closer to the center of the circle.
+<!-- - As for certain vertices, the name and the vertex are not center-aligned. Fix it. -->

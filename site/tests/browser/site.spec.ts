@@ -2054,16 +2054,16 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   await page.mouse.wheel(0, -5000);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
-    .toBe(256);
+    .toBe(50);
   const extreme = await screenSizes();
   await page.mouse.wheel(0, 500);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
-    .toBeCloseTo(128, 2);
+    .toBeCloseTo(25, 2);
   await settleZoom();
-  await expect
-    .poll(async () => (await screenSizes()).diameter / extreme.diameter)
-    .toBeCloseTo(0.5, 2);
+  const halfDiameterRatio = (await screenSizes()).diameter / extreme.diameter;
+  expect(halfDiameterRatio).toBeGreaterThan(0.5);
+  expect(halfDiameterRatio).toBeLessThan(Math.SQRT1_2);
   expect((await screenSizes()).titleHeight / extreme.titleHeight).toBeCloseTo(
     Math.SQRT1_2,
     2,
@@ -2072,13 +2072,13 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     .poll(async () => (await screenSizes()).thickness)
     .toBeCloseTo(originalSizes.thickness, 2);
   // Sample the rendered curve across normal and extreme zoom, including title reveal.
-  await page.mouse.wheel(0, 3500);
+  await page.mouse.wheel(0, Math.log2(25) * 500);
   await settleZoom();
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
     .toBeCloseTo(1, 2);
   const scales = [await screenSizes()];
-  for (const zoom of [2, 4, 8, 16, 32, 64, 128, 256]) {
+  for (const zoom of [2, 4, 8, 16, 32, 50]) {
     await page.mouse.wheel(0, -500);
     await settleZoom();
     const size = await screenSizes();
@@ -2093,11 +2093,13 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   const growth = scales
     .slice(1)
     .map(
-      (size, i) => Math.log(size.diameter / scales[i].diameter) / Math.log(2),
+      (size, i) =>
+        Math.log(size.diameter / scales[i].diameter) /
+        Math.log(size.zoom / scales[i].zoom),
     );
   expect(growth[0]).toBeGreaterThan(0.49);
   expect(growth[0]).toBeLessThan(0.6);
-  expect(growth.at(-1)!).toBeGreaterThan(0.98);
+  expect(growth.at(-1)!).toBeGreaterThan(0.9);
   for (let i = 1; i < growth.length; i++) {
     expect(growth[i]).toBeGreaterThanOrEqual(growth[i - 1] - 0.001);
     expect(growth[i] - growth[i - 1]).toBeLessThan(0.2);
@@ -2111,7 +2113,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   await page.mouse.wheel(0, 300);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
-    .toBeLessThan(256);
+    .toBeLessThan(50);
   const reversing = await canvas.evaluate(
     (element) => (element as any).__zoom.k,
   );
@@ -2131,30 +2133,66 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   await page.mouse.move(0, 0);
 });
 
-test.describe("Graph text quality", () => {
+test.describe("Graph rendering quality", () => {
   test.use({ deviceScaleFactor: 2 });
-  test("visible names are rerasterized sharply at extreme zoom", async ({
+  test("names and analytic circles stay sharp and aligned at extreme zoom", async ({
     page,
   }, testInfo) => {
     test.setTimeout(60000);
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("console", (message) => {
+      if (message.type() === "error") errors.push(message.text());
+    });
     await page.route("**/static/contentIndex.json", (route) =>
       route.fulfill({
         contentType: "application/json",
         body: JSON.stringify({
           "articles/quality": {
+            slug: "articles/quality",
             title: "English sample text",
             content: "",
             tags: [],
             links: ["articles/japanese", "articles/distant"],
           },
           "articles/japanese": {
+            slug: "articles/japanese",
             title: "日本語の見出し",
             content: "",
             tags: [],
             links: ["articles/quality"],
           },
           "articles/distant": {
+            slug: "articles/distant",
             title: "Offscreen title",
+            content: "",
+            tags: [],
+            links: [],
+          },
+          "articles/narrow": {
+            slug: "articles/narrow",
+            title: "I",
+            content: "",
+            tags: [],
+            links: [],
+          },
+          "articles/overhang": {
+            slug: "articles/overhang",
+            title: "j’",
+            content: "",
+            tags: [],
+            links: [],
+          },
+          "articles/multiline": {
+            slug: "articles/multiline",
+            title: "A much wider first line\nI",
+            content: "",
+            tags: [],
+            links: [],
+          },
+          "articles/spaced": {
+            slug: "articles/spaced",
+            title: "  Spaced title  ",
             content: "",
             tags: [],
             links: [],
@@ -2193,13 +2231,13 @@ test.describe("Graph text quality", () => {
     await page.evaluate(() => {
       const sim = (window as any).__qualitySimulation;
       sim.stop();
-      for (const node of sim.nodes()) {
+      for (const [index, node] of sim.nodes().entries()) {
         node.x =
           node.id === "articles/quality"
             ? 0
             : node.id === "articles/japanese"
               ? 2000
-              : -2000;
+              : (index + 1) * 4000;
         node.y = 0;
       }
     });
@@ -2237,7 +2275,50 @@ test.describe("Graph text quality", () => {
           scale = label.scale.y * zoom;
         const texture =
           app.renderer.renderPipes.text._gpuText[label.uid]?.texture;
+        let horizontalError = Infinity,
+          gapInEms = Infinity;
+        if (texture) {
+          const gpuText = app.renderer.renderPipes.text._gpuText[label.uid];
+          const resolution = texture.source.resolution,
+            frame = texture.frame;
+          const width = Math.round(frame.width * resolution),
+            height = Math.round(frame.height * resolution);
+          const pixels = texture.source.resource
+            .getContext("2d")
+            .getImageData(
+              Math.round(frame.x * resolution),
+              Math.round(frame.y * resolution),
+              width,
+              height,
+            ).data;
+          let left = width,
+            right = -1,
+            top = height;
+          for (let y = 0; y < height; y++)
+            for (let x = 0; x < width; x++) {
+              if (pixels[(y * width + x) * 4 + 3]) {
+                left = Math.min(left, x);
+                right = Math.max(right, x);
+                top = Math.min(top, y);
+              }
+            }
+          const node = app.stage.children[0].children[0].children.find(
+            (shape: any) => shape.label === id,
+          );
+          const position = label.getGlobalPosition(),
+            center = node.getGlobalPosition();
+          const bounds = gpuText.batchableSprite.bounds;
+          horizontalError =
+            position.x +
+            (bounds.minX + (left + right + 1) / (2 * resolution)) * scale -
+            center.x;
+          const inkTop = position.y + (bounds.minY + top / resolution) * scale;
+          gapInEms =
+            (inkTop - node.getBounds().maxY) / (label.style.fontSize * scale);
+        }
         return {
+          horizontalError,
+          gapInEms,
           visible: label.renderable,
           alpha: label.alpha,
           resolution: label.resolution,
@@ -2248,11 +2329,97 @@ test.describe("Graph text quality", () => {
           font: label.style.fontSize,
         };
       }, id);
+    const circleQuality = (id: string) =>
+      page.evaluate(async (id) => {
+        const app = (window as any).__qualityApp,
+          pixi = (window as any).PIXI;
+        const circle = app.stage.children[0].children[0].children.find(
+          (shape: any) => shape.label === id,
+        );
+        const bounds = circle.getBounds(),
+          resolution = app.renderer.resolution;
+        const { pixels, width, height } = app.renderer.extract.pixels({
+          target: app.stage,
+          resolution,
+          frame: new pixi.Rectangle(
+            bounds.x - 2,
+            bounds.y - 2,
+            bounds.width + 4,
+            bounds.height + 4,
+          ),
+        });
+        const radius = (bounds.width * resolution) / 2;
+        const cx = 2 * resolution + radius,
+          cy = 2 * resolution + (bounds.height * resolution) / 2;
+        // Interpolate around pixel centers to measure the actual GPU-drawn contour.
+        const alpha = (x: number, y: number) => {
+          x -= 0.5;
+          y -= 0.5;
+          const ix = Math.floor(x),
+            iy = Math.floor(y),
+            fx = x - ix,
+            fy = y - iy;
+          const at = (dx: number, dy: number) =>
+            pixels[((iy + dy) * width + ix + dx) * 4 + 3] / 255;
+          return (
+            at(0, 0) * (1 - fx) * (1 - fy) +
+            at(1, 0) * fx * (1 - fy) +
+            at(0, 1) * (1 - fx) * fy +
+            at(1, 1) * fx * fy
+          );
+        };
+        const errors: number[] = [];
+        // Offset the rays from the horizontal graph edges beneath the circles.
+        for (let angle = 7.5; angle < 360; angle += 15) {
+          const radians = (angle * Math.PI) / 180;
+          let low = radius - 2,
+            high = radius + 2;
+          for (let i = 0; i < 12; i++) {
+            const distance = (low + high) / 2;
+            if (
+              alpha(
+                cx + Math.cos(radians) * distance,
+                cy + Math.sin(radians) * distance,
+              ) > 0.5
+            )
+              low = distance;
+            else high = distance;
+          }
+          errors.push(Math.abs((low + high) / 2 - radius));
+        }
+        return {
+          image: await app.renderer.extract.base64({
+            target: app.stage,
+            resolution,
+            frame: new pixi.Rectangle(
+              bounds.x - 2,
+              bounds.y - 2,
+              bounds.width + 4,
+              bounds.height + 4,
+            ),
+          }),
+          pipe: circle.renderPipeId,
+          vertices: circle.geometry.positions.length / 2,
+          triangles: circle.geometry.indices.length / 3,
+          centerAlpha: alpha(cx, cy),
+          maxContourError: Math.max(...errors),
+          batches:
+            app.renderer.renderPipes.batch._activeBatches["graph-circle"]
+              .batchIndex,
+        };
+      }, id);
     // Normal zoom and high zoom must keep the same font styling and layout rules.
     await focus("articles/quality", 1);
     const normalFont = (await quality("articles/quality")).font;
-    for (const id of ["articles/quality", "articles/japanese"]) {
-      for (const zoom of [64, 256]) {
+    for (const id of [
+      "articles/quality",
+      "articles/japanese",
+      "articles/narrow",
+      "articles/overhang",
+      "articles/multiline",
+      "articles/spaced",
+    ]) {
+      for (const zoom of [16, 50]) {
         // The below-node offset changes with zoom; center again after that update.
         await focus(id, zoom);
         await page.waitForTimeout(80);
@@ -2270,6 +2437,23 @@ test.describe("Graph text quality", () => {
           })
           .toBe(true);
         expect((await quality(id)).font).toBe(normalFont);
+        expect(Math.abs((await quality(id)).horizontalError)).toBeLessThan(
+          0.01,
+        );
+        expect((await quality(id)).gapInEms).toBeCloseTo(0.7, 3);
+        const circle = await circleQuality(id);
+        await (
+          await import("node:fs/promises")
+        ).writeFile(
+          testInfo.outputPath("extreme-zoom-circle.png"),
+          Buffer.from(circle.image.split(",")[1], "base64"),
+        );
+        expect(circle.pipe).toBe("graph-circle");
+        expect(circle.vertices).toBe(4);
+        expect(circle.triangles).toBe(2);
+        expect(circle.centerAlpha).toBeGreaterThan(0.99);
+        expect(circle.maxContourError).toBeLessThan(0.75);
+        expect(circle.batches).toBeLessThanOrEqual(2);
       }
     }
     await canvas.screenshot({ path: testInfo.outputPath("extreme-zoom.png") });
@@ -2280,6 +2464,39 @@ test.describe("Graph text quality", () => {
     await page.waitForTimeout(80);
     await focus("articles/quality", 1);
     expect((await quality("articles/quality")).font).toBe(normalFont);
+    // Dispose GPU resources on SPA navigation, then create a fresh working graph.
+    await page.evaluate(() =>
+      window.spaNavigate(
+        new URL((document.body.dataset.basepath || "") + "/", location.origin),
+      ),
+    );
+    await expect(page.locator(".graph-page")).toHaveCount(0);
+    expect(
+      await page.evaluate(() => (window as any).__qualityApp.renderer),
+    ).toBeNull();
+    await page.evaluate(() =>
+      window.spaNavigate(
+        new URL(
+          (document.body.dataset.basepath || "") + "/graph",
+          location.origin,
+        ),
+      ),
+    );
+    await expect(canvas).toBeVisible({ timeout: 20000 });
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          Object.values(
+            (window as any).__qualityApp.renderer.renderPipes.batch
+              ._activeBatches,
+          ).some(
+            (batch: any) =>
+              batch.name === "graph-circle" && batch.batchIndex > 0,
+          ),
+        ),
+      )
+      .toBe(true);
+    expect(errors).toEqual([]);
   });
 });
 
@@ -2356,7 +2573,7 @@ test.describe("Graph pinch sensitivity", () => {
         ]);
       });
     const gain: number[] = [];
-    for (const scale of [0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256]) {
+    for (const scale of [0.15, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 50]) {
       await setZoom(scale);
       const anchor = await worldCenter(),
         direction = scale <= 8 ? -1 : 1;
@@ -2366,36 +2583,41 @@ test.describe("Graph pinch sensitivity", () => {
       expect(after[0]).toBeCloseTo(anchor[0], 7);
       expect(after[1]).toBeCloseTo(anchor[1], 7);
     }
-    expect(gain[0]).toBeGreaterThan(0.02);
-    expect(gain[0]).toBeLessThan(0.03);
-    expect(gain.at(-1)!).toBeCloseTo(gain[0], 5);
-    expect(gain[5]).toBeGreaterThan(0.99);
-    for (let i = 1; i <= 5; i++) expect(gain[i]).toBeGreaterThan(gain[i - 1]);
-    for (let i = 6; i < gain.length; i++)
+    expect(gain[0]).toBeGreaterThan(0.004);
+    expect(gain[0]).toBeLessThan(0.006);
+    expect(gain.at(-1)!).toBeGreaterThan(0.65);
+    expect(gain.at(-1)!).toBeLessThan(0.7);
+    expect(gain[6]).toBeGreaterThan(0.99);
+    for (let i = 1; i <= 6; i++) expect(gain[i]).toBeGreaterThan(gain[i - 1]);
+    for (let i = 7; i < gain.length; i++)
       expect(gain[i]).toBeLessThan(gain[i - 1]);
 
     // Mouse-wheel increments retain their existing speed, including at extremes.
-    for (const scale of [0.3, 8, 200]) {
+    for (const scale of [0.4, 8, 40]) {
       await setZoom(scale);
       await wheel(-50, false);
       expect((await zoom()) / scale).toBeCloseTo(Math.pow(2, 0.1), 7);
     }
     // A single large pinch and a sequence of small events follow the same curve.
-    await setZoom(0.3);
+    await setZoom(0.4);
     await wheel(-160);
     const batched = await zoom();
-    await setZoom(0.3);
+    await setZoom(0.4);
     for (let i = 0; i < 40; i++) await wheel(-4);
     expect((await zoom()) / batched).toBeCloseTo(1, 3);
     // Both endpoints remain reachable, with no accumulated overshoot on reversal.
     await wheel(-10000);
-    expect(await zoom()).toBe(256);
+    expect(await zoom()).toBe(50);
+    await wheel(-20);
+    expect(await zoom()).toBe(50);
     await wheel(2);
-    expect(await zoom()).toBeLessThan(256);
+    expect(await zoom()).toBeLessThan(50);
     await wheel(10000);
-    expect(await zoom()).toBe(0.25);
+    expect(await zoom()).toBe(0.15);
+    await wheel(20);
+    expect(await zoom()).toBe(0.15);
     await wheel(-2);
-    expect(await zoom()).toBeGreaterThan(0.25);
+    expect(await zoom()).toBeGreaterThan(0.15);
 
     const touch = (type: string, distance: number, fingers = 2, offset = 0) =>
       canvas.evaluate(
@@ -2428,7 +2650,7 @@ test.describe("Graph pinch sensitivity", () => {
         { type, distance, fingers, offset },
       );
     // Native touchscreen pinch follows the same sensitivity as trackpad pinch.
-    for (const scale of [0.3, 8, 200]) {
+    for (const scale of [0.4, 8, 40]) {
       await setZoom(scale);
       await wheel(-Math.log(1.1) / (0.02 * Math.LN2));
       const trackpad = await zoom();
@@ -2452,6 +2674,20 @@ test.describe("Graph pinch sensitivity", () => {
         await canvas.evaluate((element) => (element as any).__zoom.x),
       ).toBeCloseTo(beforePan + 10, 5);
       await touch("touchend", 44, 0, 18);
+    }
+    // Touchscreen gestures stop at the same earlier limits and reverse immediately.
+    for (const [limit, outward] of [
+      [0.15, 36],
+      [50, 44],
+    ]) {
+      await setZoom(limit);
+      await touch("touchstart", 40);
+      await touch("touchmove", outward);
+      expect(await zoom()).toBeCloseTo(limit, 8);
+      await touch("touchmove", 40);
+      if (limit === 50) expect(await zoom()).toBeLessThan(limit);
+      else expect(await zoom()).toBeGreaterThan(limit);
+      await touch("touchend", 40, 0);
     }
     // Trackpad pinch retains the existing smooth momentum when motion is enabled.
     await page.emulateMedia({ reducedMotion: "no-preference" });

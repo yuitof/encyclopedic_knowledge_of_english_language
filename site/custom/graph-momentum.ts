@@ -1,13 +1,14 @@
+export const graphZoomLimits = { minimum: 0.15, maximum: 50 };
+
 /** Runs inside the guarded Quartz graph renderer, sharing its D3 camera. */
 export const graphMomentum = String.raw`
   var graphZoomSelection=o.select(Q.canvas),graphZoomFrame=0,graphZoomLastFrame=0;
   var graphZoomTarget=Math.log(j.k),graphZoomDirection=0,graphZoomLastInput=0;
   var graphZoomPoint=[0,0],graphZoomAnchor=[0,0];
-  var graphZoomMinimum=Math.log(.25),graphZoomMaximum=Math.log(256);
-  var graphPinchCutoff=.02,graphPinchSlope=Math.log(1/graphPinchCutoff-1)/2;
+  var graphZoomMinimum=Math.log(${graphZoomLimits.minimum}),graphZoomMaximum=Math.log(${graphZoomLimits.maximum});
+  var graphPinchSlope=Math.log(49)/2;
   function graphPinchSensitivity(logScale){
-    // Two sigmoid shoulders: near-normal in the middle, ~2% at .25x/256x.
-    // Clamp there instead of allowing an endless, imperceptibly slow tail.
+    // Keep the accepted sensitivity curve independent of the hard zoom limits.
     var stops=logScale/Math.LN2;
     return 1/((1+Math.exp(-stops*graphPinchSlope))*(1+Math.exp((stops-6)*graphPinchSlope)));
   }
@@ -18,7 +19,6 @@ export const graphMomentum = String.raw`
     for(var i=0;i<steps;i++){
       var midpoint=logScale+step*.5*graphPinchSensitivity(logScale);
       logScale=Math.max(graphZoomMinimum,Math.min(graphZoomMaximum,logScale+step*graphPinchSensitivity(midpoint)));
-      if(graphPinchSensitivity(logScale)<=graphPinchCutoff&&step!==0)return step<0?graphZoomMinimum:graphZoomMaximum;
       if(logScale===graphZoomMinimum||logScale===graphZoomMaximum)break;
     }
     return logScale;
@@ -28,7 +28,7 @@ export const graphMomentum = String.raw`
     graphZoomTarget=Math.log(o.zoomTransform(Q.canvas).k);graphZoomDirection=0;
   };
   function graphApplyZoom(logScale){
-    var scale=logScale===graphZoomMaximum?256:logScale===graphZoomMinimum?.25:Math.exp(logScale);
+    var scale=logScale===graphZoomMaximum?${graphZoomLimits.maximum}:logScale===graphZoomMinimum?${graphZoomLimits.minimum}:Math.exp(logScale);
     var transform=o.zoomIdentity.translate(graphZoomPoint[0]-graphZoomAnchor[0]*scale,graphZoomPoint[1]-graphZoomAnchor[1]*scale).scale(scale);
     graphZoomSelection.call(et.transform,transform);
   }
