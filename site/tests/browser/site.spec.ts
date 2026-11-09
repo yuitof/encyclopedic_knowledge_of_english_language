@@ -2064,10 +2064,10 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   const halfDiameterRatio = (await screenSizes()).diameter / extreme.diameter;
   expect(halfDiameterRatio).toBeGreaterThan(0.5);
   expect(halfDiameterRatio).toBeLessThan(Math.SQRT1_2);
-  expect((await screenSizes()).titleHeight / extreme.titleHeight).toBeCloseTo(
-    Math.SQRT1_2,
-    2,
-  );
+  const halfTitleRatio =
+    (await screenSizes()).titleHeight / extreme.titleHeight;
+  expect(halfTitleRatio).toBeGreaterThan(0.5);
+  expect(halfTitleRatio).toBeLessThan(0.56);
   await expect
     .poll(async () => (await screenSizes()).thickness)
     .toBeCloseTo(originalSizes.thickness, 2);
@@ -2153,7 +2153,11 @@ test.describe("Graph rendering quality", () => {
             title: "English sample text",
             content: "",
             tags: [],
-            links: ["articles/japanese", "articles/distant"],
+            links: [
+              "articles/japanese",
+              "articles/distant",
+              "articles/reference",
+            ],
           },
           "articles/japanese": {
             slug: "articles/japanese",
@@ -2165,6 +2169,13 @@ test.describe("Graph rendering quality", () => {
           "articles/distant": {
             slug: "articles/distant",
             title: "Offscreen title",
+            content: "",
+            tags: [],
+            links: [],
+          },
+          "articles/reference": {
+            slug: "articles/reference",
+            title: "Reference name",
             content: "",
             tags: [],
             links: [],
@@ -2327,6 +2338,7 @@ test.describe("Graph rendering quality", () => {
           pixelHeight: texture?.source.pixelHeight ?? 0,
           height: label.getBounds().height,
           font: label.style.fontSize,
+          screenFont: label.style.fontSize * scale,
         };
       }, id);
     const circleQuality = (id: string) =>
@@ -2408,6 +2420,43 @@ test.describe("Graph rendering quality", () => {
               .batchIndex,
         };
       }, id);
+    // One connection gives the reference vertex-size factor of 1. Measure the
+    // actual scene scale after camera zoom, including when labels are hidden.
+    const fontCurve: { zoom: number; size: number }[] = [];
+    for (const zoom of [0.15, 1, 2, 4, 8, 16, 20, 32, 45, 50]) {
+      await focus("articles/reference", zoom);
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) =>
+            requestAnimationFrame(() => resolve()),
+          ),
+      );
+      fontCurve.push({
+        zoom,
+        size: (await quality("articles/reference")).screenFont,
+      });
+    }
+    for (const sample of fontCurve.slice(0, 3))
+      expect(sample.size).toBeCloseTo(8, 2);
+    expect(fontCurve.find((sample) => sample.zoom === 20)!.size).toBeCloseTo(
+      9.514,
+      2,
+    );
+    expect(fontCurve.at(-1)!.size).toBeCloseTo(20.13, 2);
+    const fontGrowth = fontCurve
+      .slice(1)
+      .map(
+        (sample, i) =>
+          Math.log(sample.size / fontCurve[i].size) /
+          Math.log(sample.zoom / fontCurve[i].zoom),
+      );
+    expect(fontGrowth[0]).toBeLessThan(0.001);
+    expect(fontGrowth.at(-1)!).toBeGreaterThan(0.96);
+    expect(fontGrowth.at(-1)!).toBeLessThan(1);
+    for (let i = 1; i < fontGrowth.length; i++) {
+      expect(fontGrowth[i]).toBeGreaterThanOrEqual(fontGrowth[i - 1]);
+      expect(fontGrowth[i] - fontGrowth[i - 1]).toBeLessThan(0.4);
+    }
     // Normal zoom and high zoom must keep the same font styling and layout rules.
     await focus("articles/quality", 1);
     const normalFont = (await quality("articles/quality")).font;

@@ -158,7 +158,8 @@ runtime = runtime.replace(
     // Smoothly increase logarithmic growth from 1/2 to 1 around 16x.
     return Math.sqrt(zoom)*Math.pow((256+zoom*zoom)/257,.25);
   }
-  function graphTitleSize(zoom){return Math.sqrt(zoom);}
+  // Nominal font size in screen pixels: a low-zoom floor, smoothly becoming linear.
+  function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/20,4),.25);}
   var graphLabelTextureLimit=Q.renderer.gl?Q.renderer.gl.getParameter(Q.renderer.gl.MAX_TEXTURE_SIZE)
     :Q.renderer.gpu?.device?.limits?.maxTextureDimension2D||8192;
   function graphRefreshLabelQuality(){
@@ -206,12 +207,12 @@ for (const fragment of [labelFocus, zoomLabels])
 runtime = runtime.replace(
   labelFocus,
   `function qe(){
-  var size=graphTitleSize(j.k)/(j.k*Vu),opacity=graphLabelOpacity(j.k);
+  var size=graphTitleSize(j.k)/j.k,opacity=graphLabelOpacity(j.k);
   for(var i=0;i<P.length;i++){
     var node=P[i],hovered=_u===node.simulationData.id;
     node.label.alpha=hovered?1:opacity;
     // Use the base radius so hover enlargement never changes the font size.
-    node.label.scale.set(size*Math.pow(node.radius/1.35,Math.log2(1.3)));
+    node.label.scale.set(size/node.label.style.fontSize*Math.pow(node.radius/1.35,Math.log2(1.3)));
   }
 }`,
 );
