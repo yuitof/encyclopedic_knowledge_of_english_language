@@ -2282,3 +2282,193 @@ test.describe("Graph text quality", () => {
     expect((await quality("articles/quality")).font).toBe(normalFont);
   });
 });
+
+test.describe("Graph pinch sensitivity", () => {
+  test.use({ hasTouch: true });
+  test("pinch sensitivity tapers smoothly at both extremes", async ({
+    page,
+  }) => {
+    test.setTimeout(60000);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.route("**/static/contentIndex.json", (route) =>
+      route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          "articles/pinch": {
+            title: "Pinch",
+            content: "",
+            tags: [],
+            links: [],
+          },
+        }),
+      }),
+    );
+    await page.route("**/static/graph/d3.min.js", async (route) => {
+      const response = await route.fetch();
+      await route.fulfill({
+        response,
+        body:
+          (await response.text()) +
+          `;{
+        const zoom=window.d3.zoom;
+        window.d3.zoom=(...args)=>window.__pinchZoom=zoom(...args);
+      }`,
+      });
+    });
+    await page.goto("./graph");
+    const canvas = page.locator(".graph-page .graph-container canvas");
+    await expect(canvas).toBeVisible({ timeout: 20000 });
+    if (mobile(page)) await page.locator(".explorer-panel > summary").click();
+    await canvas.scrollIntoViewIfNeeded();
+    const setZoom = (scale: number) =>
+      canvas.evaluate((element, scale) => {
+        const d3 = (window as any).d3;
+        d3.select(element).call(
+          (window as any).__pinchZoom.transform,
+          d3.zoomIdentity.translate(30, 40).scale(scale),
+        );
+      }, scale);
+    const zoom = () => canvas.evaluate((element) => (element as any).__zoom.k);
+    const wheel = (deltaY: number, pinch = true) =>
+      canvas.evaluate(
+        (element, { deltaY, pinch }) => {
+          const box = element.getBoundingClientRect();
+          element.dispatchEvent(
+            new WheelEvent("wheel", {
+              deltaY,
+              ctrlKey: pinch,
+              bubbles: true,
+              cancelable: true,
+              clientX: Math.round(box.left + box.width / 2),
+              clientY: Math.round(box.top + box.height / 2),
+            }),
+          );
+        },
+        { deltaY, pinch },
+      );
+    const worldCenter = () =>
+      canvas.evaluate((element) => {
+        const canvas = element as HTMLCanvasElement & { __zoom: any };
+        const bounds = canvas.getBoundingClientRect();
+        return canvas.__zoom.invert([
+          Math.round(bounds.left + bounds.width / 2) - bounds.left,
+          Math.round(bounds.top + bounds.height / 2) - bounds.top,
+        ]);
+      });
+    const gain: number[] = [];
+    for (const scale of [0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256]) {
+      await setZoom(scale);
+      const anchor = await worldCenter(),
+        direction = scale <= 8 ? -1 : 1;
+      await wheel(direction * 2);
+      gain.push(Math.abs(Math.log((await zoom()) / scale)) / (0.04 * Math.LN2));
+      const after = await worldCenter();
+      expect(after[0]).toBeCloseTo(anchor[0], 7);
+      expect(after[1]).toBeCloseTo(anchor[1], 7);
+    }
+    expect(gain[0]).toBeGreaterThan(0.02);
+    expect(gain[0]).toBeLessThan(0.03);
+    expect(gain.at(-1)!).toBeCloseTo(gain[0], 5);
+    expect(gain[5]).toBeGreaterThan(0.99);
+    for (let i = 1; i <= 5; i++) expect(gain[i]).toBeGreaterThan(gain[i - 1]);
+    for (let i = 6; i < gain.length; i++)
+      expect(gain[i]).toBeLessThan(gain[i - 1]);
+
+    // Mouse-wheel increments retain their existing speed, including at extremes.
+    for (const scale of [0.3, 8, 200]) {
+      await setZoom(scale);
+      await wheel(-50, false);
+      expect((await zoom()) / scale).toBeCloseTo(Math.pow(2, 0.1), 7);
+    }
+    // A single large pinch and a sequence of small events follow the same curve.
+    await setZoom(0.3);
+    await wheel(-160);
+    const batched = await zoom();
+    await setZoom(0.3);
+    for (let i = 0; i < 40; i++) await wheel(-4);
+    expect((await zoom()) / batched).toBeCloseTo(1, 3);
+    // Both endpoints remain reachable, with no accumulated overshoot on reversal.
+    await wheel(-10000);
+    expect(await zoom()).toBe(256);
+    await wheel(2);
+    expect(await zoom()).toBeLessThan(256);
+    await wheel(10000);
+    expect(await zoom()).toBe(0.25);
+    await wheel(-2);
+    expect(await zoom()).toBeGreaterThan(0.25);
+
+    const touch = (type: string, distance: number, fingers = 2, offset = 0) =>
+      canvas.evaluate(
+        (element, { type, distance, fingers, offset }) => {
+          const box = element.getBoundingClientRect();
+          const points = [0, 1].map(
+            (identifier) =>
+              new Touch({
+                identifier,
+                target: element,
+                clientX:
+                  Math.round(box.left + box.width / 2) +
+                  ((identifier ? 1 : -1) * distance) / 2 +
+                  offset,
+                clientY: Math.round(box.top + box.height / 2),
+              }),
+          );
+          const touches = points.slice(0, fingers);
+          element.dispatchEvent(
+            new TouchEvent(type, {
+              touches,
+              targetTouches: touches,
+              changedTouches:
+                type === "touchend" ? points.slice(fingers) : touches,
+              bubbles: true,
+              cancelable: true,
+            }),
+          );
+        },
+        { type, distance, fingers, offset },
+      );
+    // Native touchscreen pinch follows the same sensitivity as trackpad pinch.
+    for (const scale of [0.3, 8, 200]) {
+      await setZoom(scale);
+      await wheel(-Math.log(1.1) / (0.02 * Math.LN2));
+      const trackpad = await zoom();
+      await setZoom(scale);
+      const anchor = await worldCenter();
+      await touch("touchstart", 40);
+      await touch("touchmove", 44);
+      expect(await zoom()).toBeCloseTo(trackpad, 7);
+      const after = await worldCenter();
+      expect(after[0]).toBeCloseTo(anchor[0], 7);
+      expect(after[1]).toBeCloseTo(anchor[1], 7);
+      // Parallel movement pans without altering zoom; one-finger pan remains usable.
+      await touch("touchmove", 44, 2, 8);
+      expect(await zoom()).toBeCloseTo(trackpad, 7);
+      await touch("touchend", 44, 1, 8);
+      const beforePan = await canvas.evaluate(
+        (element) => (element as any).__zoom.x,
+      );
+      await touch("touchmove", 44, 1, 18);
+      expect(
+        await canvas.evaluate((element) => (element as any).__zoom.x),
+      ).toBeCloseTo(beforePan + 10, 5);
+      await touch("touchend", 44, 0, 18);
+    }
+    // Trackpad pinch retains the existing smooth momentum when motion is enabled.
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    );
+    await setZoom(8);
+    await wheel(-20);
+    const immediate = await zoom();
+    await expect.poll(zoom).toBeGreaterThan(immediate);
+    await page.waitForTimeout(1200);
+    const settled = await zoom();
+    expect(settled).toBeGreaterThan(8);
+    await page.waitForTimeout(150);
+    expect(await zoom()).toBe(settled);
+  });
+});
