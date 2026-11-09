@@ -87,12 +87,14 @@ runtime = runtime.replace(
   `
 var graphReducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
 function graphColor(value){return new a.Color(value).toNumber()}
-// Blend the previous theme blue with the OGP blue (#255aca).
-var graphEarlierBlue=graphColor(Ie);
-var graphHoverBlue=(Math.round(((graphEarlierBlue>>16&255)+37)/2)<<16)
-  |(Math.round(((graphEarlierBlue>>8&255)+90)/2)<<8)
-  |Math.round(((graphEarlierBlue&255)+202)/2);
+// Use the established dark-mode highlight blue in both themes.
+var graphHoverBlue=0x577fd9;
 var graphBaseEdge=graphColor(ee),graphBackground=graphColor(He);
+// Soften normal links toward the current theme background without transparency.
+var graphEdgeContrast=document.documentElement.getAttribute("saved-theme")==="dark"?.5:.65;
+graphBaseEdge=(Math.round((graphBaseEdge>>16&255)*graphEdgeContrast+(graphBackground>>16&255)*(1-graphEdgeContrast))<<16)
+  |(Math.round((graphBaseEdge>>8&255)*graphEdgeContrast+(graphBackground>>8&255)*(1-graphEdgeContrast))<<8)
+  |Math.round((graphBaseEdge&255)*graphEdgeContrast+(graphBackground&255)*(1-graphEdgeContrast));
 var graphDimEdge=(Math.round((graphBaseEdge>>16&255)*.25+(graphBackground>>16&255)*.75)<<16)
   |(Math.round((graphBaseEdge>>8&255)*.25+(graphBackground>>8&255)*.75)<<8)
   |Math.round((graphBaseEdge&255)*.25+(graphBackground&255)*.75);
@@ -121,7 +123,7 @@ runtime = runtime.replace(
   linkFocus,
   `function Ve(){for(var i=0;i<I.length;i++){
   var link=I[i];link.gfx.zIndex=_u!==null&&link.active?2:0;
-  link.alpha=1;graphFade(link,link.color,link.active?graphHoverBlue:_u!==null?graphDimEdge:ee);
+  link.alpha=1;graphFade(link,link.color,link.active?graphHoverBlue:_u!==null?graphDimEdge:graphBaseEdge);
 }}`,
 );
 runtime = runtime.replace(
@@ -190,14 +192,14 @@ runtime = runtime.replace(
     }
   }
   function graphLabelOpacity(zoom){
-    var progress=Math.max(0,Math.min(1,Math.log2(zoom/8)/Math.log2(12/8)));
+    var progress=Math.max(0,Math.min(1,Math.log2(zoom/6)/Math.log2(12/6)));
     return progress*progress*(3-2*progress);
   }function Ke(){`,
 );
 
 runtime = runtime.replace(
   edgeStroke,
-  "C.gfx.stroke({alpha:C.alpha,width:1/j.k,color:C.color})",
+  "C.gfx.stroke({alpha:C.alpha,width:.8/j.k,color:C.color})",
 );
 runtime = runtime.replace(
   dragHit,

@@ -1675,7 +1675,21 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     );
   const originalSizes = await screenSizes();
   expect(originalSizes.diameter).toBeGreaterThan(0);
-  expect(originalSizes.thickness).toBeCloseTo(1, 2);
+  expect(originalSizes.thickness).toBeCloseTo(0.8, 2);
+  const normalEdge = await page.evaluate(() =>
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--light")
+      .trim() === "#101418"
+      ? 0x32373b
+      : 0xdbdee1,
+  );
+  await expect
+    .poll(async () =>
+      (await scene()).backgroundEdgeColors.every(
+        (color: number) => color === normalEdge,
+      ),
+    )
+    .toBe(true);
   const checkSizes = async () => {
     await expect
       .poll(async () => (await screenSizes()).diameter)
@@ -1861,14 +1875,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
       page.evaluate(() => new Set((window as any).__graphColorSamples).size),
     )
     .toBeGreaterThan(2);
-  const highlightBlue = await page.evaluate(() => {
-    const earlier = new (window as any).PIXI.Color(
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--secondary")
-        .trim(),
-    ).toNumber();
-    return earlier === 0x88a3e8 ? 0x577fd9 : 0x2c60cb;
-  });
+  const highlightBlue = 0x577fd9;
   await expect
     .poll(
       async () =>
@@ -1890,7 +1897,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     const background = new Color(
       css.getPropertyValue("--light").trim(),
     ).toNumber();
-    return background === 0x101418 ? 0x212529 : 0xf1f2f4;
+    return background === 0x101418 ? 0x191d21 : 0xf6f7f8;
   });
   await expect
     .poll(async () =>
@@ -2092,7 +2099,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     const titleGrowth = size.titleHeight / previous.titleHeight;
     expect(titleGrowth).toBeGreaterThanOrEqual(1 - 1e-6);
     expect(titleGrowth).toBeLessThanOrEqual(size.zoom / previous.zoom + 1e-6);
-    expect(size.thickness).toBeCloseTo(1, 2);
+    expect(size.thickness).toBeCloseTo(0.8, 2);
   }
   const growth = scales
     .slice(1)
@@ -2109,7 +2116,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     expect(growth[i] - growth[i - 1]).toBeLessThan(0.2);
   }
   expect(scales[2].titleOpacity).toBeCloseTo(0, 8);
-  expect(scales[3].titleOpacity).toBeCloseTo(0, 8);
+  expect(scales[3].titleOpacity).toBeCloseTo(0.37378, 4);
   expect(scales[4].titleOpacity).toBeCloseTo(1, 8);
   expect(scales[5].titleOpacity).toBeCloseTo(1, 8);
   // A direction reversal should discard the pending tail, and reduced motion should settle directly.
@@ -2134,6 +2141,28 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     reduced,
   );
   await page.mouse.move(0, 0);
+  // Theme changes rebuild the canvas; softened edges must use the new background.
+  await page.locator('input[name="appearance-color"][value="dark"]').check();
+  await expect(page.locator("html")).toHaveAttribute("saved-theme", "dark");
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const app = (window as any).__hoverApplication;
+        const edges = app?.stage?.children[0]?.children[0]?.children.filter(
+          (shape: any) => shape.label === "graph-edge",
+        );
+        return (
+          edges?.length > 0 &&
+          edges.every(
+            (edge: any) =>
+              edge.context.strokeStyle.color === 0x32373b &&
+              edge.context.strokeStyle.alpha === 1,
+          )
+        );
+      }),
+    )
+    .toBe(true);
+  expect((await screenSizes()).thickness).toBeCloseTo(0.8, 2);
 });
 
 test.describe("Graph rendering quality", () => {
@@ -2428,7 +2457,7 @@ test.describe("Graph rendering quality", () => {
     // One connection gives the reference vertex-size factor of 1. Measure the
     // actual scene scale after camera zoom, including when labels are hidden.
     const fontCurve: { zoom: number; size: number; opacity: number }[] = [];
-    for (const zoom of [0.15, 1, 2, 4, 8, 10, 12, 16, 20, 32, 45, 50]) {
+    for (const zoom of [0.15, 1, 2, 4, 6, 8, 10, 12, 16, 20, 32, 45, 50]) {
       await focus("articles/reference", zoom);
       await page.evaluate(
         () =>
@@ -2454,10 +2483,14 @@ test.describe("Graph rendering quality", () => {
       expect(sample.size).toBeCloseTo(defaultSizes.get(sample.zoom)!, 5);
     for (const sample of fontCurve.filter((sample) => sample.zoom <= 4))
       expect(sample.size).toBeCloseTo(8, 3);
-    for (const sample of fontCurve.filter((sample) => sample.zoom <= 8))
+    for (const sample of fontCurve.filter((sample) => sample.zoom <= 6))
       expect(sample.opacity).toBe(0);
+    expect(fontCurve.find((sample) => sample.zoom === 8)!.opacity).toBeCloseTo(
+      0.37378,
+      4,
+    );
     expect(fontCurve.find((sample) => sample.zoom === 10)!.opacity).toBeCloseTo(
-      0.575,
+      0.82884,
       3,
     );
     for (const sample of fontCurve.filter((sample) => sample.zoom >= 12))
@@ -2557,7 +2590,7 @@ test.describe("Graph rendering quality", () => {
       await expect
         .poll(async () => (await quality("articles/reference")).screenFont)
         .toBeCloseTo(normalSize, 3);
-      if (zoom <= 8)
+      if (zoom <= 6)
         await expect
           .poll(async () => (await quality("articles/reference")).alpha)
           .toBe(0);

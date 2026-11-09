@@ -124,3 +124,10 @@ $
 $M(r)=\left(\frac{r}{1.35}\right)^{\log_2(1.3)}$
 
 $\left(1+\left(\frac{z}{12}\right)^8\right)^{1/8}$
+
+<!-- - Make the edges a little more darker in the light mode. the dark mode is fine. -->
+
+- Sometimes when the cursor hovers, the graph view becomes glitchy. Fix it.
+  <!-- - Make the fading animation of names of pages start at 6x. -->
+  <!-- - try doing these. make sure to commit before just in case.
+    Set the denominator of Z 9 in the functions for the font size. And use 81 and 82 in the circle diameter function. -->
