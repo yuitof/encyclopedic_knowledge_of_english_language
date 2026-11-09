@@ -104,5 +104,5 @@ $S(z,r)=
 \underbrace{\left(\frac{r}{1.35}\right)^{\log_2(1.3)}}_{\text{vertex-size multiplier}}$
 
 <!-- - During 8x and 16x, when the cursor is over a vertex, -->
-
-- When the cursor is over a vertex, change the its name's font size to what we've already implemented from z/2 \* (the multiplier from the base radius)
+<!--
+- When the cursor is over a vertex, change the its name's font size to what we've already implemented from z/2 * (the multiplier from the base radius) -->
