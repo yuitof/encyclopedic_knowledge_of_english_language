@@ -1694,7 +1694,8 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
       .poll(async () => (await screenSizes()).thickness)
       .toBeCloseTo(originalSizes.thickness, 2);
     const titleRatio = current.titleHeight / originalSizes.titleHeight;
-    expect(titleRatio).toBeCloseTo(zoomRatio, 4);
+    expect(titleRatio).toBeGreaterThanOrEqual(Math.min(1, zoomRatio) - 1e-6);
+    expect(titleRatio).toBeLessThanOrEqual(Math.max(1, zoomRatio) + 1e-6);
   };
   const box = (await canvas.boundingBox())!;
   const before = await canvas.evaluate((element) => (element as any).__zoom.k);
@@ -2089,7 +2090,8 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     scales.push(size);
     const previous = scales[scales.length - 2];
     const titleGrowth = size.titleHeight / previous.titleHeight;
-    expect(titleGrowth).toBeCloseTo(size.zoom / previous.zoom, 4);
+    expect(titleGrowth).toBeGreaterThanOrEqual(1 - 1e-6);
+    expect(titleGrowth).toBeLessThanOrEqual(size.zoom / previous.zoom + 1e-6);
     expect(size.thickness).toBeCloseTo(1, 2);
   }
   const growth = scales
@@ -2437,8 +2439,21 @@ test.describe("Graph rendering quality", () => {
       const state = await quality("articles/reference");
       fontCurve.push({ zoom, size: state.screenFont, opacity: state.alpha });
     }
-    for (const sample of fontCurve)
-      expect(sample.size).toBeCloseTo(sample.zoom / 2, 5);
+    const defaultSizes = new Map([
+      [0.15, 1],
+      [1, 1],
+      [8, 1.0048],
+      [10, 1.02648],
+      [12, 1.09051],
+      [16, 1.34933],
+      [50, 4.16667],
+    ]);
+    for (const sample of fontCurve.filter((sample) =>
+      defaultSizes.has(sample.zoom),
+    ))
+      expect(sample.size).toBeCloseTo(defaultSizes.get(sample.zoom)!, 5);
+    for (const sample of fontCurve.filter((sample) => sample.zoom <= 4))
+      expect(sample.size).toBeCloseTo(1, 4);
     for (const sample of fontCurve.filter((sample) => sample.zoom <= 8))
       expect(sample.opacity).toBe(0);
     expect(fontCurve.find((sample) => sample.zoom === 10)!.opacity).toBeCloseTo(
@@ -2457,6 +2472,7 @@ test.describe("Graph rendering quality", () => {
       [16, 11.42553],
       [50, 33.36095],
     ]) {
+      const normalSize = defaultSizes.get(zoom)!;
       await canvas.evaluate((view, zoom) => {
         const app = (window as any).__qualityApp,
           d3 = (window as any).d3;
@@ -2475,7 +2491,7 @@ test.describe("Graph rendering quality", () => {
       }, zoom);
       await expect
         .poll(async () => (await quality("articles/reference")).screenFont)
-        .toBeCloseTo(zoom / 2, 3);
+        .toBeCloseTo(normalSize, 3);
       const point = await page.evaluate(() => {
         const app = (window as any).__qualityApp;
         const node = app.stage.children[0].children[0].children.find(
@@ -2526,7 +2542,9 @@ test.describe("Graph rendering quality", () => {
           () => (window as any).__fontHoverSamples,
         );
         expect(
-          samples.some((size) => size > 4.01 && size < hoveredSize - 0.01),
+          samples.some(
+            (size) => size > normalSize + 0.01 && size < hoveredSize - 0.01,
+          ),
         ).toBe(true);
         expect(
           samples.every((size, i) => i === 0 || size >= samples[i - 1]),
@@ -2535,7 +2553,7 @@ test.describe("Graph rendering quality", () => {
       await page.mouse.move(0, 0);
       await expect
         .poll(async () => (await quality("articles/reference")).screenFont)
-        .toBeCloseTo(zoom / 2, 3);
+        .toBeCloseTo(normalSize, 3);
     }
     // Normal zoom and high zoom must keep the same font styling and layout rules.
     await focus("articles/quality", 1);
