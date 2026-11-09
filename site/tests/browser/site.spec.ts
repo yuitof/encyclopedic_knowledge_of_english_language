@@ -2438,11 +2438,11 @@ test.describe("Graph rendering quality", () => {
     }
     for (const sample of fontCurve.slice(0, 3))
       expect(sample.size).toBeCloseTo(8, 2);
-    expect(fontCurve.find((sample) => sample.zoom === 20)!.size).toBeCloseTo(
+    expect(fontCurve.find((sample) => sample.zoom === 16)!.size).toBeCloseTo(
       9.514,
       2,
     );
-    expect(fontCurve.at(-1)!.size).toBeCloseTo(20.13, 2);
+    expect(fontCurve.at(-1)!.size).toBeCloseTo(25.07, 2);
     const fontGrowth = fontCurve
       .slice(1)
       .map(

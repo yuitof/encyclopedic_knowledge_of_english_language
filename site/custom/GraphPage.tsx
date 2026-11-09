@@ -159,7 +159,7 @@ runtime = runtime.replace(
     return Math.sqrt(zoom)*Math.pow((256+zoom*zoom)/257,.25);
   }
   // Nominal font size in screen pixels: a low-zoom floor, smoothly becoming linear.
-  function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/20,4),.25);}
+  function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/16,4),.25);}
   var graphLabelTextureLimit=Q.renderer.gl?Q.renderer.gl.getParameter(Q.renderer.gl.MAX_TEXTURE_SIZE)
     :Q.renderer.gpu?.device?.limits?.maxTextureDimension2D||8192;
   function graphRefreshLabelQuality(){

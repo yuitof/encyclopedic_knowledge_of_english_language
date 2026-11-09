@@ -89,3 +89,10 @@
 
 - Get the name of a vertex a little closer to the center of the circle.
 <!-- - As for certain vertices, the name and the vertex are not center-aligned. Fix it. -->
+
+- As for the room between a vertex and its name
+  low zoom: make sure names do not overlap the cursor
+  very high zoom: make sure the text do not overlap the vertex.
+
+$A(r)=\left(\frac{r}{1.35}\right)^{\log_2(1.3)}
+\approx\left(\frac{r}{1.35}\right)^{0.379}$
