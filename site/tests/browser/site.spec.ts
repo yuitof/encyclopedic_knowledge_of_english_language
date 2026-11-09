@@ -2058,7 +2058,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
     .toBe(50);
   const extreme = await screenSizes();
-  expect(extreme.diameter / extreme.baseDiameter).toBeCloseTo(12.796, 3);
+  expect(extreme.diameter / extreme.baseDiameter).toBeCloseTo(14.612, 3);
   await page.mouse.wheel(0, 500);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
@@ -2426,7 +2426,7 @@ test.describe("Graph rendering quality", () => {
     // One connection gives the reference vertex-size factor of 1. Measure the
     // actual scene scale after camera zoom, including when labels are hidden.
     const fontCurve: { zoom: number; size: number; opacity: number }[] = [];
-    for (const zoom of [0.15, 1, 2, 4, 8, 12, 16, 20, 32, 45, 50]) {
+    for (const zoom of [0.15, 1, 2, 4, 8, 10, 12, 16, 20, 32, 45, 50]) {
       await focus("articles/reference", zoom);
       await page.evaluate(
         () =>
@@ -2441,21 +2441,21 @@ test.describe("Graph rendering quality", () => {
       expect(sample.size).toBeCloseTo(sample.zoom / 2, 5);
     for (const sample of fontCurve.filter((sample) => sample.zoom <= 8))
       expect(sample.opacity).toBe(0);
-    expect(fontCurve.find((sample) => sample.zoom === 12)!.opacity).toBeCloseTo(
-      0.626,
+    expect(fontCurve.find((sample) => sample.zoom === 10)!.opacity).toBeCloseTo(
+      0.575,
       3,
     );
-    for (const sample of fontCurve.filter((sample) => sample.zoom >= 16))
+    for (const sample of fontCurve.filter((sample) => sample.zoom >= 12))
       expect(sample.opacity).toBe(1);
     // Use real pointer movement, placing even a subpixel circle on an integer
     // client coordinate so the extreme zoom-out case can be hovered reliably.
     for (const [zoom, hoveredSize] of [
       [0.15, 8],
-      [1, 8.00003],
-      [8, 8.12217],
-      [12, 8.56914],
-      [16, 9.51366],
-      [50, 25.06528],
+      [1, 8.0001],
+      [8, 8.36877],
+      [12, 9.51366],
+      [16, 11.42553],
+      [50, 33.36095],
     ]) {
       await canvas.evaluate((view, zoom) => {
         const app = (window as any).__qualityApp,
@@ -2525,7 +2525,9 @@ test.describe("Graph rendering quality", () => {
         const samples: number[] = await page.evaluate(
           () => (window as any).__fontHoverSamples,
         );
-        expect(samples.some((size) => size > 4.01 && size < 8.11)).toBe(true);
+        expect(
+          samples.some((size) => size > 4.01 && size < hoveredSize - 0.01),
+        ).toBe(true);
         expect(
           samples.every((size, i) => i === 0 || size >= samples[i - 1]),
         ).toBe(true);
