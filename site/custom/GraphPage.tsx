@@ -163,7 +163,7 @@ runtime = runtime.replace(
   // Hovered font size in screen pixels: a low-zoom floor, smoothly becoming linear.
   function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/12,4),.25);}
   // Unhovered font size in screen pixels, using the requested eighth-root curve.
-  function graphDefaultTitleSize(zoom){return Math.pow(1+Math.pow(zoom/12,8),1/8);}
+  function graphDefaultTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/12,8),1/8);}
   function graphSetTitleSize(node){
     var normal=graphDefaultTitleSize(j.k),hover=graphTitleSize(j.k);
     var size=normal+(hover-normal)*(node.hoverAmount||0);

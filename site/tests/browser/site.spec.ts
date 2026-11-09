@@ -2440,20 +2440,20 @@ test.describe("Graph rendering quality", () => {
       fontCurve.push({ zoom, size: state.screenFont, opacity: state.alpha });
     }
     const defaultSizes = new Map([
-      [0.15, 1],
-      [1, 1],
-      [8, 1.0048],
-      [10, 1.02648],
-      [12, 1.09051],
-      [16, 1.34933],
-      [50, 4.16667],
+      [0.15, 8],
+      [1, 8],
+      [8, 8.03837],
+      [10, 8.21186],
+      [12, 8.72406],
+      [16, 10.79465],
+      [50, 33.33338],
     ]);
     for (const sample of fontCurve.filter((sample) =>
       defaultSizes.has(sample.zoom),
     ))
       expect(sample.size).toBeCloseTo(defaultSizes.get(sample.zoom)!, 5);
     for (const sample of fontCurve.filter((sample) => sample.zoom <= 4))
-      expect(sample.size).toBeCloseTo(1, 4);
+      expect(sample.size).toBeCloseTo(8, 3);
     for (const sample of fontCurve.filter((sample) => sample.zoom <= 8))
       expect(sample.opacity).toBe(0);
     expect(fontCurve.find((sample) => sample.zoom === 10)!.opacity).toBeCloseTo(
@@ -2527,6 +2527,9 @@ test.describe("Graph rendering quality", () => {
       await expect
         .poll(async () => (await quality("articles/reference")).screenFont)
         .toBeCloseTo(hoveredSize, 3);
+      await expect
+        .poll(async () => (await quality("articles/reference")).alpha)
+        .toBe(1);
       const hovered = await quality("articles/reference");
       expect(hovered.alpha).toBe(1);
       expect(hovered.visible).toBe(true);
@@ -2554,6 +2557,10 @@ test.describe("Graph rendering quality", () => {
       await expect
         .poll(async () => (await quality("articles/reference")).screenFont)
         .toBeCloseTo(normalSize, 3);
+      if (zoom <= 8)
+        await expect
+          .poll(async () => (await quality("articles/reference")).alpha)
+          .toBe(0);
     }
     // Normal zoom and high zoom must keep the same font styling and layout rules.
     await focus("articles/quality", 1);
