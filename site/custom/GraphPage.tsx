@@ -1,3 +1,4 @@
+import { graphMomentum } from "./graph-momentum";
 import { Graph } from "@quartz-community/graph";
 import type { QuartzComponent } from "../quartz/components/types";
 import { pathToRoot } from "../quartz/util/path";
@@ -30,8 +31,7 @@ for (const [remote, local] of [
     `((document.body.dataset.basepath || "") + "/static/graph/${local}")`,
   );
 }
-// Preserve an explicit zero: labels must stay hidden during zoom and appear
-// only through Quartz's existing node-hover behavior.
+// Disable the stock label reveal; close-up labels follow the custom zoom curve.
 const opacityDefault = "S.opacityScale||1";
 if (!runtime.includes(opacityDefault))
   throw new Error("Graph label-opacity integration requires review");
@@ -42,8 +42,167 @@ const labelLayer = "nu.addChild(vu)";
 const nodeEvents = 'U.eventMode="static"';
 if (!runtime.includes(labelLayer) || !runtime.includes(nodeEvents))
   throw new Error("Graph pointer interaction requires review");
-runtime = runtime.replace(labelLayer, `vu.eventMode="none",${labelLayer}`);
+const graphLayers =
+  "var te=new a.Container,re=new a.Container,vu=new a.Container;nu.addChild(te),nu.addChild(re),nu.addChild(vu)";
+const edgeCreation = 'U.eventMode="none",te.addChild(U)';
+if (!runtime.includes(graphLayers) || !runtime.includes(edgeCreation))
+  throw new Error("Graph highlight layer integration requires review");
+// Shared parent keeps Pixi's hover tracking intact while zIndex orders all shapes.
+runtime = runtime.replace(
+  graphLayers,
+  `
+  var te=new a.Container,re=te,vu=new a.Container;
+  te.label="graph-shapes";te.sortableChildren=true;vu.label="graph-labels";
+  vu.eventMode="none";nu.addChild(te,vu)`,
+);
+runtime = runtime.replace(edgeCreation, 'U.label="graph-edge",' + edgeCreation);
 runtime = runtime.replace(nodeEvents, 'U.eventMode="dynamic"');
+// Keep graph shapes opaque and interpolate their colors on the existing frame loop.
+const nodeFocus =
+  "function Ke(){for(var i=0;i<P.length;i++){var l=P[i],F=1;_u!==null&&Oe&&(F=l.active?1:.2),l.gfx.alpha=F}}";
+const linkFocus =
+  "function Ve(){for(var i=0;i<I.length;i++){var l=I[i],F=1;_u!==null&&(F=l.active?1:.2),l.alpha=F,l.color=l.active?ue:ee}}";
+const nodeFill = "U.fill({color:ie?He:De})";
+const nodeCircle = "U.circle(0,0,Tu)";
+const frameLoop = "function se(){if(!le){";
+for (const fragment of [nodeFocus, linkFocus, nodeFill, frameLoop, nodeCircle])
+  if (!runtime.includes(fragment))
+    throw new Error("Graph color transition integration requires review");
+runtime = runtime.replace(nodeCircle, "U.circle(0,0,Tu*.45)");
+runtime = runtime.replace(nodeFill, "U.fill({color:0xffffff}),U.tint=ie?He:De");
+runtime = runtime.replace(
+  nodeFocus,
+  `
+var graphReducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
+function graphColor(value){return new a.Color(value).toNumber()}
+// Blend the previous theme blue with the OGP blue (#255aca).
+var graphEarlierBlue=graphColor(Ie);
+var graphHoverBlue=(Math.round(((graphEarlierBlue>>16&255)+37)/2)<<16)
+  |(Math.round(((graphEarlierBlue>>8&255)+90)/2)<<8)
+  |Math.round(((graphEarlierBlue&255)+202)/2);
+var graphBaseEdge=graphColor(ee),graphBackground=graphColor(He);
+var graphDimEdge=(Math.round((graphBaseEdge>>16&255)*.25+(graphBackground>>16&255)*.75)<<16)
+  |(Math.round((graphBaseEdge>>8&255)*.25+(graphBackground>>8&255)*.75)<<8)
+  |Math.round((graphBaseEdge&255)*.25+(graphBackground&255)*.75);
+function graphFade(item,current,target){
+  item.fadeFrom=graphColor(current);item.fadeTo=graphColor(target);item.fadeStart=performance.now();
+}
+function graphBlend(item,now){
+  if(item.fadeTo===undefined)return null;
+  var progress=graphReducedMotion.matches?1:Math.min(1,(now-item.fadeStart)/100);
+  var eased=progress*progress*(3-2*progress),from=item.fadeFrom,to=item.fadeTo;
+  var color=(Math.round((from>>16&255)+((to>>16&255)-(from>>16&255))*eased)<<16)
+    |(Math.round((from>>8&255)+((to>>8&255)-(from>>8&255))*eased)<<8)
+    |Math.round((from&255)+((to&255)-(from&255))*eased);
+  if(progress===1)item.fadeTo=undefined;
+  return color;
+}
+function Ke(){for(var i=0;i<P.length;i++){
+  var node=P[i],target=_u!==null&&Oe&&!node.active?ee:node.color;
+  if(node.simulationData.id===_u)target=graphHoverBlue;
+  node.gfx.zIndex=_u!==null&&node.active?(node.simulationData.id===_u?4:3):1;
+  node.hoverFrom=node.hoverAmount||0;node.hoverTarget=node.simulationData.id===_u?1:0;
+  node.gfx.alpha=1;graphFade(node,node.gfx.tint,target);
+}}`,
+);
+runtime = runtime.replace(
+  linkFocus,
+  `function Ve(){for(var i=0;i<I.length;i++){
+  var link=I[i];link.gfx.zIndex=_u!==null&&link.active?2:0;
+  link.alpha=1;graphFade(link,link.color,link.active?graphHoverBlue:_u!==null?graphDimEdge:ee);
+}}`,
+);
+runtime = runtime.replace(
+  frameLoop,
+  `${frameLoop}
+  var graphFrameTime=performance.now(),graphLayoutScale=graphNodeSize(j.k)/j.k;
+  for(var graphNode of P){
+    var nodeColor=graphBlend(graphNode,graphFrameTime);if(nodeColor!==null)graphNode.gfx.tint=nodeColor;
+    var hoverProgress=graphReducedMotion.matches?1:Math.min(1,(graphFrameTime-graphNode.fadeStart)/100);
+    hoverProgress=hoverProgress*hoverProgress*(3-2*hoverProgress);
+    graphNode.hoverAmount=graphNode.hoverFrom+(graphNode.hoverTarget-graphNode.hoverFrom)*hoverProgress;
+    graphNode.gfx.scale.set(graphLayoutScale*(1+.06*graphNode.hoverAmount));
+  }
+  for(var graphLink of I){var linkColor=graphBlend(graphLink,graphFrameTime);if(linkColor!==null)graphLink.color=linkColor;}
+`,
+);
+// Nodes scale gently at low/medium zoom, then proportionally for close inspection.
+// Edge strokes and the extra drag tolerance remain fixed in screen pixels.
+const zoomPosition = "nu.position.set(j.x,j.y);";
+const edgeStroke = "C.gfx.stroke({alpha:C.alpha,width:1,color:C.color})";
+const dragHit = "if(J<gu+5)";
+const zoomExtent = ".scaleExtent([.25,4])";
+for (const fragment of [zoomPosition, edgeStroke, dragHit, zoomExtent])
+  if (!runtime.includes(fragment))
+    throw new Error("Graph zoom geometry integration requires review");
+runtime = runtime.replace(
+  zoomPosition,
+  `${zoomPosition}
+  for(var zoomNode of P)zoomNode.gfx.scale.set(graphNodeSize(j.k)/j.k*(1+.06*(zoomNode.hoverAmount||0)));`,
+);
+runtime = runtime.replace(
+  "function Ke(){",
+  `function graphNodeSize(zoom){
+    // Smoothly increase logarithmic growth from 1/2 to 1 around 16x.
+    return Math.sqrt(zoom)*Math.pow((256+zoom*zoom)/257,.25);
+  }
+  function graphTitleSize(zoom){return Math.sqrt(zoom);}
+  function graphLabelOpacity(zoom){
+    var progress=Math.max(0,Math.min(1,Math.log2(zoom/4)/3));
+    return progress*progress*(3-2*progress);
+  }function Ke(){`,
+);
+
+runtime = runtime.replace(
+  edgeStroke,
+  "C.gfx.stroke({alpha:C.alpha,width:1/j.k,color:C.color})",
+);
+runtime = runtime.replace(
+  dragHit,
+  "if(J<(gu*.45*graphNodeSize(j.k)*(1+.06*(P[v].hoverAmount||0))+5)/j.k)",
+);
+runtime = runtime.replace(zoomExtent, ".scaleExtent([.25,256])");
+const labelFocus =
+  "function qe(){for(var i=1/Vu,l=i*1.1,F=0;F<P.length;F++){var v=P[F];_u===v.simulationData.id?(v.label.alpha=1,v.label.scale.set(l)):v.label.scale.set(i)}}";
+const zoomLabels =
+  "for(var l=j.k*Me,F=Math.max((l-1)/3.75,0),v=[],C=0;C<P.length;C++)P[C].active&&v.push(P[C].label);for(var C=0;C<vu.children.length;C++){var T=vu.children[C];v.indexOf(T)===-1&&(T.alpha=F)}";
+for (const fragment of [labelFocus, zoomLabels])
+  if (!runtime.includes(fragment))
+    throw new Error("Graph title scaling integration requires review");
+runtime = runtime.replace(
+  labelFocus,
+  `function qe(){
+  var size=graphTitleSize(j.k)/(j.k*Vu),opacity=graphLabelOpacity(j.k);
+  for(var i=0;i<P.length;i++){
+    var node=P[i],hovered=_u===node.simulationData.id;
+    node.label.alpha=hovered?1:opacity;
+    // Use the base radius so hover enlargement never changes the font size.
+    node.label.scale.set(size*Math.pow(node.radius/1.35,Math.log2(1.3)));
+  }
+}`,
+);
+runtime = runtime.replace(zoomLabels, "qe();");
+// Reserve space below the normal vertex; hover travel is a fixed zoom-scaled
+// distance, independent of that vertex's radius or connectivity.
+const titleFont = "fontSize:We*15";
+const titleAnchor = "Du.anchor.set(.5,1.2)";
+const titlePosition = "l.label.position.set(F+O/2,v+G/2)";
+const nodeRecord =
+  "P.push({simulationData:iu,gfx:U,label:Du,color:De,alpha:1,active:!1})";
+for (const fragment of [titleFont, titleAnchor, titlePosition, nodeRecord])
+  if (!runtime.includes(fragment))
+    throw new Error("Graph title placement integration requires review");
+runtime = runtime.replace(
+  nodeRecord,
+  "P.push({simulationData:iu,gfx:U,label:Du,color:De,alpha:1,active:!1,radius:Tu*.45})",
+);
+runtime = runtime.replace(titleFont, "fontSize:We*5.04");
+runtime = runtime.replace(titleAnchor, "Du.label=ae,Du.anchor.set(.5,0)");
+runtime = runtime.replace(
+  titlePosition,
+  "l.label.position.set(F+O/2,v+G/2+(l.radius*1.06+3+1.5*(l.hoverAmount||0))*graphLayoutScale)",
+);
+
 // Quartz's radial mode targets a ring. A zero-radius target provides inward
 // gravity instead, balanced by the existing charge and collision forces.
 const radialForce = /\.forceRadial\([^()]+\)\.strength\(\.2\)/gu;
@@ -51,14 +210,16 @@ if ([...runtime.matchAll(radialForce)].length !== 1)
   throw new Error("Graph gravity integration requires review");
 runtime = runtime.replace(radialForce, ".forceRadial(0).strength(.12)");
 // Fit the initial camera once after a short force warm-up. Subsequent pan/zoom
-// remains owned by Quartz, so interacting with the graph never resets the view.
+// remains owned by Quartz. Size changes refit the collection around its center.
 const zoomSetup = "o.select(Q.canvas).call(et)";
 if (!runtime.includes(zoomSetup))
   throw new Error("Graph camera integration requires review");
 runtime = runtime.replace(
   zoomSetup,
   `${zoomSetup};
-  function fitGraphCamera(){if(!ru.length)return;
+  function fitGraphCamera(){
+    if(typeof graphStopMomentum==="function")graphStopMomentum();
+    if(!ru.length)return;
     var fitBounds=ru.reduce(function(bounds,node){
       return [Math.min(bounds[0],node.x),Math.max(bounds[1],node.x),Math.min(bounds[2],node.y),Math.max(bounds[3],node.y)];
     },[Infinity,-Infinity,Infinity,-Infinity]);
@@ -71,14 +232,17 @@ runtime = runtime.replace(
     var width=_.offsetWidth,height=Math.max(_.offsetHeight,250);
     if(width!==O||height!==G){O=width;G=height;Q.renderer.resize(O,G);fitGraphCamera();}
   });
-  graphResizeObserver.observe(_);`,
+  graphResizeObserver.observe(_);
+  var graphRefit=function(){requestAnimationFrame(function(){if(!le)fitGraphCamera();})};
+  window.addEventListener("graph-window-change",graphRefit);
+  ${graphMomentum}`,
 );
 const graphCleanup = "function(){le=!0,ou.stop();";
 if (!runtime.includes(graphCleanup))
   throw new Error("Graph resize cleanup integration requires review");
 runtime = runtime.replace(
   graphCleanup,
-  "function(){graphResizeObserver&&graphResizeObserver.disconnect();le=!0,ou.stop();",
+  'function(){typeof graphDisposeMomentum==="function"&&graphDisposeMomentum();graphResizeObserver&&graphResizeObserver.disconnect();graphRefit&&window.removeEventListener("graph-window-change",graphRefit);le=!0,ou.stop();',
 );
 export const GraphPage: QuartzComponent = (props) => {
   if (props.fileData.slug !== "graph") return null;

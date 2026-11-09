@@ -30,7 +30,7 @@ function prepareGraphWindow() {
     button.title = label;
   };
   // Quartz handles its canvas resize and refits the current collection.
-  const redraw = () => window.dispatchEvent(new Event("resize"));
+  const redraw = () => window.dispatchEvent(new Event("graph-window-change"));
   const restore = () => {
     if (!expanded) return;
     expanded = false;

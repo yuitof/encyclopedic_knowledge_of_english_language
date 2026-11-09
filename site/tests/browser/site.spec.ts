@@ -751,10 +751,10 @@ test("sidebars pin on shorter articles without reserving empty viewport space", 
         Math.abs(
           element.getBoundingClientRect().bottom -
             Math.min(
-            element.lastElementChild!.getBoundingClientRect().bottom,
-            element.getBoundingClientRect().top +
-              parseFloat(getComputedStyle(element).maxHeight),
-          ),
+              element.lastElementChild!.getBoundingClientRect().bottom,
+              element.getBoundingClientRect().top +
+                parseFloat(getComputedStyle(element).maxHeight),
+            ),
         ),
       ),
     ).toBeLessThan(2);
@@ -1430,6 +1430,18 @@ test("Graph expands inside the browser window and restores with button or Escape
   page,
 }) => {
   test.setTimeout(60000);
+  await page.route("**/static/graph/d3.min.js", async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({
+      response,
+      body:
+        (await response.text()) +
+        `;{
+      const original=window.d3.forceSimulation;
+      window.d3.forceSimulation=(...args)=>window.__resizeSimulation=original(...args);
+    }`,
+    });
+  });
   await page.goto("./graph");
   const canvas = page.locator(".graph-page .graph-container canvas");
   const button = page.locator(".graph-expand-button");
@@ -1438,6 +1450,31 @@ test("Graph expands inside the browser window and restores with button or Escape
   await expect(button).toHaveAttribute("aria-expanded", "false");
   const graphSession = await page.context().newCDPSession(page);
   await graphSession.send("Emulation.setCPUThrottlingRate", { rate: 2 });
+  await page.evaluate(() => (window as any).__resizeSimulation.stop());
+  const centered = () =>
+    canvas.evaluate((element) => {
+      const nodes = (window as any).__resizeSimulation.nodes();
+      const bounds = nodes.reduce(
+        (b: number[], n: any) => [
+          Math.min(b[0], n.x),
+          Math.max(b[1], n.x),
+          Math.min(b[2], n.y),
+          Math.max(b[3], n.y),
+        ],
+        [Infinity, -Infinity, Infinity, -Infinity],
+      );
+      const zoom = (element as any).__zoom;
+      return Math.max(
+        Math.abs(
+          zoom.applyX((bounds[0] + bounds[1]) / 2 + element.clientWidth / 2) -
+            element.clientWidth / 2,
+        ),
+        Math.abs(
+          zoom.applyY((bounds[2] + bounds[3]) / 2 + element.clientHeight / 2) -
+            element.clientHeight / 2,
+        ),
+      );
+    });
   await button.scrollIntoViewIfNeeded();
   await button.focus();
   const initial = await page.evaluate(() => ({
@@ -1468,6 +1505,7 @@ test("Graph expands inside the browser window and restores with button or Escape
       })),
     )
     .toEqual(page.viewportSize());
+  await expect.poll(centered).toBeLessThan(1);
   await expect(button).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
@@ -1484,6 +1522,7 @@ test("Graph expands inside the browser window and restores with button or Escape
   await expect
     .poll(() => canvas.evaluate((element) => element.clientHeight))
     .toBe(initial.canvasHeight);
+  await expect.poll(centered).toBeLessThan(1);
   // SPA cleanup must also restore scroll state when navigation occurs while expanded.
   await button.click();
   await expect(dialog).toBeVisible();
@@ -1506,10 +1545,10 @@ test("Graph expands inside the browser window and restores with button or Escape
   );
 });
 
-test("Graph hover alone shows a page name and dims nodes outside its neighbors", async ({
+test("Graph hover fades opaque node colors and highlights neighbors", async ({
   page,
 }) => {
-  test.setTimeout(60000);
+  test.setTimeout(90000);
   await page.route("**/static/graph/d3.min.js", async (route) => {
     const response = await route.fetch();
     await route.fulfill({
@@ -1547,25 +1586,177 @@ test("Graph hover alone shows a page name and dims nodes outside its neighbors",
       const containers = (window as any).__hoverApplication.stage.children[0]
         .children;
       return {
-        labels: containers[2].children
+        layers: containers.map((layer: any) => layer.label),
+        drawOrder: containers[0].children.map((shape: any) => shape.zIndex),
+        highlightedNodes: containers[0].children
+          .filter(
+            (shape: any) => shape.label !== "graph-edge" && shape.zIndex >= 3,
+          )
+          .map((node: any) => node.label),
+        backgroundEdgeColors: containers[0].children
+          .filter(
+            (shape: any) => shape.label === "graph-edge" && shape.zIndex === 0,
+          )
+          .map((edge: any) => edge.context.strokeStyle.color),
+        edgeOpacities: containers[0].children
+          .filter((shape: any) => shape.label === "graph-edge")
+          .map((edge: any) => edge.context.strokeStyle.alpha),
+        highlightedEdgeColors: containers[0].children
+          .filter(
+            (shape: any) => shape.label === "graph-edge" && shape.zIndex === 2,
+          )
+          .map((edge: any) => edge.context.strokeStyle.color),
+        highlightedEdges: containers[0].children.filter(
+          (shape: any) => shape.label === "graph-edge" && shape.zIndex === 2,
+        ).length,
+        labels: containers[1].children
           .filter((label: any) => label.alpha > 0)
           .map((label: any) => label.text),
-        nodes: containers[1].children.map((node: any) => ({
-          id: node.label,
-          alpha: node.alpha,
-        })),
+        nodes: containers[0].children
+          .filter((shape: any) => shape.label !== "graph-edge")
+          .map((node: any) => ({
+            id: node.label,
+            alpha: node.alpha,
+            tint: node.tint,
+          })),
       };
     });
   expect((await scene()).labels).toEqual([]);
+  const measuredNode = (await scene()).nodes[0].id;
+  const screenSizes = () =>
+    page.evaluate((id) => {
+      const graph = (window as any).__hoverApplication.stage.children[0];
+      const shapes = graph.children[0].children;
+      const title = (window as any).__hoverSimulation
+        .nodes()
+        .find((node: any) => node.id === id).text;
+      const label = graph.children[1].children.find(
+        (label: any) => label.text === title,
+      );
+      const node = shapes.find((shape: any) => shape.label === id);
+      const edge = shapes.find((shape: any) => shape.label === "graph-edge");
+      const transform = edge.worldTransform;
+      return {
+        diameter: node.getBounds().width,
+        titleHeight: label.getBounds().height,
+        titleOpacity: label.alpha,
+        zoom: (document.querySelector(".graph-container canvas") as any).__zoom
+          .k,
+        thickness:
+          edge.context.strokeStyle.width * Math.hypot(transform.a, transform.b),
+      };
+    }, measuredNode);
+  const settleZoom = () =>
+    page.evaluate(
+      () =>
+        new Promise<number>((resolve, reject) => {
+          const canvas = document.querySelector(
+            ".graph-container canvas",
+          ) as any;
+          let previous = canvas.__zoom.k,
+            stable = 0,
+            frame = 0;
+          const timeout = setTimeout(() => {
+            cancelAnimationFrame(frame);
+            reject(new Error("Zoom did not settle"));
+          }, 5000);
+          const sample = () => {
+            const next = canvas.__zoom.k;
+            stable = next === previous ? stable + 1 : 0;
+            previous = next;
+            if (stable >= 3) {
+              clearTimeout(timeout);
+              resolve(next);
+            } else frame = requestAnimationFrame(sample);
+          };
+          frame = requestAnimationFrame(sample);
+        }),
+    );
+  const originalSizes = await screenSizes();
+  expect(originalSizes.diameter).toBeGreaterThan(0);
+  expect(originalSizes.thickness).toBeCloseTo(1, 2);
+  const checkSizes = async () => {
+    await expect
+      .poll(async () => (await screenSizes()).diameter)
+      .not.toBeCloseTo(originalSizes.diameter, 2);
+    const current = await screenSizes();
+    const zoomRatio = current.zoom / originalSizes.zoom;
+    const diameterRatio = current.diameter / originalSizes.diameter;
+    if (zoomRatio > 1) {
+      expect(diameterRatio).toBeGreaterThan(1);
+      expect(diameterRatio).toBeLessThan(zoomRatio);
+    } else {
+      expect(diameterRatio).toBeLessThan(1);
+      expect(diameterRatio).toBeGreaterThan(zoomRatio);
+    }
+    await expect
+      .poll(async () => (await screenSizes()).thickness)
+      .toBeCloseTo(originalSizes.thickness, 2);
+    const titleRatio = current.titleHeight / originalSizes.titleHeight;
+    if (zoomRatio > 1) {
+      expect(titleRatio).toBeGreaterThan(1);
+      expect(titleRatio).toBeLessThan(zoomRatio);
+    } else {
+      expect(titleRatio).toBeLessThan(1);
+      expect(titleRatio).toBeGreaterThan(zoomRatio);
+    }
+  };
   const box = (await canvas.boundingBox())!;
   const before = await canvas.evaluate((element) => (element as any).__zoom.k);
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  const anchorPoint = {
+    x: Math.round(box.x + box.width / 2),
+    y: Math.round(box.y + box.height / 2),
+  };
+  const anchoredWorld = () =>
+    canvas.evaluate((element, point) => {
+      const bounds = element.getBoundingClientRect();
+      return (element as any).__zoom.invert([
+        point.x - bounds.left,
+        point.y - bounds.top,
+      ]);
+    }, anchorPoint);
+  const anchorBefore = await anchoredWorld();
+  await page.evaluate(() => {
+    const samples: { time: number; zoom: number }[] = [];
+    (window as any).__momentumSamples = samples;
+    const start = performance.now();
+    const sample = () => {
+      samples.push({
+        time: performance.now() - start,
+        zoom: (document.querySelector(".graph-container canvas") as any).__zoom
+          .k,
+      });
+      if (performance.now() - start < 500) requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+  await page.mouse.move(anchorPoint.x, anchorPoint.y);
   await page.mouse.wheel(0, -300);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
     .toBeGreaterThan(before);
+  await settleZoom();
+  const motion = await page.evaluate(
+    () => (window as any).__momentumSamples as { time: number; zoom: number }[],
+  );
+  expect(
+    new Set(
+      motion.filter((sample) => sample.time > 100).map((sample) => sample.zoom),
+    ).size,
+  ).toBeGreaterThan(2);
+  expect(
+    motion.every((sample, i) => i === 0 || sample.zoom >= motion[i - 1].zoom),
+  ).toBe(true);
+  const anchorAfter = await anchoredWorld();
+  expect(anchorAfter[0]).toBeCloseTo(anchorBefore[0], 5);
+  expect(anchorAfter[1]).toBeCloseTo(anchorBefore[1], 5);
   await page.mouse.move(0, 0);
   await expect.poll(async () => (await scene()).labels).toEqual([]);
+  await checkSizes();
+  await page.mouse.move(0, 0);
+  await expect.poll(async () => (await scene()).labels).toEqual([]);
+  // The preceding zoom can briefly hover a node; let its color recovery finish.
+  await page.waitForTimeout(250);
   const target = await page.evaluate(() => {
     const simulation = (window as any).__hoverSimulation,
       canvas = document.querySelector<HTMLCanvasElement>(
@@ -1602,11 +1793,140 @@ test("Graph hover alone shows a page name and dims nodes outside its neighbors",
       y: box.y + zoom.applyY(node.y + canvas.clientHeight / 2),
     };
   });
+  const vertexGeometry = (ids: string[]) =>
+    page.evaluate((ids) => {
+      const app = (window as any).__hoverApplication;
+      const graph = app.stage.children[0],
+        shapes = graph.children[0].children,
+        labels = graph.children[1].children;
+      const links = (window as any).__hoverSimulation.force("link").links();
+      return ids.map((id) => {
+        const node = shapes.find((node: any) => node.label === id),
+          label = labels.find((label: any) => label.label === id);
+        const bounds = node.getBounds(),
+          title = label.getBounds();
+        return {
+          id,
+          diameter: bounds.width,
+          localDiameter: node.getLocalBounds().width,
+          nodeBottom: bounds.y + bounds.height,
+          titleY: title.y,
+          titleHeight: title.height,
+          titleWidth: title.width,
+          titleScale: label.scale.y,
+          font: label.style.fontSize,
+          degree: links.filter(
+            (link: any) => link.source.id === id || link.target.id === id,
+          ).length,
+        };
+      });
+    }, ids);
+  const firstId = target.neighbors[0];
+  const firstIdle = (await vertexGeometry([firstId]))[0];
+  expect(firstIdle.font).toBeCloseTo(3.024, 2);
+  expect(firstIdle.titleY).toBeGreaterThan(firstIdle.nodeBottom);
+  expect(
+    firstIdle.localDiameter / (2 * (2 + Math.sqrt(firstIdle.degree))),
+  ).toBeCloseTo(0.45, 3);
+  const baseline = await scene();
+  const outside = baseline.nodes.find(
+    (node: any) => !target.neighbors.includes(node.id),
+  )!;
+  await page.evaluate((id) => {
+    const samples: number[] = [];
+    (window as any).__graphColorSamples = samples;
+    const start = performance.now();
+    const record = () => {
+      const node = (
+        window as any
+      ).__hoverApplication.stage.children[0].children[0].children.find(
+        (node: any) => node.label === id,
+      );
+      samples.push(node.tint);
+      if (performance.now() - start < 700) requestAnimationFrame(record);
+    };
+    requestAnimationFrame(record);
+  }, outside.id);
   await page.mouse.move(target.x, target.y);
   await expect.poll(async () => (await scene()).labels).toEqual([target.title]);
+  await expect
+    .poll(async () => {
+      const current = await scene();
+      return (
+        current.nodes.find((node: any) => node.id === outside.id)!.tint !==
+        outside.tint
+      );
+    })
+    .toBe(true);
+  await expect
+    .poll(() =>
+      page.evaluate(() => new Set((window as any).__graphColorSamples).size),
+    )
+    .toBeGreaterThan(2);
+  const highlightBlue = await page.evaluate(() => {
+    const earlier = new (window as any).PIXI.Color(
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--secondary")
+        .trim(),
+    ).toNumber();
+    return earlier === 0x88a3e8 ? 0x577fd9 : 0x2c60cb;
+  });
+  await expect
+    .poll(
+      async () =>
+        (await scene()).nodes.find(
+          (node: any) => node.id === target.neighbors[0],
+        )!.tint,
+    )
+    .toBe(highlightBlue);
+  await expect
+    .poll(async () =>
+      (await scene()).highlightedEdgeColors.every(
+        (color: number) => color === highlightBlue,
+      ),
+    )
+    .toBe(true);
+  const mutedEdge = await page.evaluate(() => {
+    const css = getComputedStyle(document.documentElement),
+      Color = (window as any).PIXI.Color;
+    const background = new Color(
+      css.getPropertyValue("--light").trim(),
+    ).toNumber();
+    return background === 0x101418 ? 0x212529 : 0xf1f2f4;
+  });
+  await expect
+    .poll(async () =>
+      (await scene()).backgroundEdgeColors.every(
+        (color: number) => color === mutedEdge,
+      ),
+    )
+    .toBe(true);
+  expect((await scene()).backgroundEdgeColors.length).toBeGreaterThan(0);
+  expect(
+    (await scene()).edgeOpacities.every((alpha: number) => alpha === 1),
+  ).toBe(true);
+  const normalColors = new Map(
+    baseline.nodes.map((node: any) => [node.id, node.tint]),
+  );
+  expect(
+    (await scene()).nodes
+      .filter(
+        (node: any) =>
+          target.neighbors.includes(node.id) && node.id !== target.neighbors[0],
+      )
+      .every((node: any) => node.tint === normalColors.get(node.id)),
+  ).toBe(true);
   const state = await scene(),
     neighbors = new Set(target.neighbors);
   expect(state.nodes.some((node: any) => !neighbors.has(node.id))).toBe(true);
+  expect(state.layers).toEqual(["graph-shapes", "graph-labels"]);
+  expect(state.drawOrder).toEqual(
+    [...state.drawOrder].sort((a: number, b: number) => a - b),
+  );
+  expect(new Set(state.drawOrder)).toEqual(new Set([0, 1, 2, 3, 4]));
+  expect(new Set(state.highlightedNodes)).toEqual(neighbors);
+  expect(state.highlightedEdges).toBeGreaterThan(0);
+  expect(state.highlightedNodes.at(-1)).toBe(target.neighbors[0]);
   expect(
     state.nodes
       .filter((node: any) => neighbors.has(node.id))
@@ -1615,8 +1935,82 @@ test("Graph hover alone shows a page name and dims nodes outside its neighbors",
   expect(
     state.nodes
       .filter((node: any) => !neighbors.has(node.id))
-      .every((node: any) => node.alpha === 0.2),
+      .every((node: any) => node.alpha === 1),
   ).toBe(true);
+  await expect
+    .poll(
+      async () =>
+        (await vertexGeometry([firstId]))[0].diameter / firstIdle.diameter,
+    )
+    .toBeCloseTo(1.06, 4);
+  const firstHover = (await vertexGeometry([firstId]))[0];
+  expect(firstHover.titleHeight).toBeCloseTo(firstIdle.titleHeight, 3);
+  expect(firstHover.titleWidth).toBeCloseTo(firstIdle.titleWidth, 3);
+  expect(firstHover.titleY).toBeGreaterThan(firstHover.nodeBottom);
+  const firstTravel = firstHover.titleY - firstIdle.titleY;
+  expect(firstTravel).toBeCloseTo(
+    (1.5 * firstIdle.diameter) / firstIdle.localDiameter,
+    2,
+  );
+  await page.mouse.move(0, 0);
+  await expect
+    .poll(async () => (await vertexGeometry([firstId]))[0].diameter)
+    .toBeCloseTo(firstIdle.diameter, 4);
+  const second = await page.evaluate(
+    ({ firstId, diameter }) => {
+      const app = (window as any).__hoverApplication,
+        graph = app.stage.children[0];
+      const canvas = document.querySelector(".graph-container canvas")!,
+        box = canvas.getBoundingClientRect();
+      for (const node of graph.children[0].children) {
+        if (
+          node.label === "graph-edge" ||
+          node.label === firstId ||
+          Math.abs(node.getLocalBounds().width - diameter) < 0.01
+        )
+          continue;
+        const point = node.getGlobalPosition(),
+          x = box.left + point.x,
+          y = box.top + point.y;
+        if (
+          x < box.left + 20 ||
+          x > box.right - 20 ||
+          y < Math.max(box.top + 60, 160) ||
+          y > Math.min(box.bottom - 20, innerHeight - 20)
+        )
+          continue;
+        if (app.renderer.events.rootBoundary.hitTest(point.x, point.y) !== node)
+          continue;
+        return { id: node.label, x, y };
+      }
+      throw new Error("No second visible vertex of a different diameter");
+    },
+    { firstId, diameter: firstIdle.localDiameter },
+  );
+  const secondIdle = (await vertexGeometry([second.id]))[0];
+  const diameterRatio = secondIdle.localDiameter / firstIdle.localDiameter;
+  const nameRatio = secondIdle.titleScale / firstIdle.titleScale;
+  expect(
+    Math.pow(2, Math.log(nameRatio) / Math.log(diameterRatio)),
+  ).toBeCloseTo(1.3, 3);
+  if (diameterRatio > 1) {
+    expect(nameRatio).toBeGreaterThan(1);
+    expect(nameRatio).toBeLessThan(Math.sqrt(diameterRatio));
+  } else {
+    expect(nameRatio).toBeLessThan(1);
+    expect(nameRatio).toBeGreaterThan(Math.sqrt(diameterRatio));
+  }
+  await page.mouse.move(second.x, second.y);
+  await expect
+    .poll(
+      async () =>
+        (await vertexGeometry([second.id]))[0].diameter / secondIdle.diameter,
+    )
+    .toBeCloseTo(1.06, 4);
+  const secondHover = (await vertexGeometry([second.id]))[0];
+  expect(secondHover.titleHeight).toBeCloseTo(secondIdle.titleHeight, 3);
+  expect(secondHover.titleY - secondIdle.titleY).toBeCloseTo(firstTravel, 2);
+  expect(secondHover.titleY).toBeGreaterThan(secondHover.nodeBottom);
   // No extra pointer event: moving nodes away must clear the hover state too.
   await page.evaluate(() => {
     for (const node of (window as any).__hoverSimulation.nodes()) {
@@ -1625,8 +2019,114 @@ test("Graph hover alone shows a page name and dims nodes outside its neighbors",
     }
   });
   await expect.poll(async () => (await scene()).labels).toEqual([]);
+  await expect
+    .poll(async () => (await scene()).highlightedNodes.length)
+    .toBe(0);
+  expect((await scene()).highlightedEdges).toBe(0);
+  await expect
+    .poll(async () =>
+      (await scene()).backgroundEdgeColors.every(
+        (color: number) => color === baseline.backgroundEdgeColors[0],
+      ),
+    )
+    .toBe(true);
   expect((await scene()).nodes.every((node: any) => node.alpha === 1)).toBe(
     true,
+  );
+  await expect
+    .poll(async () => {
+      const colors = new Map(
+        (await scene()).nodes.map((node: any) => [node.id, node.tint]),
+      );
+      return baseline.nodes.every(
+        (node: any) => colors.get(node.id) === node.tint,
+      );
+    })
+    .toBe(true);
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.wheel(0, 600);
+  await expect
+    .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
+    .toBeLessThan(before);
+  await settleZoom();
+  await checkSizes();
+  // Reach the new extreme zoom limit through real wheel input.
+  await page.mouse.wheel(0, -5000);
+  await expect
+    .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
+    .toBe(256);
+  const extreme = await screenSizes();
+  await page.mouse.wheel(0, 500);
+  await expect
+    .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
+    .toBeCloseTo(128, 2);
+  await settleZoom();
+  await expect
+    .poll(async () => (await screenSizes()).diameter / extreme.diameter)
+    .toBeCloseTo(0.5, 2);
+  expect((await screenSizes()).titleHeight / extreme.titleHeight).toBeCloseTo(
+    Math.SQRT1_2,
+    2,
+  );
+  await expect
+    .poll(async () => (await screenSizes()).thickness)
+    .toBeCloseTo(originalSizes.thickness, 2);
+  // Sample the rendered curve across normal and extreme zoom, including title reveal.
+  await page.mouse.wheel(0, 3500);
+  await settleZoom();
+  await expect
+    .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
+    .toBeCloseTo(1, 2);
+  const scales = [await screenSizes()];
+  for (const zoom of [2, 4, 8, 16, 32, 64, 128, 256]) {
+    await page.mouse.wheel(0, -500);
+    await settleZoom();
+    const size = await screenSizes();
+    expect(size.zoom).toBeCloseTo(zoom, 2);
+    scales.push(size);
+    const previous = scales[scales.length - 2];
+    const titleGrowth = size.titleHeight / previous.titleHeight;
+    expect(titleGrowth).toBeGreaterThan(1);
+    expect(titleGrowth).toBeLessThan(size.zoom / previous.zoom);
+    expect(size.thickness).toBeCloseTo(1, 2);
+  }
+  const growth = scales
+    .slice(1)
+    .map(
+      (size, i) => Math.log(size.diameter / scales[i].diameter) / Math.log(2),
+    );
+  expect(growth[0]).toBeGreaterThan(0.49);
+  expect(growth[0]).toBeLessThan(0.6);
+  expect(growth.at(-1)!).toBeGreaterThan(0.98);
+  for (let i = 1; i < growth.length; i++) {
+    expect(growth[i]).toBeGreaterThanOrEqual(growth[i - 1] - 0.001);
+    expect(growth[i] - growth[i - 1]).toBeLessThan(0.2);
+  }
+  expect(scales[2].titleOpacity).toBeCloseTo(0, 8);
+  expect(scales[3].titleOpacity).toBeGreaterThan(0);
+  expect(scales[3].titleOpacity).toBeLessThan(scales[4].titleOpacity);
+  expect(scales[4].titleOpacity).toBeLessThan(scales[5].titleOpacity);
+  expect(scales[5].titleOpacity).toBeCloseTo(1, 8);
+  // A direction reversal should discard the pending tail, and reduced motion should settle directly.
+  await page.mouse.wheel(0, 300);
+  await expect
+    .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
+    .toBeLessThan(256);
+  const reversing = await canvas.evaluate(
+    (element) => (element as any).__zoom.k,
+  );
+  await page.mouse.wheel(0, -100);
+  await settleZoom();
+  expect(
+    await canvas.evaluate((element) => (element as any).__zoom.k),
+  ).toBeGreaterThan(reversing);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.mouse.wheel(0, 500);
+  await settleZoom();
+  const reduced = await canvas.evaluate((element) => (element as any).__zoom.k);
+  await page.waitForTimeout(150);
+  expect(await canvas.evaluate((element) => (element as any).__zoom.k)).toBe(
+    reduced,
   );
   await page.mouse.move(0, 0);
 });
