@@ -1694,13 +1694,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
       .poll(async () => (await screenSizes()).thickness)
       .toBeCloseTo(originalSizes.thickness, 2);
     const titleRatio = current.titleHeight / originalSizes.titleHeight;
-    if (zoomRatio > 1) {
-      expect(titleRatio).toBeGreaterThan(1);
-      expect(titleRatio).toBeLessThan(zoomRatio);
-    } else {
-      expect(titleRatio).toBeLessThan(1);
-      expect(titleRatio).toBeGreaterThan(zoomRatio);
-    }
+    expect(titleRatio).toBeCloseTo(zoomRatio, 4);
   };
   const box = (await canvas.boundingBox())!;
   const before = await canvas.evaluate((element) => (element as any).__zoom.k);
@@ -1816,6 +1810,8 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
           titleWidth: title.width,
           titleScale: label.scale.y,
           font: label.style.fontSize,
+          screenFont:
+            label.style.fontSize * label.scale.y * app.canvas.__zoom.k,
           degree: links.filter(
             (link: any) => link.source.id === id || link.target.id === id,
           ).length,
@@ -1945,11 +1941,12 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     )
     .toBeCloseTo(1.06, 4);
   const firstHover = (await vertexGeometry([firstId]))[0];
-  expect(firstHover.titleHeight).toBeCloseTo(firstIdle.titleHeight, 3);
-  expect(firstHover.titleWidth).toBeCloseTo(firstIdle.titleWidth, 3);
+  expect(firstHover.titleHeight).toBeGreaterThan(firstIdle.titleHeight);
+  expect(firstHover.titleWidth).toBeGreaterThan(firstIdle.titleWidth);
   expect(firstHover.titleY).toBeGreaterThan(firstHover.nodeBottom);
   const firstTravel = firstHover.titleY - firstIdle.titleY;
-  expect(firstTravel).toBeCloseTo(
+  const firstFontGap = 0.7 * (firstHover.screenFont - firstIdle.screenFont);
+  expect(firstTravel - firstFontGap).toBeCloseTo(
     (1.5 * firstIdle.diameter) / firstIdle.localDiameter,
     2,
   );
@@ -2009,8 +2006,12 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     )
     .toBeCloseTo(1.06, 4);
   const secondHover = (await vertexGeometry([second.id]))[0];
-  expect(secondHover.titleHeight).toBeCloseTo(secondIdle.titleHeight, 3);
-  expect(secondHover.titleY - secondIdle.titleY).toBeCloseTo(firstTravel, 2);
+  expect(secondHover.titleHeight).toBeGreaterThan(secondIdle.titleHeight);
+  const secondFontGap = 0.7 * (secondHover.screenFont - secondIdle.screenFont);
+  expect(secondHover.titleY - secondIdle.titleY - secondFontGap).toBeCloseTo(
+    firstTravel - firstFontGap,
+    2,
+  );
   expect(secondHover.titleY).toBeGreaterThan(secondHover.nodeBottom);
   // No extra pointer event: moving nodes away must clear the hover state too.
   await page.evaluate(() => {
@@ -2068,8 +2069,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   expect(halfDiameterRatio).toBeLessThan(Math.SQRT1_2);
   const halfTitleRatio =
     (await screenSizes()).titleHeight / extreme.titleHeight;
-  expect(halfTitleRatio).toBeGreaterThan(0.5);
-  expect(halfTitleRatio).toBeLessThan(0.56);
+  expect(halfTitleRatio).toBeCloseTo(0.5, 3);
   await expect
     .poll(async () => (await screenSizes()).thickness)
     .toBeCloseTo(originalSizes.thickness, 2);
@@ -2089,8 +2089,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     scales.push(size);
     const previous = scales[scales.length - 2];
     const titleGrowth = size.titleHeight / previous.titleHeight;
-    expect(titleGrowth).toBeGreaterThan(1);
-    expect(titleGrowth).toBeLessThan(size.zoom / previous.zoom);
+    expect(titleGrowth).toBeCloseTo(size.zoom / previous.zoom, 4);
     expect(size.thickness).toBeCloseTo(1, 2);
   }
   const growth = scales
@@ -2241,6 +2240,8 @@ test.describe("Graph rendering quality", () => {
     await page.goto("./graph");
     const canvas = page.locator(".graph-page .graph-container canvas");
     await expect(canvas).toBeVisible({ timeout: 20000 });
+    if (mobile(page)) await page.locator(".explorer-panel > summary").click();
+    await canvas.scrollIntoViewIfNeeded();
     await page.evaluate(() => {
       const sim = (window as any).__qualitySimulation;
       sim.stop();
@@ -2436,13 +2437,8 @@ test.describe("Graph rendering quality", () => {
       const state = await quality("articles/reference");
       fontCurve.push({ zoom, size: state.screenFont, opacity: state.alpha });
     }
-    for (const sample of fontCurve.slice(0, 3))
-      expect(sample.size).toBeCloseTo(8, 2);
-    expect(fontCurve.find((sample) => sample.zoom === 16)!.size).toBeCloseTo(
-      9.514,
-      2,
-    );
-    expect(fontCurve.at(-1)!.size).toBeCloseTo(25.07, 2);
+    for (const sample of fontCurve)
+      expect(sample.size).toBeCloseTo(sample.zoom / 2, 5);
     for (const sample of fontCurve.filter((sample) => sample.zoom <= 8))
       expect(sample.opacity).toBe(0);
     expect(fontCurve.find((sample) => sample.zoom === 12)!.opacity).toBeCloseTo(
@@ -2451,19 +2447,93 @@ test.describe("Graph rendering quality", () => {
     );
     for (const sample of fontCurve.filter((sample) => sample.zoom >= 16))
       expect(sample.opacity).toBe(1);
-    const fontGrowth = fontCurve
-      .slice(1)
-      .map(
-        (sample, i) =>
-          Math.log(sample.size / fontCurve[i].size) /
-          Math.log(sample.zoom / fontCurve[i].zoom),
+    // Use real pointer movement, placing even a subpixel circle on an integer
+    // client coordinate so the extreme zoom-out case can be hovered reliably.
+    for (const [zoom, hoveredSize] of [
+      [0.15, 8],
+      [1, 8.00003],
+      [8, 8.12217],
+      [12, 8.56914],
+      [16, 9.51366],
+      [50, 25.06528],
+    ]) {
+      await canvas.evaluate((view, zoom) => {
+        const app = (window as any).__qualityApp,
+          d3 = (window as any).d3;
+        const node = app.stage.children[0].children[0].children.find(
+          (shape: any) => shape.label === "articles/reference",
+        );
+        const box = view.getBoundingClientRect();
+        const x = Math.round(box.left + box.width / 2) - box.left;
+        const y = Math.round(box.top + box.height / 2) - box.top;
+        d3.select(view).call(
+          (window as any).__qualityZoom.transform,
+          d3.zoomIdentity
+            .translate(x - node.position.x * zoom, y - node.position.y * zoom)
+            .scale(zoom),
+        );
+      }, zoom);
+      await expect
+        .poll(async () => (await quality("articles/reference")).screenFont)
+        .toBeCloseTo(zoom / 2, 3);
+      const point = await page.evaluate(() => {
+        const app = (window as any).__qualityApp;
+        const node = app.stage.children[0].children[0].children.find(
+          (shape: any) => shape.label === "articles/reference",
+        );
+        const point = node.getGlobalPosition(),
+          box = app.canvas.getBoundingClientRect();
+        return {
+          x: Math.round(box.left + point.x),
+          y: Math.round(box.top + point.y),
+        };
+      });
+      const otherSize = (await quality("articles/japanese")).screenFont;
+      if (zoom === 8)
+        await page.evaluate(() => {
+          const samples: number[] = [];
+          (window as any).__fontHoverSamples = samples;
+          const started = performance.now();
+          const record = () => {
+            const app = (window as any).__qualityApp;
+            const label = app.stage.children[0].children[1].children.find(
+              (label: any) => label.label === "articles/reference",
+            );
+            samples.push(
+              label.style.fontSize * label.scale.y * app.canvas.__zoom.k,
+            );
+            if (performance.now() - started < 160)
+              requestAnimationFrame(record);
+          };
+          requestAnimationFrame(record);
+        });
+      await page.mouse.move(point.x, point.y);
+      await expect
+        .poll(async () => (await quality("articles/reference")).screenFont)
+        .toBeCloseTo(hoveredSize, 3);
+      const hovered = await quality("articles/reference");
+      expect(hovered.alpha).toBe(1);
+      expect(hovered.visible).toBe(true);
+      expect(Math.abs(hovered.horizontalError)).toBeLessThan(0.01);
+      expect(hovered.gapInEms).toBeGreaterThan(0);
+      expect((await quality("articles/japanese")).screenFont).toBeCloseTo(
+        otherSize,
+        5,
       );
-    expect(fontGrowth[0]).toBeLessThan(0.001);
-    expect(fontGrowth.at(-1)!).toBeGreaterThan(0.96);
-    expect(fontGrowth.at(-1)!).toBeLessThan(1);
-    for (let i = 1; i < fontGrowth.length; i++) {
-      expect(fontGrowth[i]).toBeGreaterThanOrEqual(fontGrowth[i - 1]);
-      expect(fontGrowth[i] - fontGrowth[i - 1]).toBeLessThan(0.4);
+      if (zoom === 8) {
+        await page.waitForTimeout(180);
+        const samples: number[] = await page.evaluate(
+          () => (window as any).__fontHoverSamples,
+        );
+        expect(samples.some((size) => size > 4.01 && size < 8.11)).toBe(true);
+        expect(
+          samples.every((size, i) => i === 0 || size >= samples[i - 1]),
+        ).toBe(true);
+      }
+      await page.mouse.move(0, 0);
+      await expect
+        .poll(async () => (await quality("articles/reference")).screenFont)
+        .toBeCloseTo(zoom / 2, 3);
     }
     // Normal zoom and high zoom must keep the same font styling and layout rules.
     await focus("articles/quality", 1);

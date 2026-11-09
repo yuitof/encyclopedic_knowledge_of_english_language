@@ -129,11 +129,13 @@ runtime = runtime.replace(
   `${frameLoop}
   var graphFrameTime=performance.now(),graphLayoutScale=graphNodeSize(j.k)/j.k;
   for(var graphNode of P){
+    var previousHover=graphNode.hoverAmount||0;
     var nodeColor=graphBlend(graphNode,graphFrameTime);if(nodeColor!==null)graphNode.gfx.tint=nodeColor;
     var hoverProgress=graphReducedMotion.matches?1:Math.min(1,(graphFrameTime-graphNode.fadeStart)/100);
     hoverProgress=hoverProgress*hoverProgress*(3-2*hoverProgress);
     graphNode.hoverAmount=graphNode.hoverFrom+(graphNode.hoverTarget-graphNode.hoverFrom)*hoverProgress;
     graphNode.gfx.scale.set(graphLayoutScale*(1+.06*graphNode.hoverAmount));
+    if(graphNode.hoverAmount!==previousHover)graphSetTitleSize(graphNode);
   }
   for(var graphLink of I){var linkColor=graphBlend(graphLink,graphFrameTime);if(linkColor!==null)graphLink.color=linkColor;}
 `,
@@ -158,8 +160,14 @@ runtime = runtime.replace(
     // Smoothly increase logarithmic growth from 1/2 to 1 around 16x.
     return Math.sqrt(zoom)*Math.pow((256+zoom*zoom)/257,.25);
   }
-  // Nominal font size in screen pixels: a low-zoom floor, smoothly becoming linear.
+  // Hovered font size in screen pixels: a low-zoom floor, smoothly becoming linear.
   function graphTitleSize(zoom){return 8*Math.pow(1+Math.pow(zoom/16,4),.25);}
+  function graphSetTitleSize(node){
+    var normal=j.k/2,hover=graphTitleSize(j.k);
+    var size=normal+(hover-normal)*(node.hoverAmount||0);
+    // Use the base radius; only the hovered name receives the font enlargement.
+    node.label.scale.set(size/(j.k*node.label.style.fontSize)*Math.pow(node.radius/1.35,Math.log2(1.3)));
+  }
   var graphLabelTextureLimit=Q.renderer.gl?Q.renderer.gl.getParameter(Q.renderer.gl.MAX_TEXTURE_SIZE)
     :Q.renderer.gpu?.device?.limits?.maxTextureDimension2D||8192;
   function graphRefreshLabelQuality(){
@@ -207,12 +215,11 @@ for (const fragment of [labelFocus, zoomLabels])
 runtime = runtime.replace(
   labelFocus,
   `function qe(){
-  var size=graphTitleSize(j.k)/j.k,opacity=graphLabelOpacity(j.k);
+  var opacity=graphLabelOpacity(j.k);
   for(var i=0;i<P.length;i++){
     var node=P[i],hovered=_u===node.simulationData.id;
     node.label.alpha=hovered?1:opacity;
-    // Use the base radius so hover enlargement never changes the font size.
-    node.label.scale.set(size/node.label.style.fontSize*Math.pow(node.radius/1.35,Math.log2(1.3)));
+    graphSetTitleSize(node);
   }
 }`,
 );
