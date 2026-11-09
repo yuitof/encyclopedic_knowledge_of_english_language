@@ -5,13 +5,22 @@ const vaultRoot = path.resolve(
   process.env.VAULT_ROOT ?? path.join(import.meta.dirname, "../.vault-data"),
 );
 const sample = fs.existsSync(path.join(vaultRoot, "sample-vault.json"));
+const profile =
+  process.env.SITE_TEST_PROFILE || (sample ? "sample" : "generic");
+if (!["sample", "generic", "reference"].includes(profile))
+  throw new Error("SITE_TEST_PROFILE must be sample, generic, or reference");
 const chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const executablePath =
   process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ??
   (fs.existsSync(chrome) ? chrome : undefined);
 export default defineConfig({
   testDir: "./tests/browser",
-  testMatch: sample ? "sample.spec.ts" : "site.spec.ts",
+  testMatch:
+    profile === "sample"
+      ? "sample.spec.ts"
+      : profile === "reference"
+        ? "site.spec.ts"
+        : "collection.spec.ts",
   fullyParallel: false,
   workers: 1,
   timeout: 30000,

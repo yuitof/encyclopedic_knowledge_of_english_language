@@ -24,9 +24,9 @@ git clone --branch vault --single-branch https://github.com/yuitof/encyclopedic_
 
 Open `../english-vault/vault/` in Obsidian to edit live notes. Commit and push from `../english-vault` to `origin vault`, then pull again after automatic timestamp repairs. This separate checkout never changes the website's recorded sample pin.
 
-The website records a specific **sample-vault** commit. Use `git submodule update --remote .vault-data` only to deliberately update the sample, then review and commit that pin. `--remote-submodules` follows sample-vault too. GitHub Pages always uses the latest remote **vault** branch independently of the sample pin. A recursive clone can still download other history from this repository; the sample is not a privacy boundary.
+The website records a specific **sample-vault** commit. Use `git submodule update --remote .vault-data` only to deliberately update the sample, then review and commit that pin. `--remote-submodules` follows sample-vault too. GitHub Pages uses the configured production branch (by default **vault**) independently of the sample pin, falling back to the pinned sample if that branch is absent. A recursive clone can still download other history from this repository; the sample is not a privacy boundary.
 
-To deploy a new collection in your own repository, create its `vault` branch from `sample-vault`, add the caller workflow from `site/workflows/vault-publish.yml`, and change that workflow's repository reference and `.gitmodules` URL to your repository. Keep the caller's source copy on main synchronized. Configure Pages and permissions as described in the wiki.
+To deploy a new collection in your own repository, configure Pages and update the `.gitmodules` URL for your starter collection. With no production branch, Actions deploys the pinned sample. When ready, create a production branch from `sample-vault` and add the caller from `site/workflows/vault-publish.yml`, changing its repository reference to your website repository. Keep the caller's source copy on main synchronized. Other branch names and separate content repositories are supported; see [content source setup](docs/content-sources.md).
 
 If `.vault-data` is still an older Git worktree, move it aside first with `git worktree move .vault-data ../vault-data-worktree`, then initialize the submodule. The old checkout and any local edits remain in that sibling directory; transfer any intended edits before using the new checkout.
 
@@ -41,24 +41,24 @@ npm run preview
 
 Preview is at `http://127.0.0.1:8080/`. Rebuild after changes. To use another data checkout, set `VAULT_ROOT=/absolute/path/to/data-checkout` (the directory containing `vault/`). For production set `SITE_BASE_URL=username.github.io/repository` without a scheme. `SITE_OUTPUT=public-review` selects a separate ignored artifact directory.
 
-For the separate live checkout, from `site/` use `VAULT_ROOT=/absolute/path/to/english-vault npm run build` and the same prefix for `npm run lint:timestamps`, `npm run fix:timestamps`, or `npm test`. Builds print the selected source directory. Without that prefix the sample is used. Tests select starter checks for the sample marker and the full collection browser matrix for the live checkout; both are required by CI before deployment.
+For the separate live checkout, from `site/` use `VAULT_ROOT=/absolute/path/to/english-vault npm run build` and the same prefix for `npm run lint:timestamps`, `npm run fix:timestamps`, or `npm test`. Builds print the selected source directory. Without that prefix the sample is used. Tests select starter checks for the sample marker and collection-independent browser checks for other checkouts. Add `SITE_TEST_PROFILE=reference` for the original collection's full browser matrix; this repository's production CI retains that matrix.
 
 ## Project map
 
-| Path | Purpose |
-| --- | --- |
-| `.vault-data/` (submodule) | Pinned starter checkout; tracks sample-vault for explicit remote updates |
-| `quartz/` | Pinned upstream Quartz 5 core |
-| `quartz.config.yaml`, `quartz.ts` | Plugins, theme and custom layout |
-| `custom/` | Reading frame, navigation, search adaptation, appearance, sorting and graph |
-| `content/` | Homepage, privacy, license and graph project pages |
-| `scripts/discover-vault.mjs` | Automatic note/asset discovery and stable routes |
-| `scripts/repair-vault-timestamps.mjs` | Git history repair, bot commits and bounded push retries |
-| `scripts/publish.mjs`, `scripts/missing-notes.mjs` | Validation, staging and blank missing-note pages |
-| `trusted-*.json` | Reviewed resource inventories |
-| `tests/` | Publication, timestamp repair, rendering, sorting and browser checks |
-| `workflows/vault-publish.yml` | Source copy of the vault branch's caller workflow |
-| `../.github/workflows/pages.yml` | Shared build and Pages deployment workflow |
+| Path                                               | Purpose                                                                     |
+| -------------------------------------------------- | --------------------------------------------------------------------------- |
+| `.vault-data/` (submodule)                         | Pinned starter checkout; tracks sample-vault for explicit remote updates    |
+| `quartz/`                                          | Pinned upstream Quartz 5 core                                               |
+| `quartz.config.yaml`, `quartz.ts`                  | Plugins, theme and custom layout                                            |
+| `custom/`                                          | Reading frame, navigation, search adaptation, appearance, sorting and graph |
+| `content/`                                         | Homepage, privacy, license and graph project pages                          |
+| `scripts/discover-vault.mjs`                       | Automatic note/asset discovery and stable routes                            |
+| `scripts/repair-vault-timestamps.mjs`              | Git history repair, bot commits and bounded push retries                    |
+| `scripts/publish.mjs`, `scripts/missing-notes.mjs` | Validation, staging and blank missing-note pages                            |
+| `trusted-*.json`                                   | Reviewed resource inventories                                               |
+| `tests/`                                           | Publication, timestamp repair, rendering, sorting and browser checks        |
+| `workflows/vault-publish.yml`                      | Source copy of the vault branch's caller workflow                           |
+| `../.github/workflows/pages.yml`                   | Shared build and Pages deployment workflow                                  |
 
 Read [publication.md](docs/publication.md) for rules, timestamp semantics and concurrency behavior. The former per-file manifest has been removed. Missing Markdown references become blank timestamped pages during builds; missing image references stay unchanged. Filesystem timestamps are used only as a local preview fallback when no explicit dates or Git history exist. Actions requires full Git history and commits missing dates back to the data branch.
 
@@ -81,10 +81,16 @@ For local timestamp checks, run `npm run lint:timestamps` from `site/`. Use `npm
 
 ## Deployment
 
-Push either branch to run validation, timestamp repair and Pages deployment. Both triggers use website code from main and the latest data from vault, checked out with full history into `website/.vault-data`. CI deliberately uses the latest branch rather than the pinned local revision so a notes-only push deploys immediately. The GitHub Actions bot uses the built-in token to commit only missing timestamp fields. Its push does not start a second workflow. Permission failures and repeated concurrent edits stop deployment safely.
+With the default settings, pushes to main or vault run validation, timestamp repair and Pages deployment. Both triggers use website code from the website's default branch and the latest configured production content, checked out with full history into `website/.vault-data`. A confirmed missing production branch selects the pinned sample. For same-repository production content, the bot commits only missing timestamp fields back to the selected branch using the built-in token. Its push does not start a second workflow. External content uses the notifier described below. Permission failures and repeated concurrent edits stop deployment safely.
 
 Keep `main` as the default branch and **Settings → Pages → Source → GitHub Actions**. The bot needs permission to push to `vault`; applicable branch rules must allow that push. No separate generated hosting branch is required.
 
 The UI retains full-text local search, appearance preferences, date/name sorting, alphabet sections, calendar filters, backlinks, graph navigation and random real-note homepage snippets. Counts derive from the built collection. Image bytes are preserved; large original images can cause large transfers.
 
 Original note/editorial text uses CC BY-SA 4.0 under `../LICENSE` and `../CONTENT-LICENSE.md`. Quartz software retains MIT licensing in `LICENSE.txt`; third-party material retains its rights.
+
+## Configurable production content
+
+GitHub Actions accepts optional `CONTENT_REPOSITORY` and `CONTENT_BRANCH` repository variables (defaults: this repository and `vault`). A confirmed missing branch uses the pinned sample from `.gitmodules`; inaccessible repositories and other errors stop the build. For external content, a notifier workflow repairs dates in the content repository, then dispatches the website workflow. See [content source setup](docs/content-sources.md) for credentials, branch naming, fallback rules, and validation-only runs. Deployment always belongs to the website repository.
+
+Browser checks default to the bundled sample profile or collection-independent checks for other data. Set `SITE_TEST_PROFILE=reference` locally, or `CONTENT_TEST_PROFILE=reference` in this repository’s Actions variables, to run the full original-collection browser matrix.

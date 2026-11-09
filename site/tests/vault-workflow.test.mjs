@@ -25,17 +25,21 @@ test("vault pushes call the shared workflow with permission to repair and push t
       "utf8",
     ),
   );
-  assert.deepEqual(caller.on.push.branches, ["vault"]);
+  assert.deepEqual(caller.on.push.branches, ["**"]);
+  assert.ok(caller.jobs.publish.if.includes("vars.CONTENT_BRANCH"));
   assert.match(
     caller.jobs.publish.uses,
     /\/\.github\/workflows\/pages\.yml@main$/,
   );
   assert.equal(caller.jobs.publish.permissions.contents, "write");
   assert.ok(Object.hasOwn(shared.on, "workflow_call"));
+  assert.equal(shared.on.workflow_call.inputs.deploy.default, true);
   const build = shared.jobs.build;
-  assert.ok(build.if.includes("refs/heads/vault"));
+  assert.ok(build.if.includes("vars.CONTENT_BRANCH"));
   assert.equal(build.permissions.contents, "write");
-  const checkout = build.steps.find((step) => step.with?.ref === "vault");
+  const checkout = build.steps.find(
+    (step) => step.with?.ref === "${{ steps.content.outputs.ref }}",
+  );
   assert.equal(checkout.with["fetch-depth"], 0);
   assert.notEqual(checkout.with["persist-credentials"], false);
   assert.equal(
@@ -53,9 +57,42 @@ test("vault pushes call the shared workflow with permission to repair and push t
   assert.equal(sample.permissions.contents, "read");
   assert.equal(sample.env?.VAULT_ROOT, undefined);
   assert.equal(sample.steps[0].with.submodules, "recursive");
-  assert.equal(sample.steps[0].with.ref, "main");
+  assert.ok(
+    sample.steps[0].with.ref.includes("github.event.repository.default_branch"),
+  );
   assert.ok(sample.steps.some((step) => step.run === "npm test"));
   assert.deepEqual(shared.jobs.deploy.needs, ["build", "sample"]);
+  assert.ok(shared.jobs.deploy.if.includes("inputs.deploy"));
+  const resolver = build.steps.find((step) => step.id === "content");
+  assert.ok(
+    resolver.env.CONTENT_REPOSITORY.includes("vars.CONTENT_REPOSITORY"),
+  );
+  assert.ok(resolver.env.CONTENT_BRANCH.includes("vars.CONTENT_BRANCH"));
+  const push = build.steps[repairIndex];
+  assert.ok(push.if.includes("mode == 'production'"));
+  assert.ok(push.if.includes("same_repository == 'true'"));
+  assert.equal(push.env.CONTENT_BRANCH, "${{ steps.content.outputs.branch }}");
+  const notifier = YAML.parse(
+    await fs.readFile(
+      new URL("../workflows/external-content-publish.yml", import.meta.url),
+      "utf8",
+    ),
+  );
+  assert.equal(notifier.permissions.contents, "write");
+  assert.ok(notifier.jobs.notify.if.includes("vars.CONTENT_BRANCH"));
+  const steps = notifier.jobs.notify.steps;
+  assert.ok(
+    steps.findIndex(
+      (step) => step.run === "node scripts/repair-vault-timestamps.mjs --push",
+    ) <
+      steps.findIndex(
+        (step) => step.run === "node scripts/dispatch-website.mjs",
+      ),
+  );
+  assert.equal(
+    steps.at(-1).env.WEBSITE_DISPATCH_TOKEN,
+    "${{ secrets.WEBSITE_DISPATCH_TOKEN }}",
+  );
 });
 
 function git(root, args, date) {

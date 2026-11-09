@@ -13,14 +13,20 @@ const vaultRoot = await ensureVaultCheckout(
   path.dirname(siteRoot),
   process.env.VAULT_ROOT,
 );
-const sample = await fs.stat(path.join(vaultRoot, "sample-vault.json")).then(
-  () => true,
-  (error) => {
-    if (error.code === "ENOENT") return false;
-    throw error;
-  },
-);
+const sampleCheckout = await fs
+  .stat(path.join(vaultRoot, "sample-vault.json"))
+  .then(
+    () => true,
+    (error) => {
+      if (error.code === "ENOENT") return false;
+      throw error;
+    },
+  );
 const manifest = await discoverVault(path.dirname(siteRoot), vaultRoot);
+const profile =
+  process.env.SITE_TEST_PROFILE || (sampleCheckout ? "sample" : "generic");
+const sample = profile === "sample";
+const reference = profile === "reference";
 const note = (title) => manifest.notes.find((entry) => entry.title === title);
 const html = async (title) =>
   fs.readFile(
@@ -46,14 +52,15 @@ test("all approved existing notes including empty notes are indexed; samples are
   );
   assert.equal(publication.assets, manifest.assets.length);
   assert.ok(report.indexBytes > 0);
-  assert.doesNotMatch(
-    JSON.stringify(index),
-    /intervalhalving|Welcome to Knowledge Commons|A transcluded fixture paragraph/u,
-  );
+  if (reference)
+    assert.doesNotMatch(
+      JSON.stringify(index),
+      /intervalhalving|Welcome to Knowledge Commons|A transcluded fixture paragraph/u,
+    );
 });
 test(
   "real notes retain Unicode titles, images, aliases, links and collision-separated routes",
-  { skip: sample },
+  { skip: !reference },
   async () => {
     assert.match(await html("caimans"), /<img[^>]+assets\//u);
     assert.match(await html("CPTSD"), /第一次世界大戦/u);
@@ -113,10 +120,11 @@ test("only approved assets/content are emitted, with no Obsidian settings, sourc
     path.join(output, "static/contentIndex.json"),
     "utf8",
   );
-  assert.doesNotMatch(
-    index,
-    /PRIVATE_NOTE_CANARY|PRIVATE_ATTACHMENT_CANARY|\.obsidian|site\/samples/u,
-  );
+  if (reference)
+    assert.doesNotMatch(
+      index,
+      /PRIVATE_NOTE_CANARY|PRIVATE_ATTACHMENT_CANARY|\.obsidian|site\/samples/u,
+    );
   assert.ok(!files.includes("mathematics/linear-algebra.html"));
 });
 test("production client has no live reload WebSocket connection", async () => {
@@ -177,19 +185,13 @@ test("project pages, sort ranks and favicon are public without source filesystem
       await fs.readFile(path.join(output, "static/favicon.svg"), "utf8")
     ).includes(">E</text>"),
   );
-  assert.doesNotMatch(
-    // Article text may legitimately explain source folder names. Check emitted
-    // metadata, rather than treating ordinary prose as a metadata leak.
-    JSON.stringify(
-      Object.fromEntries(
-        Object.entries(index).map(([slug, { content, ...metadata }]) => [
-          slug,
-          metadata,
-        ]),
-      ),
-    ),
-    /birthtime|mtimeMs|vault\/notes|fileName/u,
-  );
+  for (const note of Object.values(index)) {
+    // User-authored titles/descriptions may explain source folders. Reject
+    // machine metadata fields and source paths, not ordinary authored text.
+    for (const key of ["birthtime", "birthtimeMs", "mtimeMs", "fileName"])
+      assert.ok(!Object.hasOwn(note, key));
+    assert.ok(!note.filePath?.startsWith("vault/"));
+  }
 });
 
 test("removed catalogue is absent from output and generated navigation", async () => {

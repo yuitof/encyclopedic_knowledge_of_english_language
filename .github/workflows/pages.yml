@@ -4,7 +4,26 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      content_repository:
+        description: "Content owner/repository (empty uses repository settings)"
+        type: string
+      content_branch:
+        description: "Content branch (empty uses repository settings)"
+        type: string
+      deploy:
+        description: "Deploy after successful checks"
+        type: boolean
+        default: true
   workflow_call:
+    inputs:
+      deploy:
+        description: "Deploy after successful checks"
+        type: boolean
+        default: true
+    secrets:
+      CONTENT_TOKEN:
+        required: false
 
 permissions:
   contents: read
@@ -17,7 +36,7 @@ concurrency:
 jobs:
   sample:
     name: Verify default sample checkout
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/vault'
+    if: github.event_name != 'push' || github.ref_name == github.event.repository.default_branch || github.ref_name == (vars.CONTENT_BRANCH || 'vault')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,7 +46,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: main
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.repository.default_branch || 'main' }}
           path: website
           submodules: recursive
           fetch-depth: 0
@@ -44,7 +64,7 @@ jobs:
       - run: npm run lint:timestamps
       - run: npm test
   build:
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/vault'
+    if: github.event_name != 'push' || github.ref_name == github.event.repository.default_branch || github.ref_name == (vars.CONTENT_BRANCH || 'vault')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -58,29 +78,64 @@ jobs:
       - name: Check out website code
         uses: actions/checkout@v6
         with:
-          ref: main
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.repository.default_branch || 'main' }}
           path: website
           fetch-depth: 0
           persist-credentials: false
-      # Deploy current vault data even when main pins an older submodule commit.
-      # The separate checkout supplies full history and write credentials only here.
-      - name: Check out latest vault data at the submodule path
+      - name: Select production content or pinned sample fallback
+        id: content
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CONTENT_TOKEN: ${{ secrets.CONTENT_TOKEN }}
+          CONTENT_REPOSITORY: ${{ inputs.content_repository || vars.CONTENT_REPOSITORY || github.repository }}
+          CONTENT_BRANCH: ${{ inputs.content_branch || vars.CONTENT_BRANCH || 'vault' }}
+        run: node scripts/content-source.mjs
+      - name: Check out selected content with full history
         uses: actions/checkout@v6
         with:
-          ref: vault
+          repository: ${{ steps.content.outputs.repository }}
+          ref: ${{ steps.content.outputs.ref }}
           path: website/.vault-data
           fetch-depth: 0
+          token: ${{ steps.content.outputs.same_repository == 'true' && github.token || secrets.CONTENT_TOKEN || github.token }}
+          persist-credentials: ${{ steps.content.outputs.mode == 'production' && steps.content.outputs.same_repository == 'true' }}
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
           cache: npm
           cache-dependency-path: website/site/package-lock.json
       - run: npm ci
-      - name: Validate vault, repair missing timestamps and commit to vault
+      - name: Repair and push same-repository production timestamps
+        if: steps.content.outputs.mode == 'production' && steps.content.outputs.same_repository == 'true'
+        env:
+          CONTENT_BRANCH: ${{ steps.content.outputs.branch }}
         run: node scripts/repair-vault-timestamps.mjs --push
+      - name: Validate external production timestamps without a remote write
+        if: steps.content.outputs.mode == 'production' && steps.content.outputs.same_repository != 'true'
+        run: node scripts/repair-vault-timestamps.mjs
+      # Sample fallback is a pinned example: never repair/push it during deployment.
+      - name: Report selected source
+        env:
+          SOURCE_MODE: ${{ steps.content.outputs.mode }}
+          SOURCE_REPOSITORY: ${{ steps.content.outputs.repository }}
+          SOURCE_BRANCH: ${{ steps.content.outputs.branch }}
+        run: echo "Building $SOURCE_MODE content from $SOURCE_REPOSITORY ($SOURCE_BRANCH)"
       - name: Prepare Quartz plugins
         run: npx quartz plugin install --from-config
       - run: npx playwright install --with-deps chromium
+      - name: Select collection-independent or reference browser checks
+        env:
+          SOURCE_MODE: ${{ steps.content.outputs.mode }}
+          REFERENCE_PROFILE: ${{ vars.CONTENT_TEST_PROFILE }}
+          SAME_REPOSITORY: ${{ steps.content.outputs.same_repository }}
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const profile = process.env.SOURCE_MODE === 'sample' ? 'sample'
+            : process.env.SAME_REPOSITORY === 'true' && process.env.REFERENCE_PROFILE === 'reference' ? 'reference' : 'generic';
+          fs.appendFileSync(process.env.GITHUB_ENV, `SITE_TEST_PROFILE=${profile}\n`);
+          JS
       - name: Validate publication, types, rendering, search and URL layouts
         run: npm test
       - name: Configure Pages
@@ -103,6 +158,7 @@ jobs:
         with:
           path: website/site/public
   deploy:
+    if: github.event_name != 'workflow_dispatch' || inputs.deploy
     needs: [build, sample]
     runs-on: ubuntu-latest
     permissions:

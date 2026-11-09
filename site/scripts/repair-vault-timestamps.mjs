@@ -105,6 +105,7 @@ if (
   const root = path.resolve(process.env.VAULT_ROOT);
   const result = process.argv.includes("--push")
     ? await repairAndPush(root, {
+        branch: process.env.CONTENT_BRANCH || "vault",
         validate: () =>
           preparePublication({ root: repositoryRoot, vaultRoot: root }),
       })

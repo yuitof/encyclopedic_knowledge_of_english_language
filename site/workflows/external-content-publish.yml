@@ -1,0 +1,57 @@
+name: Repair content and notify website
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: content-publication
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    if: github.event_name == 'workflow_dispatch' || (github.ref_name == (vars.CONTENT_BRANCH || github.event.repository.default_branch) && github.event.head_commit.message != 'Repair missing note timestamps')
+    runs-on: ubuntu-latest
+    env:
+      WEBSITE_REPOSITORY: ${{ vars.WEBSITE_REPOSITORY }}
+      WEBSITE_BRANCH: ${{ vars.WEBSITE_BRANCH || 'main' }}
+      WEBSITE_WORKFLOW: ${{ vars.WEBSITE_WORKFLOW || 'pages.yml' }}
+      VAULT_ROOT: ${{ github.workspace }}/data
+      CONTENT_BRANCH: ${{ github.ref_name }}
+    defaults:
+      run:
+        working-directory: website/site
+    steps:
+      - name: Require an explicit website repository
+        working-directory: ${{ github.workspace }}
+        run: node -e 'if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(process.env.WEBSITE_REPOSITORY || "")) throw Error("Set WEBSITE_REPOSITORY to owner/repository")'
+      - name: Check out website tools
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ vars.WEBSITE_REPOSITORY }}
+          ref: ${{ vars.WEBSITE_BRANCH || 'main' }}
+          path: website
+          persist-credentials: false
+          token: ${{ secrets.WEBSITE_CODE_TOKEN || github.token }}
+      - name: Check out content and full history
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name }}
+          path: data
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: website/site/package-lock.json
+      - run: npm ci
+      - name: Repair timestamps and push to this content repository
+        run: node scripts/repair-vault-timestamps.mjs --push
+      - name: Notify the website after successful repair
+        env:
+          WEBSITE_DISPATCH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
+        run: node scripts/dispatch-website.mjs
