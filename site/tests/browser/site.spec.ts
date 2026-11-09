@@ -1726,29 +1726,43 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
       ]);
     }, anchorPoint);
   const anchorBefore = await anchoredWorld();
+  await page.mouse.move(anchorPoint.x, anchorPoint.y);
   await page.evaluate(() => {
     const samples: { time: number; zoom: number }[] = [];
     (window as any).__momentumSamples = samples;
-    const start = performance.now();
-    const sample = () => {
-      samples.push({
-        time: performance.now() - start,
-        zoom: (document.querySelector(".graph-container canvas") as any).__zoom
-          .k,
-      });
-      if (performance.now() - start < 500) requestAnimationFrame(sample);
-    };
-    requestAnimationFrame(sample);
+    (window as any).__momentumSampling = true;
+    const canvas = document.querySelector(".graph-container canvas") as any;
+    // Start at the actual input event, then sample until settling. A fixed
+    // wall-clock window can expire before enough frames render on CI.
+    canvas.addEventListener(
+      "wheel",
+      () => {
+        const start = performance.now();
+        const sample = () => {
+          if (!(window as any).__momentumSampling) return;
+          samples.push({
+            time: performance.now() - start,
+            zoom: canvas.__zoom.k,
+          });
+          requestAnimationFrame(sample);
+        };
+        sample();
+      },
+      { capture: true, once: true },
+    );
   });
-  await page.mouse.move(anchorPoint.x, anchorPoint.y);
   await page.mouse.wheel(0, -300);
   await expect
     .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
     .toBeGreaterThan(before);
   await settleZoom();
-  const motion = await page.evaluate(
-    () => (window as any).__momentumSamples as { time: number; zoom: number }[],
-  );
+  const motion = await page.evaluate(() => {
+    (window as any).__momentumSampling = false;
+    return (window as any).__momentumSamples as {
+      time: number;
+      zoom: number;
+    }[];
+  });
   expect(
     new Set(
       motion.filter((sample) => sample.time > 100).map((sample) => sample.zoom),
