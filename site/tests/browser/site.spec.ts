@@ -130,19 +130,30 @@ test("Explorer shows only the ten newest modified articles regardless of obsolet
     await page
       .locator(`input[name="appearance-color"][value="${mode}"]`)
       .check();
-    const blue = await page
-      .locator(".graph-view-link")
-      .evaluate((link) => getComputedStyle(link).color);
-    expect(
-      await recentLinks.evaluateAll((links) =>
-        links.map((link) => ({
-          color: getComputedStyle(link).color,
-          opacity: getComputedStyle(link).opacity,
-        })),
-      ),
-    ).toEqual(
-      Array.from({ length: 11 }, () => ({ color: blue, opacity: "1" })),
-    );
+    await expect(page.locator("html")).toHaveAttribute("saved-theme", mode);
+    // Read the final theme color without sampling an animated link mid-transition.
+    const blue = await page.evaluate(() => {
+      const probe = document.createElement("span");
+      probe.style.cssText =
+        "color:var(--secondary);transition:none;display:none";
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    });
+    await expect(page.locator(".graph-view-link")).toHaveCSS("color", blue);
+    await expect
+      .poll(() =>
+        recentLinks.evaluateAll((links) =>
+          links.map((link) => ({
+            color: getComputedStyle(link).color,
+            opacity: getComputedStyle(link).opacity,
+          })),
+        ),
+      )
+      .toEqual(
+        Array.from({ length: 11 }, () => ({ color: blue, opacity: "1" })),
+      );
   }
 });
 test("Show more follows the recent articles and opens the full list", async ({
