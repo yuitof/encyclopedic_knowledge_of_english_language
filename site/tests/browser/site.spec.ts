@@ -1953,7 +1953,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   expect(firstHover.titleWidth).toBeGreaterThan(firstIdle.titleWidth);
   expect(firstHover.titleY).toBeGreaterThan(firstHover.nodeBottom);
   const firstTravel = firstHover.titleY - firstIdle.titleY;
-  const firstFontGap = 0.7 * (firstHover.screenFont - firstIdle.screenFont);
+  const firstFontGap = 0.5 * (firstHover.screenFont - firstIdle.screenFont);
   expect(firstTravel - firstFontGap).toBeCloseTo(
     (1.5 * firstIdle.diameter) / firstIdle.localDiameter,
     2,
@@ -2015,7 +2015,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     .toBeCloseTo(1.06, 4);
   const secondHover = (await vertexGeometry([second.id]))[0];
   expect(secondHover.titleHeight).toBeGreaterThan(secondIdle.titleHeight);
-  const secondFontGap = 0.7 * (secondHover.screenFont - secondIdle.screenFont);
+  const secondFontGap = 0.5 * (secondHover.screenFont - secondIdle.screenFont);
   expect(secondHover.titleY - secondIdle.titleY - secondFontGap).toBeCloseTo(
     firstTravel - firstFontGap,
     2,
@@ -2629,7 +2629,7 @@ test.describe("Graph rendering quality", () => {
         expect(Math.abs((await quality(id)).horizontalError)).toBeLessThan(
           0.01,
         );
-        expect((await quality(id)).gapInEms).toBeCloseTo(0.7, 3);
+        expect((await quality(id)).gapInEms).toBeCloseTo(0.5, 3);
         const circle = await circleQuality(id);
         await (
           await import("node:fs/promises")

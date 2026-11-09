@@ -229,8 +229,8 @@ runtime = runtime.replace(
 );
 runtime = runtime.replace(zoomLabels, "qe();");
 // Center the visible glyphs, including multiline titles, rather than the text
-// texture's empty margins. Leave 0.7em below the circle; hover travel remains a
-// fixed zoom-scaled distance, independent of vertex size or connectivity.
+// texture's empty margins. Leave 0.5em below the circle; extra hover travel
+// remains independent of vertex size or connectivity.
 const titleFont = "fontSize:We*15";
 const titleAnchor = "Du.anchor.set(.5,1.2)";
 const titlePosition = "l.label.position.set(F+O/2,v+G/2)";
@@ -247,7 +247,7 @@ runtime = runtime.replace(titleFont, 'fontSize:We*5.04,align:"center",trim:!0');
 runtime = runtime.replace(titleAnchor, "Du.label=ae,Du.anchor.set(.5,0)");
 runtime = runtime.replace(
   titlePosition,
-  "l.label.position.set(F+O/2,v+G/2+(l.radius+1.5*(l.hoverAmount||0))*graphLayoutScale+.7*l.label.style.fontSize*l.label.scale.y)",
+  "l.label.position.set(F+O/2,v+G/2+(l.radius+1.5*(l.hoverAmount||0))*graphLayoutScale+.5*l.label.style.fontSize*l.label.scale.y)",
 );
 
 // Refresh after positions and zoom transforms, before the next render frame.
