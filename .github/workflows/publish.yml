@@ -2,7 +2,7 @@ name: Publish vault
 
 on:
   push:
-    branches: [vault]
+    branches: ["**"]
   workflow_dispatch:
 
 permissions:
@@ -10,8 +10,11 @@ permissions:
 
 jobs:
   publish:
+    if: github.event_name == 'workflow_dispatch' || github.ref_name == (vars.CONTENT_BRANCH || 'vault')
     permissions:
       contents: write
       pages: write
       id-token: write
     uses: yuitof/encyclopedic_knowledge_of_english_language/.github/workflows/pages.yml@main
+    secrets:
+      CONTENT_TOKEN: ${{ secrets.CONTENT_TOKEN }}
