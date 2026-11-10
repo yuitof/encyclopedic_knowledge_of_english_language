@@ -15,12 +15,14 @@ const executablePath =
   (fs.existsSync(chrome) ? chrome : undefined);
 export default defineConfig({
   testDir: "./tests/browser",
-  testMatch:
+  testMatch: [
     profile === "sample"
       ? "sample.spec.ts"
       : profile === "reference"
         ? "site.spec.ts"
         : "collection.spec.ts",
+    "graph-theme.spec.ts",
+  ],
   fullyParallel: false,
   workers: 1,
   timeout: 30000,

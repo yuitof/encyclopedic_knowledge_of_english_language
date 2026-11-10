@@ -2166,7 +2166,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
     reduced,
   );
   await page.mouse.move(0, 0);
-  // Theme changes rebuild the canvas; softened edges must use the new background.
+  // Theme changes refresh the palette; softened edges use the new background.
   await page.locator('input[name="appearance-color"][value="dark"]').check();
   await expect(page.locator("html")).toHaveAttribute("saved-theme", "dark");
   await expect

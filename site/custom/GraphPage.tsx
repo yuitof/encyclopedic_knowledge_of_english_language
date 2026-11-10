@@ -58,6 +58,17 @@ runtime = runtime.replace(
 );
 runtime = runtime.replace(edgeCreation, 'U.label="graph-edge",' + edgeCreation);
 runtime = runtime.replace(nodeEvents, 'U.eventMode="dynamic"');
+// History/current-page colors belong to navigation, not the neutral graph.
+const nodePalette =
+  'function $e(i){var l=i.id===g;return l?Ie:K.has(i.id)||i.id.startsWith("tags/")?Qu:ue}';
+const themeRebuild =
+  'function R(){Y(),M()&&N()}document.addEventListener("themechange",R)';
+if (!runtime.includes(nodePalette) || !runtime.includes(themeRebuild))
+  throw new Error("Graph theme integration requires review");
+runtime = runtime.replace(nodePalette, "function $e(){return ze}");
+// Theme changes only change paint. Keep the existing renderer, camera, pointer
+// tracking and batches instead of destroying/recreating them on every switch.
+runtime = runtime.replace(themeRebuild, "");
 // Keep graph shapes opaque and interpolate their colors on the existing frame loop.
 const nodeFocus =
   "function Ke(){for(var i=0;i<P.length;i++){var l=P[i],F=1;_u!==null&&Oe&&(F=l.active?1:.2),l.gfx.alpha=F}}";
@@ -89,15 +100,31 @@ var graphReducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
 function graphColor(value){return new a.Color(value).toNumber()}
 // Use the established dark-mode highlight blue in both themes.
 var graphHoverBlue=0x577fd9;
-var graphBaseEdge=graphColor(ee),graphBackground=graphColor(He);
+var graphBaseEdge,graphBackground,graphDimEdge,graphSavedTheme;
+function graphReadPalette(){
+var styles=getComputedStyle(document.documentElement);
+ee=h(styles.getPropertyValue("--lightgray").trim(),"#c8ccd1");
+ze=h(styles.getPropertyValue("--dark").trim(),"#101418");
+He=h(styles.getPropertyValue("--light").trim(),"#ffffff");
+graphSavedTheme=document.documentElement.getAttribute("saved-theme");
+graphBaseEdge=graphColor(ee);graphBackground=graphColor(He);
 // Soften normal links toward the current theme background without transparency.
-var graphEdgeContrast=document.documentElement.getAttribute("saved-theme")==="dark"?.5:.65;
+var graphEdgeContrast=graphSavedTheme==="dark"?.5:.65;
 graphBaseEdge=(Math.round((graphBaseEdge>>16&255)*graphEdgeContrast+(graphBackground>>16&255)*(1-graphEdgeContrast))<<16)
   |(Math.round((graphBaseEdge>>8&255)*graphEdgeContrast+(graphBackground>>8&255)*(1-graphEdgeContrast))<<8)
   |Math.round((graphBaseEdge&255)*graphEdgeContrast+(graphBackground&255)*(1-graphEdgeContrast));
-var graphDimEdge=(Math.round((graphBaseEdge>>16&255)*.25+(graphBackground>>16&255)*.75)<<16)
+graphDimEdge=(Math.round((graphBaseEdge>>16&255)*.25+(graphBackground>>16&255)*.75)<<16)
   |(Math.round((graphBaseEdge>>8&255)*.25+(graphBackground>>8&255)*.75)<<8)
   |Math.round((graphBaseEdge&255)*.25+(graphBackground&255)*.75);
+}
+graphReadPalette();
+function graphUpdateTheme(){
+  if(le||graphSavedTheme===document.documentElement.getAttribute("saved-theme"))return;
+  graphReadPalette();
+  for(var node of P){node.color=ze;node.gfx.tint=graphColor(ze);node.label.style.fill=ze;}
+  for(var link of I)link.color=graphBaseEdge;
+  Au();
+}
 function graphFade(item,current,target){
   item.fadeFrom=graphColor(current);item.fadeTo=graphColor(target);item.fadeStart=performance.now();
 }
@@ -289,6 +316,8 @@ runtime = runtime.replace(
     if(width!==O||height!==G){O=width;G=height;Q.renderer.resize(O,G);fitGraphCamera();}
   });
   graphResizeObserver.observe(_);
+  var graphThemeObserver=new MutationObserver(graphUpdateTheme);
+  graphThemeObserver.observe(document.documentElement,{attributes:true,attributeFilter:["saved-theme"]});
   var graphRefit=function(){requestAnimationFrame(function(){if(!le)fitGraphCamera();})};
   window.addEventListener("graph-window-change",graphRefit);
   ${graphMomentum}`,
@@ -298,7 +327,7 @@ if (!runtime.includes(graphCleanup))
   throw new Error("Graph resize cleanup integration requires review");
 runtime = runtime.replace(
   graphCleanup,
-  'function(){typeof graphDisposeMomentum==="function"&&graphDisposeMomentum();graphResizeObserver&&graphResizeObserver.disconnect();graphRefit&&window.removeEventListener("graph-window-change",graphRefit);le=!0,ou.stop();graphDisposeCircles();',
+  'function(){typeof graphDisposeMomentum==="function"&&graphDisposeMomentum();graphResizeObserver&&graphResizeObserver.disconnect();graphThemeObserver&&graphThemeObserver.disconnect();graphRefit&&window.removeEventListener("graph-window-change",graphRefit);le=!0,ou.stop();graphDisposeCircles();',
 );
 export const GraphPage: QuartzComponent = (props) => {
   if (props.fileData.slug !== "graph") return null;
