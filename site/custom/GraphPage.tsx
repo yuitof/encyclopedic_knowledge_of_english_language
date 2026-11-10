@@ -65,7 +65,7 @@ const themeRebuild =
   'function R(){Y(),M()&&N()}document.addEventListener("themechange",R)';
 if (!runtime.includes(nodePalette) || !runtime.includes(themeRebuild))
   throw new Error("Graph theme integration requires review");
-runtime = runtime.replace(nodePalette, "function $e(){return ze}");
+runtime = runtime.replace(nodePalette, "function $e(){return ue}");
 // Theme changes only change paint. Keep the existing renderer, camera, pointer
 // tracking and batches instead of destroying/recreating them on every switch.
 runtime = runtime.replace(themeRebuild, "");
@@ -104,6 +104,7 @@ var graphBaseEdge,graphBackground,graphDimEdge,graphSavedTheme;
 function graphReadPalette(){
 var styles=getComputedStyle(document.documentElement);
 ee=h(styles.getPropertyValue("--lightgray").trim(),"#c8ccd1");
+ue=h(styles.getPropertyValue("--gray").trim(),"#72777d");
 ze=h(styles.getPropertyValue("--dark").trim(),"#101418");
 He=h(styles.getPropertyValue("--light").trim(),"#ffffff");
 graphSavedTheme=document.documentElement.getAttribute("saved-theme");
@@ -121,7 +122,7 @@ graphReadPalette();
 function graphUpdateTheme(){
   if(le||graphSavedTheme===document.documentElement.getAttribute("saved-theme"))return;
   graphReadPalette();
-  for(var node of P){node.color=ze;node.gfx.tint=graphColor(ze);node.label.style.fill=ze;}
+  for(var node of P){node.color=ue;node.gfx.tint=graphColor(ue);node.label.style.fill=ze;}
   for(var link of I)link.color=graphBaseEdge;
   Au();
 }

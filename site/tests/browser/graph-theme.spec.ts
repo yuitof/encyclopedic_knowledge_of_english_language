@@ -152,7 +152,7 @@ test("visited and current graph vertices stay neutral before and after hover", a
   page,
 }) => {
   const { errors } = await prepareGraph(page);
-  const neutral = 0x101418;
+  const neutral = 0x72777d;
   await expect
     .poll(async () => (await scene(page)).nodes.map((n: any) => n.tint))
     .toEqual(Array(5).fill(neutral));
@@ -180,7 +180,7 @@ test("theme switches preserve rendered edges and repeated hover recovery", async
     await expect(page.locator("html")).toHaveAttribute("saved-theme", theme);
     await expect(canvas).toHaveCount(1);
     await arrange(page);
-    const neutral = theme === "dark" ? 0xf8f9fa : 0x101418;
+    const neutral = theme === "dark" ? 0xa2a9b1 : 0x72777d;
     await expect
       .poll(async () => (await scene(page)).nodes.map((n: any) => n.tint))
       .toEqual(Array(5).fill(neutral));
@@ -233,7 +233,7 @@ test("theme switches preserve rendered edges and repeated hover recovery", async
   await page.mouse.move(0, 0);
   await expect
     .poll(async () => (await scene(page)).nodes.map((n: any) => n.tint))
-    .toEqual(Array(5).fill(0xf8f9fa));
+    .toEqual(Array(5).fill(0xa2a9b1));
   expect(await page.evaluate(() => (window as any).__themeApps.length)).toBe(
     applications,
   );
