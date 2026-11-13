@@ -1,6 +1,6 @@
 ---
-created: "2026-07-10T23:32:12.602548Z"
-modified: "2026-11-07T03:40:25.009316Z"
+created: 2026-07-10T23:32:12.602548Z
+modified: 2026-11-13T23:42:43+00:00
 ---
 #### celebrity
 - [[Ace Taffy Ch.]] 中国のVTuber
@@ -14,6 +14,7 @@ modified: "2026-11-07T03:40:25.009316Z"
 
 #### game
 - [[Chutes and Ladders]] ボードゲーム
+- [[monopoly]] ボードゲーム
 - [[hit and blow]] ボードゲーム
 - [[escape the backrooms]] ゲーム
 - [[R.E.P.O.]]
