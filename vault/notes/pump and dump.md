@@ -1,10 +1,4 @@
-**pump and [[dump]]** (/ˌpʌmp ən ˈdʌmp/) is vulgar [[slang]] meaning to [[have sex]] with someone and then [[dump]] them, without intending to pursue a relationship.
-
-In this video, [[the]] phrase is used figuratively as a joke [[about]] being used for YouTube content and then discarded.
-
-**pumped and [[dump|dumped]]** (/ˌpʌmpt ən ˈdʌmpt/) is [[the]] past-[[tense]] and past-[[participle]] form; both verbs change, and both **-ed** endings are pronounced /t/. In **get pumped and [[dump|dumped]]**, [[the]] [[participle|participles]] form a passive construction: someone else does it to you. **I'm getting…** describes it as happening to [[the]] speaker.
-
-Other forms: **pumps and [[dump|dumps]]**; **pumping and [[dump|dumping]]**.
+**pumped and [[dump|dumped]]** (/ˌpʌmpt ən ˈdʌmpt/) is a joking way to describe being used for YouTube content and then discarded.
 
 ## Examples
 
@@ -19,5 +13,3 @@ Context: Continuing [[the]] same exchange, [[the]] speaker jokes that this happe
 > That's my job as a streamer. [[just|Just]] get pumped and [[dump|dumped]] every single day.
 
 [Donating to EVERY Big Vtuber — OzzyGaming, 20:01](https://www.youtube.com/watch?v=flu1Ngnm5JA&t=1201s)
-
-Source: [Wiktionary — pump and dump](https://en.wiktionary.org/wiki/pump_and_dump#Verb).
