@@ -1,8 +1,8 @@
-**pumped and [[dump|dumped]]** (/ˌpʌmpt ən ˈdʌmpt/) is a joking way to describe being used for YouTube content and then discarded.
+**pumped and [[dump|dumped]]** (/ˌpʌmpt ən ˈdʌmpt/) is [[slang]] for being used for sex once, without any intention of further contact or a relationship.
 
 ## Examples
 
-Context: During a segment featuring LucyPyre, a $100 donation with no message prompts jokes [[about]] using VTubers for YouTube content.
+Context: LucyPyre jokes [[about]] being used for YouTube content and then discarded, using [[the]] phrase figuratively.
 
 > I'm getting pumped and [[dump|dumped]], [[dude]].
 
@@ -13,3 +13,5 @@ Context: Continuing [[the]] same exchange, [[the]] speaker jokes that this happe
 > That's my job as a streamer. [[just|Just]] get pumped and [[dump|dumped]] every single day.
 
 [Donating to EVERY Big Vtuber — OzzyGaming, 20:01](https://www.youtube.com/watch?v=flu1Ngnm5JA&t=1201s)
+
+Source: [Wiktionary — pump and dump, verb sense 2](https://en.wiktionary.org/wiki/pump_and_dump#Verb).
