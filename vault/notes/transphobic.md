@@ -1,6 +1,6 @@
 ---
-created: "2026-07-26T05:22:24.874408Z"
-modified: "2026-07-26T05:22:50.644862Z"
+created: 2026-07-26T05:22:24.874408Z
+modified: 2026-11-14T08:03:09+00:00
 ---
 transphobic
-: having or showing discrimination against, aversion to, or fear of [transgender](https://www.merriam-webster.com/dictionary/transgender) people
+: having or showing discrimination against, aversion to, or fear of [[transgender]] people
