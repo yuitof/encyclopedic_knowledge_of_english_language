@@ -8,3 +8,7 @@ Untitled*
 /vault/.obsidian/workspace-mobile.json
 /vault/.obsidian/cache/
 /vault/.trash/
+
+# Local agent instructions and private YouTube history/transcript cache.
+/AGENTS.md
+/.codex/tmp/youtube/
