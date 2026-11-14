@@ -19,32 +19,34 @@ export const ArticleContents: QuartzComponent = (data) => {
       isBacklinks: true,
     });
   return (
-    <details class="navigation-panel contents-panel" open>
+    <details class="navigation-panel contents-panel">
       <summary>Contents</summary>
-      <nav class="article-contents" aria-label="Article contents">
-        <a class="contents-top" href="#quartz-root">
-          (Top)
-        </a>
-        {(entries.length > 0 || data.fileData.slug === "articles/index") && (
-          <ul>
-            {entries.map((entry) => (
-              <li
-                style={{
-                  paddingLeft: `${Math.max(0, entry.depth - entries[0].depth)}rem`,
-                }}
-              >
-                <a
-                  href={`#${entry.slug}`}
-                  data-section={entry.slug}
-                  data-backlinks={entry.isBacklinks ? "true" : undefined}
+      <div class="navigation-panel-body">
+        <nav class="article-contents" aria-label="Article contents">
+          <a class="contents-top" href="#quartz-root">
+            (Top)
+          </a>
+          {(entries.length > 0 || data.fileData.slug === "articles/index") && (
+            <ul>
+              {entries.map((entry) => (
+                <li
+                  style={{
+                    paddingLeft: `${Math.max(0, entry.depth - entries[0].depth)}rem`,
+                  }}
                 >
-                  {entry.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </nav>
+                  <a
+                    href={`#${entry.slug}`}
+                    data-section={entry.slug}
+                    data-backlinks={entry.isBacklinks ? "true" : undefined}
+                  >
+                    {entry.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </nav>
+      </div>
     </details>
   );
 };

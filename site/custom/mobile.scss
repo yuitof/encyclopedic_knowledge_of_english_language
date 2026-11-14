@@ -1,0 +1,279 @@
+// A reading-first phone layout: quiet masthead and navigation on demand.
+.mobile-site-links {
+  display: none;
+}
+@media (max-width: 800px) {
+  html {
+    scroll-padding-top: 4rem;
+  }
+  .page {
+    padding-inline: 1rem;
+  }
+  .page > #quartz-body {
+    gap: 0;
+  }
+  .encyclopedia-header {
+    box-sizing: border-box;
+    gap: 0.75rem;
+    padding: 0.875rem 0;
+    border: 0;
+  }
+  .encyclopedia-brand {
+    min-width: 0;
+    gap: 0.5rem;
+  }
+  .encyclopedia-brand strong {
+    font-size: 1.25rem;
+    line-height: 1.3;
+    white-space: normal;
+  }
+  .brand-mark {
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: 0 0 auto;
+    border: 0;
+    font-size: 1.8rem;
+  }
+  .encyclopedia-brand small,
+  .header-links,
+  .article-toolbar {
+    display: none;
+  }
+  .header-search .search > .search-container > .search-space > input {
+    box-sizing: border-box;
+    height: 2.75rem;
+    padding-inline: 0.75rem;
+    font-size: 1rem;
+    border-color: var(--lightgray);
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--lightgray) 15%, var(--light));
+  }
+  .header-search .search > .search-container > .search-space > .search-layout {
+    top: 3rem;
+    width: 100%;
+    max-height: min(60dvh, 28rem);
+  }
+  .reading-row {
+    gap: 1rem;
+  }
+  .page > #quartz-body .sidebar.left {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    gap: 0;
+    border-block: 1px solid var(--lightgray);
+    background: var(--light);
+  }
+  .sidebar.left > :is(.navigation-panel, .appearance-panel) {
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    border: 0;
+    width: auto;
+  }
+  .sidebar.left > :is(.navigation-panel, .appearance-panel) > summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    box-sizing: border-box;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.15rem;
+    margin: 0;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    color: var(--darkgray);
+    font:
+      500 0.8125rem/1.25 Arial,
+      sans-serif;
+    list-style: none;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .sidebar.left summary::-webkit-details-marker {
+    display: none;
+  }
+  .sidebar.left > details > summary::after {
+    content: "";
+    width: 0.375rem;
+    height: 0.375rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    flex: 0 0 auto;
+  }
+  .sidebar.left > details[open] > summary {
+    color: var(--secondary);
+    border-bottom-color: var(--secondary);
+  }
+  .sidebar.left > details[open] > summary::after {
+    transform: translateY(1px) rotate(225deg);
+  }
+  .sidebar.left .navigation-panel-body {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    max-height: min(65dvh, 30rem);
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    padding: 0.75rem 1rem;
+    background: var(--light);
+    border: 1px solid var(--lightgray);
+    box-shadow: 0 6px 12px rgb(0 0 0 / 12%);
+  }
+  .sidebar.left .navigation-panel-body a {
+    display: block;
+    box-sizing: border-box;
+    padding-block: 0.625rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  .article-contents ul {
+    margin: 0;
+  }
+  .mobile-site-links {
+    display: block;
+  }
+  .graph-navigation {
+    border-bottom: 1px solid var(--lightgray);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .navigation-panel .explorer {
+    font-size: 0.9375rem;
+  }
+  .recently-updated-label {
+    font-size: 0.8125rem;
+  }
+  .sidebar.left .explorer-ul {
+    border: 0;
+    padding: 0;
+  }
+  .sidebar.left .explorer-content {
+    margin-top: 0;
+  }
+  .show-more-row {
+    margin-top: 0.25rem;
+  }
+  .appearance-panel fieldset {
+    gap: 0.25rem 1rem;
+  }
+  .appearance-panel label {
+    min-height: 2.75rem;
+  }
+  .appearance-panel input {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+  .page > #quartz-body .sidebar.right:empty {
+    display: none;
+  }
+  .article-title {
+    font-size: 1.8rem;
+    line-height: 1.25;
+    margin: 0.25rem 0 0.875rem;
+    padding-bottom: 0.5rem;
+    overflow-wrap: anywhere;
+  }
+  article {
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+  article h2 {
+    font-size: 1.4em;
+    margin-top: 1.5rem;
+  }
+  article h3 {
+    font-size: 1.15em;
+  }
+  article img {
+    border-radius: 0;
+    box-sizing: border-box;
+  }
+  article :is(pre, table, .table-container) {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  article table {
+    display: block;
+  }
+  .page-listing :is(.section-ul, .section-li, .section, .desc) {
+    min-width: 0;
+  }
+  .page-listing li.section-li {
+    margin: 0;
+    border-bottom: 1px solid var(--lightgray);
+  }
+  .page-listing li.section-li > .section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.75rem 0;
+  }
+  .page-listing .section .meta {
+    font-size: 0.8125rem;
+    opacity: 1;
+    color: var(--gray);
+  }
+  .page-listing .section .desc h3 {
+    margin: 0;
+    font:
+      400 1.0625rem/1.5 Arial,
+      sans-serif;
+  }
+  .page-listing .section .desc a {
+    overflow-wrap: anywhere;
+  }
+  .page-listing .section .tags {
+    display: none;
+  }
+  .article-list-sort {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .article-list-sort select {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+    min-height: 2.75rem;
+    font-size: 1rem;
+  }
+  .highlight-cards {
+    display: block;
+    border-top: 1px solid var(--lightgray);
+  }
+  .highlight-cards > article {
+    height: auto;
+    padding: 1rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--lightgray);
+  }
+  .highlight-cards h2 {
+    margin-top: 0;
+    font-size: 1.3rem;
+  }
+  .highlight-cards p {
+    -webkit-line-clamp: 3;
+  }
+  .graph-page .graph .graph-outer {
+    height: clamp(18rem, 55dvh, 32rem);
+  }
+  .encyclopedia-footer {
+    margin-top: 1.5rem;
+    line-height: 1.6;
+  }
+  .site-footer nav {
+    gap: 0.25rem 1rem;
+  }
+  .site-footer nav a {
+    padding-block: 0.5rem;
+  }
+}

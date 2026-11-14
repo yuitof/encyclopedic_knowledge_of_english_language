@@ -22,6 +22,7 @@ export default defineConfig({
         ? "site.spec.ts"
         : "collection.spec.ts",
     "graph-theme.spec.ts",
+    "mobile-layout.spec.ts",
   ],
   fullyParallel: false,
   workers: 1,

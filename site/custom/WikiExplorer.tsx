@@ -22,6 +22,16 @@ const treeBehavior = [stock.afterDOMLoaded ?? ""].flat().map((script) => {
 });
 type TreeChild = VNode<{ class?: string; "aria-expanded"?: boolean | string }>;
 export const WikiExplorer: QuartzComponent = (props) => {
+  const base =
+    props.ctx.argv.serve || !props.cfg.baseUrl
+      ? ""
+      : new URL(`https://${props.cfg.baseUrl}`).pathname.replace(/\/$/u, "");
+  const siteLinks = (
+    <nav class="mobile-site-links" aria-label="Explore the encyclopedia">
+      <a href={pathToRoot(props.fileData.slug!)}>Main page</a>
+      <a href={`${base}/articles/?sort=name-asc`}>Browse entries</a>
+    </nav>
+  );
   const graphLink = props.allFiles.some((file) => file.slug === "graph") ? (
     <nav class="graph-navigation" aria-label="Graph navigation">
       <a
@@ -36,32 +46,35 @@ export const WikiExplorer: QuartzComponent = (props) => {
     return (
       <details class="navigation-panel explorer-panel">
         <summary>Explorer</summary>
-        {graphLink}
-        <form
-          class="article-date-filter"
-          hidden
-          aria-label="Article date range"
-        >
-          <p class="date-filter-title" />
-          <label for="article-date-from">From</label>
-          <input
-            id="article-date-from"
-            type="date"
-            aria-describedby="article-date-help"
-          />
-          <label for="article-date-to">To</label>
-          <input
-            id="article-date-to"
-            type="date"
-            aria-describedby="article-date-help"
-          />
-          <button type="reset">Clear dates</button>
-          <p id="article-date-help">
-            Includes both dates (UTC). Articles with unknown dates are excluded
-            while filtering.
-          </p>
-          <p class="date-filter-status" role="status" />
-        </form>
+        <div class="navigation-panel-body">
+          {siteLinks}
+          {graphLink}
+          <form
+            class="article-date-filter"
+            hidden
+            aria-label="Article date range"
+          >
+            <p class="date-filter-title" />
+            <label for="article-date-from">From</label>
+            <input
+              id="article-date-from"
+              type="date"
+              aria-describedby="article-date-help"
+            />
+            <label for="article-date-to">To</label>
+            <input
+              id="article-date-to"
+              type="date"
+              aria-describedby="article-date-help"
+            />
+            <button type="reset">Clear dates</button>
+            <p id="article-date-help">
+              Includes both dates (UTC). Articles with unknown dates are
+              excluded while filtering.
+            </p>
+            <p class="date-filter-status" role="status" />
+          </form>
+        </div>
       </details>
     );
   const tree = stock(props) as VNode<{ children: TreeChild[] }>;
@@ -72,23 +85,22 @@ export const WikiExplorer: QuartzComponent = (props) => {
         ? cloneElement(child, { "aria-expanded": undefined })
         : child,
     );
-  const base =
-    props.ctx.argv.serve || !props.cfg.baseUrl
-      ? ""
-      : new URL(`https://${props.cfg.baseUrl}`).pathname.replace(/\/$/u, "");
   return (
-    <details class="navigation-panel explorer-panel" open>
+    <details class="navigation-panel explorer-panel">
       <summary>Explorer</summary>
-      {graphLink}
-      {cloneElement(tree, {}, ...children)}
-      <div class="show-more-row">
-        <a
-          class="internal nav-show-more"
-          data-no-popover="true"
-          href={`${base}/articles/?sort=modified-desc`}
-        >
-          Show more
-        </a>
+      <div class="navigation-panel-body">
+        {siteLinks}
+        {graphLink}
+        {cloneElement(tree, {}, ...children)}
+        <div class="show-more-row">
+          <a
+            class="internal nav-show-more"
+            data-no-popover="true"
+            href={`${base}/articles/?sort=modified-desc`}
+          >
+            Show more
+          </a>
+        </div>
       </div>
     </details>
   );

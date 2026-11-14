@@ -87,6 +87,8 @@ Keep `main` as the default branch and **Settings → Pages → Source → GitHub
 
 The UI retains full-text local search, appearance preferences, date/name sorting, alphabet sections, calendar filters, backlinks, graph navigation and random real-note homepage snippets. Counts derive from the built collection. Image bytes are preserved; large original images can cause large transfers.
 
+On phones (800px and below), the reading layout uses a compact masthead and a sticky bar for Contents, Explorer, and Appearance. Panels start closed, open over the article one at a time, and close after choosing a link, pressing Escape, or tapping outside. Appearance returns to the right sidebar on wider screens. Article lists wrap long titles, and tables/code scroll within the page instead of widening it. The native navigation disclosures also work without JavaScript. Mobile styles live in `custom/mobile.scss`.
+
 Original note/editorial text uses CC BY-SA 4.0 under `../LICENSE` and `../CONTENT-LICENSE.md`. Quartz software retains MIT licensing in `LICENSE.txt`; third-party material retains its rights.
 
 ## Configurable production content

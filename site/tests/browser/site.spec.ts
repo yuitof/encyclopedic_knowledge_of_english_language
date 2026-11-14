@@ -1,5 +1,10 @@
 import { test, expect } from "@playwright/test";
 const mobile = (page: any) => (page.viewportSize()?.width ?? 1440) <= 800;
+async function openAppearance(page: any) {
+  const panel = page.locator(".appearance-panel");
+  if (!(await panel.evaluate((element: HTMLDetailsElement) => element.open)))
+    await panel.locator(":scope > summary").click();
+}
 async function openContents(page: any) {
   const panel = page.locator(".contents-panel");
   if (!(await panel.evaluate((element: HTMLDetailsElement) => element.open)))
@@ -123,10 +128,11 @@ test("Explorer shows only the ten newest modified articles regardless of obsolet
   }
   await openExplorer(page);
   const recentLinks = page.locator(
-    ".explorer-content a.nav-file-title, .explorer-panel > .show-more-row a.nav-show-more",
+    ".explorer-content a.nav-file-title, .explorer-panel .show-more-row a.nav-show-more",
   );
   await expect(recentLinks).toHaveCount(11);
   for (const mode of ["light", "dark"]) {
+    await openAppearance(page);
     await page
       .locator(`input[name="appearance-color"][value="${mode}"]`)
       .check();
@@ -169,7 +175,7 @@ test("Show more follows the recent articles and opens the full list", async ({
   await expect(link).toHaveCount(1);
   await link.scrollIntoViewIfNeeded();
   await expect(link).toBeVisible();
-  await expect(page.locator(".explorer-panel > .show-more-row > a")).toHaveText(
+  await expect(page.locator(".explorer-panel .show-more-row > a")).toHaveText(
     "Show more",
   );
   await expect(page.locator(".explorer .nav-show-more")).toHaveCount(0);
@@ -201,11 +207,13 @@ test("Show more follows the recent articles and opens the full list", async ({
     .toEqual(await expectedArticleList(page, "name-asc"));
   await expect(page.locator(".nav-show-more")).toHaveCount(0);
   await select.selectOption("modified-desc");
-  const browse = page.getByRole("link", {
-    name: "Browse entries",
-    exact: true,
-    includeHidden: true,
-  });
+  const browse = page
+    .getByRole("link", {
+      name: "Browse entries",
+      exact: true,
+      includeHidden: true,
+    })
+    .first();
   await expect(browse).toHaveAttribute("href", /\/articles\/\?sort=name-asc$/);
   if (mobile(page)) {
     // The compact header omits this link visually; its URL still works in a new tab.
@@ -339,6 +347,7 @@ test("appearance text width and color preferences persist, including automatic c
   page,
 }) => {
   await page.goto("./articles/caimans");
+  await openAppearance(page);
   const panel = page.locator(".appearance-panel");
   await panel.locator('input[name="appearance-text"][value="large"]').check();
   await panel.locator('input[name="appearance-width"][value="wide"]').check();
@@ -348,6 +357,7 @@ test("appearance text width and color preferences persist, including automatic c
   await expect(page.locator("html")).toHaveAttribute("data-width", "wide");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("saved-theme", "dark");
+  await openAppearance(page);
   await page
     .locator('input[name="appearance-color"][value="automatic"]')
     .check();
@@ -388,6 +398,10 @@ test("malformed saved appearance falls back safely and keeps keyboard controls",
 test("section contents, active heading and Explorer collapse share one sidebar scroll", async ({
   page,
 }) => {
+  test.skip(
+    mobile(page),
+    "Phone panels scroll independently; covered by mobile-layout.spec.ts",
+  );
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({
     width: page.viewportSize()!.width,
@@ -563,6 +577,7 @@ test("Top reaches document zero including the masthead with mouse and keyboard",
       scrollTo(0, document.documentElement.scrollHeight),
     );
     await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
+    await openContents(page);
     if (activation === "click") await top.click();
     else await top.press("Enter");
     await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
@@ -581,6 +596,10 @@ test("Top reaches document zero including the masthead with mouse and keyboard",
 test("Contents and Explorer are matching independent sibling panels", async ({
   page,
 }) => {
+  test.skip(
+    mobile(page),
+    "Phone navigation opens one panel at a time; covered by mobile-layout.spec.ts",
+  );
   await page.goto("./articles/culture");
   const contents = page.locator(".contents-panel");
   const explorer = page.locator(".explorer-panel");
@@ -629,6 +648,10 @@ test("Contents and Explorer are matching independent sibling panels", async ({
 test("sidebar pins to the window edge until the article ends", async ({
   page,
 }) => {
+  test.skip(
+    mobile(page),
+    "Phone navigation uses a compact sticky bar; covered by mobile-layout.spec.ts",
+  );
   await page.goto("./articles/culture");
   const sidebar = page.locator(".sidebar.left");
   const offset = await sidebar.evaluate((element) =>
@@ -743,6 +766,10 @@ test("sidebar pins to the window edge until the article ends", async ({
 test("sidebars pin on shorter articles without reserving empty viewport space", async ({
   page,
 }) => {
+  test.skip(
+    mobile(page),
+    "Phone panels overlay the article; covered by mobile-layout.spec.ts",
+  );
   await page.goto("./articles/caimans");
   await expect
     .poll(() => actualOrder(page))
@@ -1083,6 +1110,7 @@ test("Articles filename groups populate Contents and date calendars filter inclu
   await jump.click();
   await expect(page.locator("#article-group-m")).toBeInViewport();
   await expect(jump).toHaveAttribute("aria-current", "location");
+  await openContents(page);
   await page.locator(".contents-top").click();
   await select.selectOption("name-desc");
   expect((await headings.allTextContents()).slice(0, 26)).toEqual(
@@ -1134,6 +1162,7 @@ test("Articles filename groups populate Contents and date calendars filter inclu
     .poll(() => articleListOrder(page))
     .toEqual(await expectedOrder(page, "modified-asc"));
   await select.selectOption("created-desc");
+  await openExplorer(page);
   await expect(calendar.locator(".date-filter-title")).toHaveText(
     "Created date",
   );
@@ -1146,6 +1175,7 @@ test("Articles filename groups populate Contents and date calendars filter inclu
   await expect(page.locator(".page-listing .section-li")).toHaveCount(
     (await expectedOrder(page, "name-asc")).length,
   );
+  await openExplorer(page);
   await page.getByRole("link", { name: "Main page", exact: true }).click();
   await openExplorer(page);
   await expect(page.locator(".nav-show-more")).toHaveCount(1);
@@ -1160,11 +1190,13 @@ test("Browse entries retains filename A-Z through repeated SPA navigation", asyn
   await page.goto("./articles/?sort=modified-desc");
   const select = page.getByRole("combobox", { name: "Sort articles" });
   await expect(select).toBeEnabled();
-  const browse = page.getByRole("link", {
-    name: "Browse entries",
-    exact: true,
-    includeHidden: true,
-  });
+  const browse = page
+    .getByRole("link", {
+      name: "Browse entries",
+      exact: true,
+      includeHidden: true,
+    })
+    .first();
   const openBrowse = async () => {
     await expect(browse).toHaveAttribute(
       "href",
@@ -1190,6 +1222,7 @@ test("Browse entries retains filename A-Z through repeated SPA navigation", asyn
     await openBrowse();
   }
   await select.selectOption("modified-desc");
+  await openExplorer(page);
   await page.getByRole("link", { name: "Main page", exact: true }).click();
   await expect(page.locator(".article-list-sort")).toHaveCount(0);
   await openBrowse();
@@ -1220,6 +1253,10 @@ test("Recently updated is a plain label and its entries reopen on every reload",
   );
   await expect(group).toHaveText("Recently updated");
   await expect(group.locator("a,button,svg")).toHaveCount(0);
+  if (mobile(page)) {
+    await expect(explorer).not.toHaveAttribute("open", "");
+    await openExplorer(page);
+  }
   await expect(explorer).toHaveAttribute("open", "");
   await expect(
     page.locator(".explorer-content a.nav-file-title").first(),
@@ -1231,6 +1268,10 @@ test("Recently updated is a plain label and its entries reopen on every reload",
   await expect(explorer).not.toHaveAttribute("open", "");
   await page.reload();
   await expect(group).toHaveText("Recently updated");
+  if (mobile(page)) {
+    await expect(explorer).not.toHaveAttribute("open", "");
+    await openExplorer(page);
+  }
   await expect(explorer).toHaveAttribute("open", "");
   await expect(
     page.locator(".explorer-content a.nav-file-title").first(),
@@ -1240,6 +1281,10 @@ test("Recently updated is a plain label and its entries reopen on every reload",
 test("Top counts as content while empty Explorer closes automatically", async ({
   page,
 }) => {
+  test.skip(
+    mobile(page),
+    "Desktop empty-panel behavior; phone filter controls are tested in mobile-layout.spec.ts",
+  );
   await page.goto("./articles/?sort=name-asc");
   const select = page.getByRole("combobox", { name: "Sort articles" });
   await expect(select).toBeEnabled();
@@ -1352,6 +1397,7 @@ test("Graph view works through Explorer with local resources and normal navigati
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  await openExplorer(page);
   await page.getByRole("link", { name: "Main page", exact: true }).focus();
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/(?:knowledge\/)?$/);
@@ -1587,7 +1633,6 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   await page.goto("./graph");
   const canvas = page.locator(".graph-page .graph-container canvas");
   await expect(canvas).toBeVisible({ timeout: 20000 });
-  if (mobile(page)) await page.locator(".explorer-panel > summary").click();
   await canvas.scrollIntoViewIfNeeded();
   await page.evaluate(() => {
     (window as any).__hoverSimulation.stop().tick(200);
@@ -2167,6 +2212,7 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   );
   await page.mouse.move(0, 0);
   // Theme changes refresh the palette; softened edges use the new background.
+  await openAppearance(page);
   await page.locator('input[name="appearance-color"][value="dark"]').check();
   await expect(page.locator("html")).toHaveAttribute("saved-theme", "dark");
   await expect
@@ -2296,7 +2342,6 @@ test.describe("Graph rendering quality", () => {
     await page.goto("./graph");
     const canvas = page.locator(".graph-page .graph-container canvas");
     await expect(canvas).toBeVisible({ timeout: 20000 });
-    if (mobile(page)) await page.locator(".explorer-panel > summary").click();
     await canvas.scrollIntoViewIfNeeded();
     await page.evaluate(() => {
       const sim = (window as any).__qualitySimulation;
@@ -2749,7 +2794,6 @@ test.describe("Graph pinch sensitivity", () => {
     await page.goto("./graph");
     const canvas = page.locator(".graph-page .graph-container canvas");
     await expect(canvas).toBeVisible({ timeout: 20000 });
-    if (mobile(page)) await page.locator(".explorer-panel > summary").click();
     await canvas.scrollIntoViewIfNeeded();
     const setZoom = (scale: number) =>
       canvas.evaluate((element, scale) => {

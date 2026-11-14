@@ -63,14 +63,14 @@ async function prepareGraph(page: Page) {
   await page.goto("./graph");
   const canvas = page.locator(".graph-page canvas");
   await expect(canvas).toBeVisible();
-  if ((page.viewportSize()?.width ?? 1440) <= 800)
-    await page.locator(".explorer-panel > summary").click();
   await canvas.scrollIntoViewIfNeeded();
   await arrange(page);
   return { errors, canvas };
 }
 
 async function arrange(page: Page) {
+  if ((page.viewportSize()?.width ?? 1440) <= 800)
+    await page.keyboard.press("Escape");
   await page.locator(".graph-page canvas").scrollIntoViewIfNeeded();
   await page.evaluate(() => {
     const w = window as any,
@@ -174,6 +174,13 @@ test("theme switches preserve rendered edges and repeated hover recovery", async
   );
   expect(await edgePixels(page)).toBeGreaterThan(0);
   for (const theme of ["dark", "light", "dark", "light"]) {
+    const appearance = page.locator(".appearance-panel");
+    if (
+      !(await appearance.evaluate(
+        (element: HTMLDetailsElement) => element.open,
+      ))
+    )
+      await appearance.locator(":scope > summary").click();
     await page
       .locator(`input[name="appearance-color"][value="${theme}"]`)
       .check();
@@ -202,6 +209,11 @@ test("theme switches preserve rendered edges and repeated hover recovery", async
         .toEqual(Array(5).fill(neutral));
     }
   }
+  const appearance = page.locator(".appearance-panel");
+  if (
+    !(await appearance.evaluate((element: HTMLDetailsElement) => element.open))
+  )
+    await appearance.locator(":scope > summary").click();
   await page
     .locator('input[name="appearance-color"][value="automatic"]')
     .check();
