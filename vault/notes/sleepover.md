@@ -1,6 +1,6 @@
 ---
 created: 2026-11-14T11:01:41+00:00
-modified: 2026-11-14T11:01:41+00:00
+modified: 2026-11-14T11:14:16+00:00
 ---
 **sleepover** (/ˈsliːpəʊvə/) is an overnight stay at someone else's home.
 
@@ -13,7 +13,7 @@ Context: The hosts invite a guest to spend the night with them.
 
 > This is the perfect place for a sleepover.
 
-[\[New Voice Pack\] #holoAdvent Sleepover — You're Invited!💜ASMR — hololive English, 1:47](https://www.youtube.com/watch?v=EV-iyA4g8oU&t=107s)
+[\[New Voice Pack\ #holoAdvent Sleepover — You're Invited!💜ASMR — hololive English, 1:47](https://www.youtube.com/watch?v=EV-iyA4g8oU&t=107s)
 
 Context: Family Friendly uses “sleepover” in a video title.
 

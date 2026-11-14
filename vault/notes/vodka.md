@@ -1,6 +1,6 @@
 ---
-created: "2026-07-25T07:41:42.884061Z"
-modified: "2026-11-14T09:47:46+00:00"
+created: 2026-07-25T07:41:42.884061Z
+modified: 2026-11-14T09:53:29+00:00
 ---
 vodka
 : ウォッカ
@@ -9,6 +9,8 @@ vodka
 
 also see: [[hard liquor]]
 
+
+## vodka cran
 **vodka cran** (/ˌvɒdkə ˈkræn/) is a [[drink]] made with vodka and cranberry juice; **cran** is short for **cranberry**.
 
 ## Examples

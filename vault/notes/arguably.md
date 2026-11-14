@@ -1,10 +1,7 @@
 ---
-created: "2026-09-16T13:47:10.840439Z"
-modified: "2026-11-14T11:05:49Z"
+created: 2026-09-16T13:47:10.840439Z
+modified: 2026-11-14T11:25:04+00:00
 ---
-arguably
-:
-
 **arguably** (/ˈɑːrɡjuəbli/) is an adverb used to present an opinion that there are good reasons to support, without claiming certainty. ([Oxford](https://www.oxfordlearnersdictionaries.com/definition/english/arguably))
 
 ## Examples
