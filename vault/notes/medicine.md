@@ -1,6 +1,6 @@
 ---
-created: "2026-07-10T23:36:14.577480Z"
-modified: "2026-11-01T09:51:36.888781Z"
+created: 2026-07-10T23:36:14.577480Z
+modified: 2026-11-14T01:39:08+00:00
 ---
 [[broken heart syndrome]]
 [[cyst]]
@@ -30,3 +30,5 @@ modified: "2026-11-01T09:51:36.888781Z"
 [[diarrhea]]
 [[carpal tunnel]]
 [[stuttering]]
+[[mean world syndrome]]
+[[constipated]]
