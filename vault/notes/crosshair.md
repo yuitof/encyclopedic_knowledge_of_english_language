@@ -1,13 +1,13 @@
 ---
 created: "2026-11-14T18:27:32+00:00"
-modified: "2026-11-14T18:27:32+00:00"
+modified: "2026-11-14T18:38:35+00:00"
 ---
 **crosshair** (/ˈkrɔːsher/) is a line in an aiming or sighting mark used to indicate a reference point. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/crosshair))
 
 ## Examples
 
-During a Minecraft illusion demonstration, the speaker worries that the aiming mark obstructs the view.
+A [[Fortnite]] coach demonstrates how unnecessary mouse movement makes aiming less stable.
 
-> The crosshair might be in the way.
+> You see how when I'm moving, my crosshair is [[kind of]] jittering around when I do that?
 
-[Rating Your Minecraft Optical Illusions — around 3:16](https://www.youtube.com/watch?v=xMWlcVXku00&t=196s)
+[I Hired $10 vs $10,000 Fortnite Coaches! — around 7:07](https://www.youtube.com/watch?v=g6Som9yToEk&t=427s)

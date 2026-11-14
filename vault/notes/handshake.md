@@ -2,7 +2,7 @@
 created: "2026-11-14T18:27:32+00:00"
 modified: "2026-11-14T18:27:32+00:00"
 ---
-**handshake** (/ˈhændʃeɪk/) is a greeting or gesture in which two people clasp and shake each other's hand. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/handshake))
+**handshake** (/ˈhændʃeɪk/) is a greeting or gesture in which two people [[clasp]] and shake each other's hand. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/handshake))
 
 ## Examples
 

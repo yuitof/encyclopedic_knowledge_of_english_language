@@ -2,7 +2,7 @@
 created: "2026-11-14T18:26:58+00:00"
 modified: "2026-11-14T18:26:58+00:00"
 ---
-**whistle** (/ˈwɪsl/) is a verb meaning to make a high, clear sound by blowing air through a small opening. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/whistle))
+**whistle** (/ˈwɪsl/) is a verb meaning to make a high, clear sound by blowing air through a small [[opening]]. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/whistle))
 
 ## Examples
 
