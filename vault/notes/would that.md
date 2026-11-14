@@ -9,3 +9,17 @@ would that
 
 also see: [[O! for]]
 - And the stately ships goon To their haven under the hill; But *O for* the touch of a vanish'd hand, And the sound of a voice that is still!
+
+## Reference
+
+**would that** (/wʊd ðæt/) is a formal expression introducing a wish that something were true.
+
+## Examples
+
+Dictionary example.
+
+> Would that he could have listened to his father.
+
+[Collins — would that](https://www.collinsdictionary.com/us/dictionary/english/would-that)
+
+Source: [Collins — would that](https://www.collinsdictionary.com/us/dictionary/english/would-that).

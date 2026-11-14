@@ -11,3 +11,19 @@ terrace
 屋根がない
 
 compare: [[porch]]
+
+## Reference
+
+**terrace** (/ˈterəs/) is a flat outdoor area used for sitting or eating, often beside a building.
+
+Compare [[porch]], a covered entrance structure. A terrace may itself be covered; OALD lists **covered terrace** as a collocation.
+
+## Examples
+
+Dictionary example.
+
+> The dining room opens onto a garden terrace.
+
+[OALD — terrace](https://www.oxfordlearnersdictionaries.com/us/definition/english/terrace)
+
+Source: [OALD — terrace](https://www.oxfordlearnersdictionaries.com/us/definition/english/terrace).
