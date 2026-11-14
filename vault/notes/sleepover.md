@@ -15,4 +15,10 @@ Context: The hosts invite a guest to spend the night with them.
 
 [\[New Voice Pack\] #holoAdvent Sleepover — You're Invited!💜ASMR — hololive English, 1:47](https://www.youtube.com/watch?v=EV-iyA4g8oU&t=107s)
 
+Context: Family Friendly uses “sleepover” in a video title.
+
+> We Got Invited To The [[girl|Girl's]] Sleepover
+
+[We Got Invited To The Girl's Sleepover — Family Friendly (video title)](https://www.youtube.com/watch?v=c50O250I7IM)
+
 Sources: [OALD — sleepover](https://www.oxfordlearnersdictionaries.com/definition/english/sleepover); [Merriam-Webster — oversleep](https://www.merriam-webster.com/dictionary/oversleep).
