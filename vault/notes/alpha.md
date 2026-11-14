@@ -1,8 +1,10 @@
 ---
 created: "2026-07-31T17:30:52.031740Z"
-modified: "2026-07-31T17:39:06.381846Z"
+modified: 2026-11-14T10:46:18+00:00
+aliases:
+  - alpha female
 ---
-alpha female
+alpha
 : in terms of wolf packs, alphas are the top of the [[pack]], betas are trying to usurp alphas, and omegas are submissive.
 
 - alpha female
