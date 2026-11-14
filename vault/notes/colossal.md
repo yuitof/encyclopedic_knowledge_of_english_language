@@ -12,6 +12,6 @@ In *Attack on Titan*, the name **Colossal Titan** emphasizes the Titan's enormou
 
 — [Crunchyroll Dubs — official clip](https://www.youtube.com/watch?v=soi9K7XAb8k)
 
-![The Colossal Titan beside Eren in an official Attack on Titan clip thumbnail](../assets/colossal-titan-official-clip.jpg)
+![[colossal-titan-official-clip.jpg|The Colossal Titan beside Eren in an official Attack on Titan clip thumbnail]]
 
 Image: [official clip thumbnail](https://i.ytimg.com/vi/soi9K7XAb8k/hqdefault.jpg), Crunchyroll Dubs.

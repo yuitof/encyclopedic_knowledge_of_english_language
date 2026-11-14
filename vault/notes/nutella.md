@@ -6,6 +6,6 @@ modified: "2026-11-14T11:46:02Z"
 
 Pronunciation: /nuːˈtɛlə/ in American English; /nʌˈtɛlə/ is also used in [[british|British]] English. ([pronunciations](https://en.wikipedia.org/wiki/Nutella))
 
-![A jar of Nutella hazelnut spread with cocoa](../assets/nutella-jar.jpg)
+![[nutella-jar.jpg|A jar of Nutella hazelnut spread with cocoa]]
 
 Image: [Nutella — official product photo](https://www.nutella.com/us/sites/nutella_us/files/2020-11/nutella13-oz.jpg), Ferrero.
