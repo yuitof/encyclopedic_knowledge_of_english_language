@@ -1,9 +1,8 @@
 ---
-created: "2026-10-31T01:45:02.481901Z"
-modified: "2026-10-31T01:45:08.424772Z"
+created: 2026-10-31T01:45:02.481901Z
+modified: 2026-11-14T13:24:13+00:00
 ---
-looking back
-:
+**looking back** can be used as in the way of the participle construction.
 
 ## Reference
 
