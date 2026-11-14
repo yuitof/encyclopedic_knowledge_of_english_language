@@ -1,12 +1,14 @@
 ---
 created: "2026-11-14T11:05:49Z"
-modified: "2026-11-14T11:05:49Z"
+modified: "2026-11-14T11:29:20Z"
 ---
 **super random** (/ˌsuːpər ˈrændəm/) is an informal way to say very strange or unusual; **super** means very. ([Oxford — random, sense 3](https://www.oxfordlearnersdictionaries.com/definition/american_english/random_1); [Merriam-Webster — super, adverb](https://www.merriam-webster.com/dictionary/super))
 
+Calling a question “super random” acknowledges that it is unexpected. This helps soften the approach and makes the question sound more polite.
+
 ## Examples
 
-Before asking a stranger on a date, Sayko acknowledges that his question is unexpected. Here, this helps soften the approach.
+Sayko asks a stranger on a date.
 
 > I have a super random question for you. Would you be interested in going on a date with me?
 
