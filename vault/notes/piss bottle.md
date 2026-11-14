@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **[[piss]] bottles** (/ˈpɪs ˌbɑtəlz/) is [[the]] plural of **[[piss]] bottle**, a vulgar term for a bottle used to collect urine.
 
 ## Examples

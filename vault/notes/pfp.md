@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **pfp** (/ˌpiː ɛf ˈpiː/) is an abbreviation for **profile picture**, [[the]] image representing someone [[on]] an online account.
 
 ## Examples

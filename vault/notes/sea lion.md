@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T16:32:45Z"
+---
 **sea [[lion]]** (/ˈsiː ˌlaɪən/) is a large sea mammal with flippers and visible external ears.
 
 ![[california-sea-lion-noaa.png|California sea lion with visible ear flaps and large front flippers]]

@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **crack me up** (/ˌkræk mi ˈʌp/) is an informal expression meaning **make me laugh out loud**. It uses [[the]] separable phrasal verb **crack someone up**.
 
 ## Examples

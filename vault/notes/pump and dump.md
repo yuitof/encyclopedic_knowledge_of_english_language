@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **pumped and [[dump|dumped]]** (/ˌpʌmpt ən ˈdʌmpt/) is [[slang]] for being used for sex once, without any intention of further contact or a relationship.
 
 ## Examples

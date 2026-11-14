@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **rump raider** (/ˈrʌmp ˌreɪdər/) is vulgar [[slang]] for a person [[who]] [[enjoy|enjoys]] anal sex.
 
 ## Examples

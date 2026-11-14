@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **excursion** (/ɪkˈskɜːrʒən/) is a trip or outing, usually a short one taken for pleasure.
 
 ## Examples

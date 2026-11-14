@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **play a hole** (/ˌpleɪ ə ˈhoʊl/) is to play one section of a golf course, from its tee to its putting green and hole.
 
 ## Examples

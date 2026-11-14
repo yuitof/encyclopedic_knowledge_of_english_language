@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **bratty** (/ˈbræti/) is an adjective describing spoiled or badly behaved conduct.
 
 ## Examples

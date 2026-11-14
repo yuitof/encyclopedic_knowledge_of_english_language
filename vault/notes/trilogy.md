@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **trilogy** (/ˈtrɪlədʒi/) is a set of three closely related works that develop a shared story or theme.
 
 ## Examples

@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **coptering** (/ˈkɑptərɪŋ/) is [[the]] -ing form of **copter**, an informal verb meaning to move like a helicopter.
 
 ## Examples

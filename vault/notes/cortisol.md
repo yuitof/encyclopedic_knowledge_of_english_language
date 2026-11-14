@@ -1,3 +1,7 @@
+---
+created: "2026-11-14T11:41:08Z"
+modified: "2026-11-14T11:41:08Z"
+---
 **cortisol** (/ˈkɔːrtəˌsɔːl/) is a hormone produced by [[the]] adrenal glands whose levels can rise in response to [[stress]].
 
 ## Examples
