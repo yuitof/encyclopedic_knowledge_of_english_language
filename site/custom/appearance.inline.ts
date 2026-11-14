@@ -18,6 +18,28 @@ function prepareAppearance() {
       for (const key of ["text", "width", "color"] as const)
         if (allowed[key].includes(stored[key])) preferences[key] = stored[key];
   } catch {}
+  // A reader may select a native radio before the deferred scripts load.
+  // Keep that choice rather than resetting it to the stored/default value.
+  let earlyChoice = false;
+  for (const key of ["text", "width", "color"] as const) {
+    const inputs = Array.from(
+      panels[0]?.querySelectorAll<HTMLInputElement>(
+        `input[name="appearance-${key}"]`,
+      ) ?? [],
+    );
+    if (inputs.some((input) => input.checked !== input.defaultChecked)) {
+      const selected = inputs.find((input) => input.checked);
+      if (selected && allowed[key].includes(selected.value)) {
+        preferences[key] = selected.value;
+        earlyChoice = true;
+      }
+    }
+  }
+  if (earlyChoice) {
+    try {
+      localStorage.setItem("reading-appearance", JSON.stringify(preferences));
+    } catch {}
+  }
   const media = matchMedia("(prefers-color-scheme: dark)");
   const apply = () => {
     document.documentElement.dataset.text = preferences.text;

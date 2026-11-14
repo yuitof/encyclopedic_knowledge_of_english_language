@@ -33,13 +33,21 @@ function prepareNavigationPanels() {
       ),
     );
     const panels = [...navigation, ...(appearance ? [appearance] : [])];
-    const layout = () => {
+    const layout = (event?: MediaQueryListEvent) => {
+      // Native disclosures are usable before the scripts finish loading.
+      // Preserve the panel the reader already opened during initial setup.
+      const active =
+        panels.find(
+          (panel) => panel.open && panel.contains(document.activeElement),
+        ) ?? panels.filter((panel) => panel.open).at(-1);
       if (appearance) {
         if (media.matches) sidebar.append(appearance);
         else origin.after(appearance);
       }
       for (const panel of panels)
-        panel.open = !media.matches && panel.dataset.empty !== "true";
+        panel.open = media.matches
+          ? !event && panel === active
+          : panel.dataset.empty !== "true";
     };
     layout();
     media.addEventListener("change", layout);

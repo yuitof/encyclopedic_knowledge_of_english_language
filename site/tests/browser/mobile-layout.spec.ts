@@ -4,7 +4,12 @@ test.beforeEach(async ({ page }) => {
   test.skip((page.viewportSize()?.width ?? 1440) > 800, "Phone layout only");
 });
 
-async function openPanel(page: Page, name: string) {
+async function openPanel(page: Page, name: string, native = false) {
+  if (!native)
+    await expect(page.locator(".sidebar.left")).toHaveAttribute(
+      "data-sticky-navigation",
+      "ready",
+    );
   const panel = page.locator(`.${name}-panel`);
   if (!(await panel.evaluate((element: HTMLDetailsElement) => element.open)))
     await panel.locator(":scope > summary").click();
@@ -84,6 +89,44 @@ test("phone panels overlay content, close on Escape or outside tap, and expose a
   await explorer.getByRole("link", { name: "Graph view", exact: true }).click();
   await expect(page.locator(".graph-page canvas")).toBeVisible();
   await expect(page.locator(".sidebar.left details[open]")).toHaveCount(0);
+});
+
+test("a panel opened before navigation scripts load keeps the reader's appearance choice", async ({
+  page,
+}) => {
+  let release!: () => void;
+  const blocked = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  // Quartz imports the SPA bootstrap after its component modules. Delay it
+  // deterministically so this covers the slow-load race seen on the live site.
+  await page.route("**/static/scripts/script-14-*.js", async (route) => {
+    await blocked;
+    await route.continue();
+  });
+  try {
+    await page.goto("./privacy", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".sidebar.left")).not.toHaveAttribute(
+      "data-sticky-navigation",
+      "ready",
+    );
+    const appearance = await openPanel(page, "appearance", true);
+    await appearance.getByLabel("Dark", { exact: true }).check();
+    release();
+    await expect(page.locator(".sidebar.left")).toHaveAttribute(
+      "data-sticky-navigation",
+      "ready",
+    );
+    await expect(appearance).toHaveAttribute("open", "");
+    await expect(
+      page.locator(".sidebar.left > .appearance-panel"),
+    ).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("saved-theme", "dark");
+    await appearance.getByLabel("Large", { exact: true }).check();
+    await expect(page.locator("html")).toHaveAttribute("data-text", "large");
+  } finally {
+    release();
+  }
 });
 
 test("contents jump clears the sheet and leaves the heading below the compact sticky bar", async ({
@@ -179,7 +222,7 @@ test("mobile article navigation remains usable without JavaScript", async ({
     const page = await context.newPage();
     await page.goto(baseURL!);
     await expect(page.locator(".article-title")).toBeInViewport();
-    const explorer = await openPanel(page, "explorer");
+    const explorer = await openPanel(page, "explorer", true);
     await explorer
       .getByRole("link", { name: "Browse entries", exact: true })
       .click();
