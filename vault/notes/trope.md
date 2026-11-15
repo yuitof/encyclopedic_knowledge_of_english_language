@@ -1,8 +1,13 @@
 ---
 created: "2026-11-15T03:23:17+00:00"
-modified: "2026-11-15T03:23:17+00:00"
+modified: "2026-11-15T03:42:59+00:00"
 ---
-**tropes** (/troʊps/) is the plural of **trope**, a common theme or device used in stories or other works of art. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/trope))
+**tropes** (/troʊps/) is the plural of **trope**: a familiar pattern or [[idea]] that appears in many different stories. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/trope))
+
+For example:
+
+- **The evil stepmother** — a stepmother who mistreats the main character.
+- **Found family** — unrelated people become as [[close]] as a family.
 
 ## Examples
 
