@@ -1,9 +1,7 @@
 ---
-created: "2026-11-15T03:23:50Z"
-modified: "2026-11-15T03:23:50Z"
+created: 2026-11-15T03:23:50Z
+modified: 2026-11-15T03:32:24+00:00
 ---
-# Paradise Lost (Literature)
-
 As a thematic interpretation, Sator in *Tenet* can be read alongside Satan in John Milton’s [[Paradise Lost]]: **both turn personal loss into a reason to destroy other people’s happiness.**
 
 ## Satan’s loss
