@@ -183,7 +183,7 @@ test("project pages, sort ranks and favicon are public without source filesystem
   assert.ok(
     (
       await fs.readFile(path.join(output, "static/favicon.svg"), "utf8")
-    ).includes("English Encyclopedia — linked pages"),
+    ).includes("English Encyclopedia — connected notes"),
   );
   for (const note of Object.values(index)) {
     // User-authored titles/descriptions may explain source folders. Reject

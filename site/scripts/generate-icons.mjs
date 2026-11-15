@@ -9,7 +9,7 @@ const svg = new URL("custom/favicon.svg", site);
 const png = new URL("custom/apple-touch-icon.png", site);
 await sharp(await fs.readFile(svg), { density: 144 })
   .resize(180, 180)
-  .flatten({ background: "#172c47" })
+  .flatten({ background: "#101418" })
   .png()
   .toFile(fileURLToPath(png));
 
