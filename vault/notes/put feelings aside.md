@@ -1,3 +1,7 @@
+---
+created: "2026-11-15T03:42:02Z"
+modified: "2026-11-15T03:42:02Z"
+---
 **put your feelings aside** (/pʊt jɔːr ˈfiːlɪŋz əˈsaɪd/) is a verb phrase meaning to temporarily disregard your emotions so you can deal with something else. It uses the separable phrasal verb **put something [[aside]]**; in the example, it is an imperative.
 
 Source: [Oxford Advanced Learner’s Dictionary — put aside, sense 1](https://www.oxfordlearnersdictionaries.com/definition/english/put-aside).
