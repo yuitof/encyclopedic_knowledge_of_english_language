@@ -1,6 +1,6 @@
 ---
 created: "2026-11-15T03:19:39Z"
-modified: "2026-11-15T03:24:31Z"
+modified: "2026-11-15T03:26:11Z"
 ---
 **Endurance** (/ɪnˈdʊrəns/) is the name of the main spacecraft in *Interstellar* (2014), used for the crew’s voyage through [[space]].
 
@@ -10,6 +10,6 @@ The ordinary noun **endurance** means the ability to keep going through hardship
 
 Dictionary: [Merriam-Webster — endurance](https://www.merriam-webster.com/dictionary/endurance).
 
-![[endurance-spacecraft.jpg|Exterior concept art showing Endurance’s ring of modules]]
+![[endurance-spacecraft.jpg|Endurance’s ring-shaped spacecraft in Interstellar]]
 
-Image: Endurance exterior concept art by Steve Burg, via the [Concept Art Association](https://www.conceptartassociation.com/members/steve-burg). [Artist’s Interstellar portfolio](https://steveburg.artstation.com/projects/96GNQ).
+Image: Paramount Pictures, via [Space.com — The greatest spaceships of science fiction](https://www.space.com/42312-greatest-spaceships-of-science-fiction.html).
