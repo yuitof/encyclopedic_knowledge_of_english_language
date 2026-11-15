@@ -15,7 +15,7 @@ function elements(node, tag) {
   ];
 }
 
-test("social image is an opaque 1200 × 630 PNG and is pinned as a site asset", async () => {
+test("social and home-screen images are opaque PNGs pinned as site assets", async () => {
   const source = "custom/english-encyclopedia-og.png";
   const metadata = await sharp(path.join(siteRoot, source)).metadata();
   assert.equal(metadata.format, "png");
@@ -23,10 +23,19 @@ test("social image is an opaque 1200 × 630 PNG and is pinned as a site asset", 
   assert.equal(metadata.height, 630);
   assert.equal(metadata.hasAlpha, false);
   const { checkedSiteAssets } = await import("../scripts/trusted-static.mjs");
-  assert.ok(Object.hasOwn(await checkedSiteAssets(), source));
+  const assets = await checkedSiteAssets();
+  assert.ok(Object.hasOwn(assets, source));
+  const icon = await sharp(
+    path.join(siteRoot, "custom/apple-touch-icon.png"),
+  ).metadata();
+  assert.equal(icon.format, "png");
+  assert.equal(icon.width, 180);
+  assert.equal(icon.height, 180);
+  assert.equal(icon.hasAlpha, false);
+  assert.ok(Object.hasOwn(assets, "custom/apple-touch-icon.png"));
 });
 
-test("root and repository builds publish one shared image with correct social tags on every page type", async () => {
+test("root and repository builds publish social and home-screen metadata on every page type", async () => {
   const fixture = await fs.mkdtemp(
     path.join(await fs.realpath(os.tmpdir()), "quartz-social-fixture-"),
   );
@@ -63,6 +72,10 @@ test("root and repository builds publish one shared image with correct social ta
             path.join(output, "static/english-encyclopedia-og.png"),
           ),
           asset,
+        );
+        assert.deepEqual(
+          await fs.readFile(path.join(output, "static/apple-touch-icon.png")),
+          await fs.readFile(path.join(siteRoot, "custom/apple-touch-icon.png")),
         );
         for (const page of [
           "index",
@@ -117,6 +130,29 @@ test("root and repository builds publish one shared image with correct social ta
             ).length,
             1,
           );
+          const icons = elements(head, "link").filter((tag) =>
+            tag.properties.rel?.includes("apple-touch-icon"),
+          );
+          assert.equal(icons.length, 1, `${name}/${page}: one iOS icon`);
+          assert.equal(icons[0].properties.sizes, "180x180");
+          assert.equal(icons[0].properties.type, "image/png");
+          const siteUrl = `https://${base.replace(/\/+$/u, "")}/`;
+          assert.equal(
+            new URL(icons[0].properties.href, new URL(page + ".html", siteUrl))
+              .href,
+            new URL("static/apple-touch-icon.png", siteUrl).href,
+            `${name}/${page}: icon resolves within the deployment`,
+          );
+          assert.equal(value("apple-mobile-web-app-title"), "Encyclopedia");
+          if (page === "404")
+            assert.equal(
+              new URL(
+                icons[0].properties.href,
+                new URL("missing/nested/page", siteUrl),
+              ).href,
+              new URL("static/apple-touch-icon.png", siteUrl).href,
+              `${name}: a nested 404 still resolves the home-screen icon`,
+            );
         }
       } finally {
         await fs.rm(output, { recursive: true, force: true });

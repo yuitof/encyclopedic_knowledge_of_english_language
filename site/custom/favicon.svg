@@ -1,1 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="1" y="1" width="62" height="62" fill="white" stroke="black" stroke-width="2"/><text x="32" y="47" text-anchor="middle" font-family="Georgia,serif" font-size="48" fill="black">E</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">English Encyclopedia — linked pages</title>
+  <rect width="512" height="512" fill="#172c47"/>
+  <!-- A continuous cover keeps the open-book silhouette clear at favicon size. -->
+  <path d="M78 154Q166 129 256 168Q346 129 434 154V366Q343 342 256 380Q169 342 78 366Z" fill="#577fd9"/>
+  <path d="M94 137Q174 116 256 156V358Q175 319 94 341Z" fill="#fbfaf6"/>
+  <path d="M256 156Q338 116 418 137V341Q337 319 256 358Z" fill="#edf1f6"/>
+  <path d="M256 156V358" fill="none" stroke="#c4cede" stroke-width="6"/>
+  <!-- The blue tab echoes a reference book's ribbon bookmark. -->
+  <path d="M344 126Q360 125 376 128V201L360 189L344 201Z" fill="#577fd9"/>
+  <g fill="none" stroke="#9baabb" stroke-width="7" stroke-linecap="round">
+    <path d="M127 194Q174 189 219 208"/>
+    <path d="M127 230Q174 225 219 244"/>
+    <path d="M127 266Q174 261 198 270"/>
+  </g>
+  <!-- Connected notes distinguish the encyclopedia from a generic reader. -->
+  <path d="M298 230L366 254L308 296Z" fill="none" stroke="#577fd9" stroke-width="7" stroke-linejoin="round"/>
+  <g fill="#3366cc">
+    <circle cx="298" cy="230" r="12"/>
+    <circle cx="366" cy="254" r="12"/>
+    <circle cx="308" cy="296" r="12"/>
+  </g>
+</svg>

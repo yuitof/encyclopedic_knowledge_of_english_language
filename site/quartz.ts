@@ -61,9 +61,12 @@ const customHead: typeof originalHead = (props) => {
         : [value];
   const head = flatten(node.props.children);
   const originalIcon = head.find((child) => child?.props?.rel === "icon");
+  const iconPath = String(originalIcon?.props.href ?? "./static/icon.png");
   const children = head.filter(
     (child) =>
       child?.props?.rel !== "icon" &&
+      child?.props?.rel !== "apple-touch-icon" &&
+      child?.props?.name !== "apple-mobile-web-app-title" &&
       !socialImageMeta.has(child?.props?.property ?? child?.props?.name),
   );
   const base =
@@ -89,10 +92,18 @@ const customHead: typeof originalHead = (props) => {
     createElement("link", {
       rel: "icon",
       type: "image/svg+xml",
-      href: String(originalIcon?.props.href ?? "./static/icon.png").replace(
-        /icon\.png$/u,
-        "favicon.svg",
-      ),
+      href: iconPath.replace(/icon\.png$/u, "favicon.svg"),
+    }),
+    createElement("link", {
+      rel: "apple-touch-icon",
+      sizes: "180x180",
+      type: "image/png",
+      // Keep nested pages and 404 URLs inside the configured deployment prefix.
+      href: new URL("static/apple-touch-icon.png", base).pathname,
+    }),
+    createElement("meta", {
+      name: "apple-mobile-web-app-title",
+      content: "Encyclopedia",
     }),
     ...Object.entries(metadata).map(([key, content]) =>
       createElement("meta", {

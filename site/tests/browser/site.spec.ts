@@ -470,7 +470,7 @@ test("section contents, active heading and Explorer collapse share one sidebar s
     expect(await page.evaluate(() => scrollY)).toBe(windowBefore);
   }
 });
-test("home shows compact randomized real snippets and footer policies and E icon", async ({
+test("home shows compact randomized real snippets, footer policies and the book icon", async ({
   page,
 }) => {
   await page.goto("./");
@@ -496,7 +496,9 @@ test("home shows compact randomized real snippets and footer policies and E icon
     new URL(icon!, page.url()).toString(),
   );
   expect(response.status()).toBe(200);
-  expect(await response.text()).toContain(">E</text>");
+  expect(await response.text()).toContain(
+    "English Encyclopedia — linked pages",
+  );
 });
 test("hover previews omit article title while retaining the note body", async ({
   page,
