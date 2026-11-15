@@ -5,6 +5,8 @@ modified: "2026-11-14T10:27:02+00:00"
 canonically
 : according to or in conformity with what is generally recognized or accepted.
 
+Adjective: [[canonical]].
+
 [[canon]] って教会によって定められたものみたいな感じの意味があって、そこから [[improvise]] されていったって感じなのかも？
 
 
