@@ -1,6 +1,6 @@
 ---
 created: "2026-11-14T12:14:32Z"
-modified: "2026-11-14T12:14:32Z"
+modified: "2026-11-15T02:09:01+00:00"
 ---
 **bow window** (/ˌbəʊ ˈwɪndəʊ/) is a curved bay window that projects beyond a building’s outer wall.
 
@@ -8,6 +8,6 @@ modified: "2026-11-14T12:14:32Z"
 
 Sources: [Merriam-Webster — bow window](https://www.merriam-webster.com/dictionary/bow%20window); [Wikipedia — Bow window](https://en.wikipedia.org/wiki/Bow_window).
 
-![A curved multi-pane bow window projecting from a stone facade](../assets/bow-window-facade.jpg)
+![[bow-window-facade.jpg|A curved multi-pane bow window projecting from a stone facade]]
 
 Photo: Philip Halling / Geograph, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Decorative_bow_window_facade_-_geograph.org.uk_-_7033136.jpg), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
