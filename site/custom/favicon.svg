@@ -1,18 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
   <title id="title">English Encyclopedia — connected notes</title>
-  <defs>
-    <!-- Background light: top to bottom, tilted 5 degrees from vertical toward the right. -->
-    <linearGradient id="background-light" x1="231.828" y1="-20.282" x2="280.172" y2="532.282" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#242c36"/><stop offset="1" stop-color="#101418"/>
-    </linearGradient>
-    <!-- One very gentle neutral light gradient spans the entire symbol. -->
-    <linearGradient id="subject-light" x1="100" y1="80" x2="400" y2="430" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#fff" stop-opacity=".07"/><stop offset=".48" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".04"/>
-    </linearGradient>
-    <linearGradient id="node-rim" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#fff" stop-opacity=".22"/><stop offset=".3" stop-color="#fff" stop-opacity=".08"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".06"/>
-    </linearGradient>
-    <g id="spokes" fill="none" stroke-width="5.5" stroke-linecap="round">
+  <rect width="512" height="512" fill="#fff"/>
+  <g fill="none" stroke-width="5.5" stroke-linecap="round" stroke="#577fd9">
       <line data-reach="short" x1="244" y1="270" x2="140.77" y2="257.33"/>
       <line data-reach="long" x1="244" y1="270" x2="85.87" y2="150.84"/>
       <line data-reach="short" x1="244" y1="270" x2="199.05" y2="158.74"/>
@@ -25,45 +14,7 @@
       <line data-reach="short" x1="244" y1="270" x2="233.34" y2="371.44"/>
       <line data-reach="long" x1="244" y1="270" x2="101.6" y2="417.47"/>
       <line data-reach="short" x1="244" y1="270" x2="158.9" y2="288.09"/>
-    </g>
-    <g id="node-shapes">
-      <circle cx="140.77" cy="257.33" r="12"/>
-      <circle cx="85.87" cy="150.84" r="20.5"/>
-      <circle cx="199.05" cy="158.74" r="9"/>
-      <circle cx="272.95" cy="64.02" r="16"/>
-      <circle cx="319.23" cy="166.44" r="21"/>
-      <circle cx="331.91" cy="229.01" r="11"/>
-      <circle cx="437.1" cy="297.14" r="19.5"/>
-      <circle cx="331.55" cy="346.1" r="8"/>
-      <circle cx="286.29" cy="453.18" r="18"/>
-      <circle cx="233.34" cy="371.44" r="10"/>
-      <circle cx="101.6" cy="417.47" r="20"/>
-      <circle cx="158.9" cy="288.09" r="13"/>
-      <circle cx="244" cy="270" r="27"/>
-    </g>
-    <mask id="symbol-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
-      <use href="#spokes" stroke="#fff"/>
-      <use href="#node-shapes" fill="#fff"/>
-    </mask>
-  </defs>
-  <rect width="512" height="512" fill="url(#background-light)"/>
-  <!-- Let the gray nodes recede into the dark background; retain the same blue accent. -->
-  <!-- A hairline underside gives the edges shallow relief without a cast shadow. -->
-  <use href="#spokes" transform="translate(.64 .64)" stroke="#577fd9" opacity=".23"/>
-  <use href="#spokes" stroke="#577fd9"/>
-  <!-- A shared upper-left light catches facing rims; spokes within 12 degrees of parallel have no rim reflection. -->
-  <g id="edge-reflections" fill="none" stroke="#fff" stroke-width=".9" stroke-linecap="round">
-    <line x1="244.219" y1="268.213" x2="140.989" y2="255.543" stroke-opacity="0.118"/>
-    <line x1="242.331" y1="270.674" x2="197.381" y2="159.414" stroke-opacity="0.053"/>
-    <line x1="242.218" y1="269.749" x2="271.168" y2="63.769" stroke-opacity="0.172"/>
-    <line x1="242.544" y1="268.942" x2="317.774" y2="165.382" stroke-opacity="0.226"/>
-    <line x1="243.239" y1="268.369" x2="331.149" y2="227.379" stroke-opacity="0.212"/>
-    <line x1="244.251" y1="268.218" x2="437.351" y2="295.358" stroke-opacity="0.114"/>
-    <line x1="242.246" y1="270.405" x2="284.536" y2="453.585" stroke-opacity="0.094"/>
-    <line x1="242.21" y1="269.812" x2="231.55" y2="371.252" stroke-opacity="0.165"/>
-    <line x1="242.705" y1="268.75" x2="100.305" y2="416.22" stroke-opacity="0.23"/>
-    <line x1="243.626" y1="268.239" x2="158.526" y2="286.329" stroke-opacity="0.183"/>
-  </g>
+      </g>
   <g fill="#7f8791">
     <circle cx="140.77" cy="257.33" r="12"/>
     <circle cx="85.87" cy="150.84" r="20.5"/>
@@ -79,21 +30,4 @@
     <circle cx="158.9" cy="288.09" r="13"/>
   </g>
   <circle cx="244" cy="270" r="27" fill="#577fd9"/>
-  <rect width="512" height="512" fill="url(#subject-light)" mask="url(#symbol-mask)"/>
-  <!-- A sub-pixel rim at Home Screen size, with no cast shadow. -->
-  <g fill="none" stroke="url(#node-rim)" stroke-width=".9">
-    <circle cx="140.77" cy="257.33" r="11.55"/>
-    <circle cx="85.87" cy="150.84" r="20.05"/>
-    <circle cx="199.05" cy="158.74" r="8.55"/>
-    <circle cx="272.95" cy="64.02" r="15.55"/>
-    <circle cx="319.23" cy="166.44" r="20.55"/>
-    <circle cx="331.91" cy="229.01" r="10.55"/>
-    <circle cx="437.1" cy="297.14" r="19.05"/>
-    <circle cx="331.55" cy="346.1" r="7.55"/>
-    <circle cx="286.29" cy="453.18" r="17.55"/>
-    <circle cx="233.34" cy="371.44" r="9.55"/>
-    <circle cx="101.6" cy="417.47" r="19.55"/>
-    <circle cx="158.9" cy="288.09" r="12.55"/>
-    <circle cx="244" cy="270" r="26.55"/>
-  </g>
 </svg>

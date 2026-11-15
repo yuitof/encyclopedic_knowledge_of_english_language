@@ -3,9 +3,9 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
-// Keep the browser and iOS artwork identical; only the export format differs.
+// The favicon has a white background; iOS retains its separate dark artwork.
 const site = new URL("../", import.meta.url);
-const svg = new URL("custom/favicon.svg", site);
+const svg = new URL("custom/apple-touch-icon.svg", site);
 const png = new URL("custom/apple-touch-icon.png", site);
 await sharp(await fs.readFile(svg), { density: 144 })
   .resize(180, 180)
