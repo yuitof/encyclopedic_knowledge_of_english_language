@@ -1,8 +1,8 @@
 ---
 created: "2026-08-04T13:03:35.552135Z"
-modified: "2026-11-15T04:00:07Z"
+modified: "2026-11-15T04:10:44Z"
 ---
-**chicken parm** (/ˌtʃɪkɪn ˈpɑːrm/) is an informal name for **chicken Parmesan**, also [[called]] **chicken parmigiana**: breaded chicken topped with tomato sauce and melted cheese, commonly mozzarella and Parmesan. It is an Italian-American dish, often served with pasta or in a [[sandwich]].
+**chicken parm** (/ˌtʃɪkɪn ˈpɑːrm/) is an informal name for **chicken Parmesan**, also [[called]] **chicken parmigiana**: breaded chicken topped with tomato sauce and melted cheese, commonly mozzarella and Parmesan. It is an Italian-American dish, often [[serve|served]] with pasta or in a [[sandwich]].
 
 **Parm** is pronounced like “arm” with a **p** at the beginning.
 
