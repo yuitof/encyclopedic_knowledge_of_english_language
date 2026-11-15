@@ -16,19 +16,7 @@ Source: [John Milton, *Paradise Lost*, Book IV, especially lines 32–113, 358�
 
 Sator is dying of inoperable pancreatic cancer and plans to take the world with him. His possessiveness toward Kat becomes a model for his relationship with life itself.
 
-## Examples
-
-When Kat asks why Sator did not simply throw her out, he answers:
-
-> **Sator:** If I can’t have you, no one can.
-
-— [Christopher Nolan, *Tenet*, screenplay, p. 67](https://imsdb.com/scripts/Tenet.html).
-
-Later, when the others realize Sator intends to end the world with his own death, Kat echoes his earlier threat. Here, “her” extends his possessive attitude toward Kat to the world itself:
-
-> **Kat:** If he can’t have her, no one can.
-
-— [Christopher Nolan, *Tenet*, screenplay, pp. 114–115](https://imsdb.com/scripts/Tenet.html).
+Source: [Christopher Nolan, *Tenet*, screenplay, pp. 67 and 114–115](https://imsdb.com/scripts/Tenet.html).
 
 ## The connection
 
