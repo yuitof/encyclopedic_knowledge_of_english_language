@@ -1,6 +1,6 @@
 ---
-created: "2026-10-25T23:53:48.598469Z"
-modified: "2026-11-14T10:27:02+00:00"
+created: 2026-10-25T23:53:48.598469Z
+modified: 2026-11-15T13:29:43+00:00
 ---
 canonically
 : according to or in conformity with what is generally recognized or accepted.
@@ -9,6 +9,7 @@ Adjective: [[canonical]].
 
 [[canon]] って教会によって定められたものみたいな感じの意味があって、そこから [[improvise]] されていったって感じなのかも？
 
+[[canon]] を訳すとしたら「公式設定」とかそういう訳になるんだろうか
 
 ## Examples
 
