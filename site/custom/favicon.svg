@@ -1,33 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
   <title id="title">English Encyclopedia — connected notes</title>
-  <rect width="512" height="512" fill="#fff"/>
-  <g fill="none" stroke-width="5.5" stroke-linecap="round" stroke="#577fd9">
-      <line data-reach="short" x1="244" y1="270" x2="140.77" y2="257.33"/>
+  <g fill="none" stroke-width="25.48" stroke-linecap="round" stroke="#577fd9">
       <line data-reach="long" x1="244" y1="270" x2="85.87" y2="150.84"/>
-      <line data-reach="short" x1="244" y1="270" x2="199.05" y2="158.74"/>
       <line data-reach="long" x1="244" y1="270" x2="272.95" y2="64.02"/>
-      <line data-reach="short" x1="244" y1="270" x2="319.23" y2="166.44"/>
-      <line data-reach="short" x1="244" y1="270" x2="331.91" y2="229.01"/>
       <line data-reach="long" x1="244" y1="270" x2="437.1" y2="297.14"/>
-      <line data-reach="short" x1="244" y1="270" x2="331.55" y2="346.1"/>
       <line data-reach="long" x1="244" y1="270" x2="286.29" y2="453.18"/>
-      <line data-reach="short" x1="244" y1="270" x2="233.34" y2="371.44"/>
       <line data-reach="long" x1="244" y1="270" x2="101.6" y2="417.47"/>
-      <line data-reach="short" x1="244" y1="270" x2="158.9" y2="288.09"/>
       </g>
   <g fill="#7f8791">
-    <circle cx="140.77" cy="257.33" r="12"/>
-    <circle cx="85.87" cy="150.84" r="20.5"/>
-    <circle cx="199.05" cy="158.74" r="9"/>
-    <circle cx="272.95" cy="64.02" r="16"/>
-    <circle cx="319.23" cy="166.44" r="21"/>
-    <circle cx="331.91" cy="229.01" r="11"/>
-    <circle cx="437.1" cy="297.14" r="19.5"/>
-    <circle cx="331.55" cy="346.1" r="8"/>
-    <circle cx="286.29" cy="453.18" r="18"/>
-    <circle cx="233.34" cy="371.44" r="10"/>
-    <circle cx="101.6" cy="417.47" r="20"/>
-    <circle cx="158.9" cy="288.09" r="13"/>
+    <circle cx="85.87" cy="150.84" r="51.316"/>
+    <circle cx="272.95" cy="64.02" r="50.068"/>
+    <circle cx="437.1" cy="297.14" r="48.819"/>
+    <circle cx="286.29" cy="453.18" r="45.073"/>
+    <circle cx="101.6" cy="417.47" r="50.068"/>
   </g>
-  <circle cx="244" cy="270" r="27" fill="#577fd9"/>
+  <circle cx="244" cy="270" r="67.593" fill="#577fd9"/>
 </svg>

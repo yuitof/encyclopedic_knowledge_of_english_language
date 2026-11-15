@@ -10,8 +10,9 @@ rim reflections follow upper-left lighting. Spokes parallel or nearly parallel
 to that light have no edge highlight. The raised edge and overall lighting are
 deliberately slight. The artwork is SVG geometry without fonts or external art.
 
-- `custom/favicon.svg` is the browser favicon: the same graph layout on white,
-  using only solid fills and strokes, with no gradients, highlights, or extrusion.
+- `custom/favicon.svg` is the browser favicon: a simplified five-spoke graph on
+  a transparent background, with larger nodes and thicker edges for small sizes.
+  It uses solid fills and strokes, with no gradients, highlights, or extrusion.
 - `custom/apple-touch-icon.svg` is the separate dark F source for iOS.
 - `custom/apple-touch-icon.png` is its opaque 180 × 180 export for iOS.
 - `quartz.ts` adds one `apple-touch-icon` link and the Home Screen title
@@ -19,7 +20,7 @@ deliberately slight. The artwork is SVG geometry without fonts or external art.
   The icon URL includes the configured deployment prefix and works on nested URLs.
 
 The square artwork has an opaque background; iOS applies the icon shape. The
-browser uses the white favicon in both reading themes; iOS uses dark F. An icon
+browser uses the transparent favicon in both reading themes; iOS uses dark F. An icon
 link alone does not enable standalone mode, offline caching, or a service worker.
 
 After editing either SVG, run `node scripts/generate-icons.mjs` from `site/` to
