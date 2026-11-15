@@ -1,6 +1,6 @@
 ---
-created: "2026-07-18T16:08:14.860806Z"
-modified: "2026-10-23T13:38:36.928286Z"
+created: 2026-07-18T16:08:14.860806Z
+modified: 2026-11-15T06:23:36+00:00
 ---
 I'm gonna eat shit
 -> I'm gonna eat food
@@ -10,7 +10,7 @@ do some shit / play some shit / eat some shit
 shit (exclamation)
 -> To avoid saying 'shit', you can say 'shoot' instead.
 
-shit が thing のような意味で使われる例
+#### shit が thing のような意味で使われる例
 - [[some shit]]
 - [[kind of shit]]
 - [[good at this shit]]
@@ -32,7 +32,7 @@ shit が thing のような意味で使われる例
 
 [[I'm not gonna lie]]
 
-shit が person のような意味で使われる例
+#### shit が person のような意味で使われる例
 - [[fine shyt]]
 
 形容詞とか冠詞相当語とかと使われると thing の意味になりたい。
