@@ -6,6 +6,6 @@ modified: "2026-11-15T04:00:07Z"
 
 Source: [OALD — retina](https://www.oxfordlearnersdictionaries.com/definition/english/retina); [National Eye Institute — How the Eyes Work](https://www.nei.nih.gov/eye-health-information/healthy-vision/how-eyes-work).
 
-![Cross-section of an eye, with the retina labelled at the back.](../assets/retina-eye-diagram.jpg)
+![Cross-section of an eye, with the retina labelled at the back.](retina-eye-diagram.jpg)
 
 Cross-section of an eye, with the retina labelled at the back. Diagram: [National Eye Institute — How the Eyes Work](https://www.nei.nih.gov/eye-health-information/healthy-vision/how-eyes-work).

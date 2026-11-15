@@ -6,7 +6,7 @@ modified: "2026-11-15T04:00:07Z"
 
 Source: [Cambridge — beetle](https://dictionary.cambridge.org/us/dictionary/english/beetle); [Australian Museum — Beetles: Order Coleoptera](https://australian.museum/learn/animals/insects/beetles-order-coleoptera/).
 
-![A seven-spot ladybird, a type of beetle.](../assets/seven-spot-ladybird.jpg)
+![A seven-spot ladybird, a type of beetle.](seven-spot-ladybird.jpg)
 
 A seven-spot ladybird, a type of beetle. Photo by AnemoneProjectors, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Seven-spot_Ladybird_%28Coccinella_septempunctata%29.jpg), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
 

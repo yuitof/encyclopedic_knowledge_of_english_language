@@ -6,6 +6,6 @@ modified: "2026-11-15T04:00:07Z"
 
 Source: [Oxford Advanced American Dictionary — capris](https://www.oxfordlearnersdictionaries.com/definition/american_english/capris).
 
-![Capri trousers ending above the ankles.](../assets/capri-pants.jpg)
+![Capri trousers ending above the ankles.](capri-pants.jpg)
 
 Capri trousers ending above the ankles. Photo by Rita Holcomb, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Capri_Pants_front_view.jpg), [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/).
