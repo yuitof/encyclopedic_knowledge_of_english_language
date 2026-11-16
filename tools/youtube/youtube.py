@@ -248,7 +248,7 @@ def login(args):
 
 
 def refresh(args):
-    from playwright.sync_api import sync_playwright
+    from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
     tz = ZoneInfo(args.timezone)
     started = datetime.now(tz)
     index = load_index()
@@ -304,8 +304,10 @@ def refresh(args):
         page.on('response', response_received)
         page.goto('https://www.youtube.com/feed/history?hl=en', wait_until='domcontentloaded', timeout=60000)
         page.wait_for_function('typeof ytInitialData !== "undefined"', timeout=30000)
-        if not page.evaluate('Boolean(window.ytcfg && ytcfg.get("LOGGED_IN"))'):
-            raise ValueError('YouTube session expired, blocked, or awaiting consent. Refresh the private session and retry.')
+        try:
+            page.wait_for_function('Boolean(window.ytcfg && ytcfg.get("LOGGED_IN"))', timeout=15000)
+        except PlaywrightTimeoutError:
+            raise ValueError('YouTube session expired, blocked, or awaiting consent. Refresh the private session and retry.') from None
         consume(page.evaluate('ytInitialData'))
         complete = False
         stale = 0
