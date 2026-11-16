@@ -301,10 +301,6 @@ export async function preparePublication({
         (typeof meta.title !== "string" || !meta.title.trim())
       )
         throw new Error("A public title must be nonempty text");
-      if (meta.aliases !== undefined)
-        throw new Error(
-          "Frontmatter alias redirects are not enabled; wikilink aliases are supported",
-        );
       const dates = await noteDates(sourceRoot, entry.source, meta);
       let body = front ? text.slice(front[0].length) : text;
       if (manifest.version >= 2) {
@@ -342,6 +338,10 @@ export async function preparePublication({
           meta.title ?? entry.title ?? path.posix.basename(entry.source, ".md"),
         publish: true,
       };
+      // Obsidian aliases are source metadata, not public URL declarations.
+      // Strip them only from staging so Quartz cannot generate redirects or
+      // change canonical routes, including aliases that collide with site pages.
+      delete publicMeta.aliases;
       bytes = Buffer.from(`---\n${YAML.stringify(publicMeta)}---\n${body}`);
     } else {
       const extension = path.extname(entry.target).toLowerCase();

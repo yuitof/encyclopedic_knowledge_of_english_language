@@ -53,6 +53,26 @@ test("copies only separately approved files, excluding private notes and attachm
       /CANARY/,
     );
   }));
+test("frontmatter aliases cannot change staged routes or source notes", () =>
+  fixture(async ({ root, build, output }) => {
+    const source = path.join(root, "vault/public.md");
+    for (const aliases of [
+      "aliases: Alternate name",
+      "aliases: [privacy, articles/other, ../outside, 日本語]",
+      "aliases: []",
+      "aliases:",
+    ]) {
+      const original = `---\ntitle: Public\npublish: true\n${aliases}\n---\nApproved sample.`;
+      await fs.writeFile(source, original);
+      const publication = await build();
+      assert.deepEqual(publication.files, ["index.md"]);
+      const staged = await fs.readFile(path.join(output, "index.md"), "utf8");
+      assert.doesNotMatch(staged, /^aliases:/m);
+      assert.match(staged, /^title: Public$/m);
+      assert.ok(staged.endsWith("Approved sample."));
+      assert.equal(await fs.readFile(source, "utf8"), original);
+    }
+  }));
 test("blocks traversal, hidden files, absolute paths and encoded manifest paths", () => {
   for (const value of [
     "../private.md",

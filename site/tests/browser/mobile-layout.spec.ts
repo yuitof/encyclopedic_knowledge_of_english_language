@@ -4,12 +4,18 @@ test.beforeEach(async ({ page }) => {
   test.skip((page.viewportSize()?.width ?? 1440) > 800, "Phone layout only");
 });
 
+async function waitForNavigation(page: Page) {
+  // Production loads component modules before the SPA bootstrap dispatches nav.
+  // page.goto() can finish before those dynamic imports on a busy CI runner.
+  await expect(page.locator(".sidebar.left")).toHaveAttribute(
+    "data-sticky-navigation",
+    "ready",
+    { timeout: 20000 },
+  );
+}
+
 async function openPanel(page: Page, name: string, native = false) {
-  if (!native)
-    await expect(page.locator(".sidebar.left")).toHaveAttribute(
-      "data-sticky-navigation",
-      "ready",
-    );
+  if (!native) await waitForNavigation(page);
   const panel = page.locator(`.${name}-panel`);
   if (!(await panel.evaluate((element: HTMLDetailsElement) => element.open)))
     await panel.locator(":scope > summary").click();
@@ -23,10 +29,7 @@ test("phone pages start with readable content and never widen the viewport", asy
   page.on("pageerror", (error) => errors.push(error.message));
   for (const route of ["./", "./privacy", "./articles/", "./graph"]) {
     await page.goto(route);
-    await expect(page.locator(".sidebar.left")).toHaveAttribute(
-      "data-sticky-navigation",
-      "ready",
-    );
+    await waitForNavigation(page);
     await expect(page.locator(".article-title")).toBeInViewport();
     expect(
       (await page.locator(".article-title").boundingBox())!.y,
@@ -113,10 +116,7 @@ test("a panel opened before navigation scripts load keeps the reader's appearanc
     const appearance = await openPanel(page, "appearance", true);
     await appearance.getByLabel("Dark", { exact: true }).check();
     release();
-    await expect(page.locator(".sidebar.left")).toHaveAttribute(
-      "data-sticky-navigation",
-      "ready",
-    );
+    await waitForNavigation(page);
     await expect(appearance).toHaveAttribute("open", "");
     await expect(
       page.locator(".sidebar.left > .appearance-panel"),
@@ -125,6 +125,36 @@ test("a panel opened before navigation scripts load keeps the reader's appearanc
     await appearance.getByLabel("Large", { exact: true }).check();
     await expect(page.locator("html")).toHaveAttribute("data-text", "large");
   } finally {
+    release();
+  }
+});
+
+test("phone navigation waits for a slow production bootstrap", async ({
+  page,
+}) => {
+  let release!: () => void;
+  const blocked = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/static/scripts/script-14-*.js", async (route) => {
+    await blocked;
+    await route.continue();
+  });
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    await page.goto("./privacy", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".sidebar.left")).not.toHaveAttribute(
+      "data-sticky-navigation",
+      "ready",
+    );
+    // Exceed Playwright's default five-second assertion deadline, while the
+    // same readiness wait used by the collection checks is already pending.
+    timer = setTimeout(release, 6000);
+    await waitForNavigation(page);
+    const explorer = await openPanel(page, "explorer");
+    await expect(explorer).toHaveAttribute("open", "");
+  } finally {
+    clearTimeout(timer);
     release();
   }
 });

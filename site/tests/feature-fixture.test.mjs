@@ -20,7 +20,7 @@ test("private temporary fixture preserves rich Obsidian rendering without public
     "math.md":
       "---\ntitle: Formula\n---\n## Equation\n\n$E=mc^2$\n\n$$\\sum_{i=1}^{n}i=\\frac{n(n+1)}{2}$$\n\n> [!note] Reasoning\n> A test callout.\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n\nA statement.[^one]\n\n[^one]: A test footnote.\n\n![[assets/pixel.png|Test image]]\n\n[[code#Example]]\n",
     "code.md":
-      "---\ntitle: Code\n---\n## Example\n\n```python\nprint(42)\n```\n\n![[embedded]]\n\n[[math]]\n",
+      "---\ntitle: Code\naliases: [math, alternate-route]\n---\n## Example\n\n```python\nprint(42)\n```\n\n![[embedded]]\n\n[[math]]\n",
     "embedded.md":
       "---\ntitle: Embedded\n---\nA transcluded fixture paragraph.\n",
   };
@@ -86,6 +86,15 @@ test("private temporary fixture preserves rich Obsidian rendering without public
     assert.match(code, /A transcluded fixture paragraph/u);
     assert.match(code, /transclude/u);
     assert.match(math, /#example/u);
+    // An alias matching another page must not overwrite that page, and a new
+    // alias must not become a public redirect. The source retains both aliases.
+    await assert.rejects(fs.stat(path.join(output, "alternate-route.html")), {
+      code: "ENOENT",
+    });
+    assert.equal(
+      await fs.readFile(path.join(root, "code.md"), "utf8"),
+      sources["code.md"],
+    );
   } finally {
     await fs.rm(root, { recursive: true, force: true });
   }
