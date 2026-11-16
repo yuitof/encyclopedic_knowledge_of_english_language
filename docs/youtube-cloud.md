@@ -2,7 +2,7 @@
 
 The selected design uses **one ongoing private Cloud task**, with no additional storage service. Reopen that task for each phrase request. The scripts fetch current account history and public English captions themselves; the ignored task-local cache reuses each video's transcript. They do not automatically write notes: Codex verifies the occurrence, researches its dictionary sense, and edits notes following `AGENTS.md`.
 
-**Status:** 15 synthetic offline tests pass, along with shell syntax and Git whitespace checks. Installation in a Cloud VM, YouTube authentication, and live Cloud connectivity still need verification before this can be called operational. GitHub authorization does not authorize or authenticate a Google session. No environment was created by merely adding these files.
+**Status:** 15 synthetic offline tests pass, along with shell syntax and Git whitespace checks. The workflow and Chromium installed successfully on the local Mac. A private Cloud environment draft now has installation/startup instructions, the watch-day time zone, and a restricted network allowlist. Installation in a Cloud VM, YouTube authentication, and live Cloud connectivity still need verification before this can be called operational. GitHub authorization does not authorize or authenticate a Google session.
 
 ## What belongs where
 
@@ -84,7 +84,7 @@ Return to the **same task**, for example:
 
 > Find “put aside” in yesterday's YouTube history and create or update its note.
 
-Codex must refresh history, resolve yesterday in the configured time zone, search cached captions first, and fetch unchecked candidates if needed. Exact matches come before separate inflection searches. Matches can span adjacent caption segments. Search output includes context and source timestamps; expand to the actual full sentence, verify the wording where feasible, then use a dictionary to select the attested sense and IPA. Follow `AGENTS.md` for note formatting, links, preservation of existing content, quotation limits, and the local commit. Do not add a duplicate example on repeated requests.
+Codex must refresh history, resolve yesterday in the configured time zone, search cached captions first, and fetch unchecked candidates if needed. Exact matches come before separate inflection searches. Matches can span adjacent caption segments. Search output includes context and source timestamps; expand to the actual full sentence, verify the wording where feasible, then use a dictionary to select the attested sense and IPA. Follow `AGENTS.md` for note formatting, links, preservation of existing content, quotation limits, and committing/pushing checked task changes to `vault` unless the user requests otherwise. Never push private data or unrelated commits. Do not add a duplicate example on repeated requests.
 
 The scripts cache source **transcripts**, not Japanese translations. Notes remain English unless translations are explicitly requested. If a requested example cannot be verified, report the actual limitation instead of manufacturing a quotation or treating an unrelated public search result as watched history.
 
