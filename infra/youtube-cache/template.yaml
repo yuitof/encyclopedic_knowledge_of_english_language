@@ -1,0 +1,117 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Private durable YouTube history and transcript cache. Deploy in us-west-1.
+Parameters:
+  OidcProviderArn:
+    Type: String
+    Default: ''
+    Description: Optional existing IAM OIDC provider ARN from the Codex Cloud connection.
+  OidcIssuerHostPath:
+    Type: String
+    Default: ''
+    Description: OIDC issuer without https://; used for exact audience and subject conditions.
+  OidcAudience:
+    Type: String
+    Default: ''
+  OidcSubject:
+    Type: String
+    Default: ''
+Conditions:
+  CreateRuntimeRole: !And
+    - !Not [!Equals [!Ref OidcIssuerHostPath, '']]
+    - !Not [!Equals [!Ref OidcAudience, '']]
+    - !Not [!Equals [!Ref OidcSubject, '']]
+  CreateOidcProvider: !And
+    - !Condition CreateRuntimeRole
+    - !Equals [!Ref OidcProviderArn, '']
+Rules:
+  RequiredRegion:
+    Assertions:
+      - Assert: !Equals [!Ref 'AWS::Region', us-west-1]
+        AssertDescription: Deploy this cache in us-west-1.
+Resources:
+  CacheBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Application
+          Value: english-vault-youtube-cache
+        - Key: DataClassification
+          Value: private
+  CacheBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Bucket: !Ref CacheBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: RequireTLS
+            Effect: Deny
+            Principal: '*'
+            Action: s3:*
+            Resource:
+              - !GetAtt CacheBucket.Arn
+              - !Sub '${CacheBucket.Arn}/*'
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+  CacheAccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Read/write only the YouTube cache manifest and transcript objects; no delete or credential storage.
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: CacheObjectsOnly
+            Effect: Allow
+            Action: [s3:GetObject, s3:PutObject]
+            Resource:
+              - !Sub '${CacheBucket.Arn}/cache/v1/history.json'
+              - !Sub '${CacheBucket.Arn}/cache/v1/transcripts/*'
+  CacheOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: CreateOidcProvider
+    Properties:
+      Url: !Sub 'https://${OidcIssuerHostPath}'
+      ClientIdList: [!Ref OidcAudience]
+  RuntimeRole:
+    Type: AWS::IAM::Role
+    Condition: CreateRuntimeRole
+    Properties:
+      RoleName: !Sub '${AWS::StackName}-runtime'
+      Description: Codex Cloud cache access with exact OIDC audience and subject binding.
+      MaxSessionDuration: 3600
+      ManagedPolicyArns: [!Ref CacheAccessPolicy]
+      AssumeRolePolicyDocument:
+        Fn::Sub:
+          - '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"${ProviderArn}"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"${OidcIssuerHostPath}:aud":"${OidcAudience}","${OidcIssuerHostPath}:sub":"${OidcSubject}"}}}]}'
+          - ProviderArn: !If [CreateOidcProvider, !Ref CacheOidcProvider, !Ref OidcProviderArn]
+Outputs:
+  BucketName:
+    Value: !Ref CacheBucket
+  BucketRegion:
+    Value: !Ref AWS::Region
+  BucketEndpoint:
+    Value: !Sub '${CacheBucket}.s3.${AWS::Region}.${AWS::URLSuffix}'
+  CacheAccessPolicyArn:
+    Value: !Ref CacheAccessPolicy
+  RuntimeRoleArn:
+    Condition: CreateRuntimeRole
+    Value: !GetAtt RuntimeRole.Arn

@@ -1,8 +1,8 @@
-# YouTube notes in one Cloud Codex task
+# YouTube notes with a private S3 cache
 
-The selected design uses **one ongoing private Cloud task**, with no additional storage service. Reopen that task for each phrase request. The scripts fetch current account history and public English captions themselves; the ignored task-local cache reuses each video's transcript. They do not automatically write notes: Codex verifies the occurrence, researches its dictionary sense, and edits notes following `AGENTS.md`.
+The selected design uses a **private S3 cache in us-west-1**, provisioned by [CloudFormation](../infra/youtube-cache/README.md). New Cloud tasks restore the history index and lazily download the needed transcripts, reusing them before making caption API calls. Local working files remain in the ignored cache. The scripts do not automatically write notes: Codex verifies the occurrence, researches its dictionary sense, and edits notes following `AGENTS.md`.
 
-**Status:** 15 synthetic offline tests pass, along with shell syntax and Git whitespace checks. The workflow and Chromium installed successfully on the local Mac. A private Cloud environment draft now has installation/startup instructions, the watch-day time zone, and a restricted network allowlist. Installation in a Cloud VM, YouTube authentication, and live Cloud connectivity still need verification before this can be called operational. GitHub authorization does not authorize or authenticate a Google session.
+**Status:** 24 offline tests pass. CloudFormation deployed `english-vault-youtube-cache` in `us-west-1`; the existing 750-video history index and 652 transcripts were seeded into private S3. An isolated empty local cache restored the index and a transcript with the caption API disabled. Bucket privacy/encryption/versioning were checked live. The private Cloud draft has the S3 bucket variable, scoped AWS OIDC connection, installation/startup instructions, watch-day time zone, and 13-host restricted allowlist. Cloud VM provisioning previously failed with “environment configuration was canceled”; Cloud installation and authenticated YouTube checks are still unverified. GitHub and AWS authorization do not authenticate a Google session.
 
 ## What belongs where
 
@@ -15,7 +15,9 @@ The selected design uses **one ongoing private Cloud task**, with no additional 
 
 The existing local cache is retained; setup does not upload, replace, or rebuild it. History and transcripts never go into GitHub Actions artifacts, issues, PR bodies, or releases. Keep session values out of task prompts, logs, and Git. `gitignore` only helps with untracked files; always inspect the actual staged paths.
 
-Each Cloud task has separate working files. A published environment is a starting snapshot, not a shared writable cache. Resuming the same task reuses its saved files while they remain available; this is not a permanent backup. Current OpenAI documentation describes saved VM state as recoverable for up to seven days after the last turn or resume by default. A new task does not inherit the old task's newly fetched transcripts. Cross-task durable reuse would need private external storage, which the user chose not to add for now.
+Each Cloud task has separate working files. A published environment is a starting snapshot, not a shared writable cache. S3 supplies cross-task persistence: configure the same `YOUTUBE_CACHE_BUCKET` and a scoped AWS identity in each task. The history index merges video watches using conditional writes so simultaneous tasks cannot silently overwrite each other's additions. Transcripts use immutable content-addressed keys. Local progress is retained if S3 fails, but that progress is not durable until synchronization succeeds. Runtime cookies are never included in S3 synchronization.
+
+Deploy with `bash infra/youtube-cache/deploy.sh`, then run `bash tools/youtube/run.sh sync` on the local Mac to seed existing history/transcripts. See the infrastructure guide for scoped OIDC access, recreation, privacy checks, and recovery. Do not use `aws s3 sync .codex/tmp/youtube/ ...`: it would copy authentication and browser files too.
 
 ## One-time Cloud environment setup
 
@@ -26,19 +28,20 @@ Each Cloud task has separate working files. A published environment is a startin
    ```bash
    bash tools/youtube/setup.sh
    python3 -m unittest discover -s tests/youtube -v
-   bash tools/youtube/run.sh doctor
+   bash tools/youtube/run.sh --help
    ```
 
    The script installs workflow dependencies into the ignored virtual environment and Chromium into the ignored browser directory. If Chromium reports missing Linux system libraries, run `PLAYWRIGHT_BROWSERS_PATH="$PWD/.codex/tmp/youtube/browsers" .codex/tmp/youtube/.venv/bin/python -m playwright install --with-deps chromium` during environment setup. No Node or website dependencies are changed.
 
 4. Set `YOUTUBE_TIMEZONE=Europe/London` as an environment variable. Change it if another time zone should define your watch days. The history feed exposes day labels, not precise timestamps. The script sets browser locale to English and browser time zone to this value; compare a known recent video/day during the live check because YouTube's server/account date grouping can differ.
 5. Enable **Package managers** and allow the hosts actually required by the workflow: `www.youtube.com`, `youtube.com`, `www.google.com`, `accounts.google.com`, and the Chromium download hosts `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`. Add the dictionaries you use, such as `www.merriam-webster.com`, `www.oxfordlearnersdictionaries.com`, `www.ldoceonline.com`, `www.britannica.com`, and `dictionary.cambridge.org`. Add further redirect/download hosts only when an actual failure identifies them. History continuations and caption retrieval need HTTPS POST as well as GET. For legacy environments, allow these methods in agent internet settings too.
-6. Save and publish the environment **without a saved session or copied history/transcripts in the prepared filesystem**. Start one private task from it. Supply the personal session described below to the task; do not publish a reusable image containing it. If an environment is ever shared, recheck personal-secret scope and prepared files first.
-7. In that task, run the live checks below. This is the task to reopen for future searches.
+6. Set `YOUTUBE_CACHE_BUCKET` to the CloudFormation `BucketName` output. Attach a scoped AWS OIDC connection using **Advanced → OIDC**, and permit the exact `BucketEndpoint` output and `sts.us-west-1.amazonaws.com` in the restricted network policy. The stack's `CacheAccessPolicyArn` permits only cache-object reads/writes, not deletes, listing arbitrary objects, or writing session files. Use the optional exact OIDC trust parameters in the template once the connection's issuer/audience/subject are known. Never give Cloud the local administrator's AWS access keys. OIDC and S3 access still require a live Cloud check.
+7. Save and publish the environment **without a saved session or copied history/transcripts in the prepared filesystem**. Installation tests must use synthetic data; do not restore S3 private data into the reusable setup snapshot. Supply the personal YouTube session only to a private runtime task. If an environment is ever shared, recheck personal-secret scope and prepared files first.
+8. In a runtime task, run the live checks below. New tasks may share the S3 cache; each still needs authorized YouTube and AWS access.
 
 Environment setup prompt (after the workflow is on the selected GitHub branch):
 
-> Set up this repository's vault branch using docs/youtube-cloud.md and AGENTS.md. Run bash tools/youtube/setup.sh, the offline tests, and doctor. Keep the environment private. Use Europe/London for watch dates. Do not collect history, fetch transcripts, or publish private session files into the environment snapshot. Ask me to supply my YouTube session privately if it is missing. Report the tested environment configuration before publishing.
+> Set up this repository's vault branch using docs/youtube-cloud.md and AGENTS.md. Run bash tools/youtube/setup.sh, the offline tests, and CLI --help. Keep the environment private. Use Europe/London for watch dates. During reusable setup do not restore private S3 data, run doctor with a configured bucket, collect history, fetch transcripts, or publish private session files into the environment snapshot. Ask me to supply my YouTube session privately to the runtime task if it is missing. Report the tested environment configuration before publishing.
 
 Current Cloud settings are managed in the app/web UI, not by a repository `config.toml`. This project does not add a pretend Cloud configuration file. In legacy Codex Cloud, use `bash tools/youtube/setup.sh` as the setup script; use it as maintenance only when dependencies need rebuilding, not on every search. Legacy setup-only secrets disappear before the agent runs, so they are not a usable runtime authentication source by themselves. Do not work around that by writing them into tracked files or shell startup files.
 
@@ -74,13 +77,13 @@ Check that `refresh` reports `range_complete: true`, the configured time zone, a
 
 The history feed cannot recover deleted or paused history, exact watch times, or repeats within the same day. Browser visits in the old local index remain separate and are not counted as account watches by the date filter.
 
-After the first successful caption fetch, repeat the search without `--fetch`, then with `--fetch`. A valid cache hit is read locally before constructing a caption API client. Resume this same task later and repeat to verify saved-file reuse. `doctor` validates cached transcript files without making network requests or printing credentials.
+After the first successful caption fetch, repeat the search without `--fetch`, then with `--fetch`. A valid cache hit is read locally or downloaded from private S3 before constructing a caption API client. Repeat in a new task configured for the same bucket to check cross-task reuse. `doctor` restores S3 index metadata and validates local cached files; it does not bulk-download remote-only transcripts or call YouTube. It never prints credentials.
 
 The transcript library documents frequent cloud IP blocking. Such failures are `retry_needed`, not proof captions are unavailable. `search ... --fetch --retry` retries temporary failures; confirmed unavailable captions are skipped. `YOUTUBE_TRANSCRIPT_PROXY` optionally accepts an already authorized HTTP/HTTPS proxy URL; the workflow does not buy or provision one. Proxy access is not a guarantee. Network failures are logged by exception type to avoid leaking proxy credentials. Do not silently send account cookies through a third-party transcript service.
 
 ## Subsequent natural-language requests
 
-Return to the **same task**, for example:
+Use a private task configured for the **same S3 cache**, for example:
 
 > Find “put aside” in yesterday's YouTube history and create or update its note.
 

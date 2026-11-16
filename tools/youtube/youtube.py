@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Private, task-local YouTube history and transcript search. See docs/youtube-cloud.md."""
+"""Private YouTube history and transcript search with optional durable S3 cache."""
 import argparse
 from datetime import date, datetime, timedelta, timezone
 import html
@@ -15,6 +15,30 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[2]
 CACHE = ROOT / '.codex/tmp/youtube'
 ID = re.compile(r'[-_A-Za-z0-9]{11}\Z')
+REMOTE_CACHE = None
+
+
+def remote_cache():
+    global REMOTE_CACHE
+    if REMOTE_CACHE is not None:
+        return REMOTE_CACHE
+    config = CACHE / 's3-config.json'
+    bucket = os.environ.get('YOUTUBE_CACHE_BUCKET')
+    if not bucket and config.exists():
+        bucket = json.loads(config.read_text()).get('bucket')
+    if bucket:
+        from s3_cache import S3Cache
+        REMOTE_CACHE = S3Cache(bucket)
+    return REMOTE_CACHE
+
+
+def save_index(index):
+    # Always retain local progress first, including when S3 is temporarily down.
+    atomic_json(CACHE / 'history.json', index)
+    remote = remote_cache()
+    if remote:
+        remote.save(index, CACHE, valid_transcript)
+        atomic_json(CACHE / 'history.json', index)
 
 
 def now():
@@ -36,11 +60,13 @@ def atomic_json(path, data):
 
 def load_index():
     path = CACHE / 'history.json'
-    if not path.exists():
-        return {'metadata': {}, 'videos': []}
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text()) if path.exists() else {'metadata': {}, 'videos': []}
     if not isinstance(data.get('videos'), list):
         raise ValueError('Invalid history index; refusing to replace it')
+    remote = remote_cache()
+    if remote:
+        data = remote.restore(data)
+        atomic_json(path, data)
     return data
 
 
@@ -250,7 +276,7 @@ def refresh(args):
             }
             index['metadata']['cloud_history'] = coverage
             index['metadata']['updated_at'] = now()
-            atomic_json(CACHE / 'history.json', index)
+            save_index(index)
             if complete:
                 break
             state = (len(observations), oldest)
@@ -291,6 +317,11 @@ def read_transcript(video):
             raise ValueError('Invalid transcript')
         return data
     except (OSError, ValueError, KeyError, TypeError):
+        remote = remote_cache()
+        if remote:
+            restored = remote.download(video, CACHE, valid_transcript, atomic_json)
+            if restored is not None:
+                return restored
         video['transcript'] = {'status': 'retry_needed', 'error': 'Missing or invalid cached transcript', 'attempted_at': now()}
         return None
 
@@ -343,7 +374,7 @@ def fetch(video, index, retry=False):
         # Exception text can include proxy credentials or response bodies; store only type.
         video['transcript'] = {'status': 'retry_needed', 'error': type(error).__name__, 'attempted_at': now()}
     finally:
-        atomic_json(CACHE / 'history.json', index)
+        save_index(index)
     return None
 
 
@@ -389,7 +420,7 @@ def search(args):
                 print(json.dumps({'video_id': video['video_id'], 'title': video['title'],
                                   'url': video['url'] + '&t=' + str(int(hit['start'])),
                                   'caption_type': data.get('caption_type'), 'audio_verified': data.get('audio_verified', False), **hit}, ensure_ascii=False))
-    atomic_json(CACHE / 'history.json', index)
+    save_index(index)
     print(json.dumps({'summary': {'day': day, 'timezone': args.timezone, 'videos_in_scope': len(videos),
           'transcripts': states, 'matches': hits, 'history_coverage': index['metadata'].get('cloud_history'),
           'note': 'Matches are candidates. Inspect surrounding sentences and verify source before quoting.'}}))
@@ -399,13 +430,25 @@ def doctor(args):
     index = load_index()
     invalid = 0
     for video in index['videos']:
+        state = video.get('transcript', {})
+        if state.get('s3_key') and not (CACHE / state.get('path', '')).exists():
+            continue  # Remote-only transcripts are downloaded when searched.
         if video.get('transcript', {}).get('status') == 'cached' and read_transcript(video) is None:
             invalid += 1
     atomic_json(CACHE / 'history.json', index)
     print(json.dumps({'history_videos': len(index['videos']), 'invalid_transcripts': invalid,
           'session_available': bool(os.environ.get('YOUTUBE_STORAGE_STATE_JSON') or (CACHE / 'auth/storage-state.json').exists()),
-          'cache_scope': 'This workspace only; resume the same Cloud task.',
+          'cache_scope': 'Private S3 cache shared across tasks' if remote_cache() else 'This workspace only; resume the same Cloud task.',
           'cloud_history': index['metadata'].get('cloud_history')}))
+
+
+def sync(args):
+    if not remote_cache():
+        raise ValueError('Set YOUTUBE_CACHE_BUCKET or private .codex/tmp/youtube/s3-config.json first')
+    index = load_index()
+    save_index(index)
+    print(json.dumps({'synced_videos': len(index['videos']), 'region': 'us-west-1',
+                      'uploaded': 'history index and validated transcript JSON only; no sessions or tooling'}))
 
 
 def main():
@@ -429,6 +472,8 @@ def main():
     p.set_defaults(run=search)
     p = sub.add_parser('doctor', help='Check cache without network requests or credential output')
     p.set_defaults(run=doctor)
+    p = sub.add_parser('sync', help='Merge S3 history and upload only validated cached transcripts; no YouTube calls')
+    p.set_defaults(run=sync)
     args = parser.parse_args()
     if getattr(args, 'phrase', 'x').strip() == '':
         parser.error('Phrase must not be empty')
@@ -438,7 +483,8 @@ def main():
         args.run(args)
     except Exception as error:
         # Do not dump authenticated browser/network objects or secrets in logs.
-        safe = str(error) if isinstance(error, (ValueError, ModuleNotFoundError)) else 'See setup guide; network/browser operation failed.'
+        code = getattr(error, 'response', {}).get('Error', {}).get('Code')
+        safe = str(error) if isinstance(error, (ValueError, ModuleNotFoundError)) else (code or 'See setup guide; workflow operation failed.')
         print(f'{type(error).__name__}: {safe}', file=sys.stderr)
         return 1
     return 0
