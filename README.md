@@ -19,3 +19,7 @@ The shared settings use `created` and `modified`, the date format `YYYY-MM-DD[T]
 Device-specific `workspace.json`/`workspace-mobile.json`, caches, and trash are ignored. Plugin release files, `community-plugins.json`, and the timestamp plugin's `data.json` are intentionally versioned so other clones get the same setup. Local plugin installation alone never publishes plugin code or settings to GitHub Pages.
 
 Original text uses CC BY-SA 4.0; see `CONTENT-LICENSE.md` and `LICENSE`. Third-party material retains its own rights. The source history still includes earlier website code and vault versions.
+
+## YouTube notes with Cloud Codex
+
+Use the tracked [agent procedure](AGENTS.md) and [Cloud setup guide](docs/youtube-cloud.md). The workflow refreshes authenticated account history and caches English transcripts outside Git in `.codex/tmp/youtube/`. The selected setup uses one ongoing private Cloud task; reopen that task to reuse its cache. YouTube login is separate from GitHub authorization, and live Cloud access must be verified during setup. No watch history, bulk transcripts, or session credentials belong in GitHub.

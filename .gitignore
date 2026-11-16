@@ -9,6 +9,8 @@ Untitled*
 /vault/.obsidian/cache/
 /vault/.trash/
 
-# Local agent instructions and private YouTube history/transcript cache.
-/AGENTS.md
+# Private YouTube history, transcripts, sessions, dependencies and browser data.
 /.codex/tmp/youtube/
+
+# Python bytecode for the tracked YouTube workflow.
+__pycache__/

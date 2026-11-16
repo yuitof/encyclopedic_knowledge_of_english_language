@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
+export PLAYWRIGHT_BROWSERS_PATH="$root/.codex/tmp/youtube/browsers"
+python="$root/.codex/tmp/youtube/.venv/bin/python"
+if [[ ! -x "$python" ]]; then
+  printf '%s\n' 'Run bash tools/youtube/setup.sh first.' >&2
+  exit 1
+fi
+exec "$python" "$root/tools/youtube/youtube.py" "$@"
