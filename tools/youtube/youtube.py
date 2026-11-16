@@ -8,6 +8,7 @@ import math
 import os
 from pathlib import Path
 import re
+import sqlite3
 import sys
 import tempfile
 from zoneinfo import ZoneInfo
@@ -177,26 +178,73 @@ def session_state():
     return {'cookies': cookies, 'origins': []}
 
 
+def convert_cookies(jar, flags, current_time):
+    cookies = []
+    for cookie in jar:
+        if cookie.domain.lstrip('.') not in ('youtube.com', 'www.youtube.com'):
+            continue
+        if not cookie.value:
+            continue
+        key = (cookie.domain, cookie.name, cookie.path)
+        # Preserve HttpOnly/SameSite from Chrome rather than guessing them.
+        if key not in flags:
+            raise ValueError('Cookie metadata changed during export; retry with the same Chrome profile')
+        httponly, samesite, chrome_expires = flags[key]
+        expires = chrome_expires / 1_000_000 - 11_644_473_600 if chrome_expires else -1
+        if expires != -1 and expires <= current_time:
+            continue
+        converted = {'name': cookie.name, 'value': cookie.value, 'domain': cookie.domain,
+            'path': cookie.path or '/', 'secure': bool(cookie.secure),
+            'expires': expires, 'httpOnly': bool(httponly)}
+        if samesite in (0, 1, 2):
+            converted['sameSite'] = {0: 'None', 1: 'Lax', 2: 'Strict'}[samesite]
+        cookies.append(converted)
+    names = {c['name'] for c in cookies}
+    if not cookies or not names.intersection({'SID', '__Secure-1PSID', '__Secure-3PSID'}):
+        raise ValueError('No signed-in YouTube session found. Sign in normally at youtube.com in the selected Chrome profile first.')
+    return {'cookies': cookies, 'origins': []}
+
+
 def login(args):
-    """User-driven local login; never reads an existing browser profile."""
-    from playwright.sync_api import sync_playwright
-    if not sys.stdin.isatty():
-        raise ValueError('Login requires an interactive local terminal and a display; it cannot run unattended in Cloud.')
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
-        context = browser.new_context(locale='en-GB', timezone_id=args.timezone)
-        page = context.new_page()
-        page.goto('https://www.youtube.com/feed/history?hl=en', wait_until='domcontentloaded')
-        input('Sign in yourself in the separate browser, open YouTube History, then press Enter here. ')
-        page.goto('https://www.youtube.com/feed/history?hl=en', wait_until='domcontentloaded')
-        page.wait_for_function('typeof ytInitialData !== "undefined"', timeout=30000)
-        if not page.evaluate('Boolean(window.ytcfg && ytcfg.get("LOGGED_IN"))'):
-            raise ValueError('Sign-in did not complete; no session was saved')
-        state = context.storage_state()
-        state = {'cookies': [c for c in state['cookies'] if c.get('domain', '').lstrip('.') in ('youtube.com', 'www.youtube.com')], 'origins': []}
-        atomic_json(CACHE / 'auth/storage-state.json', state)
-        browser.close()
-    print('Saved private YouTube session under the ignored cache. Do not print it or commit it.')
+    """Export an explicitly authorized local Chrome session; never automate Google sign-in."""
+    if sys.platform != 'darwin':
+        raise ValueError('This local Chrome exporter supports macOS. Supply the private session separately in Cloud.')
+    if not re.fullmatch(r'Default|Profile [0-9]+', args.profile):
+        raise ValueError('Use an explicit Chrome profile name: Default or Profile N')
+    if not args.authorize_export:
+        if not sys.stdin.isatty():
+            raise ValueError('Export needs interactive consent or explicit --authorize-export')
+        answer = input(f'Read Chrome {args.profile} cookies locally and save only YouTube cookies? [y/N] ')
+        if answer.strip().lower() not in ('y', 'yes'):
+            raise ValueError('Cookie export canceled; no session was saved')
+    from yt_dlp.cookies import extract_cookies_from_browser
+    base = Path.home() / 'Library/Application Support/Google/Chrome' / args.profile
+    database = next((p for p in (base / 'Cookies', base / 'Network/Cookies') if p.exists()), None)
+    if database is None:
+        raise ValueError('Cookie database not found in the selected Chrome profile')
+    with sqlite3.connect(database.as_uri() + '?mode=ro', uri=True, timeout=10) as connection:
+        rows = connection.execute("SELECT host_key, name, path, is_httponly, samesite, expires_utc FROM cookies WHERE host_key IN ('.youtube.com', 'youtube.com', 'www.youtube.com', '.www.youtube.com')").fetchall()
+    flags = {(domain, name, path): (httponly, samesite, expiry) for domain, name, path, httponly, samesite, expiry in rows}
+    class QuietLogger:
+        def debug(self, *args, **kwargs): pass
+        def info(self, *args, **kwargs): pass
+        def warning(self, *args, **kwargs): pass
+        def error(self, *args, **kwargs): pass
+    temporary = CACHE / 'auth/tmp'
+    temporary.mkdir(parents=True, exist_ok=True)
+    previous = tempfile.tempdir
+    try:
+        tempfile.tempdir = str(temporary)
+        jar = extract_cookies_from_browser('chrome', profile=args.profile, logger=QuietLogger())
+        state = convert_cookies(jar, flags, datetime.now(timezone.utc).timestamp())
+    except ValueError:
+        raise
+    except Exception:
+        raise ValueError('Chrome cookie export failed. Check the selected profile and approve the Keychain request yourself if prompted.') from None
+    finally:
+        tempfile.tempdir = previous
+    atomic_json(CACHE / 'auth/storage-state.json', state)
+    print('Saved private YouTube session under the ignored cache. No cookies were printed or uploaded.')
 
 
 def refresh(args):
@@ -455,8 +503,9 @@ def main():
     os.umask(0o077)
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
-    p = sub.add_parser('login', help='Local only: sign in yourself in a separate browser and save a private session')
-    p.add_argument('--timezone', default=os.environ.get('YOUTUBE_TIMEZONE', 'Europe/London'))
+    p = sub.add_parser('login', help='Local Mac only: export YouTube cookies after normal Chrome sign-in')
+    p.add_argument('--profile', default='Default', help='Explicit authorized Chrome profile: Default or Profile N')
+    p.add_argument('--authorize-export', action='store_true', help='Explicit consent to read this Chrome profile locally and save only its YouTube cookies')
     p.set_defaults(run=login)
     p = sub.add_parser('refresh', help='Refresh authenticated account history (no video playback)')
     p.add_argument('--since', help='YYYY-MM-DD; defaults to 30 days initially, then incremental')

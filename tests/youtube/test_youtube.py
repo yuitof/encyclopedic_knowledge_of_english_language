@@ -140,6 +140,44 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(len(filtered['cookies']), 1)
         self.assertEqual(filtered['origins'], [])
 
+    def test_cookie_export_filters_domains_and_preserves_security_flags(self):
+        cookie = types.SimpleNamespace(domain='.youtube.com', name='SID', path='/',
+            value='synthetic-session', expires=2000, secure=True)
+        unrelated = types.SimpleNamespace(domain='.google.com', name='SECRET', path='/',
+            value='must-not-export', expires=2000, secure=True)
+        malicious = types.SimpleNamespace(domain='.youtube.com.example.org', name='SID', path='/',
+            value='must-not-export', expires=2000, secure=True)
+        flags = {('.youtube.com', 'SID', '/'): (True, 2, (2000 + 11_644_473_600) * 1_000_000)}
+        state = yt.convert_cookies([cookie, unrelated, malicious], flags, 1000)
+        self.assertEqual(len(state['cookies']), 1)
+        self.assertTrue(state['cookies'][0]['httpOnly'])
+        self.assertEqual(state['cookies'][0]['sameSite'], 'Strict')
+        self.assertEqual(state['cookies'][0]['expires'], 2000)
+        self.assertEqual(state['origins'], [])
+
+    def test_cookie_export_rejects_expired_or_unsigned_session(self):
+        expired = types.SimpleNamespace(domain='.youtube.com', name='SID', path='/',
+            value='synthetic', expires=100, secure=True)
+        with self.assertRaises(ValueError):
+            yt.convert_cookies([expired], {('.youtube.com', 'SID', '/'): (True, 1, (100 + 11_644_473_600) * 1_000_000)}, 1000)
+        unsigned = types.SimpleNamespace(domain='.youtube.com', name='PREF', path='/',
+            value='synthetic', expires=2000, secure=True)
+        with self.assertRaises(ValueError):
+            yt.convert_cookies([unsigned], {('.youtube.com', 'PREF', '/'): (False, 1, (2000 + 11_644_473_600) * 1_000_000)}, 1000)
+
+    def test_cookie_export_does_not_guess_missing_metadata(self):
+        cookie = types.SimpleNamespace(domain='.youtube.com', name='SID', path='/',
+            value='synthetic', expires=2000, secure=True)
+        with self.assertRaises(ValueError):
+            yt.convert_cookies([cookie], {}, 1000)
+
+    def test_session_cookie_expiry_is_preserved(self):
+        cookie = types.SimpleNamespace(domain='.youtube.com', name='SID', path='/',
+            value='synthetic', expires=None, secure=True)
+        state = yt.convert_cookies([cookie], {('.youtube.com', 'SID', '/'): (False, -1, 0)}, 1000)
+        self.assertEqual(state['cookies'][0]['expires'], -1)
+        self.assertNotIn('sameSite', state['cookies'][0])
+
     def test_fetched_file_precedes_cached_index(self):
         data = transcript()
         fetched = types.SimpleNamespace(language_code='en', is_generated=False, to_raw_data=lambda: data['segments'])

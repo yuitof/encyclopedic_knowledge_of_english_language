@@ -1,0 +1,2 @@
+# Local Mac cookie export only. Not installed by Cloud setup.
+yt-dlp==2026.10.26
