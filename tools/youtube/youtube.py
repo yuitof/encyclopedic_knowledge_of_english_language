@@ -321,7 +321,7 @@ def refresh(args):
                 'updated_at': now(), 'range_complete': complete,
                 'oldest_loaded_date': str(oldest) if oldest else None,
                 'date_resolution': 'day', 'unparsed_headings': sorted(unknown),
-                'errors': failures,
+                'errors': list(failures),
                 'coverage_note': 'Account feed date headings; exact watch times and repeated watches within a day are not exposed. Older than cutoff must load before range is called complete.',
             }
             index['metadata']['cloud_history'] = coverage
@@ -336,6 +336,7 @@ def refresh(args):
             previous = state
             page.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)')
             page.wait_for_timeout(1500)
+        page.remove_listener('response', response_received)
         browser.close()
     print(json.dumps(coverage))
     if not complete:

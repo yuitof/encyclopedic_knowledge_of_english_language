@@ -56,7 +56,7 @@ Versioning preserves older manifest/transcript versions. No automatic expiration
 ```bash
 aws cloudformation validate-template --region us-west-1 \
   --template-body file://infra/youtube-cache/template.yaml
-python3 -m unittest discover -s tests/youtube -v
+.codex/tmp/youtube/.venv/bin/python -m unittest discover -s tests/youtube -v
 ```
 
 After deployment inspect encryption, public-access blocking, ownership controls, versioning, and bucket-policy public status with `aws s3api`. Run sync, then test restoration into an isolated empty cache using the same SDK configuration, with the YouTube API unavailable. Verify that S3 contains only the allowed manifest/transcript keys. Never validate by uploading real session cookies.

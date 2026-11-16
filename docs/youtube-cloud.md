@@ -2,7 +2,7 @@
 
 The selected design uses a **private S3 cache in us-west-1**, provisioned by [CloudFormation](../infra/youtube-cache/README.md). New Cloud tasks restore the history index and lazily download the needed transcripts, reusing them before making caption API calls. Local working files remain in the ignored cache. The scripts do not automatically write notes: Codex verifies the occurrence, researches its dictionary sense, and edits notes following `AGENTS.md`.
 
-**Status:** 28 offline tests pass. CloudFormation deployed `english-vault-youtube-cache` in `us-west-1`; the existing 750-video history index and 652 transcripts were seeded into private S3. An isolated empty local cache restored the index and a transcript with the caption API disabled. Bucket privacy/encryption/versioning were checked live. Normal Chrome cookie export and an isolated local history refresh succeeded, with complete account-feed coverage for 2026-10-17 through 2026-11-16 in Europe/London, saved to S3. The private Cloud draft has the bucket variable, scoped AWS OIDC connection, installation/startup instructions, time zone, and 13-host restricted allowlist. Cloud VM provisioning previously failed with “environment configuration was canceled”; Cloud installation and authenticated Cloud YouTube checks are still unverified. GitHub and AWS authorization do not authenticate a Google session.
+**Status:** 28 offline tests pass. CloudFormation deployed `english-vault-youtube-cache` in `us-west-1`; the existing 750-video history index and 652 transcripts were seeded into private S3. An isolated empty local cache restored the index and a transcript with the caption API disabled. Bucket privacy/encryption/versioning were checked live. Normal Chrome cookie export and an isolated local history refresh succeeded, with complete account-feed coverage for 2026-10-17 through 2026-11-16 in Europe/London, saved to S3. The private Cloud draft has the bucket variable, scoped AWS OIDC connection, installation/startup instructions, time zone, and 13-host restricted allowlist. The Cloud VM recovered: installation, 28/28 tests, headless Chromium, STS identity, and allowed/denied S3 metadata checks passed. Cloud YouTube access currently fails with a proxy CONNECT HTTP 403 despite the saved host allowlist; diagnosis is pending. The personal cookie requirement is declared without a value, and the environment remains unpublished until that blocker is resolved. GitHub and AWS authorization do not authenticate a Google session.
 
 ## What belongs where
 
@@ -27,7 +27,7 @@ Deploy with `bash infra/youtube-cache/deploy.sh`, then run `bash tools/youtube/r
 
    ```bash
    bash tools/youtube/setup.sh
-   python3 -m unittest discover -s tests/youtube -v
+   .codex/tmp/youtube/.venv/bin/python -m unittest discover -s tests/youtube -v
    bash tools/youtube/run.sh --help
    ```
 
@@ -98,7 +98,7 @@ Run only one workflow command at a time: atomic replacement protects files from 
 ## Offline validation
 
 ```bash
-python3 -m unittest discover -s tests/youtube -v
+.codex/tmp/youtube/.venv/bin/python -m unittest discover -s tests/youtube -v
 bash -n tools/youtube/setup.sh tools/youtube/run.sh
 python3 tools/youtube/youtube.py --help
 ```
