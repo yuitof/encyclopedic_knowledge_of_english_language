@@ -1,8 +1,6 @@
 ---
-created: "2026-11-14T18:27:32+00:00"
-modified: "2026-11-16T03:39:25+00:00"
-aliases:
-  - calves
+created: 2026-11-14T18:27:32+00:00
+modified: 2026-11-16T03:39:25+00:00
 ---
 **calf** (/kæf/) is the fleshy, muscular back part of the lower leg below the knee. The plural is **calves** (/kævz/): the **l** is silent, and **f** changes to **v** in the plural. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/calf))
 
