@@ -63,7 +63,9 @@ The two branches communicate through this contract, not shared Python imports:
 
 The previous exit-node implementation was tested on 2026-11-17 using a separate Linux client. Cloud invoked it successfully but its manually launched daemon failed enrollment. The built-in Cloud VPN subsequently reported connected; a private SSH-port probe returned CONNECT 503. Those observations do not validate this new private CONNECT service.
 
-This revision requires deployment, the `tcp:8443` tailnet grant, and a successful `bridge -- probe` from a fresh `vault` Cloud task before history collection. No history or transcript retrieval is needed for acceptance.
+The `connect-v1` server from commit `6237702` was deployed on 2026-11-17. CloudFormation completed successfully, and Lambda reported `Active` with `LastUpdateStatus: Successful` for image digest `sha256:c6d55c410b2de84b20b47bca3d35133cf824313859e19bea25dd06f759c9af29`. A synchronous empty-event smoke invocation loaded the handler and returned the expected `{"state": "rejected"}` without starting a session. The bridge client policy was checked and no longer grants Secrets Manager access.
+
+The `tcp:8443` tailnet grant and a successful `bridge -- probe` from a fresh `vault` Cloud task still require verification before history collection. Deployment and the empty-event smoke check do not establish end-to-end VPN connectivity. No history or transcript retrieval is needed for acceptance.
 
 ```bash
 python -m unittest discover -s tests/service_bridge -v
