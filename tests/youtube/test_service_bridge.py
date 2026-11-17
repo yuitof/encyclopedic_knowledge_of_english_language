@@ -1,4 +1,5 @@
 """Built-in VPN tunnel and client lifecycle tests; no live AWS or YouTube."""
+import base64
 import contextlib
 import hashlib
 import http.client
@@ -28,7 +29,7 @@ SESSION = 'a' * 32
 
 
 def ready():
-    return {'state': 'ready', 'protocol': 'connect-v1', 'expires_at': 1000, 'heartbeat': 500,
+    return {'state': 'ready', 'protocol': 'connect-v2', 'expires_at': 1000, 'heartbeat': 500,
             'node_id': 'synthetic-node', 'ipv4': '100.64.0.1', 'proxy_port': 8443, 'egress_ip': '8.8.8.8'}
 
 
@@ -37,7 +38,7 @@ class BridgeTests(unittest.TestCase):
         table = Mock()
         bridge_sessions.Jobs(table).create(SESSION, 720, TOKEN)
         item = table.put_item.call_args.kwargs['Item']
-        self.assertEqual(item['protocol'], 'connect-v1')
+        self.assertEqual(item['protocol'], 'connect-v2')
         self.assertEqual(item['proxy_token_hash'], hashlib.sha256(TOKEN.encode()).hexdigest())
         self.assertNotIn(TOKEN, repr(item))
 
@@ -45,7 +46,7 @@ class BridgeTests(unittest.TestCase):
         with patch.object(bridge_sessions.time, 'time', return_value=500):
             bridge_sessions.check_ready(ready(), reserve=60)
             for change in ({'state': 'failed'}, {'stop_requested': True}, {'heartbeat': 470},
-                           {'expires_at': 530}, {'protocol': 'old-exit-node'}):
+                           {'expires_at': 530}, {'protocol': 'connect-v1'}):
                 with self.subTest(change=change), self.assertRaises(bridge_transport.BridgeError):
                     bridge_sessions.check_ready({**ready(), **change}, reserve=60)
         for change in ({'ipv4': '8.8.8.8'}, {'ipv4': '127.0.0.1'}, {'proxy_port': 22}, {'protocol': None}):
@@ -61,7 +62,17 @@ class BridgeTests(unittest.TestCase):
             self.assertIs(bridge_transport.open_tunnel('100.64.0.1', 8443, 'www.youtube.com:443', TOKEN), connection)
         connect.assert_called_once_with('proxy', 8088, timeout=10)
         connection.set_tunnel.assert_called_once_with('100.64.0.1', 8443)
-        self.assertIn(('Proxy-Authorization: Bearer ' + TOKEN).encode(), connection.send.call_args.args[0])
+        self.assertIn(('Proxy-Authorization: Basic ' + base64.b64encode(('bridge:'+TOKEN).encode()).decode()).encode(), connection.send.call_args.args[0])
+
+    def test_private_probe_requires_authentication_without_credentials_or_origin(self):
+        connection = Mock()
+        response = Mock(status=407)
+        with patch.object(bridge_transport, 'peer_connection', return_value=connection) as peer, \
+                patch.object(bridge_transport.http.client, 'HTTPResponse', return_value=response):
+            self.assertEqual(bridge_transport.probe_private_proxy('100.64.0.1', 8443), 407)
+        peer.assert_called_once_with('100.64.0.1', 8443)
+        self.assertNotIn(b'Proxy-Authorization', connection.send.call_args.args[0])
+        connection.close.assert_called_once()
 
     def test_managed_proxy_failure_closes_without_fallback(self):
         connection = Mock()
@@ -175,7 +186,7 @@ class BridgeTests(unittest.TestCase):
             self.assertIn(b'CONNECT 100.64.0.1:8443 ', observed[0][0])
             self.assertNotIn(TOKEN.encode(), b''.join(observed[0][1]))
             self.assertIn(b'CONNECT www.youtube.com:443 ', observed[1][0])
-            self.assertIn(TOKEN.encode(), b''.join(observed[1][1]))
+            self.assertIn(base64.b64encode(('bridge:'+TOKEN).encode()), b''.join(observed[1][1]))
         finally:
             server.shutdown()
             server.server_close()

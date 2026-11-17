@@ -1,4 +1,5 @@
 """Reach a private bridge through Codex Cloud's built-in VPN TCP proxy."""
+import base64
 import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import ipaddress
@@ -16,22 +17,48 @@ def endpoint(job):
         address = str(ipaddress.IPv4Address(job['ipv4']))
         if ipaddress.ip_address(address) not in ipaddress.ip_network('100.64.0.0/10'):
             raise ValueError
-        if job['protocol'] != 'connect-v1' or job['proxy_port'] != 8443:
+        if job['protocol'] != 'connect-v2' or job['proxy_port'] != 8443:
             raise ValueError
         return address, 8443
     except (KeyError, ValueError, TypeError):
         raise BridgeError('Session does not describe a supported private bridge') from None
 
 
-def open_tunnel(address, port, authority, token):
-    # Use the documented raw TCP CONNECT endpoint, not the ambient HTTPS proxy.
-    # There is intentionally no direct-connect or standalone Tailscale fallback.
+def peer_connection(address, port):
     connection = http.client.HTTPConnection('proxy', 8088, timeout=10)
     connection.set_tunnel(address, port)
     try:
         connection.connect()
+        return connection
+    except BaseException:
+        connection.close()
+        raise
+
+
+def probe_private_proxy(address, port):
+    """Prove private TCP/service reachability without origin access or credentials."""
+    connection = peer_connection(address, port)
+    try:
+        connection.send(b'CONNECT www.youtube.com:443 HTTP/1.1\r\nHost: www.youtube.com:443\r\n\r\n')
+        response = http.client.HTTPResponse(connection.sock)
+        response.begin()
+        status = response.status
+        response.close()
+        if status != 407:
+            raise BridgeError('Private endpoint did not enforce proxy authentication')
+        return status
+    finally:
+        connection.close()
+
+
+def open_tunnel(address, port, authority, token):
+    # Use the documented raw TCP CONNECT endpoint, not the ambient HTTPS proxy.
+    # There is intentionally no direct-connect or standalone Tailscale fallback.
+    connection = peer_connection(address, port)
+    try:
+        authorization = base64.b64encode(('bridge:' + token).encode()).decode('ascii')
         connection.send((f'CONNECT {authority} HTTP/1.1\r\nHost: {authority}\r\n'
-                         f'Proxy-Authorization: Bearer {token}\r\n\r\n').encode('ascii'))
+                         f'Proxy-Authorization: Basic {authorization}\r\n\r\n').encode('ascii'))
         response = http.client.HTTPResponse(connection.sock)
         response.begin()
         status = response.status

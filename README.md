@@ -2,7 +2,7 @@
 
 Open `vault/` in Obsidian. All Markdown notes in `vault/notes/` are published automatically; supported referenced raster images come from `vault/assets/`. Obsidian settings are retained for editing and are not included in the website artifact.
 
-Push changes to this **vault** branch. Its small workflow calls the website build maintained on **main**. Do not merge main into this branch: main contains the website software, while this branch contains the collection.
+Keep client and note changes on this **vault** branch; push only when explicitly requested. Its small workflow calls the website build maintained on **main**. Do not merge main into this branch: main contains the website software, while this branch contains the collection.
 
 GitHub Actions preserves existing `created` and `modified` frontmatter. Missing fields are filled using the earliest/latest note commits in full Git history, following renames where Git can detect them, and committed back here by `github-actions[bot]`. Pull after a repair before making further changes. Existing dates are never automatically refreshed; update `modified` when editing if desired. No local timestamp hook is required yet.
 

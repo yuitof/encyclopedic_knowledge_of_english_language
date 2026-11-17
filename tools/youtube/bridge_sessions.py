@@ -1,4 +1,4 @@
-"""Client half of the connect-v1 DynamoDB session contract."""
+"""Client half of the connect-v2 DynamoDB session contract."""
 import hashlib
 import re
 import time
@@ -20,7 +20,7 @@ class Jobs:
     def create(self, session_id, seconds, token):
         stamp = int(time.time())
         self.table.put_item(Item={'session_id': session_id, 'state': 'requested',
-            'protocol': 'connect-v1', 'proxy_token_hash': hashlib.sha256(token.encode()).hexdigest(),
+            'protocol': 'connect-v2', 'proxy_token_hash': hashlib.sha256(token.encode()).hexdigest(),
             'created_at': stamp, 'expires_at': stamp + seconds, 'purge_at': stamp + 86400,
             'stop_requested': False}, ConditionExpression='attribute_not_exists(session_id)')
 
@@ -37,7 +37,7 @@ class Jobs:
 
 def check_ready(job, reserve=0):
     stamp = time.time()
-    if (not job or job.get('protocol') != 'connect-v1' or job.get('state') != 'ready'
+    if (not job or job.get('protocol') != 'connect-v2' or job.get('state') != 'ready'
             or job.get('stop_requested') or float(job.get('expires_at', 0)) - stamp <= reserve
             or stamp - float(job.get('heartbeat', 0)) > 20):
         raise BridgeError('Bridge session is stale, stopped, or near expiry')

@@ -13,7 +13,7 @@ from botocore.config import Config
 
 from bridge_sessions import Jobs, check_ready
 from bridge_probe import public_address, youtube_probe
-from bridge_transport import BridgeError, ManagedBridge, endpoint
+from bridge_transport import BridgeError, ManagedBridge, endpoint, probe_private_proxy
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -90,8 +90,14 @@ def run(args):
         payload = response.get('Payload')
         if payload is not None:
             payload.close()
+        if arguments[0] == 'probe':
+            print(json.dumps({'lambda_invocation': 'accepted'}), flush=True)
         job = wait_ready(jobs, session_id, args.ready_timeout)
-        endpoint(job)
+        target = endpoint(job)
+        if arguments[0] == 'probe':
+            print(json.dumps({'lambda_session': 'ready', 'protocol': job['protocol']}), flush=True)
+            status = probe_private_proxy(*target)
+            print(json.dumps({'private_tcp_proxy': 'reachable', 'unauthenticated_status': status}), flush=True)
         with ManagedBridge(job, token) as node:
             check_ready(jobs.get(session_id), reserve=60)
             if public_address(node.proxy_url) != job['egress_ip']:
