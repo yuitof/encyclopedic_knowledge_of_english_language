@@ -34,7 +34,7 @@ The wrapper sets a temporary `X_PROXY` for both API and asset requests, monitors
 
 Use plain search/list, `--offline` reads, and `sync` for cached work. They do not need Lambda. The bridge rejects `--offline`; network commands keep their existing checkpoint/resume and account-isolation rules. Only the child collector holds the workflow lock.
 
-The extension is tested locally (26 X tests, shared client tests, and real-GOST HTTPS component checks); deployment and live Cloud acceptance are pending. Until deployment and an unsigned Cloud probe pass, do not claim fresh Cloud X collection works.
+The X extension was deployed and passed a live unsigned built-in Cloud VPN probe on 2026-11-17: both required hosts returned 200, egress matched Lambda, authentication/407 was enforced, and cleanup was independently confirmed. Local validation also passed all 26 X tests, shared client tests, and real-GOST HTTPS checks. Authenticated account/API collection was not exercised by acceptance. Run setup in a new Cloud task if its snapshot lacks the X virtual environment; do not claim unsigned success proves account authorization.
 
 ## Collect and reuse
 
