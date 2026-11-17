@@ -23,3 +23,7 @@ Original text uses CC BY-SA 4.0; see `CONTENT-LICENSE.md` and `LICENSE`. Third-p
 ## YouTube notes with Cloud Codex
 
 Use the tracked [agent procedure](AGENTS.md) and [Cloud setup guide](docs/youtube-cloud.md). The workflow refreshes authenticated account history and caches English transcripts outside Git in `.codex/tmp/youtube/`, backed by a private [CloudFormation-managed S3 bucket](infra/youtube-cache/README.md) in `us-west-1` for reuse across tasks. YouTube login is separate from GitHub and AWS authorization, and live Cloud access must be verified during setup. No watch history, bulk transcripts, or session credentials belong in GitHub; session credentials also stay out of S3.
+
+## X collections and cached sources
+
+The [X workflow](docs/x.md) collects your own likes and bookmarks through the authenticated website API, with optional posts, replies, media and bookmark folders. It discovers account identity and current query IDs at runtime. Full source posts stay in ignored `.codex/tmp/x/`, with cache-first reads/search and optional private [S3 persistence](infra/x-cache/README.md). X sessions and collection data never enter GitHub or the website build.

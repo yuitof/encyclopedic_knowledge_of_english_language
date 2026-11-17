@@ -1,0 +1,5 @@
+# Workflow-only dependencies; never installed in the website environment.
+requests==2.34.2
+boto3==1.42.0
+beautifulsoup4==4.14.3
+xclienttransaction==1.0.3

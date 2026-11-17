@@ -12,5 +12,8 @@ Untitled*
 # Private YouTube history, transcripts, sessions, dependencies and browser data.
 /.codex/tmp/youtube/
 
-# Python bytecode for the tracked YouTube workflow.
+# Private X collections, posts, sessions, API assets and dependencies.
+/.codex/tmp/x/
+
+# Python bytecode for tracked workflows.
 __pycache__/
