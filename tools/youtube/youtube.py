@@ -248,7 +248,7 @@ def login(args):
 
 
 def refresh(args):
-    from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+    from innertube import HistoryClient, HistoryError, history_items, continuation_token
     tz = ZoneInfo(args.timezone)
     started = datetime.now(tz)
     index = load_index()
@@ -261,18 +261,51 @@ def refresh(args):
         raise ValueError('History cutoff is in the future')
     observations, unknown = {}, set()
     oldest = None
-    saw_section = False
+    complete, pages, token, reason = False, 0, None, 'page_cap'
+    failures, seen = [], set()
+
+    def checkpoint():
+        merge_observations(index, list(observations.values()))
+        coverage = {
+            'source_url': 'https://www.youtube.com/feed/history', 'timezone': args.timezone,
+            'retrieval_method': 'InnerTube HTTP',
+            'coverage_start_date': str(cutoff), 'coverage_end_date': str(started.date()),
+            'updated_at': now(), 'range_complete': complete,
+            'oldest_loaded_date': str(oldest) if oldest else None,
+            'date_resolution': 'day', 'unparsed_headings': sorted(unknown),
+            'errors': list(failures), 'pages_fetched': pages, 'termination_reason': reason,
+            'coverage_note': 'Account feed date headings; exact watch times and repeated watches within a day are not exposed.',
+        }
+        index['metadata']['cloud_history'] = coverage
+        index['metadata']['updated_at'] = now()
+        save_index(index)
+        return coverage
+
+    def raw_video_ids(value):
+        if isinstance(value, list):
+            for child in value:
+                yield from raw_video_ids(child)
+        elif isinstance(value, dict):
+            for key, child in value.items():
+                if key in ('videoId', 'contentId') and isinstance(child, str) and ID.fullmatch(child):
+                    yield child
+                else:
+                    yield from raw_video_ids(child)
 
     def consume(payload):
-        nonlocal oldest, saw_section
+        nonlocal oldest
+        for item in payload:
+            if not any(key in item for key in ('itemSectionRenderer', 'continuationItemRenderer')):
+                unknown.add('(unrecognized history item)')
         for label, contents in sections(payload):
             records = list(cards(contents))
+            if set(raw_video_ids(contents)) - {record[0] for record in records}:
+                unknown.add('(unrecognized history card)')
             day = heading_date(label, started.date())
             if day is None:
                 if records:
                     unknown.add(label or '(missing date heading)')
                 continue
-            saw_section = True
             oldest = min(oldest, day) if oldest else day
             if day < cutoff:
                 continue
@@ -285,59 +318,35 @@ def refresh(args):
                     'watched_on': str(day),
                 }
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(storage_state=session_state(), locale='en-GB', timezone_id=args.timezone)
-        page = context.new_page()
-        failures = []
-
-        def response_received(response):
-            if '/youtubei/v1/browse' in response.url:
+    state = session_state()
+    try:
+        with HistoryClient(state, args.timezone) as client:
+            for _ in range(args.max_pages):
+                payload = client.browse(token)
+                items = history_items(payload)
                 try:
-                    if response.status != 200:
-                        failures.append('History continuation HTTP failure')
-                    else:
-                        consume(response.json())
-                except Exception:
-                    failures.append('Could not parse history continuation')
-
-        page.on('response', response_received)
-        page.goto('https://www.youtube.com/feed/history?hl=en', wait_until='domcontentloaded', timeout=60000)
-        page.wait_for_function('typeof ytInitialData !== "undefined"', timeout=30000)
-        try:
-            page.wait_for_function('Boolean(window.ytcfg && ytcfg.get("LOGGED_IN"))', timeout=15000)
-        except PlaywrightTimeoutError:
-            raise ValueError('YouTube session expired, blocked, or awaiting consent. Refresh the private session and retry.') from None
-        consume(page.evaluate('ytInitialData'))
+                    consume(items)
+                except (AttributeError, TypeError, KeyError):
+                    raise HistoryError('Unrecognized YouTube history card structure') from None
+                pages += 1
+                token = continuation_token(items)
+                if oldest and oldest < cutoff:
+                    reason = 'older_than_cutoff'
+                    complete = not unknown
+                elif token is None:
+                    reason = 'feed_exhausted'
+                    complete = not unknown
+                elif token in seen:
+                    reason = 'repeated_continuation'
+                coverage = checkpoint()
+                if reason != 'page_cap':
+                    break
+                seen.add(token)
+    except HistoryError as error:
+        failures.append(str(error))
+        reason = 'request_failed'
         complete = False
-        stale = 0
-        previous = None
-        for _ in range(args.max_pages):
-            complete = bool(saw_section and oldest and oldest < cutoff and not unknown and not failures)
-            merge_observations(index, list(observations.values()))
-            coverage = {
-                'source_url': 'https://www.youtube.com/feed/history', 'timezone': args.timezone,
-                'coverage_start_date': str(cutoff), 'coverage_end_date': str(started.date()),
-                'updated_at': now(), 'range_complete': complete,
-                'oldest_loaded_date': str(oldest) if oldest else None,
-                'date_resolution': 'day', 'unparsed_headings': sorted(unknown),
-                'errors': list(failures),
-                'coverage_note': 'Account feed date headings; exact watch times and repeated watches within a day are not exposed. Older than cutoff must load before range is called complete.',
-            }
-            index['metadata']['cloud_history'] = coverage
-            index['metadata']['updated_at'] = now()
-            save_index(index)
-            if complete:
-                break
-            state = (len(observations), oldest)
-            stale = stale + 1 if state == previous else 0
-            if stale >= 5:
-                break
-            previous = state
-            page.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)')
-            page.wait_for_timeout(1500)
-        page.remove_listener('response', response_received)
-        browser.close()
+        coverage = checkpoint()
     print(json.dumps(coverage))
     if not complete:
         raise ValueError('History coverage incomplete; gathered progress saved. Do not claim the requested range was exhausted.')
