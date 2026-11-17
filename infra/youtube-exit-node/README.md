@@ -4,6 +4,10 @@ This implementation keeps the YouTube history collector, signed-out transcript r
 
 The implementation requires an end-to-end Cloud acceptance check. An offline test pass, a local container launch, or a node appearing in Tailscale establishes only that particular step. Cloud's managed proxy must permit the Tailscale control and relay connections, and YouTube must accept the AWS-origin requests.
 
+Validation on 2026-11-17 deployed the worker and confirmed that a separate Linux userspace client could select the Lambda exit node, observe the same public egress address, and receive HTTP 200 from both unsigned YouTube probe URLs. The Cloud VM successfully read its enrollment secret, created a session, invoked Lambda, and observed readiness. Its own Tailscale enrollment timed out while connecting through the managed proxy, so Cloud acceptance remains incomplete.
+
+The next credential-free diagnostic is `TS_FORCE_NOISE_443=true tailscale debug ts2021 --host=controlplane.tailscale.com`, bounded by an external timeout and using the existing managed proxy. Capture diagnostics privately because they can include proxy configuration. Avoid the diagnostic's `--force-port=443` option for this comparison because it also restricts the proxy connection's port. A successful public HTTPS GET alone does not verify the control protocol handshake.
+
 ## Resources and access
 
 `repository.yaml` creates an immutable private ECR repository. `template.yaml` creates the Lambda, a private DynamoDB session table, seven-day operational logs, a worker role, and an inline policy on the existing scoped Cloud role. The existing source-cache bucket continues to contain history and validated transcripts. Session records are stored in DynamoDB.
@@ -26,7 +30,7 @@ YouTube credentials stay in the Cloud task's existing private session configurat
 
 ## Prepare the existing tailnet
 
-Create distinct tags `tag:youtube-client` and `tag:youtube-exit`, owned by administrators. Permit exit advertisements from `tag:youtube-exit` with `autoApprovers.exitNode`. Permit the client identity to reach `autogroup:internet` on `tcp:443`. Tailscale grants are additive, so inspect existing wildcard rules before claiming these identities are isolated. Account for existing personal and tagged-device connectivity when adjusting broad rules.
+Create distinct tags `tag:youtube-client` and `tag:youtube-exit`, owned by administrators. Permit exit advertisements from `tag:youtube-exit` with `autoApprovers.exitNode`. Permit the client identity to reach `autogroup:internet` on `tcp:443` and `tcp:53`. Tailscale 1.104.7 checks TCP port 53 access before accepting a peer's DNS queries through the exit node. A grant containing only HTTPS causes DNS resolution to fail with a 403 response. Tailscale grants are additive, so inspect existing wildcard rules before claiming these identities are isolated. Account for existing personal and tagged-device connectivity when adjusting broad rules.
 
 Generate separate **preauthorized, reusable, ephemeral, tagged auth keys** for the two roles. Store each raw key as its own Secrets Manager SecretString, using the AWS-managed encryption key. Each runtime obtains its key through its own IAM role. Auth keys expire after at most 90 days, so rotate the stored values before their chosen expiration. Runtime node state is memory-only and each session enrolls a fresh ephemeral node. Normal cleanup runs `tailscale logout`; abrupt termination relies on ephemeral-node removal.
 
