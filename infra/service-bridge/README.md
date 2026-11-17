@@ -3,12 +3,12 @@
 `service-bridge` contains the self-contained Lambda service, GOST proxy, Tailscale exposure, deployment infrastructure, and server tests. The `vault` branch owns the Cloud client, session orchestration, YouTube/X collectors, and S3 caches. Neither branch imports implementation code from the other. The earlier mixed branch remains under `archive/service-bridge`.
 
 ```text
-YouTube HTTP client in vault
+YouTube or X HTTP client in vault
   → loopback HTTP CONNECT forwarder
   → proxy:8088 (Codex Cloud built-in Tailscale VPN)
   → Lambda Tailscale IPv4:8443
   → tailscale serve --tcp=8443 → loopback GOST
-  → YouTube HTTPS:443
+  → approved YouTube/X HTTPS:443
 ```
 
 Cloud starts no Tailscale daemon and selects no exit node. Lambda runs its own userspace `tailscaled` with memory-only state. Serve exposes raw private TCP, without Funnel, a public proxy listener, Function URL, API Gateway, or SSH. This raw TCP path does not depend on Tailscale HTTPS certificates.
@@ -17,11 +17,11 @@ Cloud starts no Tailscale daemon and selects no exit node. Lambda runs its own u
 
 The data path uses [GOST 3.3.3](https://github.com/go-gost/gost/releases/tag/v3.3.3), pinned by container digest in the Dockerfile. Its [HTTP handler](https://gost.run/en/reference/handlers/http/) supplies CONNECT parsing and byte forwarding. The former Python CONNECT parser/relay is removed. A small Python loopback control service implements GOST's documented [authentication plugin](https://gost.run/en/concepts/auth/#http-plugin); it checks the session password against the existing SHA-256 hash. The raw password is never stored in DynamoDB, argv, or the generated configuration. GOST's license is included in the image.
 
-GOST's service-level [destination whitelist](https://gost.run/en/concepts/bypass/#service-level-bypass) permits only `youtube.com:443`, `www.youtube.com:443`, and `checkip.amazonaws.com:443`. The last is used only for egress verification. These cover the existing collector's history/bootstrap, player, watch-page, and timedtext requests; no video-media CDN access is needed. Requests to IP literals, internal names, metadata addresses, other ports, and unrelated domains are denied.
+GOST's service-level [destination whitelist](https://gost.run/en/concepts/bypass/#service-level-bypass) permits only `youtube.com:443`, `www.youtube.com:443`, `x.com:443`, `abs.twimg.com:443`, and `checkip.amazonaws.com:443`. The last is used only for egress verification. The YouTube hosts cover the existing collector's history/bootstrap, player, watch-page, and timedtext requests. X uses `x.com` for home/API reads and `abs.twimg.com` for its web-bundle/transaction assets. Media files are not downloaded; no other X/Twitter subdomains or video-media CDN access are needed. Requests to IP literals, internal names, metadata addresses, other ports, and unrelated domains are denied.
 
 Before launch, Lambda resolves approved hosts to global IPv4 addresses and pins them in GOST's [host mapper](https://gost.run/en/concepts/hosts/). Any nonpublic or multicast answer aborts startup. A fail-closed resolver callback returns no addresses for host-map misses, preventing unchecked DNS fallback/rebinding. Pins last only for the bounded session; restart if an origin address stops working.
 
-The client uses `Proxy-Authorization: Basic base64(bridge:<random-session-token>)` inside the private tunnel. GOST forwards opaque origin TLS bytes; YouTube certificates remain verified by the existing client. No sniffing, MITM, traffic recording, UDP relay, or GOST management API is enabled. Daemon stdout/stderr are discarded, and worker failures use fixed categories. Temporary configuration is mode 0600 and removed on exit. Existing broader tailnet grants cannot bypass proxy authentication.
+The client uses `Proxy-Authorization: Basic base64(bridge:<random-session-token>)` inside the private tunnel. GOST forwards opaque origin TLS bytes; origin certificates remain verified by the existing clients. No sniffing, MITM, traffic recording, UDP relay, or GOST management API is enabled. Daemon stdout/stderr are discarded, and worker failures use fixed categories. Temporary configuration is mode 0600 and removed on exit. Existing broader tailnet grants cannot bypass proxy authentication.
 
 ## Tailnet configuration
 
@@ -96,3 +96,11 @@ The actual live tailnet policy was inspected. Its member/gateway wildcard access
 Live built-in Cloud VPN acceptance passed on 2026-11-17 in the refreshed environment's outer executor, using a clean `vault` checkout at `807339d` and a 180-second session. Lambda invocation was accepted; `connect-v2` became ready; the private endpoint returned 407 without credentials; authenticated egress matched Lambda; both unsigned YouTube URLs returned 200 with origin TLS verification; and the probe exited 0. The new managed client tag was observed in the tailnet. A separate consistent DynamoDB read confirmed that same latest session reached `stopped` / `StopRequested`, and its Lambda peer was offline. No snapshot containing probe evidence was published.
 
 The live Cloud probe exercised unauthenticated rejection, but did not enroll an unauthorized tailnet identity to test policy denial. Local deployed acceptance and automated GOST tests covered disallowed destinations/ports, including metadata addresses. Existing broad member/gateway grants remain a documented permission limitation; proxy session authentication is still enforced. No core connectivity blocker remains. Keep the private VPN enrollment key rotated before its configured expiry.
+
+## X extension
+
+The X extension adds only the two exact HTTPS destinations above. It keeps `connect-v2`, the existing function/table/IAM roles, and the private TCP 8443 grant. The shared client implementation lives in `vault` under `tools/cloud_bridge/`; Lambda imports none of it. No server-side account cookies or new public endpoints are needed.
+
+From the Cloud outer executor on the matching `vault` revision, run `bash tools/x/run.sh bridge -- probe` for unsigned checks of `x.com/robots.txt` and a small `abs.twimg.com` favicon. The client verifies Lambda readiness, private proxy authentication, egress equality, and origin TLS before returning the two HTTP statuses. HTTP denial/challenges remain failures; unsigned success does not establish X account/API authorization. Then use `bridge -- refresh`, `bridge -- get POST_ID`, or `bridge -- folders --refresh` for an authorized account workflow. Cache-only search/list and S3 sync retain their existing path.
+
+Local validation for this extension: all 18 server tests passed in the network-disabled, read-only Lambda image, and the image built successfully. The matching client passed 78 YouTube/shared-bridge tests and 26 X tests. A local full-chain component test using the actual client relay, a synthetic managed TCP proxy, and this GOST build returned verified HTTPS 200 for both X probe resources, checkip, and both unsigned YouTube URLs. Deployment and live built-in Cloud VPN acceptance of the X extension have not yet been performed; the earlier deployed YouTube revision above still has the old destination list.

@@ -48,10 +48,37 @@ class GostTests(unittest.TestCase):
 
     def test_hosts_ports_metadata_and_http_forwarding_restricted(self):
         for authority in ('example.com:443', 'www.youtube.com:80', 'www.youtube.com.evil:443',
-                          '127.0.0.1:443', '169.254.169.254:443', '[::1]:443', 'youtube.com.:443'):
+                          '127.0.0.1:443', '169.254.169.254:443', '[::1]:443', 'youtube.com.:443',
+                          'x.com:80', 'x.com.:443', 'x.com.evil:443', 'abs.twimg.com.evil:443',
+                          'api.x.com:443', 'pbs.twimg.com:443'):
             with self.subTest(authority=authority):
                 self.assertEqual(self.request(authority), 403)
         self.assertEqual(self.request('http://www.youtube.com/', method='GET'), 403)
+
+    def test_x_and_required_assets_support_opaque_connect(self):
+        class Echo(socketserver.BaseRequestHandler):
+            def handle(self):
+                self.request.sendall(self.request.recv(4096))
+        class Origin(socketserver.ThreadingTCPServer):
+            allow_reuse_address = True
+            daemon_threads = True
+        origin = Origin(('127.0.0.1', 443), Echo)
+        thread = threading.Thread(target=origin.serve_forever, daemon=True)
+        thread.start()
+        try:
+            for host in ('x.com', 'abs.twimg.com'):
+                with self.subTest(host=host):
+                    client = http.client.HTTPConnection('127.0.0.1', self.service.port, timeout=3)
+                    try:
+                        client.set_tunnel(host, 443, {'Proxy-Authorization': AUTH})
+                        client.connect()
+                        data = b'\x16\x03\x01opaque-TLS-record'
+                        client.sock.sendall(data)
+                        self.assertEqual(client.sock.recv(len(data)), data)
+                    finally:
+                        client.close()
+        finally:
+            origin.shutdown(); origin.server_close(); thread.join(timeout=2)
 
     def test_control_unavailable_fails_closed(self):
         self.service.control.stopped.set()
@@ -75,7 +102,9 @@ class GostTests(unittest.TestCase):
             def handle(self):
                 while data := self.request.recv(4096):
                     self.request.sendall(data)
-        origin = socketserver.ThreadingTCPServer(('127.0.0.1', 443), Echo)
+        class Origin(socketserver.ThreadingTCPServer):
+            allow_reuse_address = True
+        origin = Origin(('127.0.0.1', 443), Echo)
         origin.daemon_threads = True
         thread = threading.Thread(target=origin.serve_forever, daemon=True)
         thread.start()

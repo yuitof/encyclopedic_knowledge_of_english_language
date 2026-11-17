@@ -15,7 +15,7 @@ import time
 
 from tailscale_node import BridgeError
 
-ALLOWED_HOSTS = ('youtube.com', 'www.youtube.com', 'checkip.amazonaws.com')
+ALLOWED_HOSTS = ('youtube.com', 'www.youtube.com', 'x.com', 'abs.twimg.com', 'checkip.amazonaws.com')
 
 
 def public_mappings():
@@ -33,7 +33,7 @@ def public_mappings():
 def configuration(port, control_port, mappings):
     control = f'http://127.0.0.1:{control_port}'
     return {
-        'services': [{'name': 'youtube-connect', 'addr': f'127.0.0.1:{port}',
+        'services': [{'name': 'private-connect', 'addr': f'127.0.0.1:{port}',
             'handler': {'type': 'http', 'auther': 'session',
                         'metadata': {'idleTimeout': '60s', 'udp': False, 'sniffing': False}},
             'listener': {'type': 'tcp'}, 'bypass': 'approved',

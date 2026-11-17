@@ -6,7 +6,7 @@ The `service-bridge` branch contains the AWS Lambda service that exposes a priva
 - Lambda build context and CloudFormation templates: `infra/service-bridge/`
 - Server tests: `tests/service_bridge/`
 
-The Codex Cloud client, YouTube collection tooling, private-cache infrastructure, and English vault are maintained separately on the repository's [`vault` branch](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/tree/vault). The client uses Codex Cloud's built-in Tailscale VPN to reach this service.
+The shared Codex Cloud client, YouTube/X collection tooling, private-cache infrastructure, and English vault are maintained separately on the repository's [`vault` branch](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/tree/vault). The client uses Codex Cloud's built-in Tailscale VPN to reach this service.
 
 Run the offline tests with Python dependencies from `infra/service-bridge/requirements.txt` installed:
 
