@@ -1,3 +1,7 @@
+# Lambda service branch
+
+This `service-bridge` branch maintains the self-contained [Lambda server](infra/service-bridge/README.md). The Codex Cloud client lives on `vault` and uses the environment's built-in Tailscale VPN. Deploy the server from this branch; use `vault` for Cloud collection tasks. The vault documentation below is inherited repository context.
+
 # English Encyclopedia — vault data
 
 Open `vault/` in Obsidian. All Markdown notes in `vault/notes/` are published automatically; supported referenced raster images come from `vault/assets/`. Obsidian settings are retained for editing and are not included in the website artifact.

@@ -1,119 +1,75 @@
-# Service bridge
+# Service bridge — Lambda server
 
-This implementation keeps the YouTube history collector, signed-out transcript retrieval, and cache writes in the Cloud VM. An active Lambda invocation runs a userspace Tailscale exit node in `us-west-1`. The wrapper starts a private session, selects its exact node, verifies the public exit address, and runs the existing collector through a loopback HTTP proxy.
+The `service-bridge` branch owns the Lambda server. The Cloud client lives on the repository's `vault` branch under `tools/youtube/`; deploy and update them separately. The worker image builds entirely from this directory and contains no collector code, history, transcripts, YouTube credentials, or client enrollment key.
 
-The implementation requires an end-to-end Cloud acceptance check. An offline test pass, a local container launch, or a node appearing in Tailscale establishes only that particular step. Cloud's managed proxy must permit the Tailscale control and relay connections, and YouTube must accept the AWS-origin requests.
+## Connection
 
-Validation on 2026-11-17 deployed the worker and confirmed that a separate Linux userspace client could select the Lambda exit node, observe the same public egress address, and receive HTTP 200 from both unsigned YouTube probe URLs. The Cloud VM successfully read its enrollment secret, created a session, invoked Lambda, and observed readiness. Its own Tailscale enrollment timed out while connecting through the managed proxy, so Cloud acceptance remains incomplete.
+```text
+vault client → loopback CONNECT relay → proxy:8088 (built-in Cloud VPN)
+             → Lambda Tailscale IP:8443 → authenticated CONNECT proxy → YouTube:443
+```
 
-The Cloud environment now has its built-in Tailscale VPN configured. A fresh task reported `Running` and `routing_ready: true`; the tailnet console independently showed the managed node connected. A private SSH-port probe returned CONNECT 503, so service reachability is still unverified. The earlier manually launched daemon's enrollment failure does not establish a failure of this built-in VPN. The existing wrapper still launches its own daemon and requires adaptation before it can use the managed VPN.
+Cloud uses its scoped AWS identity to create a DynamoDB session and invoke Lambda asynchronously. Lambda claims that session once, retrieves its own enrollment key from Secrets Manager, and starts a userspace Tailscale node with memory-only state. `tailscale serve --bg --tcp=8443` forwards private TCP connections to a loopback CONNECT proxy. No exit route, public function URL, API Gateway, SSH service, or Funnel is created.
 
-## Resources and access
+The proxy accepts the session's bearer token, checking its SHA-256 hash from the session record. Only `youtube.com:443`, `www.youtube.com:443`, and `checkip.amazonaws.com:443` are permitted. DNS resolution happens on Lambda, and nonpublic answers are rejected. The proxy forwards opaque bytes; the Cloud HTTP client verifies YouTube's TLS certificate and retains its own YouTube session. Proxy credentials never reach the origin.
 
-The deployed resource names are independent of the source collection service:
+## Tailnet configuration
 
-| Resource | Name |
-| --- | --- |
-| Worker stack and Lambda function | `service-bridge` |
-| Image stack | `service-bridge-images` |
-| ECR repository | `service-bridge` |
-| DynamoDB table | `service-bridge-sessions` |
-| Lambda execution role | `service-bridge-worker` |
-| Lambda log group | `/aws/lambda/service-bridge` |
-| Cloud client inline policy | `service-bridge-client` |
-| Worker enrollment secret | `service-bridge/tailscale` |
-| Cloud enrollment secret | `codex-cloud/tailscale` |
+Allow the built-in Cloud VPN identity (`tag:cloud-codex`) to reach `tag:service-bridge` on `tcp:8443`. This replaces the old exit-node permission to `autogroup:internet`; this implementation needs neither exit-node auto-approval nor port 53 grants. Inspect existing additive grants before changing them, and preserve unrelated devices' access.
 
-The existing cache runtime role and S3 cache are shared with the vault workflow and retain their names. The earlier worker and image stacks have been retired after checking that no sessions were active. Their historical DynamoDB table, logs and images are retained by the original templates. Replacement reusable ephemeral keys carry the new tags; worker enrollment with the replacement key reached `ready` and cleanly stopped. The Cloud VPN replacement carrying the intermediate `tag:cloud-codex` was published. The requested final name is `tag:codex-cloud`; live policy, node tags, replacement key and environment credential migration to that final tag remain pending. The AWS secret `codex-cloud/tailscale` currently contains the intermediate key, so its path must not be taken as evidence of the key tag. Superseded keys and secrets have not yet been revoked or removed.
+Use separate preauthorized, reusable, ephemeral tagged enrollment keys. Store the worker's raw key in Secrets Manager (`service-bridge/tailscale`); configure the Cloud key in the environment's built-in Tailscale VPN settings. Cloud application code never retrieves or exports that key. Rotate before expiry. Renaming an existing secret does not change the key's tags: the previously documented tag/key migration must still be verified in the tailnet console.
 
-`repository.yaml` creates an immutable private ECR repository. `template.yaml` creates the Lambda, a private DynamoDB session table, seven-day operational logs, a worker role, and an inline policy on the existing scoped Cloud role. The existing source-cache bucket continues to contain history and validated transcripts. Session records are stored in DynamoDB.
+Tailscale Serve's raw [TCP forwarding](https://tailscale.com/docs/reference/tailscale-cli/serve#use-a-tcp-forwarder) exposes only the private service. Cloud's [documented TCP interface](https://learn.chatgpt.com/docs/environments/cloud-environments#connect-to-tcp-services) uses HTTP CONNECT at `proxy:8088`. Reconfigure and republish the Cloud environment, then test from a fresh task after any VPN change.
 
-| Setting | Value |
-| --- | --- |
-| Region and architecture | `us-west-1`, Linux amd64 |
-| Tailscale | 1.104.7, pinned image digest and static archive checksums |
-| Runtime | Python 3.12 Lambda base, pinned image digest |
-| Memory | 1 GiB |
-| Lambda hard timeout | 900 seconds |
-| Default session lifetime | 720 seconds from request creation, including startup |
-| Reserved concurrency | One worker invocation |
-| Queue age / function-error retries | 60 seconds / zero |
-| Session retention | DynamoDB TTL after one day |
+## Deployment
 
-Lambda reads only its Tailscale enrollment secret and its session records. Cloud reads the separate client enrollment secret, creates and stops sessions, and invokes this function. The new role policy is separate from the existing scoped S3 cache policy. Customer-managed KMS keys on enrollment secrets require an additional, narrowly scoped decrypt grant.
-
-YouTube credentials stay in the Cloud task's existing private session configuration. HTTPS certificate verification remains enabled. The exit node forwards encrypted YouTube TLS traffic. Tailscale identity and connection metadata, session IDs, the public exit IP, and operational status are private runtime data. The worker discards daemon output and publishes fixed error categories.
-
-## Prepare the existing tailnet
-
-Create distinct tags `tag:codex-cloud` and `tag:service-bridge`, owned by administrators. Permit exit advertisements from `tag:service-bridge` with `autoApprovers.exitNode`. Permit the client identity to reach `autogroup:internet` on `tcp:443` and `tcp:53`. Tailscale 1.104.7 checks TCP port 53 access before accepting a peer's DNS queries through the exit node. A grant containing only HTTPS causes DNS resolution to fail with a 403 response. Tailscale grants are additive, so inspect existing wildcard rules before claiming these identities are isolated. Account for existing personal and tagged-device connectivity when adjusting broad rules.
-
-Generate separate **preauthorized, reusable, ephemeral, tagged auth keys** for the two roles. Store each raw key as its own Secrets Manager SecretString, using the AWS-managed encryption key. Each runtime obtains its key through its own IAM role. Auth keys expire after at most 90 days, so rotate the stored values before their chosen expiration. Runtime node state is memory-only and each session enrolls a fresh ephemeral node. Normal cleanup runs `tailscale logout`; abrupt termination relies on ephemeral-node removal.
-
-When migrating the earlier tag names, update the policy's tag owners, exit-node auto-approval, and client grants together. Replace the two enrollment keys with keys carrying `tag:codex-cloud` and `tag:service-bridge`, and update the corresponding existing Secrets Manager values. Existing auth keys retain their original tags. After verifying enrollment with the replacement keys, revoke the superseded keys and retire the earlier policy entries. Retag existing managed Cloud nodes to `tag:codex-cloud` before removing the old policy entries. Verify replacement credentials and publish the Cloud VPN credential before revoking superseded auth keys.
-
-The console policy and credential changes require reviewing the actual existing tailnet. Keys and private policy backups belong in private runtime storage. The container build uses an explicit file allowlist to exclude local caches and credentials.
-
-## Deploy
-
-Configure these shell variables with the existing secret ARNs and scoped role name. ARN values identify resources; secret values belong in Secrets Manager.
+Run on the `service-bridge` branch using an authorized deployment identity:
 
 ```bash
 export EXIT_AUTH_SECRET_ARN='arn:aws:secretsmanager:us-west-1:ACCOUNT:secret:service-bridge/tailscale'
-export CLIENT_AUTH_SECRET_ARN='arn:aws:secretsmanager:us-west-1:ACCOUNT:secret:codex-cloud/tailscale'
 export CLOUD_RUNTIME_ROLE_NAME='english-vault-youtube-cache-runtime'
 bash infra/service-bridge/deploy.sh
 ```
 
-The script deploys the image repository, builds a Linux amd64 image, pushes an immutable image tag, resolves its digest, and deploys the worker by digest. Run it using an authorized local deployment identity. Cloud tasks use their existing scoped AWS identity. Installation and deployment use official vendor sources and do not collect history or transcripts.
+The existing `EXIT_AUTH_SECRET_ARN` parameter name is retained for deployment compatibility; it now enrolls a private service rather than an exit node. There is no `CLIENT_AUTH_SECRET_ARN` parameter. Deploying the updated template removes this stack's grant for the Cloud application's enrollment-secret access; it does not delete the secret or revoke its key.
 
-The worker runs in Lambda's default internet-enabled networking. Adding a VPC would require separately providing outbound internet connectivity. No function URL, API Gateway, public SSH service, or SSH key is created. IAM-authenticated Lambda invocation supplies the start request.
+The script builds from `infra/service-bridge/`, publishes an immutable ECR image, and deploys by digest. The allowlisted build context excludes private runtime files. The worker uses Lambda's default internet-enabled network; VPC deployment would require outbound internet connectivity.
 
-Lambda bills the whole active session, including waiting. ECR, Secrets Manager, DynamoDB, logs, data transfer, and applicable Tailscale plan usage can also incur charges. The stop request ends a normal session early. The worker's own deadline bounds a session after a lost client.
+| Resource | Name / setting |
+| --- | --- |
+| Worker stack / function | `service-bridge` |
+| Image stack / repository | `service-bridge-images` / `service-bridge` |
+| DynamoDB session table | `service-bridge-sessions` |
+| Worker role / Cloud inline policy | `service-bridge-worker` / `service-bridge-client` |
+| Region / image architecture | `us-west-1` / Linux amd64 |
+| Memory / hard timeout | 1 GiB / 900 seconds |
+| Maximum session / concurrency | 720 seconds including startup / one invocation |
+| Async queue age / retries | 60 seconds / zero function-error retries |
+| Logs / session retention | seven days / DynamoDB TTL after one day |
 
-## Configure the Cloud task
+Lambda reads only its enrollment secret and session table. Cloud's bridge policy permits only this function's invocation and session-table operations, separately from its existing S3 cache policy. Customer-managed secret encryption keys require a scoped decrypt grant. Lambda bills the whole active session, including waiting; associated AWS and Tailscale resources may incur charges.
 
-Install the binaries in the ignored workflow runtime during environment preparation.
+## Session contract: `connect-v1`
 
-```bash
-bash tools/youtube/setup.sh
-bash tools/youtube/setup-tailscale.sh
-```
+The two branches communicate through this contract, not shared Python imports:
 
-Set `YOUTUBE_EXIT_FUNCTION` to the stack's `FunctionArn`, `YOUTUBE_EXIT_TABLE` to `SessionTableName`, and `YOUTUBE_TAILSCALE_AUTH_SECRET_ARN` to `ClientAuthSecretArn`. Allow the AWS regional endpoints `lambda.us-west-1.amazonaws.com`, `dynamodb.us-west-1.amazonaws.com`, and `secretsmanager.us-west-1.amazonaws.com`, plus the Tailscale enrollment/control/DERP hosts actually needed by the selected connection path. Preserve the existing AWS/S3 and dictionary destinations. Test the scoped AWS identity's signing support for each newly used service.
+- Cloud creates a random 32-hex `session_id`, `protocol: connect-v1`, `state: requested`, `proxy_token_hash` (SHA-256 of a random 64-hex token), `created_at`, `expires_at`, `purge_at`, and `stop_requested: false`. Timestamps are Unix seconds. The raw token remains in client memory.
+- Cloud invokes the function with only `{"session_id": "..."}`. Lambda atomically claims an unexpired, uncanceled `requested` record of the supported protocol and records an invocation owner. Duplicate deliveries cannot claim it again.
+- Lambda publishes `state: ready`, `node_id`, `ipv4` (its Tailscale IPv4), `proxy_port: 8443`, `egress_ip`, effective `expires_at`, and `heartbeat`. It refreshes the heartbeat every five seconds.
+- Cloud rejects old protocol records, invalid endpoints, stopped/stale sessions, and a public egress-IP mismatch. It connects through the managed VPN, then authenticates the inner CONNECT with `Proxy-Authorization: Bearer <token>`.
+- Cloud sets `stop_requested: true` on completion or interruption. Lambda closes the proxy and logs out on stop or deadline; its hard timeout bounds abrupt failures. Terminal states are `stopped` or `failed`, with fixed error categories. Session hashes and network metadata remain private runtime data.
 
-The client runs official `tailscaled` in userspace mode and selects the per-session exit node explicitly. This path requires no TUN device or network-administration capability. Daemon connections inherit the Cloud network configuration. Application proxy settings are applied explicitly to the YouTube HTTP clients. AWS SDK requests use the existing Cloud connection path.
+## Validation status
 
-Run the unsigned acceptance check first. It performs no history/cache restoration and uses no YouTube session.
+The previous exit-node implementation was tested on 2026-11-17 using a separate Linux client. Cloud invoked it successfully but its manually launched daemon failed enrollment. The built-in Cloud VPN subsequently reported connected; a private SSH-port probe returned CONNECT 503. Those observations do not validate this new private CONNECT service.
 
-```bash
-bash tools/youtube/run.sh exit-node -- probe
-```
-
-Acceptance requires an online, approved peer with the reported node ID and IP, the same public address observed by Lambda and the proxied Cloud request, and a YouTube origin response. The public-address comparison is deliberately conservative; an AWS egress address change can fail this check even with correct routing. An address mismatch stops collection for investigation.
-
-Then run the existing authorized collection commands.
-
-```bash
-bash tools/youtube/run.sh exit-node -- refresh
-bash tools/youtube/run.sh exit-node -- search 'PHRASE' --day yesterday --fetch
-```
-
-Use `--session-seconds` (120–720) and `--ready-timeout` (10–120) before `--` if needed. One wrapper runs one collector command. The wrapper sends stop on completion or interruption. If a session nears expiry, loses its heartbeat, or changes/disconnects its selected exit node, it terminates the collector. The collector retains its last completed atomic checkpoint, and an incomplete operation exits unsuccessfully. Resume using the same command in another session. Explicit local proxy settings prevent an ambient HTTPS proxy from replacing the selected transport.
-
-Concurrent commands against the same local history cache remain unsupported. Duplicate Lambda delivery is deduplicated by an atomic claim on the session record. Expired or canceled requests cannot claim a session. Queue admission is distinct from readiness, and failure or a missing heartbeat never counts as successful collection.
-
-## Validation and rollback
+This revision requires deployment, the `tcp:8443` tailnet grant, and a successful `bridge -- probe` from a fresh `vault` Cloud task before history collection. No history or transcript retrieval is needed for acceptance.
 
 ```bash
-.codex/tmp/youtube/.venv/bin/python -m unittest discover -s tests/youtube -v
-bash -n tools/youtube/run.sh tools/youtube/setup-tailscale.sh infra/service-bridge/deploy.sh
+python -m unittest discover -s tests/service_bridge -v
+bash -n infra/service-bridge/deploy.sh
 aws cloudformation validate-template --region us-west-1 --template-body file://infra/service-bridge/template.yaml
-docker build --platform linux/amd64 --provenance=false -f infra/service-bridge/Dockerfile -t service-bridge:test .
+docker build --platform linux/amd64 --provenance=false -f infra/service-bridge/Dockerfile -t service-bridge:test infra/service-bridge
 ```
 
-Synthetic tests cover duplicate delivery, canceled/expired/stale sessions, node identity checks, process termination on route loss, credential cleanup, transport precedence, and preventing collection on an egress mismatch. A container smoke check can start the daemon as UID 1000 with a read-only filesystem and networking disabled. Live Cloud testing additionally needs the scoped tailnet keys and deployed AWS resources.
-
-To retire the feature, stop active sessions, revoke the two enrollment keys and their registered nodes, remove the dedicated tailnet grants/approval entries, and remove the stack's scoped client policy. Delete the worker stack using the authorized deployment identity when ready. The table and logs are retained for explicit review/removal, and the image repository is retained separately. Removing the wrapper configuration returns commands to their previous explicitly configured transport.
-
-References include [Tailscale on Lambda](https://tailscale.com/docs/install/cloud/aws/aws-lambda), [userspace exit nodes](https://tailscale.com/docs/reference/kernel-vs-userspace-routers), [ephemeral nodes](https://tailscale.com/docs/features/ephemeral-nodes), [exit-node approval](https://tailscale.com/docs/reference/syntax/policy-file#auto-approvers), and [AWS invocation semantics](https://docs.aws.amazon.com/lambda/latest/api/API_Invoke.html).
+To retire the service, stop active sessions, revoke its enrollment key, remove its dedicated tailnet grant and scoped Cloud policy, then remove the stack using the deployment identity. The table, logs, and image repository are retained for explicit review/removal. Do not revoke the Cloud environment's VPN identity if other private services depend on it.

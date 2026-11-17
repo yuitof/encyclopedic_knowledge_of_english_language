@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: On-demand private service bridge with a userspace Tailscale transport.
+Description: On-demand private CONNECT service reached through the built-in Cloud VPN.
 Parameters:
   ImageUri:
     Type: String
@@ -7,11 +7,7 @@ Parameters:
   ExitAuthSecretArn:
     Type: String
     AllowedPattern: 'arn:aws:secretsmanager:us-west-1:[0-9]{12}:secret:.+'
-    Description: Existing secret containing the tagged, preauthorized ephemeral exit-node auth key.
-  ClientAuthSecretArn:
-    Type: String
-    AllowedPattern: 'arn:aws:secretsmanager:us-west-1:[0-9]{12}:secret:.+'
-    Description: Existing separate secret containing the Cloud client auth key.
+    Description: Existing secret containing the tagged, preauthorized ephemeral service-node auth key.
   CloudRuntimeRoleName:
     Type: String
     AllowedPattern: '[\w+=,.@-]+'
@@ -109,13 +105,8 @@ Resources:
           - Effect: Allow
             Action: [dynamodb:PutItem, dynamodb:GetItem, dynamodb:UpdateItem]
             Resource: !GetAtt SessionTable.Arn
-          - Effect: Allow
-            Action: secretsmanager:GetSecretValue
-            Resource: !Ref ClientAuthSecretArn
 Outputs:
   FunctionArn:
     Value: !GetAtt Worker.Arn
   SessionTableName:
     Value: !Ref SessionTable
-  ClientAuthSecretArn:
-    Value: !Ref ClientAuthSecretArn

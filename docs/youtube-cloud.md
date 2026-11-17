@@ -89,7 +89,7 @@ Caption requests can be blocked by cloud IPs or require proof tokens or restrict
 
 ## Subsequent natural-language requests
 
-An optional [temporary Lambda exit node](../infra/service-bridge/README.md) keeps collection in Cloud while routing YouTube requests through an ephemeral Tailscale node. Once its AWS resources, tailnet permissions, and live unsigned probe have been validated, wrap network collection commands with `bash tools/youtube/run.sh exit-node --`, for example `exit-node -- refresh`. Each session is bounded and stops collection on transport loss. This integration requires its own live acceptance check against Cloud's managed networking.
+The Lambda server is maintained on the `service-bridge` branch in [infra/service-bridge](../infra/service-bridge/README.md). The Cloud client is maintained separately on the repository's `vault` branch; use that branch for Cloud tasks and follow its `docs/service-bridge-client.md`. The client uses the built-in Tailscale VPN through `proxy:8088`, with no application-managed Tailscale daemon. This branch contains only the server side of that integration. Deploy and validate the new private service before collection.
 
 Use a private task configured for the **same S3 cache**, for example:
 

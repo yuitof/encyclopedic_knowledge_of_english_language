@@ -1,51 +1,47 @@
 """An isolated userspace Tailscale process; credentials and logs stay private."""
-import ipaddress
 import json
 import os
 from pathlib import Path
-import socket
 import subprocess
 import tempfile
 import time
 
 
-class ExitNodeError(RuntimeError):
+class BridgeError(RuntimeError):
     """Only fixed, credential-free messages may be surfaced to the CLI."""
 
 
 def auth_key(secrets, arn):
     value = secrets.get_secret_value(SecretId=arn)['SecretString'].strip()
     if not value.startswith('tskey-auth-') or any(c.isspace() for c in value):
-        raise ExitNodeError('Tailscale secret must contain one auth key')
+        raise BridgeError('Tailscale secret must contain one auth key')
     return value
 
 
 class TailscaleNode:
-    def __init__(self, root, key, hostname, advertise=False, proxy=False):
+    def __init__(self, root, key, hostname):
         self.root, self.key, self.hostname = Path(root), key, hostname
-        self.advertise, self.proxy = advertise, proxy
         self.process = None
         self.directory = None
-        self.proxy_url = None
 
     def command(self, *arguments, timeout=10):
         if self.process is None or self.process.poll() is not None:
-            raise ExitNodeError('Tailscale daemon is unavailable')
+            raise BridgeError('Tailscale daemon is unavailable')
         try:
             result = subprocess.run([os.environ.get('TAILSCALE_BIN', 'tailscale'),
                 '--socket=t.sock', *arguments], cwd=self.directory,
                 capture_output=True, timeout=timeout, check=False)
             if result.returncode:
-                raise ExitNodeError('Tailscale command failed; check enrollment and tailnet policy')
+                raise BridgeError('Tailscale command failed; check enrollment and tailnet policy')
             return result.stdout
         except (OSError, subprocess.TimeoutExpired):
-            raise ExitNodeError('Tailscale command could not complete') from None
+            raise BridgeError('Tailscale command could not complete') from None
 
     def status(self):
         try:
             return json.loads(self.command('status', '--json'))
         except (ValueError, TypeError):
-            raise ExitNodeError('Invalid Tailscale status response') from None
+            raise BridgeError('Invalid Tailscale status response') from None
 
     def __enter__(self):
         self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -59,23 +55,17 @@ class TailscaleNode:
             arguments = [os.environ.get('TAILSCALED_BIN', 'tailscaled'),
                 '--tun=userspace-networking', '--state=mem:',
                 '--statedir=' + str(self.directory), '--socket=t.sock']
-            if self.proxy:
-                with socket.socket() as listener:
-                    listener.bind(('127.0.0.1', 0))
-                    port = listener.getsockname()[1]
-                self.proxy_url = f'http://127.0.0.1:{port}'
-                arguments.append(f'--outbound-http-proxy-listen=127.0.0.1:{port}')
             # Relative socket paths also work in deeply nested isolated checkouts.
             self.process = subprocess.Popen(arguments, cwd=self.directory,
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             deadline = time.monotonic() + 10
             while not (self.directory / 't.sock').exists():
                 if self.process.poll() is not None or time.monotonic() >= deadline:
-                    raise ExitNodeError('Tailscale daemon did not start')
+                    raise BridgeError('Tailscale daemon did not start')
                 time.sleep(0.1)
             self.command('up', '--auth-key=file:' + str(keyfile), '--hostname=' + self.hostname,
                 '--accept-dns=false', '--accept-routes=false', '--ssh=false', '--timeout=30s',
-                *(['--advertise-exit-node'] if self.advertise else ['--shields-up']), timeout=40)
+                timeout=40)
             return self
         except BaseException:
             self.__exit__(None, None, None)
@@ -83,33 +73,15 @@ class TailscaleNode:
         finally:
             keyfile.unlink(missing_ok=True)
 
-    def select_exit(self, node_id, address, timeout=30):
-        try:
-            ipaddress.IPv4Address(address)
-        except ipaddress.AddressValueError:
-            raise ExitNodeError('Invalid exit-node address') from None
-        deadline = time.monotonic() + timeout
-        while time.monotonic() < deadline:
-            peers = self.status().get('Peer', {}).values()
-            if any(p.get('ID') == node_id and p.get('Online') and p.get('ExitNodeOption')
-                   and address in p.get('TailscaleIPs', []) for p in peers):
-                self.command('set', '--exit-node=' + address, '--exit-node-allow-lan-access=false')
-                self.check_exit(node_id)
-                return
-            time.sleep(1)
-        raise ExitNodeError('Exit node is missing, offline, or awaiting tailnet approval')
-
-    def check_exit(self, node_id):
-        status = self.status()
-        selected = status.get('ExitNodeStatus') or {}
-        if status.get('BackendState') != 'Running' or selected.get('ID') != node_id or not selected.get('Online'):
-            raise ExitNodeError('Selected exit node is unavailable; collection stopped')
+    def serve(self, local_port, port=8443):
+        self.command('serve', '--bg', '--yes', '--tcp=' + str(port),
+                     'tcp://127.0.0.1:' + str(local_port))
 
     def __exit__(self, *args):
         if self.process is not None:
             try:
                 self.command('logout', timeout=5)
-            except ExitNodeError:
+            except BridgeError:
                 pass
             if self.process.poll() is None:
                 self.process.terminate()

@@ -2,10 +2,9 @@
 import re
 import time
 
-from tailscale_node import ExitNodeError
+from tailscale_node import BridgeError
 
 SESSION_ID = re.compile(r'[a-f0-9]{32}\Z')
-ACTIVE = ('requested', 'starting', 'ready')
 
 
 def condition_failed(error):
@@ -18,23 +17,17 @@ class Jobs:
 
     def get(self, session_id):
         if not SESSION_ID.fullmatch(session_id):
-            raise ExitNodeError('Invalid exit-node session ID')
+            raise BridgeError('Invalid bridge session ID')
         return self.table.get_item(Key={'session_id': session_id}, ConsistentRead=True).get('Item')
-
-    def create(self, session_id, seconds):
-        stamp = int(time.time())
-        self.table.put_item(Item={'session_id': session_id, 'state': 'requested',
-            'created_at': stamp, 'expires_at': stamp + seconds, 'purge_at': stamp + 86400,
-            'stop_requested': False}, ConditionExpression='attribute_not_exists(session_id)')
 
     def claim(self, session_id, owner):
         try:
             result = self.table.update_item(Key={'session_id': session_id},
                 UpdateExpression='SET #s = :starting, #o = :owner, heartbeat = :now',
-                ConditionExpression='#s = :requested AND expires_at > :now AND stop_requested = :false',
-                ExpressionAttributeNames={'#s': 'state', '#o': 'owner'},
+                ConditionExpression='#s = :requested AND expires_at > :now AND stop_requested = :false AND #p = :protocol',
+                ExpressionAttributeNames={'#s': 'state', '#o': 'owner', '#p': 'protocol'},
                 ExpressionAttributeValues={':starting': 'starting', ':requested': 'requested',
-                    ':owner': owner, ':now': int(time.time()), ':false': False}, ReturnValues='ALL_NEW')
+                    ':owner': owner, ':now': int(time.time()), ':false': False, ':protocol': 'connect-v1'}, ReturnValues='ALL_NEW')
             return result['Attributes']
         except Exception as error:
             if condition_failed(error):
@@ -52,21 +45,3 @@ class Jobs:
         self.table.update_item(Key={'session_id': session_id},
             UpdateExpression='SET ' + ', '.join(updates), ConditionExpression='#o = :owner',
             ExpressionAttributeNames=names, ExpressionAttributeValues=values)
-
-    def stop(self, session_id):
-        try:
-            self.table.update_item(Key={'session_id': session_id},
-                UpdateExpression='SET stop_requested = :true',
-                ConditionExpression='attribute_exists(session_id)',
-                ExpressionAttributeValues={':true': True})
-        except Exception as error:
-            if not condition_failed(error):
-                raise
-
-
-def check_ready(job, reserve=0):
-    stamp = time.time()
-    if (not job or job.get('state') != 'ready' or job.get('stop_requested')
-            or float(job.get('expires_at', 0)) - stamp <= reserve
-            or stamp - float(job.get('heartbeat', 0)) > 20):
-        raise ExitNodeError('Exit-node session is unavailable or expired; progress can be resumed')
