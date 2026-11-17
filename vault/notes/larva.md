@@ -1,3 +1,7 @@
+---
+created: "2026-11-17T17:56:42Z"
+modified: "2026-11-17T17:56:42Z"
+---
 **larva** (/ˈlɑːrvə/) is the immature, often wormlike form of an insect after it hatches from an egg and before it becomes a pupa. A [[caterpillar]] is the larva of a butterfly or [[moth]]. ([Merriam-Webster, sense 1](https://www.merriam-webster.com/dictionary/larva))
 
 Countable noun; plural **larvae** (/ˈlɑːrviː/). Common combinations include *a butterfly larva* and *mosquito larvae*.
