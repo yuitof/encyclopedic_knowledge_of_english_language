@@ -33,7 +33,7 @@ class TailscaleNode:
             raise ExitNodeError('Tailscale daemon is unavailable')
         try:
             result = subprocess.run([os.environ.get('TAILSCALE_BIN', 'tailscale'),
-                '--socket=' + str(self.directory / 't.sock'), *arguments],
+                '--socket=t.sock', *arguments], cwd=self.directory,
                 capture_output=True, timeout=timeout, check=False)
             if result.returncode:
                 raise ExitNodeError('Tailscale command failed; check enrollment and tailnet policy')
@@ -53,21 +53,21 @@ class TailscaleNode:
         self.directory = Path(self.temporary.name)
         keyfile = self.directory / 'auth-key'
         try:
-            if len(os.fsencode(self.directory / 't.sock')) > 100:
-                raise ExitNodeError('Cache path is too long for the Tailscale socket')
             keyfile.touch(mode=0o600)
             keyfile.write_text(self.key)
             self.key = None
             arguments = [os.environ.get('TAILSCALED_BIN', 'tailscaled'),
                 '--tun=userspace-networking', '--state=mem:',
-                '--statedir=' + str(self.directory), '--socket=' + str(self.directory / 't.sock')]
+                '--statedir=' + str(self.directory), '--socket=t.sock']
             if self.proxy:
                 with socket.socket() as listener:
                     listener.bind(('127.0.0.1', 0))
                     port = listener.getsockname()[1]
                 self.proxy_url = f'http://127.0.0.1:{port}'
                 arguments.append(f'--outbound-http-proxy-listen=127.0.0.1:{port}')
-            self.process = subprocess.Popen(arguments, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # Relative socket paths also work in deeply nested isolated checkouts.
+            self.process = subprocess.Popen(arguments, cwd=self.directory,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             deadline = time.monotonic() + 10
             while not (self.directory / 't.sock').exists():
                 if self.process.poll() is not None or time.monotonic() >= deadline:

@@ -154,6 +154,24 @@ class ExitNodeTests(unittest.TestCase):
                     self.fail('daemon did not start')
             self.assertEqual(list(Path(directory).iterdir()), [])
 
+    def test_nested_checkout_uses_relative_socket_for_daemon_and_client(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / ('nested-' * 20)
+            process = Mock()
+            process.poll.return_value = None
+
+            def start_daemon(arguments, **kwargs):
+                (kwargs['cwd'] / 't.sock').touch()
+                return process
+
+            with patch.object(tailscale_node.subprocess, 'Popen', side_effect=start_daemon) as start, \
+                    patch.object(tailscale_node.subprocess, 'run', return_value=types.SimpleNamespace(returncode=0, stdout=b'')) as run:
+                with tailscale_node.TailscaleNode(root, 'tskey-auth-synthetic', 'synthetic'):
+                    self.assertIn('--socket=t.sock', start.call_args.args[0])
+                    self.assertIn('--socket=t.sock', run.call_args.args[0])
+                    self.assertEqual(start.call_args.kwargs['cwd'], run.call_args.kwargs['cwd'])
+            self.assertEqual(list(root.iterdir()), [])
+
     def test_egress_mismatch_prevents_collection_and_requests_stop(self):
         args = types.SimpleNamespace(arguments=['refresh'], session_seconds=720, ready_timeout=60)
         settings = {'YOUTUBE_EXIT_FUNCTION': 'function', 'YOUTUBE_EXIT_TABLE': 'table',
