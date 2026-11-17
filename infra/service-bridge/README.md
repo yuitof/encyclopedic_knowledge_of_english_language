@@ -65,7 +65,9 @@ The previous exit-node implementation was tested on 2026-11-17 using a separate 
 
 The `connect-v1` server from commit `6237702` was deployed on 2026-11-17. CloudFormation completed successfully, and Lambda reported `Active` with `LastUpdateStatus: Successful` for image digest `sha256:c6d55c410b2de84b20b47bca3d35133cf824313859e19bea25dd06f759c9af29`. A synchronous empty-event smoke invocation loaded the handler and returned the expected `{"state": "rejected"}` without starting a session. The bridge client policy was checked and no longer grants Secrets Manager access.
 
-The `tcp:8443` tailnet grant and a successful `bridge -- probe` from a fresh `vault` Cloud task still require verification before history collection. Deployment and the empty-event smoke check do not establish end-to-end VPN connectivity. No history or transcript retrieval is needed for acceptance.
+Local acceptance passed on 2026-11-17 using the Mac's existing Tailscale connection. The worker joined with `tag:service-bridge`, and its exact node identity was confirmed online. Authenticated CONNECT requests through its private port 8443 preserved origin TLS verification, matched Lambda's public egress address, and returned HTTP 200 from both unsigned YouTube probe URLs (`/` and `/feed/history?hl=en`). Unauthenticated requests returned 407, and a disallowed destination returned 403. Cleanup reported `stopped` / `StopRequested`, and the temporary peer was confirmed disconnected. No YouTube authentication, history collection, or transcript retrieval was performed.
+
+Access from the built-in Cloud VPN identity on `tcp:8443` and a successful `bridge -- probe` from a fresh `vault` Cloud task still require verification before history collection. The successful local test validates the deployed server and local Tailscale path; it does not validate Cloud's managed CONNECT transport. No history or transcript retrieval is needed for acceptance.
 
 ```bash
 python -m unittest discover -s tests/service_bridge -v
