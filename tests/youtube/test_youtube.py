@@ -5,12 +5,14 @@ import importlib.util
 import io
 import json
 from pathlib import Path
+import sys
 import tempfile
 import types
 import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/youtube'))
 spec = importlib.util.spec_from_file_location('vault_youtube', ROOT / 'tools/youtube/youtube.py')
 yt = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(yt)
@@ -36,6 +38,9 @@ class WorkflowTests(unittest.TestCase):
         self.cache_patch = patch.object(yt, 'CACHE', Path(self.tmp.name))
         self.cache_patch.start()
         self.addCleanup(self.cache_patch.stop)
+        self.remote_patch = patch.object(yt, 'remote_cache', return_value=None)
+        self.remote_patch.start()
+        self.addCleanup(self.remote_patch.stop)
 
     def cached(self):
         video = entry()
@@ -90,7 +95,7 @@ class WorkflowTests(unittest.TestCase):
     def test_cached_fetch_does_not_import_or_call_api(self):
         video = self.cached()
         # API module unavailable: a cache hit must still succeed.
-        with patch.dict('sys.modules', {'youtube_transcript_api': None}):
+        with patch.dict('sys.modules', {'transcripts': None, 'youtube_transcript_api': None}):
             result = yt.fetch(video, {'videos': [video], 'metadata': {}})
         self.assertEqual(result['video_id'], VIDEO)
 
@@ -110,7 +115,7 @@ class WorkflowTests(unittest.TestCase):
         for status in ('unavailable', 'retry_needed'):
             video = entry()
             video['transcript'] = {'status': status}
-            with patch.dict('sys.modules', {'youtube_transcript_api': None}):
+            with patch.dict('sys.modules', {'transcripts': None, 'youtube_transcript_api': None}):
                 self.assertIsNone(yt.fetch(video, {'videos': [video], 'metadata': {}}))
         video['transcript'] = {'status': 'unavailable'}
         self.assertIsNone(yt.fetch(video, {}, retry=True))
@@ -180,19 +185,19 @@ class WorkflowTests(unittest.TestCase):
 
     def test_fetched_file_precedes_cached_index(self):
         data = transcript()
-        fetched = types.SimpleNamespace(language_code='en', is_generated=False, to_raw_data=lambda: data['segments'])
-        track = types.SimpleNamespace(language_code='en', is_generated=False, fetch=lambda: fetched)
-        class Api:
+        class Client:
             def __init__(self, **kwargs):
                 pass
-            def list(self, identifier):
-                return [track]
+            def __enter__(self):
+                return self
+            def __exit__(self, *args):
+                pass
+            def fetch(self, identifier):
+                return {'language': 'en', 'caption_type': 'manual', 'segments': data['segments']}
         class Missing(Exception):
             pass
         modules = {
-            'youtube_transcript_api': types.SimpleNamespace(YouTubeTranscriptApi=Api),
-            'youtube_transcript_api._errors': types.SimpleNamespace(NoTranscriptFound=Missing, TranscriptsDisabled=Missing, VideoUnavailable=Missing),
-            'youtube_transcript_api.proxies': types.SimpleNamespace(GenericProxyConfig=object),
+            'transcripts': types.SimpleNamespace(TranscriptClient=Client, TranscriptUnavailable=Missing, TranscriptRetryNeeded=Missing),
         }
         video = entry()
         index = {'videos': [video], 'metadata': {}}
@@ -205,12 +210,26 @@ class WorkflowTests(unittest.TestCase):
             self.assertIsNotNone(yt.fetch(video, index))
         self.assertEqual(yt.load_index()['videos'][0]['transcript']['status'], 'cached')
 
+    def test_caption_absence_and_access_failures_have_distinct_states(self):
+        from transcripts import TranscriptUnavailable, TranscriptRetryNeeded
+        from unittest.mock import MagicMock
+        for error, status in ((TranscriptUnavailable('No English caption track'), 'unavailable'),
+                              (TranscriptRetryNeeded('PoTokenRequired'), 'retry_needed')):
+            video = entry()
+            client = MagicMock()
+            client.__enter__.return_value = client
+            client.fetch.side_effect = error
+            with patch('transcripts.TranscriptClient', return_value=client):
+                self.assertIsNone(yt.fetch(video, {'metadata': {}, 'videos': [video]}))
+            self.assertEqual(video['transcript']['status'], status)
+            self.assertEqual(yt.load_index()['videos'][0]['transcript']['status'], status)
+
     def test_search_reuses_cache_and_returns_summary(self):
         video = self.cached()
         yt.atomic_json(yt.CACHE / 'history.json', {'videos': [video], 'metadata': {}})
         args = types.SimpleNamespace(timezone='Europe/London', day='2026-11-15', phrase='put aside', fetch=True, retry=False)
         output = io.StringIO()
-        with patch.dict('sys.modules', {'youtube_transcript_api': None}), contextlib.redirect_stdout(output):
+        with patch.dict('sys.modules', {'transcripts': None, 'youtube_transcript_api': None}), contextlib.redirect_stdout(output):
             yt.search(args)
         lines = [json.loads(line) for line in output.getvalue().splitlines()]
         self.assertEqual(lines[-1]['summary']['matches'], 1)

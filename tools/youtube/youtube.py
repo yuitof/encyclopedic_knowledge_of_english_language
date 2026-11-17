@@ -394,42 +394,30 @@ def fetch(video, index, retry=False):
     invalid_cache = state.get('error') == 'Missing or invalid cached transcript'
     if state.get('status') == 'unavailable' or (state.get('status') == 'retry_needed' and not retry and not invalid_cache):
         return None
-    from youtube_transcript_api import YouTubeTranscriptApi
-    from youtube_transcript_api._errors import NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
-    from youtube_transcript_api.proxies import GenericProxyConfig
-    from requests import Session
-    class TimedSession(Session):
-        def request(self, *args, **kwargs):
-            kwargs.setdefault('timeout', 30)
-            return super().request(*args, **kwargs)
+    from transcripts import TranscriptClient, TranscriptUnavailable, TranscriptRetryNeeded
     try:
-        proxy = os.environ.get('YOUTUBE_TRANSCRIPT_PROXY')
-        options = {'proxy_config': GenericProxyConfig(http_url=proxy, https_url=proxy)} if proxy else {}
-        api = YouTubeTranscriptApi(http_client=TimedSession(), **options)
-        tracks = [t for t in api.list(video['video_id']) if t.language_code.lower().split('-')[0] == 'en']
-        if not tracks:
-            video['transcript'] = {'status': 'unavailable', 'reason': 'No English caption track', 'checked_at': now()}
-            return None
-        track = sorted(tracks, key=lambda t: t.is_generated)[0]
-        fetched = track.fetch()
+        with TranscriptClient(proxy=os.environ.get('YOUTUBE_TRANSCRIPT_PROXY')) as client:
+            fetched = client.fetch(video['video_id'])
         data = {
-            'video_id': video['video_id'], 'language': fetched.language_code,
-            'caption_type': 'automatic' if fetched.is_generated else 'manual',
+            'video_id': video['video_id'], 'language': fetched['language'],
+            'caption_type': fetched['caption_type'],
             'retrieved_at': now(), 'source_url': video['url'],
-            'retrieval_method': 'youtube-transcript-api', 'audio_verified': False,
-            'segments': fetched.to_raw_data(),
+            'retrieval_method': 'InnerTube player/timedtext', 'audio_verified': False,
+            'segments': fetched['segments'],
         }
         if not valid_transcript(data, video['video_id']):
             raise ValueError('Invalid response')
-        relative = f"transcripts/{video['video_id']}.{fetched.language_code}.json"
+        relative = f"transcripts/{video['video_id']}.{data['language']}.json"
         atomic_json(CACHE / relative, data)
         # Read back before marking cached; transcript always lands before index.
         if not valid_transcript(json.loads((CACHE / relative).read_text()), video['video_id']):
             raise ValueError('Transcript read-back failed')
         video['transcript'] = {'status': 'cached', 'path': relative, 'language': data['language'], 'caption_type': data['caption_type'], 'retrieved_at': data['retrieved_at']}
         return data
-    except (NoTranscriptFound, TranscriptsDisabled, VideoUnavailable) as error:
-        video['transcript'] = {'status': 'unavailable', 'reason': type(error).__name__, 'checked_at': now()}
+    except TranscriptUnavailable as error:
+        video['transcript'] = {'status': 'unavailable', 'reason': error.reason, 'checked_at': now()}
+    except TranscriptRetryNeeded as error:
+        video['transcript'] = {'status': 'retry_needed', 'error': error.reason, 'attempted_at': now()}
     except Exception as error:
         # Exception text can include proxy credentials or response bodies; store only type.
         video['transcript'] = {'status': 'retry_needed', 'error': type(error).__name__, 'attempted_at': now()}

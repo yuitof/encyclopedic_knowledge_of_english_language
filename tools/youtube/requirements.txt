@@ -1,4 +1,4 @@
 # Workflow-only dependencies, installed outside the website environment.
-youtube-transcript-api==1.2.5
+defusedxml==0.7.1
 requests==2.34.2
 boto3==1.42.0

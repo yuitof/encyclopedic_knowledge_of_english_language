@@ -85,7 +85,7 @@ class S3Tests(unittest.TestCase):
             with patch.object(yt, 'CACHE', Path(destination)), patch.object(yt, 'REMOTE_CACHE', S3Cache('private-test-bucket', self.client)):
                 restored = yt.load_index()
                 self.assertFalse(list(Path(destination).glob('transcripts/*')))
-                with patch.dict('sys.modules', {'youtube_transcript_api': None}):
+                with patch.dict('sys.modules', {'transcripts': None, 'youtube_transcript_api': None}):
                     fetched = yt.fetch(restored['videos'][0], restored)
                 self.assertEqual(fetched, data())
                 self.assertEqual(len(list(yt.matches(fetched, 'put aside'))), 1)
