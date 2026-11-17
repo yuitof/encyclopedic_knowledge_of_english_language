@@ -1,29 +1,39 @@
-# Service bridge — Lambda server
+# Private Lambda CONNECT bridge
 
-The `service-bridge` branch owns the Lambda server. The previous source branch is retained as `archive/service-bridge`. The Cloud client lives on the repository's `vault` branch under `tools/youtube/`; deploy and update them separately. The worker image builds entirely from this directory and contains no collector code, history, transcripts, YouTube credentials, or client enrollment key.
-
-## Connection
+`service-bridge` contains the self-contained Lambda service, GOST proxy, Tailscale exposure, deployment infrastructure, and server tests. The `vault` branch owns the Cloud client, session orchestration, YouTube/X collectors, and S3 caches. Neither branch imports implementation code from the other. The earlier mixed branch remains under `archive/service-bridge`.
 
 ```text
-vault client → loopback CONNECT relay → proxy:8088 (built-in Cloud VPN)
-             → Lambda Tailscale IP:8443 → authenticated CONNECT proxy → YouTube:443
+YouTube HTTP client in vault
+  → loopback HTTP CONNECT forwarder
+  → proxy:8088 (Codex Cloud built-in Tailscale VPN)
+  → Lambda Tailscale IPv4:8443
+  → tailscale serve --tcp=8443 → loopback GOST
+  → YouTube HTTPS:443
 ```
 
-Cloud uses its scoped AWS identity to create a DynamoDB session and invoke Lambda asynchronously. Lambda claims that session once, retrieves its own enrollment key from Secrets Manager, and starts a userspace Tailscale node with memory-only state. `tailscale serve --bg --tcp=8443` forwards private TCP connections to a loopback CONNECT proxy. No exit route, public function URL, API Gateway, SSH service, or Funnel is created.
+Cloud starts no Tailscale daemon and selects no exit node. Lambda runs its own userspace `tailscaled` with memory-only state. Serve exposes raw private TCP, without Funnel, a public proxy listener, Function URL, API Gateway, or SSH. This raw TCP path does not depend on Tailscale HTTPS certificates.
 
-The proxy accepts the session's bearer token, checking its SHA-256 hash from the session record. Only `youtube.com:443`, `www.youtube.com:443`, and `checkip.amazonaws.com:443` are permitted. DNS resolution happens on Lambda, and nonpublic answers are rejected. The proxy forwards opaque bytes; the Cloud HTTP client verifies YouTube's TLS certificate and retains its own YouTube session. Proxy credentials never reach the origin.
+## Proxy selection and security
+
+The data path uses [GOST 3.3.3](https://github.com/go-gost/gost/releases/tag/v3.3.3), pinned by container digest in the Dockerfile. Its [HTTP handler](https://gost.run/en/reference/handlers/http/) supplies CONNECT parsing and byte forwarding. The former Python CONNECT parser/relay is removed. A small Python loopback control service implements GOST's documented [authentication plugin](https://gost.run/en/concepts/auth/#http-plugin); it checks the session password against the existing SHA-256 hash. The raw password is never stored in DynamoDB, argv, or the generated configuration. GOST's license is included in the image.
+
+GOST's service-level [destination whitelist](https://gost.run/en/concepts/bypass/#service-level-bypass) permits only `youtube.com:443`, `www.youtube.com:443`, and `checkip.amazonaws.com:443`. The last is used only for egress verification. These cover the existing collector's history/bootstrap, player, watch-page, and timedtext requests; no video-media CDN access is needed. Requests to IP literals, internal names, metadata addresses, other ports, and unrelated domains are denied.
+
+Before launch, Lambda resolves approved hosts to global IPv4 addresses and pins them in GOST's [host mapper](https://gost.run/en/concepts/hosts/). Any nonpublic or multicast answer aborts startup. A fail-closed resolver callback returns no addresses for host-map misses, preventing unchecked DNS fallback/rebinding. Pins last only for the bounded session; restart if an origin address stops working.
+
+The client uses `Proxy-Authorization: Basic base64(bridge:<random-session-token>)` inside the private tunnel. GOST forwards opaque origin TLS bytes; YouTube certificates remain verified by the existing client. No sniffing, MITM, traffic recording, UDP relay, or GOST management API is enabled. Daemon stdout/stderr are discarded, and worker failures use fixed categories. Temporary configuration is mode 0600 and removed on exit. Existing broader tailnet grants cannot bypass proxy authentication.
 
 ## Tailnet configuration
 
-Allow the built-in Cloud VPN identity (`tag:cloud-codex`) to reach `tag:service-bridge` on `tcp:8443`. This replaces the old exit-node permission to `autogroup:internet`; this implementation needs neither exit-node auto-approval nor port 53 grants. Inspect existing additive grants before changing them, and preserve unrelated devices' access.
+Use `tag:codex-cloud` for the built-in Cloud VPN and `tag:service-bridge` for Lambda. The minimal grant permits `tag:codex-cloud` → `tag:service-bridge` on `tcp:8443`. The [example policy fragment](tailscale-policy.example.json) is a merge reference, not a replacement for the existing policy. No exit-node advertisement, Internet grant, or port 53 grant is needed.
 
-Use separate preauthorized, reusable, ephemeral tagged enrollment keys. Store the worker's raw key in Secrets Manager (`service-bridge/tailscale`); configure the Cloud key in the environment's built-in Tailscale VPN settings. Cloud application code never retrieves or exports that key. Rotate before expiry. Renaming an existing secret does not change the key's tags: the previously documented tag/key migration must still be verified in the tailnet console.
+Review the actual current policy before editing it. Tailscale grants and ACLs are additive. Check all rules that can match this service, especially wildcard `src`/`dst`, `autogroup:member`, `autogroup:tagged`, personal identities/groups, destination tags, port ranges, and `*`/`tcp:*` grants. A narrow new rule does not cancel an existing broad rule. Use the policy editor's access tests to check the intended client/port and undesired client/port combinations. Record conflicting rules privately, and do not remove unrelated permissions to make the example appear exclusive.
 
-Tailscale Serve's raw [TCP forwarding](https://tailscale.com/docs/reference/tailscale-cli/serve#use-a-tcp-forwarder) exposes only the private service. Cloud's [documented TCP interface](https://learn.chatgpt.com/docs/environments/cloud-environments#connect-to-tcp-services) uses HTTP CONNECT at `proxy:8088`. Reconfigure and republish the Cloud environment, then test from a fresh task after any VPN change.
+Earlier environments used `tag:cloud-codex` (and older deployments used `tag:youtube-client`). Renaming source text does not retag an existing auth key or device. Configure the built-in VPN with a reusable, ephemeral key carrying `tag:codex-cloud`, and verify the resulting managed node's tag after publishing/replacing the environment. Lambda's existing `tag:service-bridge` enrollment secret can be reused. Keep enrollment keys private; Cloud application code never reads the VPN key. Rotate keys before expiry.
 
-## Deployment
+## AWS and deployment
 
-Run on the `service-bridge` branch using an authorized deployment identity:
+Reuse the existing function, DynamoDB table, IAM roles, and Secrets Manager enrollment secret in `us-west-1`. Cloud's scoped OIDC role needs this function's `lambda:InvokeFunction` and the session table's `PutItem`, `GetItem`, and `UpdateItem`. It needs no enrollment-secret access. The separate S3 cache policy is unchanged. Lambda reads only its own enrollment secret and session table, plus operational log writes. Customer-managed secret KMS encryption requires an existing scoped decrypt grant.
 
 ```bash
 export EXIT_AUTH_SECRET_ARN='arn:aws:secretsmanager:us-west-1:ACCOUNT:secret:service-bridge/tailscale'
@@ -31,49 +41,48 @@ export CLOUD_RUNTIME_ROLE_NAME='english-vault-youtube-cache-runtime'
 bash infra/service-bridge/deploy.sh
 ```
 
-The existing `EXIT_AUTH_SECRET_ARN` parameter name is retained for deployment compatibility; it now enrolls a private service rather than an exit node. There is no `CLIENT_AUTH_SECRET_ARN` parameter. Deploying the updated template removes this stack's grant for the Cloud application's enrollment-secret access; it does not delete the secret or revoke its key.
+`EXIT_AUTH_SECRET_ARN` is retained as a deployment-compatible parameter name; this key now enrolls a private service, not an exit node. Deployment builds only this directory, pushes an immutable ECR image, and deploys by digest. No runtime `vault` checkout is needed. The allowlisted Docker context excludes private runtime files. Lambda uses its default outbound-internet network; VPC placement would require outbound connectivity.
 
-The script builds from `infra/service-bridge/`, publishes an immutable ECR image, and deploys by digest. The allowlisted build context excludes private runtime files. The worker uses Lambda's default internet-enabled network; VPC deployment would require outbound internet connectivity.
-
-| Resource | Name / setting |
+| Resource / limit | Value |
 | --- | --- |
-| Worker stack / function | `service-bridge` |
-| Image stack / repository | `service-bridge-images` / `service-bridge` |
-| DynamoDB session table | `service-bridge-sessions` |
-| Worker role / Cloud inline policy | `service-bridge-worker` / `service-bridge-client` |
-| Region / image architecture | `us-west-1` / Linux amd64 |
-| Memory / hard timeout | 1 GiB / 900 seconds |
-| Maximum session / concurrency | 720 seconds including startup / one invocation |
-| Async queue age / retries | 60 seconds / zero function-error retries |
-| Logs / session retention | seven days / DynamoDB TTL after one day |
+| Function / worker stack | `service-bridge` |
+| Image stack / ECR repository | `service-bridge-images` / `service-bridge` |
+| Session table | `service-bridge-sessions` |
+| Worker role / Cloud client policy | `service-bridge-worker` / `service-bridge-client` |
+| Region / architecture / memory | `us-west-1` / Linux amd64 / 1 GiB |
+| Lambda timeout / reserved concurrency | 900 seconds / one invocation |
+| Session duration | 120–720 seconds, including startup |
+| Async queue age / function-error retries | 60 seconds / zero |
+| Heartbeat / stale threshold | five seconds / twenty seconds |
+| Operational logs / session TTL | seven days / one day |
 
-Lambda reads only its enrollment secret and session table. Cloud's bridge policy permits only this function's invocation and session-table operations, separately from its existing S3 cache policy. Customer-managed secret encryption keys require a scoped decrypt grant. Lambda bills the whole active session, including waiting; associated AWS and Tailscale resources may incur charges.
+Lambda bills the active invocation, including waiting; normal completion requests shutdown early. A lost client remains bounded by the session deadline and the Lambda limit. No new AWS privileges are needed for GOST.
 
-## Session contract: `connect-v1`
+## Session contract: `connect-v2`
 
-The two branches communicate through this contract, not shared Python imports:
+- Cloud creates a random 32-hex `session_id`, `protocol: connect-v2`, `state: requested`, a `proxy_token_hash` of a random 64-hex token, Unix-second `created_at`/`expires_at`/`purge_at`, and `stop_requested: false`. Only the client retains the raw token.
+- Cloud invokes Lambda asynchronously with only `{"session_id":"..."}`. Lambda atomically claims an unexpired, uncanceled `requested` record of this protocol, recording the invocation owner. Duplicate delivery and stale/old-protocol requests cannot claim it again.
+- Lambda starts Tailscale, the authentication/resolver control callbacks, and GOST. It checks GOST readiness before exposing the port and publishing `state: ready`, `node_id`, `ipv4`, `proxy_port: 8443`, `egress_ip`, the effective expiry, and a heartbeat.
+- Cloud validates this endpoint and session. The unsigned probe first checks that the private endpoint returns 407 without credentials, independently proving managed private TCP reachability and authentication enforcement. It then verifies authenticated CONNECT, origin TLS, the public egress address, and unsigned YouTube responses.
+- The collector uses explicit loopback proxy settings; AWS/S3 use their existing Cloud connection. A stale/stopped/near-expiry session or observed transport failure terminates collection without fallback to an ambient proxy or private Cloud daemon.
+- Cloud requests stop on completion/interruption. Lambda closes GOST, removes temporary configuration, logs out its ephemeral node, and publishes `stopped` or `failed`. The worker checks daemon health and expiry throughout its loop, retaining a sixty-second margin before Lambda's hard timeout. Abrupt termination relies on ephemeral-node cleanup.
 
-- Cloud creates a random 32-hex `session_id`, `protocol: connect-v1`, `state: requested`, `proxy_token_hash` (SHA-256 of a random 64-hex token), `created_at`, `expires_at`, `purge_at`, and `stop_requested: false`. Timestamps are Unix seconds. The raw token remains in client memory.
-- Cloud invokes the function with only `{"session_id": "..."}`. Lambda atomically claims an unexpired, uncanceled `requested` record of the supported protocol and records an invocation owner. Duplicate deliveries cannot claim it again.
-- Lambda publishes `state: ready`, `node_id`, `ipv4` (its Tailscale IPv4), `proxy_port: 8443`, `egress_ip`, effective `expires_at`, and `heartbeat`. It refreshes the heartbeat every five seconds.
-- Cloud rejects old protocol records, invalid endpoints, stopped/stale sessions, and a public egress-IP mismatch. It connects through the managed VPN, then authenticates the inner CONNECT with `Proxy-Authorization: Bearer <token>`.
-- Cloud sets `stop_requested: true` on completion or interruption. Lambda closes the proxy and logs out on stop or deadline; its hard timeout bounds abrupt failures. Terminal states are `stopped` or `failed`, with fixed error categories. Session hashes and network metadata remain private runtime data.
+`connect-v1` used the custom proxy's Bearer authentication and is intentionally rejected. Update both branches together. The collector and cache formats do not change.
 
-## Validation status
+## Verification and current limits
 
-The previous exit-node implementation was tested on 2026-11-17 using a separate Linux client. Cloud invoked it successfully but its manually launched daemon failed enrollment. The built-in Cloud VPN subsequently reported connected; a private SSH-port probe returned CONNECT 503. Those observations do not validate this new private CONNECT service.
+Before this redesign, a fresh local test of the deployed userspace Serve endpoint passed registration, private CONNECT, egress equality, unsigned YouTube HTTPS, denial, and cleanup. A separate GOST container prototype also passed authentication, exact host/port restrictions, metadata-address rejection, and verified HTTPS to both unsigned YouTube probe URLs.
 
-The `connect-v1` server from commit `6237702` was deployed on 2026-11-17. CloudFormation completed successfully, and Lambda reported `Active` with `LastUpdateStatus: Successful` for image digest `sha256:c6d55c410b2de84b20b47bca3d35133cf824313859e19bea25dd06f759c9af29`. A synchronous empty-event smoke invocation loaded the handler and returned the expected `{"state": "rejected"}` without starting a session. The bridge client policy was checked and no longer grants Secrets Manager access.
-
-Local acceptance passed on 2026-11-17 using the Mac's existing Tailscale connection. The worker joined with `tag:service-bridge`, and its exact node identity was confirmed online. Authenticated CONNECT requests through its private port 8443 preserved origin TLS verification, matched Lambda's public egress address, and returned HTTP 200 from both unsigned YouTube probe URLs (`/` and `/feed/history?hl=en`). Unauthenticated requests returned 407, and a disallowed destination returned 403. Cleanup reported `stopped` / `StopRequested`, and the temporary peer was confirmed disconnected. No YouTube authentication, history collection, or transcript retrieval was performed.
-
-Access from the built-in Cloud VPN identity on `tcp:8443` and a successful `bridge -- probe` from a fresh `vault` Cloud task still require verification before history collection. The successful local test validates the deployed server and local Tailscale path; it does not validate Cloud's managed CONNECT transport. No history or transcript retrieval is needed for acceptance.
+The automated suite includes real GOST integration inside the Lambda image with networking disabled, a read-only root filesystem, and UID 1000. It tests authentication, host/port restrictions, DNS fallback, process failure, expiry, opaque forwarding, and active-connection shutdown. Host-side tests explicitly skip GOST tests when its Linux binary is unavailable; container tests must not skip them.
 
 ```bash
 python -m unittest discover -s tests/service_bridge -v
 bash -n infra/service-bridge/deploy.sh
 aws cloudformation validate-template --region us-west-1 --template-body file://infra/service-bridge/template.yaml
 docker build --platform linux/amd64 --provenance=false -f infra/service-bridge/Dockerfile -t service-bridge:test infra/service-bridge
+docker run --rm --platform linux/amd64 --network none --read-only --tmpfs /tmp:rw,mode=1777 --user 1000:1000 --entrypoint python --mount type=bind,source="$PWD/tests/service_bridge",target=/validation/tests/service_bridge,readonly service-bridge:test -m unittest discover -s /validation/tests/service_bridge -v
 ```
 
-To retire the service, stop active sessions, revoke its enrollment key, remove its dedicated tailnet grant and scoped Cloud policy, then remove the stack using the deployment identity. The table, logs, and image repository are retained for explicit review/removal. Do not revoke the Cloud environment's VPN identity if other private services depend on it.
+A connected Cloud VPN, successful Lambda invocation, local tailnet test, or synthetic managed-proxy test is not proof of the live Cloud path. Run `bash tools/youtube/run.sh bridge -- probe` in a fresh `vault` Cloud task with the configured built-in VPN and scoped AWS OIDC identity. Keep actual tailnet-policy review, client-tag migration, managed private TCP reachability, and full proxy/YouTube acceptance as separate checks. No account authentication or history collection is needed for this probe.
+
+Deployment and live results for this revision will be recorded after verification. Until then, live Cloud acceptance and actual-policy review remain unverified.

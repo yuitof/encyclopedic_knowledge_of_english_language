@@ -27,7 +27,7 @@ class Jobs:
                 ConditionExpression='#s = :requested AND expires_at > :now AND stop_requested = :false AND #p = :protocol',
                 ExpressionAttributeNames={'#s': 'state', '#o': 'owner', '#p': 'protocol'},
                 ExpressionAttributeValues={':starting': 'starting', ':requested': 'requested',
-                    ':owner': owner, ':now': int(time.time()), ':false': False, ':protocol': 'connect-v1'}, ReturnValues='ALL_NEW')
+                    ':owner': owner, ':now': int(time.time()), ':false': False, ':protocol': 'connect-v2'}, ReturnValues='ALL_NEW')
             return result['Attributes']
         except Exception as error:
             if condition_failed(error):

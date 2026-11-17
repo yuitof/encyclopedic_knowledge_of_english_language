@@ -1,105 +1,150 @@
-"""Session-authenticated CONNECT service. TLS remains between client and origin."""
+"""Supervise GOST; Python handles session policy, never proxy traffic."""
 import hashlib
 import hmac
+import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import ipaddress
-import select
+import json
+import os
+from pathlib import Path
 import socket
+import subprocess
+import tempfile
 import threading
 import time
 
-ALLOWED_HOSTS = frozenset(('youtube.com', 'www.youtube.com', 'checkip.amazonaws.com'))
+from tailscale_node import BridgeError
+
+ALLOWED_HOSTS = ('youtube.com', 'www.youtube.com', 'checkip.amazonaws.com')
 
 
-def connect_origin(authority):
-    if authority not in {host + ':443' for host in ALLOWED_HOSTS}:
-        raise ValueError('Destination is not permitted')
-    host = authority[:-4]
-    addresses = socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)
-    if not addresses or any(not ipaddress.ip_address(a[4][0]).is_global for a in addresses):
-        raise ValueError('Destination did not resolve to public addresses')
-    error = OSError('Origin unavailable')
-    for family, kind, protocol, _, address in addresses:
-        connection = socket.socket(family, kind, protocol)
-        connection.settimeout(10)
-        try:
-            connection.connect(address)
-            return connection
-        except OSError as failure:
-            error = failure
-            connection.close()
-    raise error
+def public_mappings():
+    """Resolve once and pin only global IPv4 addresses for this bounded session."""
+    mappings = []
+    for host in ALLOWED_HOSTS:
+        addresses = {a[4][0] for a in socket.getaddrinfo(host, 443, socket.AF_INET, socket.SOCK_STREAM)}
+        if not addresses or any(not ipaddress.ip_address(ip).is_global or
+                                ipaddress.ip_address(ip).is_multicast for ip in addresses):
+            raise BridgeError('An approved proxy destination did not resolve to public addresses')
+        mappings.extend({'hostname': host, 'ip': ip} for ip in sorted(addresses))
+    return mappings
 
 
-def relay(left, right, stopped, deadline):
-    left.settimeout(10)
-    right.settimeout(10)
-    idle = time.monotonic() + 60
-    while not stopped.is_set() and time.time() < deadline and time.monotonic() < idle:
-        readable, _, _ = select.select((left, right), (), (), 0.5)
-        for source in readable:
-            data = source.recv(65536)
-            if not data:
-                return
-            (right if source is left else left).sendall(data)
-            idle = time.monotonic() + 60
+def configuration(port, control_port, mappings):
+    control = f'http://127.0.0.1:{control_port}'
+    return {
+        'services': [{'name': 'youtube-connect', 'addr': f'127.0.0.1:{port}',
+            'handler': {'type': 'http', 'auther': 'session',
+                        'metadata': {'idleTimeout': '60s', 'udp': False, 'sniffing': False}},
+            'listener': {'type': 'tcp'}, 'bypass': 'approved',
+            'hosts': 'pinned', 'resolver': 'deny-fallback'}],
+        'authers': [{'name': 'session', 'plugin': {'type': 'http', 'addr': control + '/auth', 'timeout': '2s'}}],
+        'bypasses': [{'name': 'approved', 'whitelist': True,
+                     'matchers': [host + ':443' for host in ALLOWED_HOSTS]}],
+        'hosts': [{'name': 'pinned', 'mappings': mappings}],
+        # A host-map miss must fail; never fall back to a second unchecked DNS lookup.
+        'resolvers': [{'name': 'deny-fallback',
+                       'plugin': {'type': 'http', 'addr': control + '/resolve', 'timeout': '2s'}}],
+    }
 
 
-class Handler(BaseHTTPRequestHandler):
-    rbufsize = 0
-    timeout = 10
+class ControlHandler(BaseHTTPRequestHandler):
+    timeout = 5
 
     def log_message(self, *args):
         pass
 
-    def do_CONNECT(self):
-        self.close_connection = True
-        authorization = self.headers.get('Proxy-Authorization', '')
-        token = authorization.removeprefix('Bearer ')
-        if (not authorization.startswith('Bearer ') or len(token) != 64 or
-                not hmac.compare_digest(hashlib.sha256(token.encode()).hexdigest(), self.server.token_hash)):
-            self.send_error(407)
-            return
-        if self.server.stopped.is_set() or time.time() >= self.server.deadline:
-            self.send_error(503)
-            return
-        if self.path not in {host + ':443' for host in ALLOWED_HOSTS}:
-            self.send_error(403)
-            return
-        if not self.server.slots.acquire(blocking=False):
-            self.send_error(503)
-            return
-        connected = False
+    def do_POST(self):
         try:
-            with connect_origin(self.path) as remote:
-                self.wfile.write(b'HTTP/1.1 200 Connection Established\r\n\r\n')
-                connected = True
-                relay(self.connection, remote, self.server.stopped, self.server.deadline)
-        except (OSError, ValueError):
-            if not connected:
-                self.send_error(502)
-        finally:
-            self.server.slots.release()
+            length = int(self.headers.get('Content-Length', '0'))
+            if self.path not in ('/auth', '/resolve') or not 0 < length <= 4096:
+                raise ValueError
+            data = json.loads(self.rfile.read(length))
+            if not isinstance(data, dict):
+                raise ValueError
+            if self.path == '/resolve':
+                result = {'ips': []}
+            else:
+                token = data.get('password')
+                valid = (not self.server.stopped.is_set() and time.time() < self.server.deadline
+                    and data.get('username') == 'bridge' and isinstance(token, str) and len(token) == 64
+                    and all(c in '0123456789abcdef' for c in token)
+                    and hmac.compare_digest(hashlib.sha256(token.encode()).hexdigest(), self.server.token_hash))
+                result = {'ok': bool(valid), 'id': 'bridge' if valid else ''}
+            body = json.dumps(result).encode()
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Length', str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        except (ValueError, OSError):
+            self.send_error(400)
 
 
 class Proxy:
     def __init__(self, token_hash, deadline):
-        if len(token_hash) != 64 or any(c not in '0123456789abcdef' for c in token_hash):
-            raise ValueError('Invalid session credential hash')
-        self.server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
-        self.server.token_hash = token_hash
-        self.server.deadline = deadline
-        self.server.stopped = threading.Event()
-        self.server.slots = threading.BoundedSemaphore(16)
-        self.port = self.server.server_port
+        if not isinstance(token_hash, str) or len(token_hash) != 64 or any(c not in '0123456789abcdef' for c in token_hash):
+            raise BridgeError('Invalid session credential hash')
+        self.token_hash, self.deadline = token_hash, deadline
+        self.process = self.control = self.thread = self.temporary = None
 
     def __enter__(self):
-        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
-        self.thread.start()
-        return self
+        try:
+            mappings = public_mappings()
+            if time.time() >= self.deadline:
+                raise BridgeError('Proxy session expired during startup')
+            self.control = ThreadingHTTPServer(('127.0.0.1', 0), ControlHandler)
+            self.control.token_hash = self.token_hash
+            self.control.deadline = self.deadline
+            self.control.stopped = threading.Event()
+            self.thread = threading.Thread(target=self.control.serve_forever, daemon=True)
+            self.thread.start()
+            with socket.socket() as listener:
+                listener.bind(('127.0.0.1', 0))
+                self.port = listener.getsockname()[1]
+            self.temporary = tempfile.TemporaryDirectory(prefix='gost-', dir='/tmp')
+            path = Path(self.temporary.name) / 'config.json'
+            path.touch(mode=0o600)
+            path.write_text(json.dumps(configuration(self.port, self.control.server_port, mappings)))
+            # No credentials in argv and no daemon output, traffic logs, API, sniffing, or MITM.
+            self.process = subprocess.Popen([os.environ.get('GOST_BIN', '/usr/local/bin/gost'), '-C', str(path)],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            timeout = time.monotonic() + 10
+            while time.monotonic() < timeout:
+                self.check()
+                try:
+                    client = http.client.HTTPConnection('127.0.0.1', self.port, timeout=0.5)
+                    try:
+                        client.request('CONNECT', 'www.youtube.com:443')
+                        if client.getresponse().status == 407:
+                            return self
+                    finally:
+                        client.close()
+                except (OSError, http.client.HTTPException):
+                    time.sleep(0.1)
+            raise BridgeError('GOST proxy did not become ready')
+        except BaseException:
+            self.__exit__(None, None, None)
+            raise
+
+    def check(self):
+        if self.process is None or self.process.poll() is not None or time.time() >= self.deadline:
+            raise BridgeError('GOST proxy is unavailable or expired')
 
     def __exit__(self, *args):
-        self.server.stopped.set()
-        self.server.shutdown()
-        self.server.server_close()
-        self.thread.join(timeout=2)
+        if self.control is not None:
+            self.control.stopped.set()
+        if self.process is not None and self.process.poll() is None:
+            self.process.terminate()
+            try:
+                self.process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+                self.process.wait()
+        if self.thread is not None:
+            self.control.shutdown()
+            self.thread.join(timeout=2)
+        if self.control is not None:
+            self.control.server_close()
+        if self.temporary is not None:
+            self.temporary.cleanup()

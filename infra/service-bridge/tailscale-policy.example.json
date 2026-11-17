@@ -1,0 +1,13 @@
+{
+  "tagOwners": {
+    "tag:codex-cloud": ["autogroup:admin"],
+    "tag:service-bridge": ["autogroup:admin"]
+  },
+  "grants": [
+    {
+      "src": ["tag:codex-cloud"],
+      "dst": ["tag:service-bridge"],
+      "ip": ["tcp:8443"]
+    }
+  ]
+}

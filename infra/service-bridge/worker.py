@@ -43,6 +43,7 @@ def handler(event, context):
             address = next(ip for ip in identity['TailscaleIPs'] if ipaddress.ip_address(ip).version == 4)
             egress = public_address()
             with Proxy(job['proxy_token_hash'], deadline) as proxy:
+                proxy.check()
                 node.serve(proxy.port)
                 jobs.publish(session_id, owner, state='ready', node_id=identity['ID'], ipv4=address,
                     proxy_port=8443, egress_ip=egress, expires_at=deadline, heartbeat=int(time.time()))
@@ -52,6 +53,7 @@ def handler(event, context):
                     if job is None or job.get('stop_requested'):
                         reason = 'StopRequested'
                         break
+                    proxy.check()
                     if node.status().get('BackendState') != 'Running':
                         raise RuntimeError('Tailscale disconnected')
                     jobs.publish(session_id, owner, heartbeat=int(time.time()))

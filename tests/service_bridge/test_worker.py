@@ -113,41 +113,63 @@ class WorkerTests(unittest.TestCase):
                     self.assertIn('tcp://127.0.0.1:12345', commands[-1])
 
 
-class ProxyTests(unittest.TestCase):
-    def request(self, service, target, authorization=None):
-        connection = http.client.HTTPConnection('127.0.0.1', service.port, timeout=3)
-        self.addCleanup(connection.close)
-        connection.request('CONNECT', target, headers={'Proxy-Authorization': authorization} if authorization else {})
-        return connection.getresponse()
+class PolicyTests(unittest.TestCase):
+    def test_dns_pins_only_public_ipv4_and_rejects_mixed_private_answers(self):
+        public = [(2, 1, 6, '', ('8.8.8.8', 443))]
+        with patch.object(proxy.socket, 'getaddrinfo', return_value=public):
+            mappings = proxy.public_mappings()
+        self.assertEqual({m['hostname'] for m in mappings}, set(proxy.ALLOWED_HOSTS))
+        for address in ('127.0.0.1', '169.254.169.254', '10.0.0.1', '100.64.0.1', '224.0.0.1'):
+            with self.subTest(address=address), patch.object(proxy.socket, 'getaddrinfo',
+                    return_value=public+[(2, 1, 6, '', (address, 443))]), self.assertRaises(tailscale_node.BridgeError):
+                proxy.public_mappings()
 
-    def test_authentication_allowlist_and_expiry_reject_before_dial(self):
-        with proxy.Proxy(HASH, time.time() + 30) as service, patch.object(proxy, 'connect_origin') as connect:
-            self.assertEqual(self.request(service, 'www.youtube.com:443').status, 407)
-            self.assertEqual(self.request(service, 'www.youtube.com:443', 'Bearer ' + 'c' * 64).status, 407)
-            for target in ('169.254.169.254:443', 'www.youtube.com:80', 'www.youtube.com.evil:443'):
-                self.assertEqual(self.request(service, target, 'Bearer ' + TOKEN).status, 403)
-            service.server.deadline = 0
-            self.assertEqual(self.request(service, 'www.youtube.com:443', 'Bearer ' + TOKEN).status, 503)
-            connect.assert_not_called()
+    def test_configuration_is_private_pinned_and_fail_closed(self):
+        mappings = [{'hostname': h, 'ip': '8.8.8.8'} for h in proxy.ALLOWED_HOSTS]
+        config = proxy.configuration(12345, 12346, mappings)
+        service = config['services'][0]
+        self.assertEqual(service['addr'], '127.0.0.1:12345')
+        self.assertEqual(service['resolver'], 'deny-fallback')
+        self.assertEqual(config['bypasses'][0]['matchers'], [h+':443' for h in proxy.ALLOWED_HOSTS])
+        self.assertTrue(config['bypasses'][0]['whitelist'])
+        self.assertFalse(service['handler']['metadata']['sniffing'])
+        self.assertFalse(service['handler']['metadata']['udp'])
+        self.assertNotIn('api', config)
+        self.assertNotIn(TOKEN, str(config))
+        self.assertEqual(config['hosts'][0]['mappings'], mappings)
 
-    def test_private_dns_answer_is_rejected(self):
-        with patch.object(proxy.socket, 'getaddrinfo', return_value=[(2, 1, 6, '', ('127.0.0.1', 443))]):
-            with self.assertRaises(ValueError):
-                proxy.connect_origin('www.youtube.com:443')
+    def test_control_authentication_expiry_and_resolver_fallback(self):
+        import json
+        control = proxy.ThreadingHTTPServer(('127.0.0.1', 0), proxy.ControlHandler)
+        control.token_hash, control.deadline, control.stopped = HASH, time.time()+30, threading.Event()
+        thread = threading.Thread(target=control.serve_forever, daemon=True)
+        thread.start()
+        def request(path, data):
+            client = http.client.HTTPConnection('127.0.0.1', control.server_port, timeout=3)
+            try:
+                client.request('POST', path, json.dumps(data), {'Content-Type':'application/json'})
+                return json.loads(client.getresponse().read())
+            finally:
+                client.close()
+        try:
+            self.assertTrue(request('/auth', {'username':'bridge','password':TOKEN})['ok'])
+            self.assertFalse(request('/auth', {'username':'bridge','password':'c'*64})['ok'])
+            self.assertFalse(request('/auth', {'username':'other','password':TOKEN})['ok'])
+            self.assertEqual(request('/resolve', {'host':'metadata.internal'}), {'ips':[]})
+            control.deadline = 0
+            self.assertFalse(request('/auth', {'username':'bridge','password':TOKEN})['ok'])
+        finally:
+            control.shutdown(); control.server_close(); thread.join(timeout=2)
 
-    def test_opaque_bytes_round_trip_and_active_connection_closes(self):
-        left, right = socket.socketpair()
-        self.addCleanup(right.close)
-        with proxy.Proxy(HASH, time.time() + 30) as service, patch.object(proxy, 'connect_origin', return_value=left):
-            client = http.client.HTTPConnection('127.0.0.1', service.port, timeout=3)
-            self.addCleanup(client.close)
-            client.set_tunnel('www.youtube.com', 443, {'Proxy-Authorization': 'Bearer ' + TOKEN})
-            client.connect()
-            client.sock.sendall(b'opaque TLS bytes')
-            self.assertEqual(right.recv(100), b'opaque TLS bytes')
-            right.sendall(b'opaque response')
-            self.assertEqual(client.sock.recv(100), b'opaque response')
-        self.assertEqual(client.sock.recv(100), b'')
+    def test_failed_gost_launch_cleans_up_control_and_config(self):
+        service = proxy.Proxy(HASH, time.time()+30)
+        with patch.object(proxy, 'public_mappings', return_value=[]), \
+                patch.object(proxy.subprocess, 'Popen', side_effect=OSError):
+            with self.assertRaises(OSError):
+                service.__enter__()
+        self.assertFalse(Path(service.temporary.name).exists())
+        self.assertTrue(service.control.stopped.is_set())
+        self.assertFalse(service.thread.is_alive())
 
 
 if __name__ == '__main__':
