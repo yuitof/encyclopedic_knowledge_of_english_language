@@ -87,6 +87,23 @@ class WorkerTests(unittest.TestCase):
         node.return_value.__exit__.assert_called_once()
         proxy_context.return_value.__exit__.assert_called_once()
 
+    def test_insufficient_time_never_starts_daemons(self):
+        jobs, node, proxy_context, context = self.setup_worker()
+        jobs.claim.return_value['expires_at'] = 530
+        self.assertEqual(worker.handler({'session_id': SESSION}, context), {'state': 'failed'})
+        node.assert_not_called()
+        proxy_context.assert_not_called()
+        self.assertEqual(jobs.publish.call_args.kwargs['reason'], 'InsufficientSessionTime')
+
+    def test_gost_loss_during_session_fails_and_closes_both_contexts(self):
+        jobs, node, proxy_context, context = self.setup_worker()
+        jobs.get.return_value = {'stop_requested': False}
+        proxy_context.return_value.__enter__.return_value.check.side_effect = [None, RuntimeError('private')]
+        self.assertEqual(worker.handler({'session_id': SESSION}, context), {'state': 'failed'})
+        self.assertEqual(jobs.publish.call_args.kwargs['reason'], 'BridgeFailure')
+        node.return_value.__exit__.assert_called_once()
+        proxy_context.return_value.__exit__.assert_called_once()
+
     def test_daemon_failure_removes_key_file(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(tailscale_node.subprocess, 'Popen', side_effect=OSError):
             with self.assertRaises(OSError):
