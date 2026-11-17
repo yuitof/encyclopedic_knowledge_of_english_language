@@ -2,6 +2,8 @@
 
 Use the `vault` branch for Cloud tasks. Lambda's self-contained server and deployment templates live on the separate [`service-bridge` branch](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/tree/service-bridge/infra/service-bridge). The client does not import server code, install or launch Tailscale, read enrollment secrets, or select an exit node.
 
+Run the whole wrapper command in the Cloud **outer executor** (using the command tool's approved outer-execution path where required). The raw `proxy:8088` listener is not reachable directly from a separate inner command sandbox, and loopback relays/collector processes must share the same network namespace. Keep the inherited AWS proxy/CA configuration.
+
 The client reaches Lambda's private CONNECT proxy through Codex Cloud's built-in VPN. Its [documented TCP transport](https://learn.chatgpt.com/docs/environments/cloud-environments#connect-to-tcp-services) is HTTP CONNECT at `proxy:8088`; it is separate from the ambient HTTPS proxy. A small loopback relay chains the collector's HTTPS tunnels through that endpoint to the Lambda Tailscale IP on port 8443. No direct-network fallback is implemented. AWS and S3 keep their existing Cloud connection path.
 
 ## Setup
@@ -39,3 +41,13 @@ The session wire contract is documented in the server README. The client recogni
 The minimal tailnet grant is maintained in the server's [policy example](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/blob/service-bridge/infra/service-bridge/tailscale-policy.example.json). Merge it into the actual policy after reviewing additive ACLs/grants; do not overwrite unrelated permissions. Earlier keys/devices using `tag:cloud-codex` or `tag:youtube-client` must be migrated explicitly to `tag:codex-cloud`. Changing documentation does not retag them. Republish the environment and verify the new managed node's tag before the live probe.
 
 GOST runs only on Lambda. It permits the two YouTube hosts needed by the existing collector and the egress-check host, all on TCP 443, with pinned public DNS addresses and no unchecked fallback. The client retains normal origin TLS verification and its existing authenticated-history / signed-out-caption behavior. No X transport or S3 cache behavior changes.
+
+For a legacy VPN configuration, inspect the current managed policy: `automatic_tailscale_access: true` permits routed tailnet TCP destinations without a separate CIDR grant. Older configurations may need a `tcp_network_access` private IPv4 grant for the selected endpoint and a replacement runtime. Do not weaken platform-protected-destination rules or substitute a private daemon after a denial.
+
+## Verified deployment
+
+On 2026-11-17, the GOST server at `f7a3431` and this client at `807339d` passed the unsigned probe from the refreshed Cloud environment's outer executor through the built-in VPN. Lambda invocation was accepted, `connect-v2` became ready, the private proxy returned 407 without authentication, authenticated public egress matched Lambda, both unsigned YouTube URLs returned 200 with certificate verification enabled, and the command exited 0. Independent session/peer checks subsequently confirmed `stopped` / `StopRequested` and the Lambda peer offline. This verifies the full managed VPN path, in addition to the separate local tailnet acceptance.
+
+The environment's private VPN key now enrolls `tag:codex-cloud`; its function/table variables and client-only setup were published before the probe. No private daemon, exit node, enrollment-key retrieval, account cookies, history collection, captions, or S3-cache reads were used for this acceptance. No snapshot containing probe evidence was published. Existing broad member/gateway tailnet rules were preserved and also permit TCP access to the bridge; session authentication remains mandatory. An unauthorized tailnet identity was not separately enrolled for a live denial test.
+
+Local validation passed all 74 YouTube-client tests and all 20 X tests. The matching server passed all 17 tests inside its Lambda image, plus deployed local authentication/destination-denial and expired-session checks. Existing collector authentication and cache behavior are preserved; authenticated collection itself was not exercised by this unsigned acceptance.
