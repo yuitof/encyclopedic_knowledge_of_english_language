@@ -1,0 +1,8 @@
+**
+!requirements.txt
+!tailscale_node.py
+!sessions.py
+!proxy.py
+!worker.py
+!Dockerfile
+!Dockerfile.dockerignore

@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: On-demand private CONNECT service reached through the built-in Cloud VPN.
+Parameters:
+  ImageUri:
+    Type: String
+    AllowedPattern: '[0-9]{12}\.dkr\.ecr\.us-west-1\.amazonaws\.com/.+@sha256:[a-f0-9]{64}'
+  ExitAuthSecretArn:
+    Type: String
+    AllowedPattern: 'arn:aws:secretsmanager:us-west-1:[0-9]{12}:secret:.+'
+    Description: Existing secret containing the tagged, preauthorized ephemeral service-node auth key.
+  CloudRuntimeRoleName:
+    Type: String
+    AllowedPattern: '[\w+=,.@-]+'
+    Description: Existing scoped Cloud AWS runtime role receiving the session-client permissions.
+Rules:
+  RequiredRegion:
+    Assertions:
+      - Assert: !Equals [!Ref 'AWS::Region', us-west-1]
+        AssertDescription: Deploy in us-west-1, alongside the private cache.
+Resources:
+  SessionTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: service-bridge-sessions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: session_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: session_id
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: purge_at
+        Enabled: true
+      SSESpecification:
+        SSEEnabled: true
+  WorkerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: service-bridge-worker
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ServiceBridgeSessionOnly
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref ExitAuthSecretArn
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:UpdateItem]
+                Resource: !GetAtt SessionTable.Arn
+              - Effect: Allow
+                Action: [logs:CreateLogStream, logs:PutLogEvents]
+                Resource: !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}:*'
+  Worker:
+    Type: AWS::Lambda::Function
+    DependsOn: WorkerLogs
+    Properties:
+      FunctionName: !Ref AWS::StackName
+      PackageType: Image
+      Code:
+        ImageUri: !Ref ImageUri
+      Architectures: [x86_64]
+      Role: !GetAtt WorkerRole.Arn
+      MemorySize: 1024
+      Timeout: 900
+      ReservedConcurrentExecutions: 1
+      Environment:
+        Variables:
+          SESSION_TABLE: !Ref SessionTable
+          TAILSCALE_AUTH_SECRET_ARN: !Ref ExitAuthSecretArn
+  WorkerLogs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${AWS::StackName}'
+      RetentionInDays: 7
+  AsyncPolicy:
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      FunctionName: !Ref Worker
+      Qualifier: '$LATEST'
+      MaximumEventAgeInSeconds: 60
+      MaximumRetryAttempts: 0
+  CloudClientPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub '${AWS::StackName}-client'
+      Roles: [!Ref CloudRuntimeRoleName]
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: lambda:InvokeFunction
+            Resource: !GetAtt Worker.Arn
+          - Effect: Allow
+            Action: [dynamodb:PutItem, dynamodb:GetItem, dynamodb:UpdateItem]
+            Resource: !GetAtt SessionTable.Arn
+Outputs:
+  FunctionArn:
+    Value: !GetAtt Worker.Arn
+  SessionTableName:
+    Value: !Ref SessionTable

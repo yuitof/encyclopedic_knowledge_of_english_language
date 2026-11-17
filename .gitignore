@@ -1,0 +1,9 @@
+.DS_Store
+
+# Private runtime evidence, credentials, caches, and dependencies.
+/.codex/tmp/
+.venv/
+
+# Python-generated files.
+__pycache__/
+*.py[cod]
