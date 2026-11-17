@@ -57,9 +57,19 @@ def initial_state(source):
 
 
 class Client:
-    def __init__(self, cookies, root, atomic):
+    def __init__(self, cookies, root, atomic, proxy=None):
         self.root, self.atomic = root, atomic
         self.http = requests.Session()
+        if proxy:
+            try:
+                parsed = urlparse(proxy)
+                if parsed.scheme not in ('http', 'https') or not parsed.hostname:
+                    raise ValueError
+                parsed.port
+            except ValueError:
+                self.http.close()
+                raise XError('Invalid X proxy configuration.') from None
+            self.http.proxies.update(http=proxy, https=proxy)
         self.http.headers.update({'User-Agent': USER_AGENT, 'Accept-Language': 'en-US,en;q=0.9'})
         for c in cookies:
             if c['domain'].lstrip('.') in ('x.com', 'www.x.com'):
@@ -72,10 +82,12 @@ class Client:
 
     def get(self, url, **kwargs):
         parsed = urlparse(url)
-        if parsed.scheme != 'https' or parsed.hostname not in ('x.com', 'abs.twimg.com') or parsed.username or parsed.password:
+        if (parsed.scheme != 'https' or parsed.hostname not in ('x.com', 'abs.twimg.com')
+                or parsed.username or parsed.password or parsed.port not in (None, 443)):
             raise XError('Refusing unexpected X asset/API destination.')
         try:
-            response = self.http.get(url, timeout=(10, 45), allow_redirects=False, **kwargs)
+            response = self.http.get(url, timeout=(10, 45), allow_redirects=False,
+                **({'proxies': self.http.proxies} if self.http.proxies else {}), **kwargs)
         except requests.RequestException:
             raise XError('X network/TLS request failed; local progress retained. Retry later.') from None
         if response.status_code == 429:

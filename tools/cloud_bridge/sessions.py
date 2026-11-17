@@ -3,7 +3,7 @@ import hashlib
 import re
 import time
 
-from bridge_transport import BridgeError
+from .transport import BridgeError
 
 SESSION_ID = re.compile(r'[a-f0-9]{32}\Z')
 

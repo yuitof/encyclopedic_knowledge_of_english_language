@@ -10,7 +10,7 @@ The client reaches Lambda's private CONNECT proxy through Codex Cloud's built-in
 
 1. Deploy the matching `connect-v2` server from the `service-bridge` branch. It publishes private session readiness in DynamoDB.
 2. Configure the environment's built-in Tailscale VPN with a reusable, ephemeral key carrying `tag:codex-cloud`. Keep this credential in the private VPN settings, outside application variables and files. Permit this identity to reach `tag:service-bridge` on `tcp:8443`. The old exit-node/Internet/DNS grants are not required by this client.
-3. Set `YOUTUBE_BRIDGE_FUNCTION` to the stack's `FunctionArn` and `YOUTUBE_BRIDGE_TABLE` to `SessionTableName`. The old `YOUTUBE_EXIT_*` names are replaced; `YOUTUBE_TAILSCALE_AUTH_SECRET_ARN` is no longer read. Remove `setup-tailscale.sh` and manual daemon startup from any environment setup instructions. Install only `bash tools/youtube/setup.sh` for this workflow.
+3. Set `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions` (or the matching stack's function ARN/table outputs). Both clients also accept the existing `YOUTUBE_BRIDGE_FUNCTION` and `YOUTUBE_BRIDGE_TABLE` variables; shared names take precedence. Install `bash tools/youtube/setup.sh` and/or `bash tools/x/setup.sh` for the workflows you use. The old `YOUTUBE_EXIT_*` names are replaced; `YOUTUBE_TAILSCALE_AUTH_SECRET_ARN` is no longer read. Remove `setup-tailscale.sh` and manual daemon startup from environment setup instructions.
 4. Attach the existing scoped AWS identity with permission to invoke that function and create/read/update that session table. Allow `lambda.us-west-1.amazonaws.com` and `dynamodb.us-west-1.amazonaws.com` on the ordinary Cloud network, preserving existing S3/dictionary destinations. Client application access to Secrets Manager and Tailscale enrollment/control hosts is no longer needed for this bridge; preserve any permissions needed by other workflows.
 5. Save and republish the environment, then use a fresh task on `vault`. A connected VPN status alone does not establish private service reachability.
 
@@ -40,7 +40,7 @@ The session wire contract is documented in the server README. The client recogni
 
 The minimal tailnet grant is maintained in the server's [policy example](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/blob/service-bridge/infra/service-bridge/tailscale-policy.example.json). Merge it into the actual policy after reviewing additive ACLs/grants; do not overwrite unrelated permissions. Earlier keys/devices using `tag:cloud-codex` or `tag:youtube-client` must be migrated explicitly to `tag:codex-cloud`. Changing documentation does not retag them. Republish the environment and verify the new managed node's tag before the live probe.
 
-GOST runs only on Lambda. It permits the two YouTube hosts needed by the existing collector and the egress-check host, all on TCP 443, with pinned public DNS addresses and no unchecked fallback. The client retains normal origin TLS verification and its existing authenticated-history / signed-out-caption behavior. No X transport or S3 cache behavior changes.
+GOST runs only on Lambda. With the X extension deployed, it permits the two YouTube hosts, `x.com`, `abs.twimg.com`, and the egress-check host, all on TCP 443, with pinned public DNS addresses and no unchecked fallback. The clients retain normal origin TLS verification and existing authentication. S3 cache behavior is unchanged. Session coordination, forwarding, and probes are shared under `tools/cloud_bridge/`; neither collector imports Lambda code.
 
 For a legacy VPN configuration, inspect the current managed policy: `automatic_tailscale_access: true` permits routed tailnet TCP destinations without a separate CIDR grant. Older configurations may need a `tcp_network_access` private IPv4 grant for the selected endpoint and a replacement runtime. Do not weaken platform-protected-destination rules or substitute a private daemon after a denial.
 
@@ -51,3 +51,24 @@ On 2026-11-17, the GOST server at `f7a3431` and this client at `807339d` passed 
 The environment's private VPN key now enrolls `tag:codex-cloud`; its function/table variables and client-only setup were published before the probe. No private daemon, exit node, enrollment-key retrieval, account cookies, history collection, captions, or S3-cache reads were used for this acceptance. No snapshot containing probe evidence was published. Existing broad member/gateway tailnet rules were preserved and also permit TCP access to the bridge; session authentication remains mandatory. An unauthorized tailnet identity was not separately enrolled for a live denial test.
 
 Local validation passed all 74 YouTube-client tests and all 20 X tests. The matching server passed all 17 tests inside its Lambda image, plus deployed local authentication/destination-denial and expired-session checks. Existing collector authentication and cache behavior are preserved; authenticated collection itself was not exercised by this unsigned acceptance.
+
+## X through the same bridge
+
+The X extension requires deployment of the matching server destination list. The previous YouTube-only image rejects X. It uses the same function/table, `connect-v2` protocol, AWS invocation/session permissions, built-in VPN identity, and private TCP 8443 grant. Existing `YOUTUBE_BRIDGE_*` settings work for both clients; no X-specific bridge credential is needed.
+
+Run these commands in the Cloud outer executor after deployment:
+
+```bash
+bash tools/x/run.sh bridge -- probe
+bash tools/x/run.sh bridge -- refresh
+bash tools/x/run.sh bridge -- get POST_ID
+bash tools/x/run.sh bridge -- folders --refresh
+```
+
+The unsigned X probe checks readiness, private authentication/407, egress equality, and verified HTTPS to `x.com/robots.txt` and a small `abs.twimg.com` favicon. It reads no X session or cache and does not call the authenticated API. A denial/challenge or non-success HTTP status fails the probe. Successful connectivity does not establish account authorization.
+
+For authenticated reads, supply your existing private `X_STORAGE_STATE_JSON` and preserve normal `Viewer` identity verification. The wrapper passes a temporary `X_PROXY` only to the X collector, covering API and required asset requests; it never replaces ambient AWS/S3 proxy/CA settings or falls back to direct X after tunnel loss. Cookies stay in the client and remain scoped to X, including when assets are fetched. Account selection works as `bash tools/x/run.sh --account ID bridge -- refresh --resume`, or `bridge -- --account ID refresh --resume`.
+
+Cache-only search/list, offline reads, and S3 sync keep their ordinary commands; `--offline bridge` is rejected before AWS access. Use one session at a time because Lambda concurrency remains one. The collector owns its local workflow lock and preserves page checkpoints if a bounded session expires. Resume an incomplete scan in a new session.
+
+Local X-extension validation passed 78 YouTube/shared-bridge tests, 26 X tests, and 18 server tests in the Lambda image. A full local chain using the actual client relay, a synthetic managed TCP proxy, and the new production GOST build returned HTTP 200 with origin TLS verification for both X probe resources and the two YouTube URLs. This is a local component check. The X extension has not yet been deployed or accepted through a live Cloud VPN, and no X account collection was performed for acceptance.

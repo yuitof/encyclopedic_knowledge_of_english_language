@@ -18,10 +18,10 @@ import requests
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/youtube'))
-import bridge_sessions
-import bridge_transport
+sys.path.insert(0, str(ROOT / 'tools'))
+from cloud_bridge import sessions as bridge_sessions, transport as bridge_transport
 import innertube
-import service_bridge
+from cloud_bridge import client as service_bridge
 import youtube
 
 TOKEN = 'b' * 64
@@ -34,6 +34,56 @@ def ready():
 
 
 class BridgeTests(unittest.TestCase):
+    def test_shared_settings_preserve_legacy_and_prefer_shared_values(self):
+        with patch.dict(os.environ, {'YOUTUBE_BRIDGE_FUNCTION': 'legacy'}, clear=True):
+            self.assertEqual(service_bridge.required('FUNCTION'), 'legacy')
+            with patch.dict(os.environ, {'SERVICE_BRIDGE_FUNCTION': 'shared'}):
+                self.assertEqual(service_bridge.required('FUNCTION'), 'shared')
+
+    def test_x_child_uses_shared_lifecycle_and_only_x_proxy(self):
+        child, jobs, transport = Mock(), Mock(), Mock()
+        child.poll.return_value = 0
+        child.returncode = 0
+        jobs.get.return_value = ready()
+        transport.proxy_url = 'http://127.0.0.1:12345'
+        with patch.dict(os.environ, {}, clear=True), patch.object(service_bridge.subprocess, 'Popen', return_value=child) as spawn, \
+                patch.object(bridge_sessions.time, 'time', return_value=500):
+            self.assertEqual(service_bridge.collect(['--account', '42', 'refresh', '--resume'],
+                transport, ready(), jobs, SESSION, workflow='x'), 0)
+        call = spawn.call_args
+        self.assertTrue(call.args[0][1].endswith('/tools/x/x.py'))
+        self.assertEqual(call.args[0][2:], ['--account', '42', 'refresh', '--resume'])
+        self.assertEqual(call.kwargs['env']['X_PROXY'], transport.proxy_url)
+        self.assertNotIn('HTTPS_PROXY', call.kwargs['env'])
+        self.assertNotIn('YOUTUBE_HISTORY_PROXY', call.kwargs['env'])
+
+    def test_x_unsigned_probe_uses_shared_session_and_stops_on_http_denial(self):
+        args = types.SimpleNamespace(arguments=['probe'], session_seconds=180, ready_timeout=60)
+        jobs, aws, transport = Mock(), Mock(), MagicMock()
+        jobs.get.return_value = ready()
+        aws.client.return_value.invoke.return_value = {'StatusCode': 202}
+        with patch.dict(os.environ, {'SERVICE_BRIDGE_FUNCTION': 'function', 'SERVICE_BRIDGE_TABLE': 'table'}, clear=True), \
+                patch.object(service_bridge.boto3, 'Session', return_value=aws), \
+                patch.object(service_bridge, 'Jobs', return_value=jobs), \
+                patch.object(service_bridge, 'wait_ready', return_value=ready()), \
+                patch.object(service_bridge, 'ManagedBridge', return_value=transport), \
+                patch.object(service_bridge, 'probe_private_proxy', return_value=407), \
+                patch.object(service_bridge, 'public_address', return_value='8.8.8.8'), \
+                patch.object(service_bridge, 'x_probe', return_value=[{'status':403}]) as probe, \
+                patch.object(service_bridge, 'youtube_probe', side_effect=AssertionError('Wrong probe')), \
+                patch.object(service_bridge, 'collect', side_effect=AssertionError('No authenticated workflow during probe')), \
+                patch.object(bridge_sessions.time, 'time', return_value=500), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(service_bridge.run(args, workflow='x'), 1)
+        probe.assert_called_once()
+        jobs.stop.assert_called_once()
+        transport.__exit__.assert_called_once()
+
+    def test_offline_or_unsupported_x_commands_never_create_aws_session(self):
+        with patch.object(service_bridge.boto3, 'Session', side_effect=AssertionError('AWS forbidden')):
+            for arguments in (['--offline', 'refresh'], ['login'], ['search', 'phrase']):
+                with self.subTest(arguments=arguments), self.assertRaises(bridge_transport.BridgeError):
+                    service_bridge.run(types.SimpleNamespace(arguments=arguments), workflow='x')
+
     def test_sessions_store_only_token_hash(self):
         table = Mock()
         bridge_sessions.Jobs(table).create(SESSION, 720, TOKEN)
@@ -174,19 +224,22 @@ class BridgeTests(unittest.TestCase):
             with patch.object(bridge_transport.http.client, 'HTTPConnection', side_effect=route_proxy):
                 with bridge_transport.ManagedBridge(job, TOKEN) as transport:
                     port = int(transport.proxy_url.rsplit(':', 1)[1])
-                    client = original('127.0.0.1', port, timeout=3)
-                    try:
-                        client.set_tunnel('www.youtube.com', 443)
-                        client.connect()
-                        client.sock.sendall(b'\x16\x03\x01HELLO')
-                        self.assertEqual(client.sock.recv(8), b'\x16\x03\x01HELLO')
-                        transport.check()
-                    finally:
-                        client.close()
+                    for host in ('www.youtube.com', 'x.com', 'abs.twimg.com'):
+                        client = original('127.0.0.1', port, timeout=3)
+                        try:
+                            client.set_tunnel(host, 443)
+                            client.connect()
+                            client.sock.sendall(b'\x16\x03\x01HELLO')
+                            self.assertEqual(client.sock.recv(8), b'\x16\x03\x01HELLO')
+                            transport.check()
+                        finally:
+                            client.close()
             self.assertIn(b'CONNECT 100.64.0.1:8443 ', observed[0][0])
             self.assertNotIn(TOKEN.encode(), b''.join(observed[0][1]))
             self.assertIn(b'CONNECT www.youtube.com:443 ', observed[1][0])
             self.assertIn(base64.b64encode(('bridge:'+TOKEN).encode()), b''.join(observed[1][1]))
+            self.assertIn(b'CONNECT x.com:443 ', observed[3][0])
+            self.assertIn(b'CONNECT abs.twimg.com:443 ', observed[5][0])
         finally:
             server.shutdown()
             server.server_close()

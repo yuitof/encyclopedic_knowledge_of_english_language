@@ -3,7 +3,7 @@ import ipaddress
 
 import requests
 
-from bridge_transport import BridgeError
+from .transport import BridgeError
 
 
 def public_address(proxy=None):
@@ -23,14 +23,24 @@ def public_address(proxy=None):
 
 
 def youtube_probe(proxy):
+    return origin_probe(proxy, [('www.youtube.com', '/'), ('www.youtube.com', '/feed/history?hl=en')])
+
+
+def x_probe(proxy):
+    # Unsigned, small resources on both hosts needed by the authenticated X client.
+    # A successful response checks connectivity, not account/API authorization.
+    return origin_probe(proxy, [('x.com', '/robots.txt'), ('abs.twimg.com', '/favicons/twitter.3.ico')])
+
+
+def origin_probe(proxy, destinations):
     results = []
     try:
         with requests.Session() as client:
             client.trust_env = False
-            for path in ('/', '/feed/history?hl=en'):
-                with client.get('https://www.youtube.com' + path, timeout=(5, 15),
+            for host, path in destinations:
+                with client.get('https://' + host + path, timeout=(5, 15),
                         proxies={'http': proxy, 'https': proxy}, allow_redirects=False) as response:
-                    results.append({'path': path, 'status': response.status_code})
+                    results.append({'host': host, 'path': path, 'status': response.status_code})
         return results
     except requests.RequestException:
-        raise BridgeError('YouTube probe failed through the built-in VPN bridge') from None
+        raise BridgeError('Origin probe failed through the built-in VPN bridge') from None

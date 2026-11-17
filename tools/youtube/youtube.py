@@ -500,8 +500,9 @@ def sync(args):
 
 
 def service_bridge(args):
-    from service_bridge import command
-    from bridge_transport import BridgeError
+    sys.path.insert(0, str(ROOT / 'tools'))
+    from cloud_bridge.client import command
+    from cloud_bridge.transport import BridgeError
     try:
         return command(args)
     except BridgeError as error:

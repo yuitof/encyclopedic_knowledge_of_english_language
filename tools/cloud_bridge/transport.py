@@ -1,4 +1,4 @@
-"""Reach a private bridge through Codex Cloud's built-in VPN TCP proxy."""
+"""Shared private bridge transport through Codex Cloud's built-in VPN TCP proxy."""
 import base64
 import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer

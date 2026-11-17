@@ -1,4 +1,4 @@
-"""Run the collector through a Lambda service using the built-in Cloud VPN."""
+"""Run YouTube or X through one Lambda session using the built-in Cloud VPN."""
 import json
 import os
 from pathlib import Path
@@ -11,17 +11,23 @@ import secrets
 import boto3
 from botocore.config import Config
 
-from bridge_sessions import Jobs, check_ready
-from bridge_probe import public_address, youtube_probe
-from bridge_transport import BridgeError, ManagedBridge, endpoint, probe_private_proxy
+from .sessions import Jobs, check_ready
+from .probe import public_address, youtube_probe, x_probe
+from .transport import BridgeError, ManagedBridge, endpoint, probe_private_proxy
 
 ROOT = Path(__file__).resolve().parents[2]
+WORKFLOWS = {
+    'youtube': {'script': 'tools/youtube/youtube.py', 'proxies': ('YOUTUBE_HISTORY_PROXY', 'YOUTUBE_TRANSCRIPT_PROXY'),
+                'commands': ('probe', 'refresh', 'search')},
+    'x': {'script': 'tools/x/x.py', 'proxies': ('X_PROXY',), 'commands': ('probe', 'refresh', 'get', 'folders')},
+}
 
 
 def required(name):
-    value = os.environ.get(name, '').strip()
+    # Preserve existing YouTube environments while allowing shared resource names.
+    value = os.environ.get('SERVICE_BRIDGE_' + name, '').strip() or os.environ.get('YOUTUBE_BRIDGE_' + name, '').strip()
     if not value:
-        raise BridgeError('Missing bridge setting: ' + name)
+        raise BridgeError('Missing bridge setting: SERVICE_BRIDGE_' + name + ' (or YOUTUBE_BRIDGE_' + name + ')')
     return value
 
 
@@ -38,11 +44,11 @@ def wait_ready(jobs, session_id, timeout):
     raise BridgeError('Lambda bridge did not become ready before the startup deadline')
 
 
-def collect(arguments, node, job, jobs, session_id):
+def collect(arguments, node, job, jobs, session_id, workflow='youtube'):
     environment = os.environ.copy()
-    environment['YOUTUBE_HISTORY_PROXY'] = node.proxy_url
-    environment['YOUTUBE_TRANSCRIPT_PROXY'] = node.proxy_url
-    process = subprocess.Popen([sys.executable, str(ROOT / 'tools/youtube/youtube.py'), *arguments],
+    for name in WORKFLOWS[workflow]['proxies']:
+        environment[name] = node.proxy_url
+    process = subprocess.Popen([sys.executable, str(ROOT / WORKFLOWS[workflow]['script']), *arguments],
         env=environment)
     try:
         while process.poll() is None:
@@ -62,18 +68,26 @@ def collect(arguments, node, job, jobs, session_id):
                 process.wait()
 
 
-def run(args):
-    arguments = args.arguments
+def run(args, workflow='youtube'):
+    if workflow not in WORKFLOWS:
+        raise BridgeError('Unsupported bridge workflow')
+    arguments = list(args.arguments)
     if arguments[:1] == ['--']:
         arguments = arguments[1:]
-    if not arguments or arguments[0] not in ('probe', 'refresh', 'search'):
-        raise BridgeError('Use bridge -- probe, refresh, or search with their usual arguments')
-    if arguments[0] == 'probe' and len(arguments) != 1:
+    command_arguments = arguments
+    if workflow == 'x' and arguments[:1] == ['--account']:
+        if len(arguments) < 3:
+            raise BridgeError('Expected --account ID followed by an X command')
+        command_arguments = arguments[2:]
+    if not command_arguments or command_arguments[0] not in WORKFLOWS[workflow]['commands']:
+        raise BridgeError('Use bridge -- with a supported command; offline/cache-only commands do not need a bridge')
+    probing = command_arguments[0] == 'probe'
+    if probing and len(command_arguments) != 1:
         raise BridgeError('The unsigned probe does not accept additional arguments')
     if not 120 <= args.session_seconds <= 720 or not 10 <= args.ready_timeout <= 120:
         raise BridgeError('Session duration must be 120–720 seconds; readiness timeout must be 10–120 seconds')
-    function = required('YOUTUBE_BRIDGE_FUNCTION')
-    table = required('YOUTUBE_BRIDGE_TABLE')
+    function = required('FUNCTION')
+    table = required('TABLE')
     session_id = uuid.uuid4().hex
     settings = {'region_name': 'us-west-1', 'config': Config(connect_timeout=5,
         read_timeout=10, retries={'mode': 'standard', 'total_max_attempts': 2})}
@@ -90,11 +104,11 @@ def run(args):
         payload = response.get('Payload')
         if payload is not None:
             payload.close()
-        if arguments[0] == 'probe':
+        if probing:
             print(json.dumps({'lambda_invocation': 'accepted'}), flush=True)
         job = wait_ready(jobs, session_id, args.ready_timeout)
         target = endpoint(job)
-        if arguments[0] == 'probe':
+        if probing:
             print(json.dumps({'lambda_session': 'ready', 'protocol': job['protocol']}), flush=True)
             status = probe_private_proxy(*target)
             print(json.dumps({'private_tcp_proxy': 'reachable', 'unauthenticated_status': status}), flush=True)
@@ -103,14 +117,14 @@ def run(args):
             if public_address(node.proxy_url) != job['egress_ip']:
                 raise BridgeError('Bridge egress address did not match; collection was not started')
             node.check()
-            print(json.dumps({'bridge': 'verified', 'session_id': session_id}), flush=True)
-            if arguments[0] == 'probe':
-                results = youtube_probe(node.proxy_url)
+            print(json.dumps({'bridge': 'verified'}), flush=True)
+            if probing:
+                results = (youtube_probe if workflow == 'youtube' else x_probe)(node.proxy_url)
                 check_ready(jobs.get(session_id))
                 node.check()
-                print(json.dumps({'unsigned_youtube_probe': results}), flush=True)
+                print(json.dumps({'unsigned_' + workflow + '_probe': results}), flush=True)
                 return 0 if all(200 <= r['status'] < 400 for r in results) else 1
-            return collect(arguments, node, job, jobs, session_id)
+            return collect(arguments, node, job, jobs, session_id, workflow)
     finally:
         try:
             jobs.stop(session_id)
@@ -118,9 +132,9 @@ def run(args):
             print('Could not send stop request; Lambda will stop at its session deadline.', file=sys.stderr)
 
 
-def command(args):
+def command(args, workflow='youtube'):
     try:
-        return run(args)
+        return run(args, workflow)
     except BridgeError:
         raise
     except Exception:

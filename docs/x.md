@@ -16,6 +16,26 @@ Cloud/Linux sessions use a privately supplied `X_STORAGE_STATE_JSON` in the same
 
 `doctor` reports configuration, not verified live connectivity. With S3 configured, it reports `s3`. Use `sync` and a restoration check to establish persistence.
 
+## Codex Cloud private bridge
+
+When direct X connections are blocked, use the authorized [private Lambda bridge](service-bridge-client.md) after its X extension has been deployed. It routes both `x.com` and the required `abs.twimg.com` assets through the built-in Cloud Tailscale VPN. Run the entire command in the outer executor; no separate Tailscale daemon or exit node is used.
+
+```bash
+bash tools/x/run.sh bridge -- probe
+bash tools/x/run.sh bridge -- refresh
+bash tools/x/run.sh bridge -- refresh --resume
+bash tools/x/run.sh bridge -- get POST_ID_OR_URL
+bash tools/x/run.sh bridge -- folders --refresh
+```
+
+Set `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions`, or reuse the existing `YOUTUBE_BRIDGE_FUNCTION` / `YOUTUBE_BRIDGE_TABLE` pair. Shared names take precedence. Keep the scoped AWS OIDC identity, private `X_STORAGE_STATE_JSON`, `X_ACCOUNT_ID`, and X cache settings separate. The probe uses no account session/cache. Follow it with an explicitly authorized authenticated command; unsigned success does not prove X will accept the session or AWS egress for account reads.
+
+The wrapper sets a temporary `X_PROXY` for both API and asset requests, monitors the shared session, and requests shutdown on completion. TLS verification remains enabled, and a tunnel failure stops the command without direct fallback. Other hosts, ports, and media downloads remain unsupported. X challenges or authorization failures stay visible. This wrapper does not configure a browser's proxy.
+
+Use plain search/list, `--offline` reads, and `sync` for cached work. They do not need Lambda. The bridge rejects `--offline`; network commands keep their existing checkpoint/resume and account-isolation rules. Only the child collector holds the workflow lock.
+
+The extension is tested locally (26 X tests, shared client tests, and real-GOST HTTPS component checks); deployment and live Cloud acceptance are pending. Until deployment and an unsigned Cloud probe pass, do not claim fresh Cloud X collection works.
+
 ## Collect and reuse
 
 ```bash

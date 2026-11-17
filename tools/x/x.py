@@ -46,7 +46,7 @@ def selected_account(args):
 def authenticated(args):
     if args.offline:
         raise ValueError('This operation needs X access; omit --offline.')
-    client = Client(state(CACHE), CACHE, atomic_json)
+    client = Client(state(CACHE), CACHE, atomic_json, proxy=os.environ.get('X_PROXY'))
     account = client.account()
     expected = args.account or os.environ.get('X_ACCOUNT_ID')
     if expected and account['id'] != expected:
@@ -282,12 +282,34 @@ def sync(args):
     emit({'synced': True, 'posts': len(cache.index['posts']), 'persistence': 's3'})
 
 
+def service_bridge(args):
+    if args.offline:
+        raise ValueError('Offline commands do not use the bridge.')
+    sys.path.insert(0, str(ROOT / 'tools'))
+    from cloud_bridge.client import command
+    from cloud_bridge.transport import BridgeError
+    if args.account:
+        arguments = list(args.arguments)
+        if arguments[:1] == ['--']:
+            arguments = arguments[1:]
+        args.arguments = ['--account', args.account, *arguments]
+    try:
+        return command(args, workflow='x')
+    except BridgeError as error:
+        raise ValueError(str(error)) from None
+
+
 def main():
     os.umask(0o077)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--account', help='Optional numeric account ID; otherwise use the authenticated/last selected account.')
     parser.add_argument('--offline', action='store_true', help='No X or S3 calls; use local files only.')
     commands = parser.add_subparsers(dest='command', required=True)
+    p = commands.add_parser('bridge', help='Run probe, refresh, get, or folders through the built-in Cloud VPN and Lambda')
+    p.add_argument('--session-seconds', type=int, default=720)
+    p.add_argument('--ready-timeout', type=int, default=60)
+    p.add_argument('arguments', nargs=argparse.REMAINDER)
+    p.set_defaults(run=service_bridge)
     p = commands.add_parser('login', help='Export X-only cookies after explicit local Chrome consent')
     p.add_argument('--profile', default='Default')
     p.add_argument('--authorize-export', action='store_true')
@@ -321,6 +343,10 @@ def main():
         p.set_defaults(run=function)
     args = parser.parse_args()
     try:
+        # The collector subprocess owns the workflow lock. Holding it in the
+        # wrapper would prevent that subprocess from starting its command.
+        if args.command == 'bridge':
+            return args.run(args) or 0
         with lock():
             return args.run(args) or 0
     except (ValueError, OSError) as error:
