@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Shared Codex Cloud identity for the private YouTube/X caches and service bridge.
+Parameters:
+  OidcProviderArn:
+    Type: String
+  OidcIssuerHostPath:
+    Type: String
+  OidcAudience:
+    Type: String
+  OidcSubject:
+    Type: String
+  YouTubeCacheAccessPolicyArn:
+    Type: String
+  XCacheAccessPolicyArn:
+    Type: String
+  BridgeFunctionArn:
+    Type: String
+  BridgeSessionTableArn:
+    Type: String
+Resources:
+  RuntimeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: english-vault-cloud-runtime
+      Description: Codex Cloud read/write access to private YouTube and X caches and bounded bridge sessions.
+      MaxSessionDuration: 3600
+      ManagedPolicyArns:
+        - !Ref YouTubeCacheAccessPolicyArn
+        - !Ref XCacheAccessPolicyArn
+      AssumeRolePolicyDocument:
+        Fn::Sub: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"${OidcProviderArn}"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"${OidcIssuerHostPath}:aud":"${OidcAudience}","${OidcIssuerHostPath}:sub":"${OidcSubject}"}}}]}'
+      Policies:
+        - PolicyName: service-bridge-client
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !Ref BridgeFunctionArn
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem]
+                Resource: !Ref BridgeSessionTableArn
+Outputs:
+  RuntimeRoleArn:
+    Value: !GetAtt RuntimeRole.Arn

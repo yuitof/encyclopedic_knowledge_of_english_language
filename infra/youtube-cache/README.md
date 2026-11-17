@@ -18,6 +18,8 @@ For Cloud tasks, set `YOUTUBE_CACHE_BUCKET` to the `BucketName` output and use s
 
 ## Scoped Cloud identity
 
+For the combined YouTube/X environment, use the separately managed [shared Cloud role](../cloud-runtime/README.md), `english-vault-cloud-runtime`. The YouTube-stack runtime role described below is the legacy single-cache option; preserve it during migration until the new Cloud session is verified. The shared role attaches both cache policies without moving or recreating either bucket.
+
 The stack output `CacheAccessPolicyArn` permits `GetObject` and `PutObject` on:
 
 - `cache/v1/history.json`
