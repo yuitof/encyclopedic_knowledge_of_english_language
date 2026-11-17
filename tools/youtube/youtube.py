@@ -320,7 +320,7 @@ def refresh(args):
 
     state = session_state()
     try:
-        with HistoryClient(state, args.timezone) as client:
+        with HistoryClient(state, args.timezone, proxy=os.environ.get('YOUTUBE_HISTORY_PROXY')) as client:
             for _ in range(args.max_pages):
                 payload = client.browse(token)
                 items = history_items(payload)
@@ -499,6 +499,15 @@ def sync(args):
                       'uploaded': 'history index and validated transcript JSON only; no sessions or tooling'}))
 
 
+def exit_node(args):
+    from exit_node import command
+    from tailscale_node import ExitNodeError
+    try:
+        return command(args)
+    except ExitNodeError as error:
+        raise ValueError(str(error)) from None
+
+
 def main():
     os.umask(0o077)
     parser = argparse.ArgumentParser(description=__doc__)
@@ -523,13 +532,18 @@ def main():
     p.set_defaults(run=doctor)
     p = sub.add_parser('sync', help='Merge S3 history and upload only validated cached transcripts; no YouTube calls')
     p.set_defaults(run=sync)
+    p = sub.add_parser('exit-node', help='Run probe, refresh, or search through an on-demand Lambda exit node')
+    p.add_argument('--session-seconds', type=int, default=720)
+    p.add_argument('--ready-timeout', type=int, default=60)
+    p.add_argument('arguments', nargs=argparse.REMAINDER)
+    p.set_defaults(run=exit_node)
     args = parser.parse_args()
     if getattr(args, 'phrase', 'x').strip() == '':
         parser.error('Phrase must not be empty')
     if getattr(args, 'max_pages', 1) < 1:
         parser.error('--max-pages must be positive')
     try:
-        args.run(args)
+        return args.run(args) or 0
     except Exception as error:
         # Do not dump authenticated browser/network objects or secrets in logs.
         code = getattr(error, 'response', {}).get('Error', {}).get('Code')

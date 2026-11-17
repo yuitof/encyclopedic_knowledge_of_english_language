@@ -6,6 +6,7 @@ import json
 import re
 import time
 from zoneinfo import ZoneInfo
+from urllib.parse import urlsplit
 
 import requests
 
@@ -99,9 +100,19 @@ def continuation_token(items):
 
 
 class HistoryClient:
-    def __init__(self, state, timezone):
+    def __init__(self, state, timezone, proxy=None):
         self.timezone = timezone
         self.session = requests.Session()
+        if proxy:
+            try:
+                parsed = urlsplit(proxy)
+                if parsed.scheme not in ('http', 'https') or not parsed.hostname:
+                    raise ValueError
+                parsed.port
+            except ValueError:
+                self.session.close()
+                raise HistoryError('Invalid history proxy configuration') from None
+            self.session.proxies.update(http=proxy, https=proxy)
         self.session.headers.update({'User-Agent': USER_AGENT, 'Accept-Language': 'en-GB,en;q=0.9'})
         for cookie in state['cookies']:
             if cookie.get('domain', '').lstrip('.') not in ('youtube.com', 'www.youtube.com'):
@@ -156,7 +167,8 @@ class HistoryClient:
             if method == 'POST':
                 self._authorize()
             try:
-                response = self.session.request(method, url, timeout=(15, 45), allow_redirects=False, **kwargs)
+                response = self.session.request(method, url, timeout=(15, 45), allow_redirects=False,
+                    **({'proxies': self.session.proxies} if self.session.proxies else {}), **kwargs)
             except requests.RequestException:
                 if attempt == 2:
                     raise HistoryError('YouTube network request failed after 3 attempts; check connectivity or proxy access') from None

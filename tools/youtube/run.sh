@@ -2,6 +2,7 @@
 set -euo pipefail
 umask 077
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
+export PATH="$root/.codex/tmp/youtube/bin:$PATH"
 python="$root/.codex/tmp/youtube/.venv/bin/python"
 if [[ ! -x "$python" ]]; then
   printf '%s\n' 'Run bash tools/youtube/setup.sh first.' >&2

@@ -1,0 +1,12 @@
+**
+!tools/
+!tools/youtube/
+!tools/youtube/requirements.txt
+!tools/youtube/tailscale_node.py
+!tools/youtube/exit_jobs.py
+!tools/youtube/exit_probe.py
+!infra/
+!infra/youtube-exit-node/
+!infra/youtube-exit-node/worker.py
+!infra/youtube-exit-node/Dockerfile
+!infra/youtube-exit-node/Dockerfile.dockerignore
