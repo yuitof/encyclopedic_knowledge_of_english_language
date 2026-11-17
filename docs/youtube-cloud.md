@@ -89,7 +89,7 @@ Caption requests can be blocked by cloud IPs or require proof tokens or restrict
 
 ## Subsequent natural-language requests
 
-An optional [temporary Lambda exit node](../infra/youtube-exit-node/README.md) keeps collection in Cloud while routing YouTube requests through an ephemeral Tailscale node. Once its AWS resources, tailnet permissions, and live unsigned probe have been validated, wrap network collection commands with `bash tools/youtube/run.sh exit-node --`, for example `exit-node -- refresh`. Each session is bounded and stops collection on transport loss. This integration requires its own live acceptance check against Cloud's managed networking.
+An optional [temporary Lambda exit node](../infra/service-bridge/README.md) keeps collection in Cloud while routing YouTube requests through an ephemeral Tailscale node. Once its AWS resources, tailnet permissions, and live unsigned probe have been validated, wrap network collection commands with `bash tools/youtube/run.sh exit-node --`, for example `exit-node -- refresh`. Each session is bounded and stops collection on transport loss. This integration requires its own live acceptance check against Cloud's managed networking.
 
 Use a private task configured for the **same S3 cache**, for example:
 

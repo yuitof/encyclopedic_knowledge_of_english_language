@@ -6,7 +6,7 @@
 !tools/youtube/exit_jobs.py
 !tools/youtube/exit_probe.py
 !infra/
-!infra/youtube-exit-node/
-!infra/youtube-exit-node/worker.py
-!infra/youtube-exit-node/Dockerfile
-!infra/youtube-exit-node/Dockerfile.dockerignore
+!infra/service-bridge/
+!infra/service-bridge/worker.py
+!infra/service-bridge/Dockerfile
+!infra/service-bridge/Dockerfile.dockerignore

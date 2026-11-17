@@ -22,7 +22,7 @@ import exit_probe
 import innertube
 import tailscale_node
 
-spec = importlib.util.spec_from_file_location('exit_worker', ROOT / 'infra/youtube-exit-node/worker.py')
+spec = importlib.util.spec_from_file_location('exit_worker', ROOT / 'infra/service-bridge/worker.py')
 worker = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(worker)
 SESSION = 'a' * 32

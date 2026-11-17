@@ -5,5 +5,5 @@ COPY --from=tailscale /usr/local/bin/tailscaled /usr/local/bin/tailscaled
 COPY tools/youtube/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 COPY tools/youtube/tailscale_node.py tools/youtube/exit_jobs.py tools/youtube/exit_probe.py ${LAMBDA_TASK_ROOT}/
-COPY infra/youtube-exit-node/worker.py ${LAMBDA_TASK_ROOT}/
+COPY infra/service-bridge/worker.py ${LAMBDA_TASK_ROOT}/
 CMD ["worker.handler"]
