@@ -89,6 +89,8 @@ Caption requests can be blocked by cloud IPs or require proof tokens or restrict
 
 ## Subsequent natural-language requests
 
+For the optional Lambda bridge, use this `vault` branch's [built-in VPN client](service-bridge-client.md). It reaches the separately deployed `service-bridge` Lambda through the environment's managed Tailscale connection. Run the unsigned `bash tools/youtube/run.sh bridge -- probe` acceptance check before wrapping `refresh` or `search` with `bridge --`. The client installs no Tailscale binaries and reads no enrollment key. The new server and `tcp:8443` tailnet grant require live acceptance before use.
+
 Use a private task configured for the **same S3 cache**, for example:
 
 > Find “put aside” in yesterday's YouTube history and create or update its note.

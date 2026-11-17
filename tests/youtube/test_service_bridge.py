@@ -1,0 +1,186 @@
+"""Built-in VPN tunnel and client lifecycle tests; no live AWS or YouTube."""
+import contextlib
+import hashlib
+import http.client
+import io
+import os
+from pathlib import Path
+import socketserver
+import sys
+import threading
+import time
+import types
+import unittest
+from unittest.mock import MagicMock, Mock, patch
+
+import requests
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/youtube'))
+import bridge_sessions
+import bridge_transport
+import innertube
+import service_bridge
+import youtube
+
+TOKEN = 'b' * 64
+SESSION = 'a' * 32
+
+
+def ready():
+    return {'state': 'ready', 'protocol': 'connect-v1', 'expires_at': 1000, 'heartbeat': 500,
+            'node_id': 'synthetic-node', 'ipv4': '100.64.0.1', 'proxy_port': 8443, 'egress_ip': '8.8.8.8'}
+
+
+class BridgeTests(unittest.TestCase):
+    def test_sessions_store_only_token_hash(self):
+        table = Mock()
+        bridge_sessions.Jobs(table).create(SESSION, 720, TOKEN)
+        item = table.put_item.call_args.kwargs['Item']
+        self.assertEqual(item['protocol'], 'connect-v1')
+        self.assertEqual(item['proxy_token_hash'], hashlib.sha256(TOKEN.encode()).hexdigest())
+        self.assertNotIn(TOKEN, repr(item))
+
+    def test_stale_stopped_expiring_and_old_protocol_are_rejected(self):
+        with patch.object(bridge_sessions.time, 'time', return_value=500):
+            bridge_sessions.check_ready(ready(), reserve=60)
+            for change in ({'state': 'failed'}, {'stop_requested': True}, {'heartbeat': 470},
+                           {'expires_at': 530}, {'protocol': 'old-exit-node'}):
+                with self.subTest(change=change), self.assertRaises(bridge_transport.BridgeError):
+                    bridge_sessions.check_ready({**ready(), **change}, reserve=60)
+        for change in ({'ipv4': '8.8.8.8'}, {'ipv4': '127.0.0.1'}, {'proxy_port': 22}, {'protocol': None}):
+            with self.subTest(change=change), self.assertRaises(bridge_transport.BridgeError):
+                bridge_transport.endpoint({**ready(), **change})
+
+    def test_tunnel_uses_managed_proxy_and_keeps_auth_inside_private_tunnel(self):
+        connection = Mock()
+        response = Mock(status=200)
+        with patch.dict(os.environ, {'HTTPS_PROXY': 'http://ambient.invalid:1234'}), \
+                patch.object(bridge_transport.http.client, 'HTTPConnection', return_value=connection) as connect, \
+                patch.object(bridge_transport.http.client, 'HTTPResponse', return_value=response):
+            self.assertIs(bridge_transport.open_tunnel('100.64.0.1', 8443, 'www.youtube.com:443', TOKEN), connection)
+        connect.assert_called_once_with('proxy', 8088, timeout=10)
+        connection.set_tunnel.assert_called_once_with('100.64.0.1', 8443)
+        self.assertIn(('Proxy-Authorization: Bearer ' + TOKEN).encode(), connection.send.call_args.args[0])
+
+    def test_managed_proxy_failure_closes_without_fallback(self):
+        connection = Mock()
+        connection.connect.side_effect = OSError('unreachable')
+        with patch.object(bridge_transport.http.client, 'HTTPConnection', return_value=connection) as connect:
+            with self.assertRaises(OSError):
+                bridge_transport.open_tunnel('100.64.0.1', 8443, 'www.youtube.com:443', TOKEN)
+        connect.assert_called_once()
+        connection.close.assert_called_once()
+
+    def test_collect_terminates_child_on_transport_loss(self):
+        child = Mock()
+        child.poll.return_value = None
+        transport, jobs = Mock(), Mock()
+        transport.proxy_url = 'http://127.0.0.1:12345'
+        transport.check.side_effect = bridge_transport.BridgeError('route lost')
+        jobs.get.return_value = ready()
+        with patch.object(service_bridge.subprocess, 'Popen', return_value=child) as spawn, \
+                patch.object(bridge_sessions.time, 'time', return_value=500), self.assertRaises(bridge_transport.BridgeError):
+            service_bridge.collect(['refresh'], transport, ready(), jobs, SESSION)
+        child.terminate.assert_called_once()
+        for key in ('YOUTUBE_HISTORY_PROXY', 'YOUTUBE_TRANSCRIPT_PROXY'):
+            self.assertEqual(spawn.call_args.kwargs['env'][key], transport.proxy_url)
+
+    def test_egress_mismatch_prevents_collection_and_always_stops_session(self):
+        args = types.SimpleNamespace(arguments=['refresh'], session_seconds=720, ready_timeout=60)
+        settings = {'YOUTUBE_BRIDGE_FUNCTION': 'function', 'YOUTUBE_BRIDGE_TABLE': 'table'}
+        jobs, aws, transport = Mock(), Mock(), MagicMock()
+        jobs.get.return_value = ready()
+        aws.client.return_value.invoke.return_value = {'StatusCode': 202}
+        transport.__enter__.return_value.proxy_url = 'http://127.0.0.1:12345'
+        with patch.dict(os.environ, settings), patch.object(service_bridge.boto3, 'Session', return_value=aws), \
+                patch.object(service_bridge, 'Jobs', return_value=jobs), \
+                patch.object(service_bridge, 'wait_ready', return_value=ready()), \
+                patch.object(service_bridge, 'ManagedBridge', return_value=transport), \
+                patch.object(service_bridge, 'public_address', return_value='1.1.1.1'), \
+                patch.object(bridge_sessions.time, 'time', return_value=500), \
+                patch.object(service_bridge, 'collect') as collect, self.assertRaises(bridge_transport.BridgeError):
+            service_bridge.run(args)
+        collect.assert_not_called()
+        jobs.stop.assert_called_once()
+        transport.__exit__.assert_called_once()
+        self.assertEqual([c.args[0] for c in aws.client.call_args_list], ['lambda'])
+
+    def test_history_proxy_overrides_ambient_proxy_with_tls_verification(self):
+        with patch.dict(os.environ, {'HTTPS_PROXY': 'http://ambient.invalid:1234'}):
+            session = requests.Session()
+            adapter = Mock()
+            response = requests.Response()
+            response.status_code = 200
+            adapter.send.return_value = response
+            session.mount('https://', adapter)
+            with patch.object(innertube.requests, 'Session', return_value=session):
+                client = innertube.HistoryClient({'cookies': []}, 'Europe/London', 'http://127.0.0.1:12345')
+                client._request('GET', innertube.HISTORY_URL)
+            self.assertEqual(adapter.send.call_args.kwargs['proxies']['https'], 'http://127.0.0.1:12345')
+            self.assertTrue(adapter.send.call_args.kwargs['verify'])
+            client.__exit__()
+
+    def test_cli_preserves_failed_probe_exit_status(self):
+        with patch.object(sys, 'argv', ['youtube.py', 'bridge', '--', 'probe']), \
+                patch.object(service_bridge, 'command', return_value=1):
+            self.assertEqual(youtube.main(), 1)
+
+    def test_nested_connect_round_trip_over_real_sockets(self):
+        observed = []
+        class FakeManagedProxy(socketserver.StreamRequestHandler):
+            def handle(self):
+                outer = self.rfile.readline()
+                headers = []
+                while True:
+                    line = self.rfile.readline()
+                    if line in (b'\r\n', b''):
+                        break
+                    headers.append(line)
+                observed.append((outer, headers))
+                self.wfile.write(b'HTTP/1.1 200 Connection Established\r\n\r\n')
+                inner = self.rfile.readline()
+                headers = []
+                while True:
+                    line = self.rfile.readline()
+                    if line in (b'\r\n', b''):
+                        break
+                    headers.append(line)
+                observed.append((inner, headers))
+                self.wfile.write(b'HTTP/1.1 200 Connection Established\r\n\r\n')
+                data = self.rfile.read(8)
+                self.wfile.write(data)
+        server = socketserver.ThreadingTCPServer(('127.0.0.1', 0), FakeManagedProxy)
+        server.daemon_threads = True
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        original = http.client.HTTPConnection
+        def route_proxy(host, port, **kwargs):
+            self.assertEqual((host, port), ('proxy', 8088))
+            return original('127.0.0.1', server.server_address[1], **kwargs)
+        try:
+            job = {**ready(), 'expires_at': time.time() + 60}
+            with patch.object(bridge_transport.http.client, 'HTTPConnection', side_effect=route_proxy):
+                with bridge_transport.ManagedBridge(job, TOKEN) as transport:
+                    port = int(transport.proxy_url.rsplit(':', 1)[1])
+                    client = original('127.0.0.1', port, timeout=3)
+                    try:
+                        client.set_tunnel('www.youtube.com', 443)
+                        client.connect()
+                        client.sock.sendall(b'\x16\x03\x01HELLO')
+                        self.assertEqual(client.sock.recv(8), b'\x16\x03\x01HELLO')
+                        transport.check()
+                    finally:
+                        client.close()
+            self.assertIn(b'CONNECT 100.64.0.1:8443 ', observed[0][0])
+            self.assertNotIn(TOKEN.encode(), b''.join(observed[0][1]))
+            self.assertIn(b'CONNECT www.youtube.com:443 ', observed[1][0])
+            self.assertIn(TOKEN.encode(), b''.join(observed[1][1]))
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
+
+
+if __name__ == '__main__':
+    unittest.main()

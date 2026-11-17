@@ -27,3 +27,5 @@ Use the tracked [agent procedure](AGENTS.md) and [Cloud setup guide](docs/youtub
 ## X collections and cached sources
 
 The [X workflow](docs/x.md) collects your own likes and bookmarks through the authenticated website API, with optional posts, replies, media and bookmark folders. It discovers account identity and current query IDs at runtime. Full source posts stay in ignored `.codex/tmp/x/`, with cache-first reads/search and optional private [S3 persistence](infra/x-cache/README.md). X sessions and collection data never enter GitHub or the website build.
+
+The optional [Lambda bridge client](docs/service-bridge-client.md) uses the built-in Cloud Tailscale VPN. Its server is maintained and deployed separately from the `service-bridge` branch.
