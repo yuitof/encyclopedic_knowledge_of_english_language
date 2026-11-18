@@ -124,3 +124,7 @@ The extension was deployed on 2026-11-18 from `cd00fa2`, with image digest `sha2
 Local acceptance using the Mac's existing tailnet verified private 407, matching egress and origin TLS, but unsigned Old Reddit returned HTTP 403. A separate user-authorized local cookie check through the same route also returned origin HTTP 403; no account identity or source content was collected. This is an origin rejection, not proof of expired credentials.
 
 A real built-in Cloud VPN probe at client `aeb8ce2` passed invocation, `connect-v2` readiness, private 407 and egress equality, then failed the client's bridge health check before it emitted an origin status. The client now confines normal post-CONNECT disconnects to their own tunnel; that possible false-health-failure correction has local regression coverage but could not be retested in Cloud because the account hit its usage limit. Cloud origin acceptance remains unverified. The local coordinator confirmed all acceptance sessions stopped with `StopRequested` and their Lambda peers offline. No Cloud cookies, account collection or published snapshot were used.
+
+## Cloudflare egress feasibility
+
+A separate AWS Lambda ran the official WARP client and enrolled a Cloudflare Zero Trust device on 2026-11-18. The tunnel and proxied HTTPS acceptance gate did not pass. See the [feasibility report, probe and persistent gateway assessment](experiments/warp/README.md).
