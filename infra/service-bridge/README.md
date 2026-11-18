@@ -113,10 +113,14 @@ Live built-in Cloud VPN acceptance also passed on 2026-11-17 from the existing r
 
 X's authenticated website API and account authorization were not exercised by the unsigned probe. Supply the private X session and run the separately authorized collector to establish that behavior; challenge or API-denial responses must remain visible. New Cloud tasks need `bash tools/x/setup.sh` if their snapshot has only the YouTube environment installed. Existing legacy `YOUTUBE_BRIDGE_*` variables work for either client, so no configuration migration is required.
 
-## Reddit extension (prepared, not deployed)
+## Reddit extension
 
 The Reddit collector on `vault` uses cookie-authenticated Old Reddit HTML. This server extension adds only `old.reddit.com:443` to the destination allowlist and DNS pins. `reddit.com`, `www.reddit.com`, `oauth.reddit.com`, asset/media hosts, other ports and lookalike domains remain denied. The existing session protocol, authentication, TLS tunneling, bounded lifetime and cleanup are unchanged. Account cookies remain in the collector.
 
 The Lambda image built successfully and all 18 server tests passed inside it with external networking disabled, a read-only filesystem and UID 1000. The real GOST tests include opaque forwarding for the new host and denial of the other Reddit destinations. These are local component checks, not live origin or Cloud acceptance.
 
-This change has not been deployed. Deploy it separately before running `bash tools/reddit/run.sh bridge -- probe` from the matching `vault` client in the Cloud outer executor. The unsigned probe checks only Old Reddit over verified HTTPS and does not follow redirects; a login redirect is transport evidence only, and a 403/429 is a failure. The existing deployment's X/YouTube acceptance does not establish Reddit connectivity or authenticated collection. No private Reddit session or collection was used for validation.
+The extension was deployed on 2026-11-18 from `cd00fa2`, with image digest `sha256:4736921516d9bd2db09b1e0577fe47678214148da860edc16b699870af56988e`. CloudFormation is UPDATE_COMPLETE and Lambda is Active / Successful. No enrollment secret value, existing session permissions, or public exposure changed.
+
+Local acceptance using the Mac's existing tailnet verified private 407, matching egress and origin TLS, but unsigned Old Reddit returned HTTP 403. A separate user-authorized local cookie check through the same route also returned origin HTTP 403; no account identity or source content was collected. This is an origin rejection, not proof of expired credentials.
+
+A real built-in Cloud VPN probe at client `aeb8ce2` passed invocation, `connect-v2` readiness, private 407 and egress equality, then failed the client's bridge health check before it emitted an origin status. The client now confines normal post-CONNECT disconnects to their own tunnel; that possible false-health-failure correction has local regression coverage but could not be retested in Cloud because the account hit its usage limit. Cloud origin acceptance remains unverified. The local coordinator confirmed all acceptance sessions stopped with `StopRequested` and their Lambda peers offline. No Cloud cookies, account collection or published snapshot were used.
