@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T04:42:26Z"
+modified: "2026-11-18T04:42:26Z"
+---
 **VTubing** (/ˈviːtjuːbɪŋ/) is the activity of creating videos or livestreams as a **VTuber**, using a virtual avatar to represent the performer. It can name the activity as an uncountable noun or function as the **-ing** form of the informal verb **VTube**. ([Wiktionary: VTubing](https://en.wiktionary.org/wiki/VTubing))
 
 ## Word formation and grammar

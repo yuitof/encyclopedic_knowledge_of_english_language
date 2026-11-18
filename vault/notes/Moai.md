@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T04:42:26Z"
+modified: "2026-11-18T04:42:26Z"
+---
 **moai** (/ˈmoʊ.aɪ/) is a large stone statue carved by the Rapa Nui people of Easter Island (Rapa Nui). These figures represent ancestral chiefs. ([The Metropolitan Museum of Art](https://www.metmuseum.org/essays/easter-island); [Wiktionary: pronunciation and word forms](https://en.wiktionary.org/wiki/moai))
 
 Countable noun; plural **moai** or **moais**. The figures have prominent heads and elongated faces, with torsos and arms as well.

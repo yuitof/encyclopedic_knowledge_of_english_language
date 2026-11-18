@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T04:42:26Z"
+modified: "2026-11-18T04:42:26Z"
+---
 **side quests** (/ˈsaɪd ˌkwests/) are additional activities or adventures pursued alongside a main activity or goal. The phrase borrows the gaming idea of optional missions outside the main storyline and applies it to real life. Singular: **a side quest**. ([Cambridge Dictionary](https://dictionary.cambridge.org/dictionary/english/side-quest))
 
 Common patterns include **go on a side quest** and **complete a side quest**. In casual conversation, the phrase can make an unexpected errand or encounter sound like a small adventure.
