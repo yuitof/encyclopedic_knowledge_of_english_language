@@ -4,6 +4,8 @@ import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import ipaddress
 import select
+import re
+import socket
 import threading
 import time
 
@@ -30,6 +32,20 @@ def peer_connection(address, port):
     try:
         connection.connect()
         return connection
+    except OSError as error:
+        connection.close()
+        # Only fixed categories and an HTTP status may escape. Never include
+        # arbitrary exception text, proxy URLs or private destination addresses.
+        if isinstance(error, (TimeoutError, socket.timeout)):
+            detail = 'timed out'
+        elif isinstance(error, socket.gaierror):
+            detail = 'proxy hostname resolution failed'
+        elif isinstance(error, ConnectionRefusedError):
+            detail = 'proxy connection refused'
+        else:
+            status = re.fullmatch(r'Tunnel connection failed: ([1-5][0-9]{2})(?: .*)?', str(error))
+            detail = 'CONNECT returned HTTP ' + status[1] if status else 'connection failed'
+        raise BridgeError('Cloud VPN TCP route: ' + detail + '; no fallback was attempted') from None
     except BaseException:
         connection.close()
         raise
@@ -58,6 +74,9 @@ def probe_private_proxy(address, port, local=False):
         if status != 407:
             raise BridgeError('Private endpoint did not enforce proxy authentication')
         return status
+    except (OSError, http.client.HTTPException) as error:
+        detail = 'timed out' if isinstance(error, (TimeoutError, socket.timeout)) else 'closed or malformed response'
+        raise BridgeError('Private bridge authentication check: ' + detail) from None
     finally:
         connection.close()
 
@@ -118,7 +137,7 @@ class Handler(BaseHTTPRequestHandler):
                         idle = time.monotonic() + 60
             finally:
                 connection.close()
-        except (OSError, http.client.HTTPException):
+        except (BridgeError, OSError, http.client.HTTPException):
             if not connected:
                 self.server.failed.set()
                 self.send_error(502)

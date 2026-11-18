@@ -34,6 +34,30 @@ def ready():
 
 
 class BridgeTests(unittest.TestCase):
+    def test_cloud_tcp_failure_categories_are_sanitized_without_retry(self):
+        cases = [(TimeoutError('PRIVATE'), 'timed out'),
+                 (ConnectionRefusedError('PRIVATE'), 'proxy connection refused'),
+                 (OSError('Tunnel connection failed: 403 Forbidden'), 'CONNECT returned HTTP 403'),
+                 (OSError('PRIVATE'), 'connection failed')]
+        for failure, message in cases:
+            connection = Mock()
+            connection.connect.side_effect = failure
+            with self.subTest(message=message), patch.object(bridge_transport.http.client, 'HTTPConnection', return_value=connection):
+                with self.assertRaisesRegex(bridge_transport.BridgeError, message) as caught:
+                    bridge_transport.peer_connection('100.64.0.1', 8443)
+                self.assertNotIn('PRIVATE', str(caught.exception))
+                connection.connect.assert_called_once()
+                connection.close.assert_called_once()
+
+    def test_private_proxy_read_timeout_reports_stage_without_private_values(self):
+        connection = Mock()
+        with patch.object(bridge_transport, 'peer_connection', return_value=connection), \
+                patch.object(bridge_transport.http.client, 'HTTPResponse', side_effect=TimeoutError('PRIVATE')):
+            with self.assertRaisesRegex(bridge_transport.BridgeError, 'Private bridge authentication check: timed out') as caught:
+                bridge_transport.probe_private_proxy('100.64.0.1',8443)
+        self.assertNotIn('PRIVATE', str(caught.exception))
+        connection.close.assert_called_once()
+
     def test_shared_settings_preserve_legacy_and_prefer_shared_values(self):
         with patch.dict(os.environ, {'YOUTUBE_BRIDGE_FUNCTION': 'legacy'}, clear=True):
             self.assertEqual(service_bridge.required('FUNCTION'), 'legacy')
@@ -128,7 +152,7 @@ class BridgeTests(unittest.TestCase):
         connection = Mock()
         connection.connect.side_effect = OSError('unreachable')
         with patch.object(bridge_transport.http.client, 'HTTPConnection', return_value=connection) as connect:
-            with self.assertRaises(OSError):
+            with self.assertRaises(bridge_transport.BridgeError):
                 bridge_transport.open_tunnel('100.64.0.1', 8443, 'www.youtube.com:443', TOKEN)
         connect.assert_called_once()
         connection.close.assert_called_once()
