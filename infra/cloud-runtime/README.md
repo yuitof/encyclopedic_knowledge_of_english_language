@@ -9,3 +9,7 @@ Create a replacement AWS OIDC connection targeting the `RuntimeRoleArn` output i
 During migration the legacy role may also have the X cache policy attached so existing tasks can sync. That attachment is outside the original YouTube template; if retained long term, manage it explicitly rather than assuming a YouTube stack redeployment preserves it. After verified cutover, retire legacy access as a separate reviewed change.
 
 The role permits only the cache object paths defined by the attached policies; it grants no S3 listing/deletion, bucket administration, IAM inspection, or CloudFormation access. The X policy currently covers all account archives within its private bucket. Cookies and private cache contents remain outside Git and environment snapshots.
+
+## Optional Reddit cache policy
+
+The [Reddit cache stack](../reddit-cache/README.md) supplies an optional `RedditCacheAccessPolicyArn` parameter. Leaving it empty preserves the existing role's cache grants. Supplying it attaches that stack's narrowly scoped index/source policy alongside YouTube and X access. This template change has not been deployed by the Reddit tooling task; save/apply and check the Cloud connection's STS identity before claiming the runtime uses the new grant. Reddit's private session and bridge destination support are separate requirements.

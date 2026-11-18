@@ -1,0 +1,413 @@
+"""Synthetic HTML, cookies and S3 only; no real account data or live requests."""
+import contextlib
+import copy
+import gzip
+import importlib.util
+import io
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+import types
+import unittest
+from unittest.mock import Mock, patch
+
+import requests
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/reddit'))
+sys.path.insert(0, str(ROOT / 'tools'))
+from api import Client
+from auth import state, login
+from cache import Cache, atomic_json, body, empty_index, merge_indexes
+from pages import RedditError, Unavailable, document, listing, source, source_url, valid_post
+from s3_cache import S3Cache
+from cloud_bridge import client as bridge, probe
+from cloud_bridge.transport import BridgeError
+
+spec = importlib.util.spec_from_file_location('reddit_cli', ROOT / 'tools/reddit/reddit.py')
+cli = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(cli)
+STAMP = '2026-01-01T00:00:00+00:00'
+PROXY = 'http://127.0.0.1:12345'
+URL = 'https://old.reddit.com/r/fixture/comments/abc/example/'
+COOKIE = {'name': 'reddit_session', 'value': 'synthetic', 'domain': '.reddit.com', 'path': '/', 'expires': -1}
+
+
+def header(user='fixture'):
+    return f'<div id="header-bottom-right"><span class="user"><a href="https://old.reddit.com/user/{user}/">{user}</a></span></div>'
+
+
+def thing(identifier='t3_abc', sentence='A synthetic full sentence.', children=''):
+    comment = identifier.startswith('t1_')
+    url = URL + (identifier[3:] + '/' if comment else '')
+    title = '' if comment else '<a class="title" href="https://example.org/">Synthetic title</a>'
+    return f'''<div class="thing {'comment' if comment else 'link self'}" data-fullname="{identifier}">
+      <div class="entry">{title}<a class="author">writer</a><a class="subreddit">r/fixture</a>
+      <time datetime="{STAMP}"></time><div class="usertext-body"><div class="md"><p>{sentence}</p></div></div>
+      <a class="{'bylink' if comment else 'comments'}" href="{url}">permalink</a></div><div class="child">{children}</div></div>'''
+
+
+def page(items='', cursor=None, empty=False):
+    more = f'<span class="next-button"><a rel="next" href="/user/fixture/saved/?after={cursor}">next</a></span>' if cursor else ''
+    tabs = '<ul class="tabmenu"><li class="selected"><a href="/user/fixture/saved/">saved</a></li></ul>'
+    return header() + tabs + '<div class="content" role="main"><div id="siteTable" class="sitetable">' + items + more + ('<p id="noresults">empty</p>' if empty else '') + '</div></div>'
+
+
+def post(identifier='t3_abc'):
+    return source(header() + thing(identifier), identifier, STAMP, 'fixture')
+
+
+class PageTests(unittest.TestCase):
+    def test_posts_and_saved_comments_keep_full_bodies(self):
+        parsed = listing(page(thing() + thing('t1_def'), 't1_def'), 'fixture', 'saved')
+        self.assertEqual(list(parsed['members']), ['t3_abc', 't1_def'])
+        self.assertEqual(parsed['cursor'], 't1_def')
+        self.assertEqual(post()['text'], 'A synthetic full sentence.')
+        self.assertTrue(valid_post(post('t1_def'), 't1_def'))
+
+    def test_nested_comments_do_not_supply_parent_author_body_or_membership(self):
+        markup = header() + thing('t1_def', 'Parent <em>exact</em> &amp; complete.', thing('t1_ghi', 'Child body.'))
+        self.assertEqual(source(markup, 't1_def', STAMP, 'fixture')['text'], 'Parent exact & complete.')
+        parsed = listing(page(thing('t1_def', children=thing('t1_ghi'))), 'fixture', 'saved')
+        self.assertEqual(list(parsed['members']), ['t1_def'])
+        bad = markup.replace('<p>Parent <em>exact</em> &amp; complete.</p>', '').replace('<div class="usertext-body"><div class="md"></div></div>', '')
+        with self.assertRaises(RedditError):
+            source(bad, 't1_def', STAMP, 'fixture')
+
+    def test_verified_empty_and_legacy_next_link(self):
+        self.assertEqual(listing(page(empty=True), 'fixture', 'saved')['members'], {})
+        markup = page(thing(), 't3_abc').replace('class="next-button"', 'class="nextprev"')
+        self.assertEqual(listing(markup, 'fixture', 'saved')['cursor'], 't3_abc')
+        for bad in (page(), header() + '<p>challenge</p>', page(empty=True).replace('id="noresults"', 'id="unknown"')):
+            with self.subTest(bad=bad), self.assertRaises(RedditError):
+                listing(bad, 'fixture', 'saved')
+
+    def test_login_challenge_and_wrong_account_are_not_empty(self):
+        for markup in ('<html>Log in</html>', header('someone_else')):
+            with self.assertRaises(RedditError):
+                document(markup, 'fixture')
+
+    def test_signed_in_wrong_feed_is_not_accepted_as_the_requested_collection(self):
+        with self.assertRaises(RedditError):
+            listing(page(thing()).replace('/user/fixture/saved/', '/user/fixture/submitted/'), 'fixture', 'saved')
+
+    def test_pagination_cannot_change_account_host_or_collection(self):
+        markup = page(thing(), 't3_abc')
+        for replacement in ('https://evil.example/?after=t3_abc', '/user/other/saved/?after=t3_abc',
+                            '/user/fixture/hidden/?after=t3_abc', '/user/fixture/saved/?after=bad'):
+            with self.subTest(replacement=replacement), self.assertRaises(RedditError):
+                listing(markup.replace('/user/fixture/saved/?after=t3_abc', replacement), 'fixture', 'saved')
+
+    def test_source_urls_are_canonical_and_allowlisted(self):
+        self.assertEqual(source_url(URL.replace('old.', 'www.') + '?context=3'), ('t3_abc', URL))
+        self.assertEqual(source_url(URL + 'def/')[0], 't1_def')
+        for value in ('https://old.reddit.com.evil/comments/abc/title/', 'http://old.reddit.com/comments/abc/',
+                      'https://old.reddit.com:8443/comments/abc/', 'https://old.reddit.com/api/save', '../auth',
+                      'https://evil.example/comments/abc/title/', 'https://old.reddit.com@evil.example/comments/abc/title/'):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                source_url(value)
+
+    def test_missing_or_truncated_sources_fail_instead_of_caching_a_title(self):
+        for markup in (header(), (header() + thing()).replace('class="usertext-body"', 'class="hidden-body"')):
+            with self.assertRaises(RedditError):
+                source(markup, 't3_abc', STAMP, 'fixture')
+
+
+class TransportTests(unittest.TestCase):
+    def test_live_reads_require_explicit_proxy(self):
+        with self.assertRaisesRegex(RedditError, 'private bridge'):
+            Client([COOKIE])
+        for proxy in ('socks5://localhost:1234', 'http://', 'http://localhost:bad', 'http://u:p@localhost:1234'):
+            with self.subTest(proxy=proxy), self.assertRaises(RedditError):
+                Client([COOKIE], proxy)
+
+    def test_cookie_scoping_tls_proxy_and_no_redirects(self):
+        client = Client([COOKIE], PROXY)
+        self.addCleanup(client.http.close)
+        adapter = Mock()
+        response = requests.Response()
+        response.status_code, response._content, response._content_consumed = 200, header().encode(), True
+        response.headers['Content-Type'] = 'text/html; charset=utf-8'
+        adapter.send.return_value = response
+        client.http.mount('https://', adapter)
+        with patch.dict(os.environ, {'HTTPS_PROXY': 'http://wrong.invalid:9'}):
+            self.assertEqual(client.account()['id'], 'fixture')
+        call = adapter.send.call_args
+        self.assertEqual(call.kwargs['proxies']['https'], PROXY)
+        self.assertTrue(call.kwargs['verify'])
+        self.assertIn('reddit_session=synthetic', call.args[0].headers['Cookie'])
+        self.assertFalse(client.http.trust_env)
+        with patch.object(client.http, 'get') as get:
+            for path in ('//evil.example/', '/api/vote', '/message/inbox', 'https://evil.example/'):
+                with self.assertRaises(RedditError):
+                    client.read(path)
+            get.assert_not_called()
+
+    def test_network_failure_is_sanitized_and_never_retried_directly(self):
+        client = Client([COOKIE], PROXY)
+        self.addCleanup(client.http.close)
+        with patch.object(client.http, 'get', side_effect=requests.exceptions.ProxyError('PRIVATE')) as get:
+            with self.assertRaises(RedditError) as caught:
+                client.account()
+            self.assertNotIn('PRIVATE', str(caught.exception))
+            get.assert_called_once()
+
+    def test_403_429_and_login_redirect_stop(self):
+        for status in (403, 429, 302):
+            client = Client([COOKIE], PROXY)
+            self.addCleanup(client.http.close)
+            with patch.object(client.http, 'get') as get:
+                get.return_value.__enter__.return_value.status_code = status
+                with self.assertRaises(RedditError):
+                    client.account()
+                get.assert_called_once()
+                self.assertFalse(get.call_args.kwargs['allow_redirects'])
+
+    def test_private_cookie_loading_filters_foreign_and_expired_cookies(self):
+        with tempfile.TemporaryDirectory() as root, patch.dict(os.environ, {'REDDIT_STORAGE_STATE_JSON': json.dumps({'cookies': [COOKIE,
+                dict(COOKIE, domain='.x.com', value='foreign'), dict(COOKIE, expires=1, value='expired')]})}):
+            self.assertEqual(state(Path(root)), [COOKIE])
+
+    def test_cookie_export_needs_consent_before_browser_access(self):
+        with patch.object(sys, 'platform', 'darwin'), patch.object(sys.stdin, 'isatty', return_value=False):
+            with self.assertRaisesRegex(ValueError, 'consent'):
+                login(Path('/unused'), 'Default', False, Mock())
+
+
+class S3Error(Exception):
+    def __init__(self, code):
+        self.response = {'Error': {'Code': code}}
+
+
+class FakeS3:
+    def __init__(self):
+        self.objects, self.encodings, self.writes = {}, {}, []
+        self.fail_posts = False
+
+    def get_object(self, Bucket, Key):
+        payload, etag = self.objects[Key]
+        return {'Body': io.BytesIO(payload), 'ETag': etag, 'ContentEncoding': self.encodings.get(Key)}
+
+    def put_object(self, Bucket, Key, Body, **kw):
+        if self.fail_posts and '/posts/' in Key:
+            raise S3Error('AccessDenied')
+        if kw.get('IfNoneMatch') == '*' and Key in self.objects:
+            raise S3Error('PreconditionFailed')
+        if kw.get('IfMatch') and kw['IfMatch'] != self.objects[Key][1]:
+            raise S3Error('PreconditionFailed')
+        self.objects[Key] = (Body, str(len(self.writes)))
+        self.encodings[Key] = kw.get('ContentEncoding')
+        self.writes.append(Key)
+        return {'ETag': self.objects[Key][1]}
+
+
+class CacheWorkflowTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        self.addCleanup(patch.stopall)
+        patch.object(cli, 'CACHE', self.root).start()
+        patch.dict(os.environ, {'REDDIT_CACHE_BUCKET': '', 'REDDIT_ACCOUNT': ''}).start()
+        self.args = types.SimpleNamespace(account='fixture', offline=True, collection=None, latest=False)
+
+    def test_corruption_orphan_recovery_and_account_isolation(self):
+        cache = Cache(self.root, 'fixture')
+        atomic_json(cache.root / 'posts/t3_abc.json', post())
+        self.assertEqual(cache.get('t3_abc')['id'], 't3_abc')
+        self.assertIsNone(Cache(self.root, 'someone_else').get('t3_abc'))
+        (cache.root / 'posts/t3_abc.json').write_text('{broken')
+        self.assertIsNone(cache.get('t3_abc'))
+        self.assertEqual(cache.index['posts']['t3_abc']['status'], 'retry_needed')
+        with self.assertRaises(ValueError):
+            Cache(self.root, '../auth')
+
+    def test_offline_get_and_search_never_construct_network_clients(self):
+        Cache(self.root, 'fixture').put(post())
+        self.args.post, self.args.refresh = URL, False
+        with patch.object(cli, 'Client', side_effect=AssertionError('No Reddit')), patch.object(cli, 'emit') as emit, \
+                patch.object(cli, 'bucket', side_effect=AssertionError('No S3')):
+            cli.get_post(self.args)
+            self.assertEqual(emit.call_args.args[0]['id'], 't3_abc')
+            self.args.phrase = 'synthetic FULL sentence'
+            cli.search(self.args)
+            self.assertEqual(len(emit.call_args.args[0]['matches']), 1)
+
+    def test_merge_keeps_archive_and_previous_completed_snapshot(self):
+        a, b = empty_index('fixture'), empty_index('fixture')
+        a['collections']['saved'] = {'post_ids': ['t3_abc'], 'latest_post_ids': ['t3_abc'], 'last_completed_at': '2026-01-01',
+                                    'scan': {'updated_at': '2026-01-01', 'status': 'reachable_end'}}
+        b['collections']['saved'] = {'post_ids': ['t1_def'], 'scan': {'updated_at': '2026-02-01', 'status': 'partial'}}
+        merged = merge_indexes(a, b)['collections']['saved']
+        self.assertEqual(set(merged['post_ids']), {'t3_abc', 't1_def'})
+        self.assertEqual(merged['latest_post_ids'], ['t3_abc'])
+        self.assertEqual(merged['scan']['status'], 'partial')
+
+    def test_s3_content_before_manifest_restore_and_no_auth_upload(self):
+        fake = FakeS3()
+        remote = S3Cache('fixture-cache', fake)
+        cache = Cache(self.root, 'fixture', remote)
+        cache.put(post())
+        atomic_json(self.root / 'auth/storage-state.json', {'cookies': 'PRIVATE'})
+        cache.save()
+        self.assertIn('/posts/', fake.writes[-2])
+        self.assertTrue(fake.writes[-1].endswith('/index.json'))
+        self.assertFalse(any(b'PRIVATE' in data for data, _ in fake.objects.values()))
+        restored = Cache(self.root / 'fresh', 'fixture', remote)
+        self.assertEqual(restored.get('t3_abc')['text'], 'A synthetic full sentence.')
+        key = restored.index['posts']['t3_abc']['s3_key']
+        fake.objects[key] = (b'{}', 'bad')
+        (restored.root / 'posts/t3_abc.json').unlink()
+        with self.assertRaises(ValueError):
+            restored.get('t3_abc')
+
+    def test_s3_upload_failure_retains_local_source_without_remote_reference(self):
+        fake = FakeS3()
+        cache = Cache(self.root, 'fixture', S3Cache('fixture-cache', fake))
+        cache.put(post())
+        fake.fail_posts = True
+        with self.assertRaises(S3Error):
+            cache.save()
+        self.assertEqual(Cache(self.root, 'fixture').get('t3_abc')['id'], 't3_abc')
+        index = json.loads(gzip.decompress(fake.objects['cache/reddit/v1/accounts/fixture/index.json'][0]))
+        self.assertEqual(index['posts'], {})
+
+    def refresh_setup(self):
+        args = types.SimpleNamespace(account='fixture', offline=False, max_pages=None, delay=1.0,
+                                     collections=['saved'], resume=False)
+        client = Mock()
+        patch.object(cli, 'authenticated', return_value=(client, 'fixture')).start()
+        patch.object(cli, 'emit').start()
+        client.post.side_effect = lambda url, stamp, account: post(source_url(url)[0])
+        return args, client
+
+    def test_pagination_checkpoint_resume_and_source_reuse(self):
+        args, client = self.refresh_setup()
+        client.page.side_effect = [{'members': {'t3_abc': URL}, 'cursor': 't3_abc'}, RedditError('rate limit')]
+        self.assertEqual(cli.refresh(args), 1)
+        cache = Cache(self.root, 'fixture')
+        self.assertEqual(cache.index['collections']['saved']['scan']['cursor'], 't3_abc')
+        client.page.side_effect = None
+        client.page.return_value = {'members': {'t3_abc': URL}, 'cursor': None}
+        args.resume = True
+        self.assertEqual(cli.refresh(args), 0)
+        self.assertEqual(client.page.call_args.args, ('fixture', 'saved', 't3_abc'))
+        client.post.assert_called_once()
+        scan = Cache(self.root, 'fixture').index['collections']['saved']
+        self.assertEqual(scan['latest_post_ids'], ['t3_abc'])
+
+    def test_source_failure_retries_same_page_and_keeps_missing_membership(self):
+        args, client = self.refresh_setup()
+        client.page.return_value = {'members': {'t3_abc': URL, 't1_def': URL + 'def/'}, 'cursor': 't1_def'}
+        client.post.side_effect = [post(), RedditError('source failed')]
+        self.assertEqual(cli.refresh(args), 1)
+        cache = Cache(self.root, 'fixture')
+        self.assertIsNone(cache.index['collections']['saved']['scan']['cursor'])
+        self.assertEqual(cache.index['posts']['t1_def']['status'], 'retry_needed')
+        self.args.phrase = 'absent'
+        with patch.object(cli, 'emit') as emit:
+            cli.search(self.args)
+            self.assertEqual(emit.call_args.args[0]['missing_items'], 1)
+        client.post.side_effect = lambda *args: post('t1_def')
+        client.page.return_value = {'members': {'t3_abc': URL, 't1_def': URL + 'def/'}, 'cursor': None}
+        args.resume = True
+        self.assertEqual(cli.refresh(args), 0)
+        self.assertEqual(client.page.call_args.args[-1], None)
+
+    def test_explicit_unavailable_source_does_not_block_following_items_or_retry(self):
+        args, client = self.refresh_setup()
+        client.page.return_value = {'members': {'t1_def': URL + 'def/', 't3_abc': URL}, 'cursor': None}
+        client.post.side_effect = [Unavailable('Reddit explicitly returned HTTP 404.'), post()]
+        self.assertEqual(cli.refresh(args), 0)
+        cache = Cache(self.root, 'fixture')
+        self.assertEqual(cache.index['posts']['t1_def']['status'], 'unavailable')
+        self.assertEqual(cache.index['collections']['saved']['scan']['unavailable_ids'], ['t1_def'])
+        client.post.reset_mock()
+        self.assertEqual(cli.refresh(args), 0)
+        client.post.assert_not_called()
+
+    def test_failed_explicit_recheck_retains_readable_old_source(self):
+        Cache(self.root, 'fixture').put(post())
+        self.args.offline, self.args.post, self.args.refresh = False, URL, True
+        client = Mock()
+        client.post.side_effect = Unavailable('Reddit explicitly returned HTTP 404.')
+        with patch.object(cli, 'authenticated', return_value=(client, 'fixture')):
+            with self.assertRaises(Unavailable):
+                cli.get_post(self.args)
+        self.assertEqual(Cache(self.root, 'fixture').get('t3_abc')['text'], 'A synthetic full sentence.')
+
+    def test_rate_limit_stops_other_collections_and_repeated_cursor_is_partial(self):
+        args, client = self.refresh_setup()
+        args.collections = ['saved', 'upvoted']
+        client.page.side_effect = RedditError('rate limited')
+        self.assertEqual(cli.refresh(args), 1)
+        client.page.assert_called_once()
+        self.assertNotIn('upvoted', Cache(self.root, 'fixture').index['collections'])
+        args.collections = ['saved']
+        client.page.side_effect = None
+        client.page.return_value = {'members': {'t3_abc': URL}, 'cursor': 't3_abc'}
+        self.assertEqual(cli.refresh(args), 1)
+        self.assertEqual(Cache(self.root, 'fixture').index['collections']['saved']['scan']['reason'], 'repeated_cursor')
+
+    def test_explicit_page_limit_is_resumable(self):
+        args, client = self.refresh_setup()
+        args.max_pages = 1
+        client.page.return_value = {'members': {'t3_abc': URL}, 'cursor': 't3_abc'}
+        self.assertEqual(cli.refresh(args), 0)
+        self.assertEqual(Cache(self.root, 'fixture').index['collections']['saved']['scan']['reason'], 'requested_page_limit')
+
+    def test_account_mismatch_cannot_write_another_archive(self):
+        self.args.offline = False
+        with patch.object(cli, 'Client') as factory:
+            factory.return_value.account.return_value = {'id': 'someone_else'}
+            with patch.object(cli, 'state', return_value=[COOKIE]), self.assertRaises(RedditError):
+                cli.authenticated(self.args)
+        self.assertFalse((self.root / 'account.json').exists())
+
+
+class BridgeTests(unittest.TestCase):
+    def test_reddit_child_sets_only_reddit_proxy_and_preserves_aws_environment(self):
+        child, jobs, transport = Mock(), Mock(), Mock()
+        child.poll.return_value, child.returncode = 0, 0
+        transport.proxy_url = PROXY
+        with patch.dict(os.environ, {'HTTPS_PROXY': 'http://aws.invalid:9'}, clear=True), \
+                patch.object(bridge.subprocess, 'Popen', return_value=child) as spawn, patch.object(bridge, 'check_ready'):
+            self.assertEqual(bridge.collect(['--account', 'fixture', 'refresh'], transport, {}, jobs, 'synthetic', workflow='reddit'), 0)
+        call = spawn.call_args
+        self.assertTrue(call.args[0][1].endswith('/tools/reddit/reddit.py'))
+        self.assertEqual(call.kwargs['env']['REDDIT_PROXY'], PROXY)
+        self.assertEqual(call.kwargs['env']['HTTPS_PROXY'], 'http://aws.invalid:9')
+        self.assertNotIn('X_PROXY', call.kwargs['env'])
+        self.assertNotIn('YOUTUBE_HISTORY_PROXY', call.kwargs['env'])
+
+    def test_cli_forwards_account_without_parent_lock(self):
+        with patch.object(sys, 'argv', ['reddit.py', '--account', 'fixture', 'bridge', '--', 'refresh', '--resume']), \
+                patch.object(cli, 'lock', side_effect=AssertionError('Only child locks')), \
+                patch.object(bridge, 'command', return_value=1) as command:
+            self.assertEqual(cli.main(), 1)
+        self.assertEqual(command.call_args.kwargs, {'workflow': 'reddit'})
+        self.assertEqual(command.call_args.args[0].arguments, ['--account', 'fixture', 'refresh', '--resume'])
+
+    def test_unsigned_probe_never_loads_cookies_or_follows_redirects(self):
+        with patch.object(probe.requests, 'Session') as session:
+            http = session.return_value.__enter__.return_value
+            http.get.return_value.__enter__.return_value.status_code = 302
+            results = probe.reddit_probe(PROXY)
+        self.assertFalse(http.trust_env)
+        self.assertEqual(http.get.call_args.args[0], 'https://old.reddit.com/')
+        self.assertFalse(http.get.call_args.kwargs['allow_redirects'])
+        self.assertEqual(results[0]['status'], 302)
+
+    def test_offline_bridge_and_cache_commands_cannot_invoke_aws(self):
+        with patch.object(bridge.boto3, 'Session', side_effect=AssertionError('No AWS')):
+            with self.assertRaises(RedditError):
+                cli.service_bridge(types.SimpleNamespace(offline=True))
+            for arguments in (['--offline', 'refresh'], ['login'], ['search', 'phrase']):
+                with self.assertRaises(BridgeError):
+                    bridge.run(types.SimpleNamespace(arguments=arguments), workflow='reddit')
+
+
+if __name__ == '__main__':
+    unittest.main()

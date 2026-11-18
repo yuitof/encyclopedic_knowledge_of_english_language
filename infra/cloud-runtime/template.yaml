@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Shared Codex Cloud identity for the private YouTube/X caches and service bridge.
+Description: Shared Codex Cloud identity for private source caches and the service bridge.
 Parameters:
   OidcProviderArn:
     Type: String
@@ -13,20 +13,27 @@ Parameters:
     Type: String
   XCacheAccessPolicyArn:
     Type: String
+  RedditCacheAccessPolicyArn:
+    Type: String
+    Default: ''
+    Description: Optional managed policy from the private Reddit cache stack.
   BridgeFunctionArn:
     Type: String
   BridgeSessionTableArn:
     Type: String
+Conditions:
+  HasRedditCache: !Not [!Equals [!Ref RedditCacheAccessPolicyArn, '']]
 Resources:
   RuntimeRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: english-vault-cloud-runtime
-      Description: Codex Cloud read/write access to private YouTube and X caches and bounded bridge sessions.
+      Description: Codex Cloud read/write access to private source caches and bounded bridge sessions.
       MaxSessionDuration: 3600
       ManagedPolicyArns:
         - !Ref YouTubeCacheAccessPolicyArn
         - !Ref XCacheAccessPolicyArn
+        - !If [HasRedditCache, !Ref RedditCacheAccessPolicyArn, !Ref 'AWS::NoValue']
       AssumeRolePolicyDocument:
         Fn::Sub: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"${OidcProviderArn}"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"${OidcIssuerHostPath}:aud":"${OidcAudience}","${OidcIssuerHostPath}:sub":"${OidcSubject}"}}}]}'
       Policies:

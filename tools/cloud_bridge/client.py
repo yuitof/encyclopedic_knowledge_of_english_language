@@ -1,4 +1,4 @@
-"""Run YouTube or X through one Lambda session using the built-in Cloud VPN."""
+"""Run a private collector through one Lambda session using the built-in Cloud VPN."""
 import json
 import os
 from pathlib import Path
@@ -12,7 +12,7 @@ import boto3
 from botocore.config import Config
 
 from .sessions import Jobs, check_ready
-from .probe import public_address, youtube_probe, x_probe
+from .probe import public_address, youtube_probe, x_probe, reddit_probe
 from .transport import BridgeError, ManagedBridge, endpoint, probe_private_proxy
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -20,6 +20,7 @@ WORKFLOWS = {
     'youtube': {'script': 'tools/youtube/youtube.py', 'proxies': ('YOUTUBE_HISTORY_PROXY', 'YOUTUBE_TRANSCRIPT_PROXY'),
                 'commands': ('probe', 'refresh', 'search')},
     'x': {'script': 'tools/x/x.py', 'proxies': ('X_PROXY',), 'commands': ('probe', 'refresh', 'get', 'folders')},
+    'reddit': {'script': 'tools/reddit/reddit.py', 'proxies': ('REDDIT_PROXY',), 'commands': ('probe', 'refresh', 'get')},
 }
 
 
@@ -75,9 +76,9 @@ def run(args, workflow='youtube'):
     if arguments[:1] == ['--']:
         arguments = arguments[1:]
     command_arguments = arguments
-    if workflow == 'x' and arguments[:1] == ['--account']:
+    if workflow in ('x', 'reddit') and arguments[:1] == ['--account']:
         if len(arguments) < 3:
-            raise BridgeError('Expected --account ID followed by an X command')
+            raise BridgeError('Expected --account ID followed by a collector command')
         command_arguments = arguments[2:]
     if not command_arguments or command_arguments[0] not in WORKFLOWS[workflow]['commands']:
         raise BridgeError('Use bridge -- with a supported command; offline/cache-only commands do not need a bridge')
@@ -119,7 +120,8 @@ def run(args, workflow='youtube'):
             node.check()
             print(json.dumps({'bridge': 'verified'}), flush=True)
             if probing:
-                results = (youtube_probe if workflow == 'youtube' else x_probe)(node.proxy_url)
+                probe = {'youtube': youtube_probe, 'x': x_probe, 'reddit': reddit_probe}[workflow]
+                results = probe(node.proxy_url)
                 check_ready(jobs.get(session_id))
                 node.check()
                 print(json.dumps({'unsigned_' + workflow + '_probe': results}), flush=True)

@@ -32,6 +32,12 @@ def x_probe(proxy):
     return origin_probe(proxy, [('x.com', '/robots.txt'), ('abs.twimg.com', '/favicons/twitter.3.ico')])
 
 
+def reddit_probe(proxy):
+    # This HTML-only client needs no redditstatic, media, or OAuth API hosts.
+    # Redirects are not followed; a login redirect checks transport only.
+    return origin_probe(proxy, [('old.reddit.com', '/')])
+
+
 def origin_probe(proxy, destinations):
     results = []
     try:

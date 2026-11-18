@@ -1,0 +1,2 @@
+# Only for explicitly authorized local Chrome cookie export.
+yt-dlp==2026.10.26
