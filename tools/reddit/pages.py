@@ -96,7 +96,10 @@ FIELDS = {'schema_version', 'id', 'source_url', 'retrieved_at', 'created_at', 'a
 
 
 def valid_post(data, identifier):
-    if not isinstance(data, dict) or set(data) != FIELDS or not ID.fullmatch(identifier):
+    if (not isinstance(data, dict) or not FIELDS <= set(data) or set(data) - FIELDS - {'body_status'}
+            or not ID.fullmatch(identifier)):
+        return False
+    if 'body_status' in data and (data['body_status'] not in ('spoiler_hidden', 'not_exposed') or data.get('text') != '' or not identifier.startswith('t3_')):
         return False
     try:
         return (data['schema_version'] == 1 and data['id'] == identifier
@@ -152,5 +155,16 @@ def source(markup, identifier, retrieved_at, account):
         raise RedditError('Requested Reddit source absent: access restriction, removal, or schema change.')
     # A hidden/expandable selftext is not a verified full source.
     if identifier.startswith('t3_') and 'self' in node.get('class', []) and own(node, '.usertext-body .md') is None:
+        if own(node, '.expando-gate--spoiler') is not None:
+            post = normalize(node, retrieved_at)
+            post['body_status'] = 'spoiler_hidden'
+            return post
+        if (own(node, '.md') is None and own(node, '.expando') is None
+                and own(node, '.expando-button, form.usertext') is None):
+            # Some historical self-posts expose their title and no body markup
+            # or expansion control. Archive only what was actually exposed.
+            post = normalize(node, retrieved_at)
+            post['body_status'] = 'not_exposed'
+            return post
         raise RedditError('Self-post body missing; not caching an incomplete source.')
     return normalize(node, retrieved_at)

@@ -1,0 +1,2 @@
+# Optional, explicitly selected local Chrome transport. Chrome is installed separately.
+playwright==1.58.0

@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/reddit'))
 sys.path.insert(0, str(ROOT / 'tools'))
 from api import Client
+from browser import BrowserClient
 from auth import state, login
 from cache import Cache, atomic_json, body, empty_index, merge_indexes
 from pages import RedditError, Unavailable, document, listing, source, source_url, valid_post
@@ -117,8 +118,53 @@ class PageTests(unittest.TestCase):
             with self.assertRaises(RedditError):
                 source(markup, 't3_abc', STAMP, 'fixture')
 
+    def test_known_spoiler_gate_preserves_visible_title_and_marks_hidden_body(self):
+        markup=(header()+thing()).replace('<div class="usertext-body"><div class="md"><p>A synthetic full sentence.</p></div></div>',
+                    '<div class="expando-gate--spoiler"><button>Click to see spoiler</button></div>')
+        parsed=source(markup,'t3_abc',STAMP,'fixture')
+        self.assertEqual(parsed['body_status'],'spoiler_hidden')
+        self.assertEqual(parsed['text'],'')
+        self.assertEqual(parsed['title'],'Synthetic title')
+        self.assertTrue(valid_post(parsed,'t3_abc'))
+        self.assertFalse(valid_post(dict(parsed,text='invented body'),'t3_abc'))
+
+    def test_self_post_without_body_or_expansion_markup_records_partial_body(self):
+        markup=(header()+thing()).replace('<div class="usertext-body"><div class="md"><p>A synthetic full sentence.</p></div></div>','')
+        parsed=source(markup,'t3_abc',STAMP,'fixture')
+        self.assertEqual(parsed['body_status'],'not_exposed')
+        self.assertEqual(parsed['text'],'')
+        self.assertTrue(valid_post(parsed,'t3_abc'))
+
 
 class TransportTests(unittest.TestCase):
+    def test_direct_local_mode_is_explicit_mac_only_and_not_a_proxy_fallback(self):
+        with patch.object(sys, 'platform', 'linux'), self.assertRaises(RedditError):
+            Client([COOKIE], direct_local=True)
+        with patch.object(sys, 'platform', 'darwin'):
+            with self.assertRaises(RedditError):
+                Client([COOKIE], PROXY, direct_local=True)
+            client=Client([COOKIE], direct_local=True)
+        self.addCleanup(client.http.close)
+        with patch.dict(os.environ, {'HTTPS_PROXY':'http://ambient.invalid:9'}), \
+                patch.object(client.http, 'get', side_effect=requests.exceptions.ConnectionError('synthetic')) as get:
+            with self.assertRaises(RedditError):
+                client.account()
+        self.assertEqual(get.call_args.kwargs['proxies'],{})
+        get.assert_called_once()
+        self.assertFalse(client.http.trust_env)
+        self.assertTrue(client.http.verify)
+
+    def test_network_security_denial_does_not_claim_cookie_expiry(self):
+        client=Client([COOKIE],PROXY)
+        self.addCleanup(client.http.close)
+        with patch.object(client.http,'get') as get:
+            response=get.return_value.__enter__.return_value
+            response.status_code=403
+            response.iter_content.return_value=iter([b'<p>Blocked by network security</p>'])
+            with self.assertRaisesRegex(RedditError,'Cookie expiry was not established'):
+                client.account()
+        get.assert_called_once()
+
     def test_live_reads_require_explicit_proxy(self):
         with self.assertRaisesRegex(RedditError, 'private bridge'):
             Client([COOKIE])
@@ -182,6 +228,121 @@ class TransportTests(unittest.TestCase):
 class S3Error(Exception):
     def __init__(self, code):
         self.response = {'Error': {'Code': code}}
+
+
+class BrowserTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root=Path(self.tmp.name)
+        self.factory=Mock()
+        self.driver=self.factory.return_value.start.return_value
+        self.context=self.driver.chromium.launch_persistent_context.return_value
+        self.page=Mock()
+        self.context.pages=[self.page]
+        self.addCleanup(patch.stopall)
+        patch.object(sys,'platform','darwin').start()
+
+    def client(self):
+        client=BrowserClient([COOKIE],self.root,delay=0,factory=self.factory)
+        self.addCleanup(client.close)
+        return client
+
+    def test_browser_is_isolated_keeps_security_checks_and_imports_only_authorized_state(self):
+        client=self.client()
+        call=self.driver.chromium.launch_persistent_context.call_args
+        self.assertEqual(Path(call.args[0]),(self.root/'browser/profile').resolve())
+        self.assertEqual(call.kwargs['channel'],'chrome')
+        self.assertFalse(call.kwargs['headless'])
+        self.assertTrue(call.kwargs['chromium_sandbox'])
+        self.assertFalse(call.kwargs['ignore_https_errors'])
+        self.assertNotIn('args',call.kwargs)
+        self.context.add_cookies.assert_called_once_with([COOKIE])
+        client.close()
+        self.context.close.assert_called_once()
+        self.driver.stop.assert_called_once()
+
+    def test_foreign_cookies_proxy_and_cloud_cannot_launch_browser(self):
+        for kwargs,cookies in (({'proxy':PROXY},[COOKIE]), ({},[dict(COOKIE,domain='.evil.example')])):
+            with self.assertRaises(RedditError):
+                BrowserClient(cookies,self.root,factory=self.factory,**kwargs)
+        with patch.object(sys,'platform','linux'),self.assertRaises(RedditError):
+            BrowserClient([COOKIE],self.root,factory=self.factory)
+        self.factory.assert_not_called()
+
+    def test_document_uses_common_identity_parser_and_no_custom_page_script(self):
+        client=self.client()
+        def navigate(url,**kwargs):
+            self.page.url=url
+            return types.SimpleNamespace(status=200,headers={'content-type':'text/html'})
+        self.page.goto.side_effect=navigate
+        self.page.content.return_value=header()+thing()
+        self.assertEqual(client.account(),{'id':'fixture'})
+        self.page.evaluate.assert_not_called()
+        self.page.goto.assert_called_once_with('https://old.reddit.com/',wait_until='domcontentloaded',timeout=30000)
+
+    def test_browser_transport_preserves_inherited_collection_method(self):
+        client=self.client()
+        def navigate(url,**kwargs):
+            self.page.url=url
+            return types.SimpleNamespace(status=200,headers={'content-type':'text/html'})
+        self.page.goto.side_effect=navigate
+        self.page.content.return_value=page(thing())
+        parsed=client.page('fixture','saved')
+        self.assertEqual(parsed['members'],{'t3_abc':URL})
+
+    def test_redirect_mutation_and_external_assets_are_blocked(self):
+        client=self.client()
+        client.target='https://old.reddit.com/'
+        for url,method,kind,main,allowed in (
+            (client.target,'GET','document',True,True),
+            ('https://old.reddit.com/login/','GET','document',True,False),
+            ('https://old.reddit.com/api/save','POST','fetch',False,False),
+            ('https://old.reddit.com/api/expando?link_id=t3_abc','GET','xhr',False,False),
+            ('https://old.reddit.com/api/expando?link_id=t3_abc','GET','image',False,False),
+            ('https://old.reddit.com/api/expando?link_id=t3_other','GET','xhr',False,False),
+            ('https://old.reddit.com/api/expando?link_id=t3_abc','POST','xhr',False,False),
+            ('https://external.example/tracker.js','GET','script',False,False),
+            ('https://www.redditstatic.com/site.css','GET','stylesheet',False,True)):
+            route=Mock();request=route.request
+            request.url,request.method,request.resource_type=url,method,kind
+            request.is_navigation_request.return_value=main
+            request.frame=self.page.main_frame
+            client._route(route)
+            (route.continue_ if allowed else route.abort).assert_called_once()
+
+    def test_login_or_challenge_navigation_is_not_followed_or_retried(self):
+        client=self.client()
+        def navigate(*a,**kw):
+            client.navigation_blocked=True
+            raise RuntimeError('PRIVATE URL')
+        self.page.goto.side_effect=navigate
+        with self.assertRaises(RedditError) as caught:
+            client.account()
+        self.assertNotIn('PRIVATE',str(caught.exception))
+        self.page.goto.assert_called_once()
+
+    def test_source_canonicalization_keeps_identity_origin_and_query_scope(self):
+        client=self.client()
+        original=URL+'?context=0'
+        for target,allowed in ((URL.replace('/example/','/new_slug/')+'?context=0',True),
+                               (URL+'?js_challenge=1',False),
+                               (URL.replace('/abc/','/other/')+'?context=0',False),
+                               (URL.replace('old.reddit.com','www.reddit.com')+'?context=0',False)):
+            client.target=original
+            route=Mock();q=route.request
+            q.method,q.url,q.resource_type='GET',target,'document'
+            q.is_navigation_request.return_value=True;q.frame=self.page.main_frame
+            client._route(route)
+            (route.continue_ if allowed else route.abort).assert_called_once()
+            if allowed:self.assertEqual(client.target,target)
+
+    def test_startup_failure_closes_driver_without_disclosing_raw_errors(self):
+        self.driver.chromium.launch_persistent_context.side_effect=RuntimeError('PRIVATE')
+        with self.assertRaises(RedditError) as caught:
+            self.client()
+        self.assertNotIn('PRIVATE',str(caught.exception))
+        self.driver.stop.assert_called_once()
 
 
 class FakeS3:
@@ -368,6 +529,27 @@ class CacheWorkflowTests(unittest.TestCase):
             with patch.object(cli, 'state', return_value=[COOKIE]), self.assertRaises(RedditError):
                 cli.authenticated(self.args)
         self.assertFalse((self.root / 'account.json').exists())
+
+    def test_live_verification_caches_a_source_without_inventing_collection_coverage(self):
+        args,client=self.refresh_setup()
+        client.page.return_value={'members':{'t3_abc':URL,'t1_def':URL+'def/'},'cursor':'t1_def'}
+        cli.verify(args)
+        cache=Cache(self.root,'fixture')
+        self.assertEqual(cache.index['collections'],{})
+        self.assertEqual(list(cache.index['posts']),['t3_abc'])
+        client.post.assert_called_once()
+
+    def test_cached_search_reports_bodies_that_could_not_be_read(self):
+        cache=Cache(self.root,'fixture')
+        cache.put(dict(post(),text='',body_status='spoiler_hidden'))
+        self.args.phrase='absent'
+        with patch.object(cli,'emit') as emit:
+            cli.search(self.args)
+        result=emit.call_args.args[0]
+        self.assertEqual(result['hidden_bodies'],1)
+        self.assertEqual(result['unread_bodies'],1)
+        self.assertEqual(result['matches'],[])
+        self.assertEqual(result['missing_items'],0)
 
 
 class BridgeTests(unittest.TestCase):

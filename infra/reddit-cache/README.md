@@ -6,7 +6,7 @@ This optional stack creates a separate encrypted, versioned bucket in **us-west-
 bash infra/reddit-cache/deploy.sh
 ```
 
-Deployment requires the user's AWS deployment authorization. The script saves noncredential outputs only to ignored `.codex/tmp/reddit/s3-config.json`. The stack was deployed on 2026-11-18; local conditional empty-manifest write/read passed. Real account sources remain uncollected because Reddit returns origin HTTP 403. Use `REDDIT_CACHE_BUCKET` in Cloud instead of copying local AWS credentials.
+Deployment requires the user's AWS deployment authorization. The script saves noncredential outputs only to ignored `.codex/tmp/reddit/s3-config.json`. The stack was deployed on 2026-11-18; local conditional empty-manifest write/read passed. The initial HTTP route was blocked by Reddit; the subsequent explicitly authorized local Chrome workflow successfully uploaded validated real source snapshots. Account membership, exact source counts and validation evidence remain private. Use `REDDIT_CACHE_BUCKET` in Cloud instead of copying local AWS credentials.
 
 `CacheAccessPolicyArn` grants only `s3:GetObject`/`s3:PutObject` under:
 
@@ -29,4 +29,6 @@ bash tools/reddit/run.sh search 'phrase'
 
 `doctor` checks configuration, not permissions or durability. Confirm successful sync and restoration using the same private bucket/identity. AccessDenied is an AWS policy failure; do not renew Reddit cookies in response. See [the collector guide](../../docs/reddit.md) for coverage, transport and privacy boundaries.
 
-Deployment status on 2026-11-18: the bucket stack is CREATE_COMPLETE and the Reddit policy is attached through the UPDATE_COMPLETE shared-runtime stack. The measured Cloud STS role was `english-vault-cloud-runtime`; local empty validation-manifest write/read passed. Cloud S3 I/O and real-source durability remain untested because the Cloud task hit its usage limit and local Reddit origin access returned HTTP 403. No account archive, cookie, or raw page was uploaded for this acceptance.
+Deployment status on 2026-11-18: the bucket stack is CREATE_COMPLETE and the Reddit policy is attached through the UPDATE_COMPLETE shared-runtime stack. The measured Cloud STS role was `english-vault-cloud-runtime`; local empty validation-manifest write/read passed. At that initial acceptance, Cloud S3 I/O and real-source durability were untested because the Cloud task hit its usage limit and local bridge requests returned HTTP 403. No account archive was uploaded during that initial check. The later local Chrome acceptance below establishes real-source persistence; Cloud I/O remains untested. Cookies and raw pages are never uploaded.
+
+The later local Chrome fix verified signed-in HTML, source parsing and content-addressed source uploads using the existing authorized session. Browser profiles, raw page diagnostics and all authentication data remain local and outside the S3 upload allowlist. Cloud route/storage testing remains separate.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Private Reddit website collections with resumable scans and cache-first search."""
 import argparse
-from contextlib import contextmanager
+from contextlib import contextmanager, ExitStack
 import fcntl
 import json
 import math
@@ -39,10 +39,22 @@ def selected_account(args):
 def authenticated(args):
     if args.offline:
         raise RedditError('This operation needs Reddit access; omit --offline.')
-    client = Client(state(CACHE), proxy=os.environ.get('REDDIT_PROXY'), delay=getattr(args, 'delay', 2.0))
-    account = client.account()
+    if getattr(args, 'browser_local', False):
+        from browser import BrowserClient
+        client = BrowserClient(state(CACHE), CACHE, proxy=os.environ.get('REDDIT_PROXY'), delay=getattr(args, 'delay', 2.0))
+    else:
+        client = Client(state(CACHE), proxy=os.environ.get('REDDIT_PROXY'), delay=getattr(args, 'delay', 2.0),
+                        direct_local=getattr(args, 'direct_local', False))
+    if getattr(args, 'clients', None) is not None:
+        args.clients.callback(client.close)
+    try:
+        account = client.account()
+    except Exception:
+        client.close()
+        raise
     expected = args.account or os.environ.get('REDDIT_ACCOUNT')
     if expected and account['id'] != expected.lower():
+        client.close()
         raise RedditError('Signed-in Reddit identity differs from --account/REDDIT_ACCOUNT; refusing cache mixing.')
     atomic_json(CACHE / 'account.json', account)
     return client, account['id']
@@ -165,6 +177,27 @@ def summary(name, collection):
             'pages': scan['pages'], 'status': scan['status'], 'reason': scan['reason']}
 
 
+def verify(args):
+    """Small live diagnostic, explicitly separate from a collection refresh."""
+    client, account = authenticated(args)
+    cache = cache_for(args, account)
+    results = []
+    for name in dict.fromkeys(args.collections):
+        page = client.page(account, name)
+        result = {'collection': name, 'page_items': len(page['members']), 'has_more': bool(page['cursor']),
+                  'source_parsed': False}
+        if page['members']:
+            identifier, url = next(iter(page['members'].items()))
+            post = client.post(url, now(), account)
+            result['source_parsed'] = True
+            if not cache.get(identifier):
+                cache.put(post)
+        results.append(result)
+    cache.save()
+    emit({'identity_verified': True, 'collections': results, 'persistence': 's3' if cache.remote else 'local',
+          'scope': 'Verification reads one page and at most one source per collection; no collection coverage is recorded.'})
+
+
 def get_post(args):
     identifier, url = source_url(args.post)
     client = None
@@ -222,14 +255,19 @@ def search(args):
         raise RedditError('Search phrase must not be empty.')
     cache = cache_for(args)
     ids = candidates(cache, args.collection, args.latest)
-    matches, missing = [], 0
+    matches, missing, hidden_bodies, unread_bodies = [], 0, 0, 0
     for identifier in ids:
         post = cache.get(identifier)
         if not post:
             missing += 1
-        elif needle in ' '.join((post['title'] + '\n' + post['text']).casefold().split()):
-            matches.append(post)
+        else:
+            hidden_bodies += post.get('body_status') == 'spoiler_hidden'
+            unread_bodies += bool(post.get('body_status'))
+            if needle in ' '.join((post['title'] + '\n' + post['text']).casefold().split()):
+                matches.append(post)
     emit({'matches': matches, 'selected_items': len(ids), 'missing_items': missing,
+          'hidden_bodies': hidden_bodies,
+          'unread_bodies': unread_bodies,
           'collections': cache.index['collections'],
           'scope': 'Cached text only; incomplete coverage is not evidence of absence.'})
 
@@ -260,6 +298,8 @@ def sync(args):
 def service_bridge(args):
     if args.offline:
         raise RedditError('Offline commands do not use the bridge.')
+    if getattr(args, 'direct_local', False) or getattr(args, 'browser_local', False):
+        raise RedditError('Local origin transports cannot wrap the bridge; select one explicit transport.')
     sys.path.insert(0, str(ROOT / 'tools'))
     from cloud_bridge.client import command
     from cloud_bridge.transport import BridgeError
@@ -277,6 +317,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--account', help='Reddit username selecting/enforcing the account archive')
     parser.add_argument('--offline', action='store_true', help='No Reddit or S3 calls')
+    transport = parser.add_mutually_exclusive_group()
+    transport.add_argument('--direct-local', action='store_true', help='Explicit macOS HTTP-client route; no proxy or fallback')
+    transport.add_argument('--browser-local', action='store_true', help='Explicit macOS Chrome route with isolated exported cookies')
     commands = parser.add_subparsers(dest='command', required=True)
     p = commands.add_parser('login', help='Export Reddit cookies after explicit local Chrome consent')
     p.add_argument('--profile', default='Default')
@@ -288,6 +331,9 @@ def main():
     p.add_argument('--max-pages', type=int)
     p.add_argument('--delay', type=float, default=2.0)
     p.set_defaults(run=refresh)
+    p = commands.add_parser('verify', help='Verify identity, first listing page and first source; no full collection scan')
+    p.add_argument('--collections', nargs='+', choices=COLLECTIONS, default=['upvoted', 'saved'])
+    p.set_defaults(run=verify)
     p = commands.add_parser('get', help='Read cached permalink; fetch only on cache miss or --refresh')
     p.add_argument('post')
     p.add_argument('--refresh', action='store_true')
@@ -311,7 +357,8 @@ def main():
     try:
         if args.command == 'bridge':
             return args.run(args) or 0
-        with lock():
+        with lock(), ExitStack() as clients:
+            args.clients = clients
             return args.run(args) or 0
     except RedditError as error:
         print(str(error), file=sys.stderr)

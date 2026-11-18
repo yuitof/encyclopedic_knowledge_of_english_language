@@ -1,6 +1,7 @@
 """Read-only, cookie-authenticated Old Reddit HTML transport."""
 import os
 import re
+import sys
 import time
 from urllib.parse import urlencode, urlsplit
 
@@ -9,16 +10,40 @@ import requests
 from pages import ACCOUNT, COLLECTIONS, ID, ORIGIN, RedditError, Unavailable, document, listing, source, source_url
 
 
+def validate_path(path):
+    if not (path == '/' or re.fullmatch(r'/user/[a-z0-9_-]{3,20}/(?:upvoted|saved|downvoted|hidden|submitted|comments)/\?[^\s]*', path)
+            or re.fullmatch(r'/(?:r/[A-Za-z0-9_]+/)?comments/[a-z0-9]+/[^?]*\?context=0', path)):
+        raise RedditError('Unsupported Reddit read path.')
+
+
+def check_response(status, prefix=b''):
+    if 300 <= status < 400:
+        raise RedditError('Reddit redirected the read; sign-in, consent, or a challenge may be required.')
+    if status == 429:
+        raise RedditError('Reddit rate limit reached; retry later (no automatic retry).')
+    if status == 403:
+        if b'blocked by network security' in prefix.lower() or b'blocked due to a network policy' in prefix.lower():
+            raise RedditError('Reddit network security blocked this HTTP client. Cookie expiry was not established; no retry or route fallback was attempted.')
+        raise RedditError('Reddit returned HTTP 403; access denied, with no retry or route fallback.')
+    if status in (404, 410):
+        raise Unavailable(f'Reddit explicitly returned HTTP {status}.')
+    if status != 200:
+        raise RedditError(f'Reddit returned HTTP {status}; cached progress retained.')
+
+
 class Client:
-    def __init__(self, cookies, proxy=None, delay=2.0):
-        if not proxy:
+    def __init__(self, cookies, proxy=None, delay=2.0, direct_local=False):
+        if direct_local and (sys.platform != 'darwin' or proxy):
+            raise RedditError('Direct local mode requires macOS and cannot be combined with a proxy.')
+        if not proxy and not direct_local:
             raise RedditError('Reddit live reads require the private bridge: use bridge -- probe, then bridge -- refresh/get.')
-        try:
-            target = urlsplit(proxy)
-            if target.scheme != 'http' or not target.hostname or not target.port or target.username or target.password:
-                raise ValueError
-        except ValueError:
-            raise RedditError('Invalid Reddit proxy; use the temporary bridge relay or an explicitly authorized HTTP proxy.') from None
+        if proxy:
+            try:
+                target = urlsplit(proxy)
+                if target.scheme != 'http' or not target.hostname or not target.port or target.username or target.password:
+                    raise ValueError
+            except ValueError:
+                raise RedditError('Invalid Reddit proxy; use the temporary bridge relay or an explicitly authorized HTTP proxy.') from None
         self.http = requests.Session()
         # Explicit proxy only. Preserve CA verification even when trust_env is disabled.
         self.http.trust_env = False
@@ -30,23 +55,21 @@ class Client:
             self.http.cookies.set(c['name'], c['value'], domain=c['domain'], path=c.get('path', '/'), secure=True)
 
     def read(self, path):
-        if not (path == '/' or re.fullmatch(r'/user/[a-z0-9_-]{3,20}/(?:upvoted|saved|downvoted|hidden|submitted|comments)/\?[^\s]*', path)
-                or re.fullmatch(r'/(?:r/[A-Za-z0-9_]+/)?comments/[a-z0-9]+/[^?]*\?context=0', path)):
-            raise RedditError('Unsupported Reddit read path.')
+        validate_path(path)
         if self.previous is not None:
             time.sleep(max(0, self.delay - (time.monotonic() - self.previous)))
         try:
             self.previous = time.monotonic()
             with self.http.get(ORIGIN + path, timeout=(10, 30), allow_redirects=False,
                                proxies={'http': self.proxy, 'https': self.proxy} if self.proxy else {}, stream=True) as response:
-                if 300 <= response.status_code < 400:
-                    raise RedditError('Reddit redirected the read; sign-in, consent, or a challenge may be required.')
-                if response.status_code == 429:
-                    raise RedditError('Reddit rate limit reached; retry later (no automatic retry).')
-                if response.status_code in (404, 410):
-                    raise Unavailable(f'Reddit explicitly returned HTTP {response.status_code}.')
-                if response.status_code != 200:
-                    raise RedditError(f'Reddit returned HTTP {response.status_code}; cached progress retained.')
+                prefix = bytearray()
+                if response.status_code == 403:
+                    # Read a bounded prefix only; never log or cache error-page contents.
+                    for chunk in response.iter_content(16384):
+                        prefix.extend(chunk)
+                        if len(prefix) >= 262144:
+                            break
+                check_response(response.status_code, prefix)
                 if 'text/html' not in response.headers.get('Content-Type', '').lower():
                     raise RedditError('Reddit did not return HTML; frontend or access conditions changed.')
                 data = bytearray()
@@ -57,6 +80,15 @@ class Client:
                 return data.decode('utf-8', errors='replace')
         except requests.RequestException:
             raise RedditError('Reddit network/proxy/TLS request failed; no direct fallback or automatic retry.') from None
+
+    def close(self):
+        self.http.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()
 
     def account(self):
         _, account = document(self.read('/'))

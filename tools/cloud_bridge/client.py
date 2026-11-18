@@ -20,7 +20,7 @@ WORKFLOWS = {
     'youtube': {'script': 'tools/youtube/youtube.py', 'proxies': ('YOUTUBE_HISTORY_PROXY', 'YOUTUBE_TRANSCRIPT_PROXY'),
                 'commands': ('probe', 'refresh', 'search')},
     'x': {'script': 'tools/x/x.py', 'proxies': ('X_PROXY',), 'commands': ('probe', 'refresh', 'get', 'folders')},
-    'reddit': {'script': 'tools/reddit/reddit.py', 'proxies': ('REDDIT_PROXY',), 'commands': ('probe', 'refresh', 'get')},
+    'reddit': {'script': 'tools/reddit/reddit.py', 'proxies': ('REDDIT_PROXY',), 'commands': ('probe', 'refresh', 'get', 'verify')},
 }
 
 
