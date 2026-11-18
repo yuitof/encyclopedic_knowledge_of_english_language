@@ -4,6 +4,10 @@ modified: "2026-11-14T18:27:32+00:00"
 ---
 **axolotl** (/ˈæksəˌlɑːtl/) is an aquatic salamander that normally retains its larval features as an adult. ([Merriam-Webster](https://www.merriam-webster.com/dictionary/axolotl))
 
+![A pink axolotl with feathery external gills](https://upload.wikimedia.org/wikipedia/commons/4/46/Axolote_rosa.jpg)
+
+Photo: Reegn.23, [Axolote rosa](https://commons.wikimedia.org/wiki/File:Axolote_rosa.jpg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Unmodified.
+
 ## Examples
 
 A Minecraft player introduces the rare blue version of the game's axolotl.
