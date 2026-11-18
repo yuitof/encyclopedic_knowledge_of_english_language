@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T03:59:50Z"
+modified: "2026-11-18T03:59:50Z"
+---
 **drop it off** (/drɒp ɪt ˈɒf/) is a form of the separable phrasal verb **drop something off**, meaning to take something to a place and leave it there, often while travelling somewhere else. ([Oxford Advanced Learner’s Dictionary: drop, sense 8](https://www.oxfordlearnersdictionaries.com/definition/english/drop_1))
 
 With a noun, both *drop something off* and *drop off something* are possible. A pronoun must go between the verb and particle: **drop it off**, not *drop off it*. Use **at** to introduce the destination.
