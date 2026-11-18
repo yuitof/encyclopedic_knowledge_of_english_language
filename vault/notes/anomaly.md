@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T05:03:51Z"
+modified: "2026-11-18T05:03:51Z"
+---
 **anomaly** (/əˈnɒməli/) is a countable noun meaning a person, thing, or situation that differs from what is normal or expected. Plural: **anomalies**. ([Oxford Advanced Learner’s Dictionary](https://www.oxfordlearnersdictionaries.com/us/definition/english/anomaly))
 
 The word highlights an exception to a usual pattern. Whether that exception is admirable, strange, or a problem depends on the context.

@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T05:03:51Z"
+modified: "2026-11-18T05:03:51Z"
+---
 **obby** (/ˈɒbi/) is an informal [[Minecraft]] term for [[obsidian]], the dark block used to build Nether portals and strong barriers. In this sense it is an uncountable noun, so players can say **some obby**. ([Wiktionary: obby](https://en.wiktionary.org/wiki/obby); [Minecraft community glossary](https://minecraft.wiki/w/Noob))
 
 ## Examples

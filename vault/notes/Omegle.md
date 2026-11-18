@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T05:03:51Z"
+modified: "2026-11-18T05:03:51Z"
+---
 **Omegle** (/oʊˈmɛɡəl/) was a website that paired strangers for one-to-one text or video chats. People could meet randomly matched users without creating a conventional social-media profile. The original service closed in November 2023. ([OECD report](https://one.oecd.org/document/DSTI/CDEP%282023%2913/FINAL/en/pdf))
 
 ![Omegle logo](https://upload.wikimedia.org/wikipedia/commons/c/c3/Omegle.png)

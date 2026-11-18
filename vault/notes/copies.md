@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T05:03:51Z"
+modified: "2026-11-18T05:03:51Z"
+---
 **copies** (/ˈkɒpiz/) is the plural of **copy**: a reproduction of something, such as a document or a piece of software. In **copies of a game**, the word counts individual instances of that game. ([Oxford Advanced Learner’s Dictionary: copy, senses 1–2](https://www.oxfordlearnersdictionaries.com/definition/english/copy_1))
 
 The pattern is **a copy of + title or work**, or **number + copies of + title or work**. Several copies can all be of the same game; they do not have to be different game titles.

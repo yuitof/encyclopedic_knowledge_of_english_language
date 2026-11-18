@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T05:03:51Z"
+modified: "2026-11-18T05:03:51Z"
+---
 **Axiom** (/ˈæksiəm/) is a Minecraft world-editing mod that helps builders create and modify structures and terrain. Its tools include moving, cloning, sculpting, and painting blocks, with real-time previews. Here it is the name of a tool. ([Official Axiom documentation](https://axiomdocs.moulberry.com/))
 
 ## Examples

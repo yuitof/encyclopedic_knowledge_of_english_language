@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T05:03:51Z"
+modified: "2026-11-18T05:03:51Z"
+---
 **domain** (/dəˈmeɪn/) is a separate challenge area in *Genshin Impact* that players enter to fight enemies, solve puzzles, or complete other objectives. It is similar to a dungeon. Countable noun; plural **domains**. ([Genshin Impact Wiki](https://genshin-impact.fandom.com/wiki/Domain))
 
 Some domains are repeatable sources of artifacts or character-development materials; others offer one-time exploration challenges. Rewards depend on the domain. ([HoYoverse: domain artifact rewards](https://genshin.hoyoverse.com/en/news/detail/112690); [domain overview](https://genshin-impact.fandom.com/wiki/Domain))
