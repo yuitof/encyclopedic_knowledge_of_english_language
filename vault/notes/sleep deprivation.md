@@ -10,6 +10,6 @@ Source: [Cambridge — sleep deprivation](https://dictionary.cambridge.org/dicti
 
 At an immersive light-and-mirror attraction, Luke wonders whether his lack of sleep explains his reaction.
 
-> Maybe it's the sleep deprivation …
+> Maybe it's the sleep deprivation, I really don't know.
 
 [I Stayed Awake Until I Hallucinated, Here’s What I Saw — LukeJ, 7:14](https://www.youtube.com/watch?v=60qYm520dlo&t=434s)
