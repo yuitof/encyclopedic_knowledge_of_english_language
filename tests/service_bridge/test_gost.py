@@ -50,12 +50,13 @@ class GostTests(unittest.TestCase):
         for authority in ('example.com:443', 'www.youtube.com:80', 'www.youtube.com.evil:443',
                           '127.0.0.1:443', '169.254.169.254:443', '[::1]:443', 'youtube.com.:443',
                           'x.com:80', 'x.com.:443', 'x.com.evil:443', 'abs.twimg.com.evil:443',
-                          'api.x.com:443', 'pbs.twimg.com:443'):
+                          'api.x.com:443', 'pbs.twimg.com:443', 'reddit.com:443', 'www.reddit.com:443',
+                          'oauth.reddit.com:443', 'old.reddit.com:80', 'old.reddit.com.evil:443'):
             with self.subTest(authority=authority):
                 self.assertEqual(self.request(authority), 403)
         self.assertEqual(self.request('http://www.youtube.com/', method='GET'), 403)
 
-    def test_x_and_required_assets_support_opaque_connect(self):
+    def test_x_assets_and_reddit_support_opaque_connect(self):
         class Echo(socketserver.BaseRequestHandler):
             def handle(self):
                 self.request.sendall(self.request.recv(4096))
@@ -66,7 +67,7 @@ class GostTests(unittest.TestCase):
         thread = threading.Thread(target=origin.serve_forever, daemon=True)
         thread.start()
         try:
-            for host in ('x.com', 'abs.twimg.com'):
+            for host in ('x.com', 'abs.twimg.com', 'old.reddit.com'):
                 with self.subTest(host=host):
                     client = http.client.HTTPConnection('127.0.0.1', self.service.port, timeout=3)
                     try:

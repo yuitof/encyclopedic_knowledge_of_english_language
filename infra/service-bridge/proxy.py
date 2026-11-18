@@ -15,7 +15,7 @@ import time
 
 from tailscale_node import BridgeError
 
-ALLOWED_HOSTS = ('youtube.com', 'www.youtube.com', 'x.com', 'abs.twimg.com', 'checkip.amazonaws.com')
+ALLOWED_HOSTS = ('youtube.com', 'www.youtube.com', 'x.com', 'abs.twimg.com', 'old.reddit.com', 'checkip.amazonaws.com')
 
 
 def public_mappings():

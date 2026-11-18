@@ -143,7 +143,7 @@ class PolicyTests(unittest.TestCase):
 
     def test_configuration_is_private_pinned_and_fail_closed(self):
         self.assertEqual(set(proxy.ALLOWED_HOSTS),
-            {'youtube.com', 'www.youtube.com', 'x.com', 'abs.twimg.com', 'checkip.amazonaws.com'})
+            {'youtube.com', 'www.youtube.com', 'x.com', 'abs.twimg.com', 'old.reddit.com', 'checkip.amazonaws.com'})
         mappings = [{'hostname': h, 'ip': '8.8.8.8'} for h in proxy.ALLOWED_HOSTS]
         config = proxy.configuration(12345, 12346, mappings)
         service = config['services'][0]
