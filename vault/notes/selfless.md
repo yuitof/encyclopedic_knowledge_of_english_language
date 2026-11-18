@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T04:14:31Z"
+modified: "2026-11-18T04:14:31Z"
+---
 **selfless** (/ˈselfləs/) is an adjective describing someone who puts other people's needs or happiness before their own. It is an approving word, closely related to [[altruistic]]. ([Oxford Advanced Learner’s Dictionary](https://www.oxfordlearnersdictionaries.com/us/definition/english/selfless))
 
 **Selflessness** (/ˈselfləsnəs/) is the corresponding noun: the quality of being selfless.

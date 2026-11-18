@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T04:14:31Z"
+modified: "2026-11-18T04:14:31Z"
+---
 **sausage sizzle** (/ˈsɒsɪdʒ ˌsɪzəl/) is an Australian and New Zealand term for a barbecue at which sausages are cooked and eaten. ([Collins English Dictionary](https://www.collinsdictionary.com/dictionary/english/sausage-sizzle))
 
 Countable noun. Community sausage sizzles often raise funds by selling sausages in bread.

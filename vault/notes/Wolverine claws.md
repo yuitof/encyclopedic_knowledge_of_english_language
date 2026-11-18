@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T04:14:31Z"
+modified: "2026-11-18T04:14:31Z"
+---
 **Wolverine claws** (/ˈwʊlvəriːn klɔːz/) is a plural noun phrase referring to the retractable blades that extend from the hands of Marvel’s superhero Wolverine, or to objects made to resemble them. It is a character reference rather than an idiom. ([Marvel: Wolverine](https://cdn.marvel.com/u/prod/marvel/i/pdf/MMRPG_XMen97_20240517.pdf))
 
 A **claw** is a sharp, curved nail on an animal’s foot; the word is extended here to Wolverine’s weapons. ([Oxford Advanced Learner’s Dictionary](https://www.oxfordlearnersdictionaries.com/definition/english/claw_1))

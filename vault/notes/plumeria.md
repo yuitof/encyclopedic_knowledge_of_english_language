@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T04:14:31Z"
+modified: "2026-11-18T04:14:31Z"
+---
 **plumeria** (/pluːˈmɪəriə/) is a tropical flowering shrub or small tree, also called **frangipani**, known for its fragrant flowers. The name can also refer to its flowers. ([University of Florida, Gardening Solutions](https://gardeningsolutions.ifas.ufl.edu/plants/ornamentals/plumeria/); [Cambridge pronunciation](https://dictionary.cambridge.org/pronunciation/english/plumeria))
 
 The flowers can be white, yellow, pink, red, orange, or a combination of colors. They are often used in Hawaiian flower necklaces called leis, although the plants are not native to Hawaii. ([University of Florida](https://gardeningsolutions.ifas.ufl.edu/plants/ornamentals/plumeria/))

@@ -1,3 +1,7 @@
+---
+created: "2026-11-18T04:14:31Z"
+modified: "2026-11-18T04:14:31Z"
+---
 **pager** (/ˈpeɪdʒə(r)/) is a small portable electronic device that alerts its owner when someone wants to contact them, often by sounding a beep or displaying a short message. ([Oxford Advanced Learner’s Dictionary](https://www.oxfordlearnersdictionaries.com/definition/english/pager))
 
 Countable noun; plural **pagers**. Also called a **beeper** or **bleeper**.
