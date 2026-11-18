@@ -23,7 +23,7 @@ Account archives use the lowercase Reddit username observed in the header. `--ac
 
 Direct Reddit access is blocked by the Cloud proxy before origin TLS. Live commands require an explicit proxy and have **no direct/ambient-proxy fallback**. Use the existing [private Lambda bridge](service-bridge-client.md) with the Reddit server extension. The client needs only `old.reddit.com:443`; it never fetches website assets, media, or external links. Cookies remain in the collector, and origin TLS stays verified.
 
-The Reddit server extension is implemented separately on `service-bridge`. Its local image and tests pass, but this task has **not deployed it or verified the live Cloud route**. Earlier YouTube/X acceptance does not establish Reddit support. Deploy the matching server before running the unsigned probe; a destination denial is a route/deployment failure, not evidence of an expired cookie. Do not retry directly or switch to a browser after bridge failure.
+The Reddit server extension at `cd00fa2` was deployed on 2026-11-18. Lambda is Active with a successful update. Local tailnet testing verified private authentication, matched egress and origin TLS, but Old Reddit returned **HTTP 403**, both unsigned and with the separately authorized local session. This is an origin response through the bridge, not a CONNECT denial. Cookie validity and authenticated HTML parsing could not be established. Do not retry directly or switch to a browser after bridge failure.
 
 Set the existing `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions`, or their matching stack outputs. Legacy `YOUTUBE_BRIDGE_FUNCTION` / `YOUTUBE_BRIDGE_TABLE` also work. Preserve scoped AWS permissions, built-in VPN configuration, normal AWS/S3 proxy/CA settings, and the private TCP 8443 grant. No new bridge credentials, private Tailscale daemon, or exit node are needed.
 
@@ -48,6 +48,17 @@ bash tools/reddit/run.sh --account YOUR_USERNAME bridge -- refresh
 The probe verifies session readiness, unauthenticated private-proxy rejection, matched egress and verified HTTPS to Old Reddit. It does not follow redirects. A login redirect demonstrates transport only; a 403/429 fails acceptance, and a 200 challenge page still does not prove account access. The client must subsequently verify a real authenticated page. A CONNECT 403 before origin TLS is distinct from a Reddit response through a working bridge.
 
 The bridge passes a temporary `REDDIT_PROXY` only to its child collector. It monitors expiry/heartbeat/tunnel health and requests worker shutdown on completion. Sessions last at most 720 seconds including startup. If terminated, complete source writes and page checkpoints survive; start a new session with `--resume`. Do not copy relay URLs to permanent settings. An independently supplied authorized HTTP proxy can be used through `REDDIT_PROXY`; credentials in that proxy URL are rejected. Plain live commands without an explicit proxy fail before making a request.
+
+## Explicit local tailnet testing
+
+On a Mac with an existing, signed-in Tailscale connection, use the explicit local transport:
+
+```bash
+SERVICE_BRIDGE_FUNCTION=service-bridge SERVICE_BRIDGE_TABLE=service-bridge-sessions \
+  bash tools/reddit/run.sh bridge --local --session-seconds 180 -- probe
+```
+
+The same `--local` option can precede `-- refresh` or `-- get PERMALINK` for authorized local collection. It connects to Lambda's private tailnet endpoint through the existing OS route, then uses the same authenticated CONNECT relay, egress check, verified origin TLS and bounded session lifecycle. It never installs or starts Tailscale. This is an explicitly selected transport, not an automatic fallback. **Do not use `--local` in Codex Cloud**; Cloud retains its `proxy:8088` path.
 
 ## Cached search and individual sources
 
@@ -88,7 +99,7 @@ Optional [Reddit S3 infrastructure](../infra/reddit-cache/README.md) uses a sepa
 bash tools/reddit/run.sh sync
 ```
 
-The stack/template and optional shared-runtime policy are prepared, **not deployed**. This task's `doctor` reports local-only persistence, and no private session/account collection was performed. Do not infer working S3 persistence or authenticated access from synthetic tests.
+The private Reddit S3 stack and optional shared-runtime cache policy were deployed on 2026-11-18. Local conditional manifest write/read passed using an isolated empty validation archive; no real account sources were collected. Local `doctor` reports S3 and an available private session, but those configuration checks do not establish account access. Cloud persistence requires the actual active scoped role and a separately verified bucket route.
 
 ## Validation and implementation references
 
@@ -97,6 +108,17 @@ The stack/template and optional shared-runtime policy are prepared, **not deploy
 bash -n tools/reddit/setup.sh tools/reddit/run.sh infra/reddit-cache/deploy.sh
 ```
 
-Tests use synthetic HTML, cookies, sources and S3. They cover account isolation, source parsing, pagination, checkpoint/resume, unavailable sources, missing-cache reporting, proxy/TLS restrictions, consent, cache-only reads, upload order/integrity and bridge dispatch. Existing X/YouTube tests check the shared-client regression boundary. The server image tests exercise real GOST with networking disabled, including opaque Reddit CONNECT and destination denial. Authenticated Old Reddit HTML and live Cloud Reddit/S3 acceptance remain unverified.
+Tests use synthetic HTML, cookies, sources and S3. They cover account isolation, source parsing, pagination, checkpoint/resume, unavailable sources, missing-cache reporting, proxy/TLS restrictions, consent, cache-only reads, upload order/integrity and bridge dispatch. Existing X/YouTube tests check the shared-client regression boundary. The server image tests exercise real GOST with networking disabled, including opaque Reddit CONNECT and destination denial. Authenticated Old Reddit HTML remains unverified because the origin rejects the deployed route with HTTP 403. Cloud route and S3 results are recorded below when measured.
 
 Parser structure is based on Reddit's archived first-party [listing](https://github.com/reddit-archive/reddit/blob/master/r2/r2/templates/listing.html), [printable item](https://github.com/reddit-archive/reddit/blob/master/r2/r2/templates/printable.html), [link](https://github.com/reddit-archive/reddit/blob/master/r2/r2/templates/link.html), and [comment](https://github.com/reddit-archive/reddit/blob/master/r2/r2/templates/comment.html) templates. These historical references are not proof of today's authenticated markup; unexpected markup fails visibly. There is no GitHub Actions or website-build integration. Only requested short verified quotations may later enter notes under `AGENTS.md`.
+
+## Deployment and measured acceptance — 2026-11-18
+
+- Server `cd00fa2` is deployed with Lambda image digest `sha256:4736921516d9bd2db09b1e0577fe47678214148da860edc16b699870af56988e`; the stack is UPDATE_COMPLETE and Lambda is Active / Successful.
+- The private Reddit bucket is CREATE_COMPLETE and the optional cache-policy attachment on `english-vault-cloud-runtime` is UPDATE_COMPLETE. Local conditional write/read of an isolated empty validation manifest passed. No personal Reddit sources were uploaded. Cloud S3 I/O was not exercised.
+- Local acceptance through the existing Mac tailnet passed private 407 enforcement and matching Lambda egress. The unsigned origin request returned HTTP 403. A separate authorized Chrome Default cookie export was tested once through the same deployed route; Reddit again returned HTTP 403 before an account header could be verified. This does not establish that the cookie is expired or invalid. No direct-origin or browser fallback was used.
+- A real Cloud runtime prepared an isolated detached worktree at client `aeb8ce2` and passed all 30 tests then present. Its actual STS role was `english-vault-cloud-runtime`. The one live outer-executor probe accepted Lambda invocation, observed `connect-v2` readiness and private 407, and matched egress. It then exited 1 with `Built-in VPN bridge connection failed; collection stopped`. No origin status was emitted, so Cloud origin acceptance is **not established**.
+- Review found that the relay could mark itself unhealthy on a normal post-CONNECT client disconnect. The client now confines those late disconnects to their tunnel; truncated HTTPS responses still fail in the collector, and pre-CONNECT failures still mark the bridge unhealthy. Synthetic regression tests pass. This is a possible explanation of the Cloud result, not a confirmed diagnosis. The Cloud task then hit its account usage limit, preventing a rerun of the corrected client or Cloud S3 tests.
+- Local coordinator checks confirmed all three acceptance sessions reached `stopped` / `StopRequested` and their exact Lambda peers were offline. No Cloud cookies were supplied and no environment snapshot was published. Local tests pass: 33 Reddit, 78 YouTube/shared-bridge, 26 X; the unchanged deployed server image passed all 18 tests.
+
+Live collection is not working through the tested deployment: local Reddit access is origin-blocked and corrected-client Cloud acceptance remains pending. Resume with one unsigned Cloud probe after usage is available. Keep the stage distinctions above; do not renew/export another session or try other hosts/proxies merely because the current route is blocked.

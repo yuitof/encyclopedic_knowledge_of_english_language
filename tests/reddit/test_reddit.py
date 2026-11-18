@@ -9,6 +9,8 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import threading
+import time
 import types
 import unittest
 from unittest.mock import Mock, patch
@@ -25,6 +27,7 @@ from pages import RedditError, Unavailable, document, listing, source, source_ur
 from s3_cache import S3Cache
 from cloud_bridge import client as bridge, probe
 from cloud_bridge.transport import BridgeError
+from cloud_bridge import transport
 
 spec = importlib.util.spec_from_file_location('reddit_cli', ROOT / 'tools/reddit/reddit.py')
 cli = importlib.util.module_from_spec(spec)
@@ -368,6 +371,43 @@ class CacheWorkflowTests(unittest.TestCase):
 
 
 class BridgeTests(unittest.TestCase):
+    def test_post_connect_client_disconnect_does_not_poison_bridge_health(self):
+        handler = object.__new__(transport.Handler)
+        handler.server = types.SimpleNamespace(stopped=threading.Event(), failed=threading.Event(),
+            deadline=time.time()+60, endpoint=('100.64.0.1',8443), token='synthetic', local_transport=False)
+        handler.path, handler.wfile, handler.connection = 'old.reddit.com:443', io.BytesIO(), Mock()
+        handler.connection.sendall.side_effect = BrokenPipeError('client closed a completed HTTPS response')
+        upstream = Mock()
+        upstream.sock.recv.return_value = b'opaque TLS bytes'
+        with patch.object(transport, 'open_tunnel', return_value=upstream), \
+                patch.object(transport.select, 'select', return_value=([upstream.sock],[],[])):
+            handler.do_CONNECT()
+        self.assertIn(b'200 Connection Established',handler.wfile.getvalue())
+        self.assertFalse(handler.server.failed.is_set())
+        upstream.close.assert_called_once()
+
+    def test_pre_connect_failure_still_marks_bridge_unhealthy(self):
+        handler = object.__new__(transport.Handler)
+        handler.server = types.SimpleNamespace(stopped=threading.Event(), failed=threading.Event(),
+            deadline=time.time()+60, endpoint=('100.64.0.1',8443), token='synthetic', local_transport=False)
+        handler.path, handler.send_error = 'old.reddit.com:443', Mock()
+        with patch.object(transport, 'open_tunnel', side_effect=OSError('route failed')):
+            handler.do_CONNECT()
+        self.assertTrue(handler.server.failed.is_set())
+        handler.send_error.assert_called_once_with(502)
+
+    def test_explicit_local_transport_never_uses_cloud_proxy_or_falls_back(self):
+        connection = Mock()
+        with patch.object(transport.http.client, 'HTTPConnection', return_value=connection) as factory:
+            self.assertIs(transport.local_peer_connection('100.64.0.1', 8443), connection)
+        factory.assert_called_once_with('100.64.0.1', 8443, timeout=10)
+        connection.connect.assert_called_once()
+        with patch.object(transport, 'peer_connection', side_effect=AssertionError('Cloud path forbidden')), \
+                patch.object(transport, 'local_peer_connection', side_effect=OSError('local route failed')) as local:
+            with self.assertRaises(OSError):
+                transport.open_tunnel('100.64.0.1', 8443, 'old.reddit.com:443', 'synthetic', local=True)
+        local.assert_called_once()
+
     def test_reddit_child_sets_only_reddit_proxy_and_preserves_aws_environment(self):
         child, jobs, transport = Mock(), Mock(), Mock()
         child.poll.return_value, child.returncode = 0, 0

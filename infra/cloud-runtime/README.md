@@ -12,4 +12,6 @@ The role permits only the cache object paths defined by the attached policies; i
 
 ## Optional Reddit cache policy
 
-The [Reddit cache stack](../reddit-cache/README.md) supplies an optional `RedditCacheAccessPolicyArn` parameter. Leaving it empty preserves the existing role's cache grants. Supplying it attaches that stack's narrowly scoped index/source policy alongside YouTube and X access. This template change has not been deployed by the Reddit tooling task; save/apply and check the Cloud connection's STS identity before claiming the runtime uses the new grant. Reddit's private session and bridge destination support are separate requirements.
+The [Reddit cache stack](../reddit-cache/README.md) supplies an optional `RedditCacheAccessPolicyArn` parameter. Leaving it empty preserves the existing role's cache grants. Supplying it attaches that stack's narrowly scoped index/source policy alongside YouTube and X access. The Reddit policy attachment was deployed to this shared role on 2026-11-18. Check the Cloud connection's actual STS identity before claiming a running task uses this grant; a separate legacy role may still be active. Reddit's private session and bridge destination support are separate requirements.
+
+The 2026-11-18 Cloud Reddit probe reported the actual STS role as `english-vault-cloud-runtime`, confirming that runtime selected the shared role. No trust conditions or existing policies were replaced. Cloud S3 I/O was not exercised before its usage limit; role selection and attached policy are not a successful storage roundtrip.

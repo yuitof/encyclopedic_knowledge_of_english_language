@@ -1,4 +1,4 @@
-"""Shared private bridge transport through Codex Cloud's built-in VPN TCP proxy."""
+"""Private bridge transport: Cloud VPN by default, existing local tailnet explicitly."""
 import base64
 import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -35,9 +35,20 @@ def peer_connection(address, port):
         raise
 
 
-def probe_private_proxy(address, port):
+def local_peer_connection(address, port):
+    """Explicit local mode only: use an already configured local tailnet route."""
+    connection = http.client.HTTPConnection(address, port, timeout=10)
+    try:
+        connection.connect()
+        return connection
+    except BaseException:
+        connection.close()
+        raise
+
+
+def probe_private_proxy(address, port, local=False):
     """Prove private TCP/service reachability without origin access or credentials."""
-    connection = peer_connection(address, port)
+    connection = (local_peer_connection if local else peer_connection)(address, port)
     try:
         connection.send(b'CONNECT www.youtube.com:443 HTTP/1.1\r\nHost: www.youtube.com:443\r\n\r\n')
         response = http.client.HTTPResponse(connection.sock)
@@ -51,10 +62,10 @@ def probe_private_proxy(address, port):
         connection.close()
 
 
-def open_tunnel(address, port, authority, token):
-    # Use the documented raw TCP CONNECT endpoint, not the ambient HTTPS proxy.
-    # There is intentionally no direct-connect or standalone Tailscale fallback.
-    connection = peer_connection(address, port)
+def open_tunnel(address, port, authority, token, local=False):
+    # Cloud uses its documented TCP CONNECT endpoint; local mode is explicit.
+    # Neither mode connects directly to an Internet origin or falls back automatically.
+    connection = (local_peer_connection if local else peer_connection)(address, port)
     try:
         authorization = base64.b64encode(('bridge:' + token).encode()).decode('ascii')
         connection.send((f'CONNECT {authority} HTTP/1.1\r\nHost: {authority}\r\n'
@@ -89,7 +100,8 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if self.server.stopped.is_set() or time.time() >= self.server.deadline:
                 raise OSError('Session ended')
-            connection = open_tunnel(*self.server.endpoint, self.path, self.server.token)
+            connection = open_tunnel(*self.server.endpoint, self.path, self.server.token,
+                                     local=self.server.local_transport)
             try:
                 self.wfile.write(b'HTTP/1.1 200 Connection Established\r\n\r\n')
                 connected = True
@@ -107,17 +119,23 @@ class Handler(BaseHTTPRequestHandler):
             finally:
                 connection.close()
         except (OSError, http.client.HTTPException):
-            self.server.failed.set()
             if not connected:
+                self.server.failed.set()
                 self.send_error(502)
+            # Once CONNECT has succeeded, either TLS peer can normally close its
+            # socket (including after a complete HTTP error response). A late
+            # EPIPE/reset is confined to this tunnel; it is not bridge health.
+            # Truncated responses still fail in the HTTPS client. A new tunnel
+            # failure or stale worker heartbeat remains fatal, without fallback.
 
 
 class ManagedBridge:
-    def __init__(self, job, token):
+    def __init__(self, job, token, local=False):
         target = endpoint(job)
         self.server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
         self.server.endpoint = target
         self.server.token = token
+        self.server.local_transport = local
         self.server.deadline = float(job['expires_at'])
         self.server.stopped = threading.Event()
         self.server.failed = threading.Event()

@@ -111,9 +111,10 @@ def run(args, workflow='youtube'):
         target = endpoint(job)
         if probing:
             print(json.dumps({'lambda_session': 'ready', 'protocol': job['protocol']}), flush=True)
-            status = probe_private_proxy(*target)
+            status = probe_private_proxy(*target, local=True) if getattr(args, 'local', False) else probe_private_proxy(*target)
             print(json.dumps({'private_tcp_proxy': 'reachable', 'unauthenticated_status': status}), flush=True)
-        with ManagedBridge(job, token) as node:
+        transport = ManagedBridge(job, token, local=True) if getattr(args, 'local', False) else ManagedBridge(job, token)
+        with transport as node:
             check_ready(jobs.get(session_id), reserve=60)
             if public_address(node.proxy_url) != job['egress_ip']:
                 raise BridgeError('Bridge egress address did not match; collection was not started')

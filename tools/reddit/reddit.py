@@ -301,7 +301,8 @@ def main():
         p.set_defaults(run=function)
     for name, function in (('doctor', doctor), ('sync', sync)):
         commands.add_parser(name).set_defaults(run=function)
-    p = commands.add_parser('bridge', help='Requires separately deployed Reddit destination support')
+    p = commands.add_parser('bridge', help='Use the deployed private bridge for live Reddit requests')
+    p.add_argument('--local', action='store_true', help='Use the existing local Tailscale connection instead of Cloud proxy:8088')
     p.add_argument('--session-seconds', type=int, default=720)
     p.add_argument('--ready-timeout', type=int, default=60)
     p.add_argument('arguments', nargs=argparse.REMAINDER)
