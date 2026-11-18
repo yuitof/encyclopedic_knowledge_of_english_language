@@ -48,6 +48,14 @@ The retained classifier recorded `operation not permitted` and a connectivity-ch
 
 The replacement credential and its enrollment rule were removed, the one attributable registration was deleted and verified absent, and the Secrets Manager secret is no longer listed, including pending deletion. A final AWS read found zero test Lambda functions, ECR repositories, roles, log groups or secrets. The production digest was independently rechecked. Raw IPs and invocation results are under ignored `.codex/tmp/warp-feasibility/`. There is no effective Cloudflare IP to compare with the stored direct AWS IPs.
 
+### Local follow-up
+
+The existing macOS WARP session served as a reference. Its effective settings showed Local proxy mode and MASQUE. Explicit HTTP CONNECT to `127.0.0.1:40000` returned 200. HTTPS to the Cloudflare trace and AWS address-check endpoints returned 200 with certificate verification enabled. The public IP differed from the direct route and Cloudflare trace reported `warp=on` and `gateway=on`.
+
+The separate Linux Docker retest reused the restricted x86_64 image and enrolled with its own approved one-hour service token. CLI IPC was ready in 1.29 seconds. The CLI confirmed enrollment, active MDM, Local proxy mode and MASQUE. An explicit `warp-cli connect` returned success, while status reported `Unable` throughout the 65-second connection window. Independent TCP checks never found the proxy listening on port 40000. The daemon logged `operation not permitted` from `warp_connection::forward_proxy`. This identifies the Linux subsystem involved. The specific denied operation is still unknown, and the earlier Lambda diagnostics did not retain the subsystem. The Docker run itself completed verified direct HTTPS.
+
+Only the Linux Docker test created a registration. The daemon shut down and removed its temporary state, and the test registration, service token and enrollment policy were removed and their absence verified. The test created no AWS resources.
+
 ## Gate outcome and production rollback
 
 The real Lambda feasibility gate failed at the tunnel and data path after enrollment. The server integration, Terraform setup and plan, client contract changes, and production deployment remain gated. No signed-out caption comparison, authenticated history check, or Cloud-to-Cloudflare YouTube, X or Reddit acceptance was run. The existing tests cover the deployed direct mode. The unsigned Cloud/VPN outcomes for that mode remain documented in the server guide.
