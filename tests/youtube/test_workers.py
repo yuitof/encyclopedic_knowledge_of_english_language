@@ -17,6 +17,7 @@ CONFIG = {
     'CF_ACCESS_CLIENT_ID': 'synthetic-id',
     'CF_ACCESS_CLIENT_SECRET': 'synthetic-placeholder',
 }
+OTHER_VIDEO = 'zyxWVU98765'
 
 
 def response(body='', status=200, **headers):
@@ -61,6 +62,7 @@ class WorkersTests(unittest.TestCase):
             self.assertEqual(call.args, ('POST', CONFIG['SERVICE_BRIDGE_WORKER_URL'] + ROUTE + stage))
             self.assertFalse(call.kwargs['allow_redirects'])
             self.assertEqual(call.kwargs['headers']['CF-Access-Client-Secret'], 'synthetic-placeholder')
+            self.assertEqual(call.kwargs['json']['videoId'], TEST_VIDEO)
             origin = {key.lower(): value for key, value in call.kwargs['json']['headers'].items()}
             self.assertNotIn('cf-access-client-secret', origin)
             self.assertEqual(origin.get('cookie'), None if stage == 'watch' else 'visitor=synthetic')
@@ -100,11 +102,33 @@ class WorkersTests(unittest.TestCase):
                 settings = transport.session.merge_environment_settings(transport.origin, {}, None, None, None)
                 self.assertEqual(settings['verify'], expected)
 
-    def test_does_not_attempt_another_video(self):
+    def test_supports_any_valid_video_id_across_all_stages(self):
+        signed_url = f'https://www.youtube.com/api/timedtext?v={OTHER_VIDEO}&sig=a%2Fb'
+        player = {'playabilityStatus': {'status': 'OK'}, 'captions': {
+            'playerCaptionsTracklistRenderer': {'captionTracks': [
+                {'languageCode': 'en', 'baseUrl': signed_url}]}}}
+        headers = {'X-Bridge-Version': '1', 'X-Origin-Http': '200'}
+        replies = [
+            response('{"INNERTUBE_API_KEY":"synthetic"}', **headers),
+            response(json.dumps(player), **headers),
+            response('<transcript><text start="0">Verified</text></transcript>', **headers),
+        ]
         with WorkersTransport() as transport, WorkersCaptionClient(transport) as captions:
-            with patch.object(transport.session, 'request') as send, self.assertRaises(WorkersError):
-                captions.fetch('AAAAAAAAAAA')
-            send.assert_not_called()
+            with patch.object(transport.session, 'request', side_effect=replies) as send:
+                result = captions.fetch(OTHER_VIDEO)
+        self.assertEqual(result['segments'][0]['text'], 'Verified')
+        self.assertEqual(send.call_args_list[0].kwargs['json']['search'], f'v={OTHER_VIDEO}&hl=en')
+        self.assertEqual(json.loads(send.call_args_list[1].kwargs['json']['body'])['videoId'], OTHER_VIDEO)
+        self.assertEqual(send.call_args_list[2].kwargs['json']['videoId'], OTHER_VIDEO)
+        self.assertEqual(send.call_args_list[2].kwargs['json']['search'], f'v={OTHER_VIDEO}&sig=a%2Fb')
+
+    def test_rejects_malformed_video_id_before_network(self):
+        with WorkersTransport() as transport, WorkersCaptionClient(transport) as captions:
+            for video_id in ('', 'short', 'AAAAAAAAAAAA', 'abc/def12345', None):
+                with self.subTest(video_id=video_id), patch.object(transport.session, 'request') as send, \
+                        self.assertRaises(WorkersError):
+                    captions.fetch(video_id)
+                send.assert_not_called()
 
     def test_probe_requires_worker_marker_and_valid_public_ip(self):
         health = response('{"ok":true}', **{'X-Bridge-Version': '1'})

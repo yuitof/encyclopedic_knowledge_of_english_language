@@ -1,6 +1,6 @@
 # Cloudflare Workers client
 
-The opt-in `workers` command exercises the [fixed-video comparison API](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/blob/service-bridge-workers/infra/service-bridge-workers/API.md#fixed-video-comparison-relay). The command sends requests to the Cloudflare Access-protected Worker over HTTPS. The Worker sends YouTube traffic through Gateway. The existing `bridge`, `refresh`, `search`, and S3 workflows continue to use their current configuration. The published comparison API supports the single public video `aircAruvnKk`. It does not cover authenticated history, arbitrary video IDs, X, Reddit, or ordinary phrase collection.
+The opt-in `workers` command exercises the [signed-out caption API](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/blob/service-bridge-workers/infra/service-bridge-workers/API.md#signed-out-caption-relay). The command sends requests to the Cloudflare Access-protected Worker over HTTPS. The Worker sends YouTube traffic through Gateway. The existing `bridge`, `refresh`, `search`, and S3 workflows continue to use their current configuration. The published API supports any valid 11-character public YouTube video ID, using signed-out requests. It does not cover authenticated history, X, Reddit, or ordinary phrase collection.
 
 The Worker operator needs to enable the HTTPS route and `COMPARISON_ENABLED` behind the dedicated Access policy during the test. The comparison route is disabled by default.
 
@@ -33,14 +33,14 @@ In Codex Cloud, run these from the environment's outer executor.
 
 ```bash
 bash tools/youtube/run.sh workers probe
-bash tools/youtube/run.sh workers captions
+bash tools/youtube/run.sh workers captions VIDEO_ID
 ```
 
-The probe checks the Worker version marker and requests a public IP observation over Gateway. The caption test starts with an empty YouTube cookie jar and requests the watch page, InnerTube player, and caption track. It reports the verified segment count with no transcript output or cache write. Run either command only while the test route is enabled.
+The probe checks the Worker version marker and requests a public IP observation over Gateway. The caption test starts with an empty YouTube cookie jar and requests the watch page, InnerTube player, and caption track for the supplied public video ID. It reports the verified segment count with no transcript output or cache write. Omitting the ID uses `aircAruvnKk` for the established test. Run either command only while the test route is enabled.
 
 ## Acceptance status
 
-The Mac test of this client against Worker server revision `bc6a9f1` verified that missing and invalid credentials return HTTP 403 and the valid token reaches the Worker. The Gateway egress probe succeeded and the caption command retrieved 286 manual English segments. The test route was disabled afterward. The new client still needs a run in the published Codex Cloud environment.
+The initial Mac test of this client against Worker server revision `bc6a9f1` verified that missing and invalid credentials return HTTP 403 and the valid token reaches the Worker. The Gateway egress probe succeeded and the fixed test video returned 286 manual English segments. Arbitrary-video support is covered by local contract tests and still needs live acceptance for a second video ID.
 
 ## Interpret failures
 

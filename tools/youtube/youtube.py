@@ -543,14 +543,18 @@ def main():
     p.add_argument('--ready-timeout', type=int, default=60)
     p.add_argument('arguments', nargs=argparse.REMAINDER)
     p.set_defaults(run=service_bridge)
-    p = sub.add_parser('workers', help='Opt-in Cloudflare Workers Access probe and fixed-video caption test')
+    p = sub.add_parser('workers', help='Opt-in Cloudflare Workers Access probe and signed-out caption test')
     p.add_argument('operation', choices=('probe', 'captions'))
+    p.add_argument('video_id', nargs='?', default='aircAruvnKk',
+                   help='11-character YouTube video ID for the captions operation (default: aircAruvnKk)')
     p.set_defaults(run=workers_bridge)
     args = parser.parse_args()
     if getattr(args, 'phrase', 'x').strip() == '':
         parser.error('Phrase must not be empty')
     if getattr(args, 'max_pages', 1) < 1:
         parser.error('--max-pages must be positive')
+    if getattr(args, 'operation', None) == 'probe' and getattr(args, 'video_id', None) != 'aircAruvnKk':
+        parser.error('workers probe does not accept a video ID')
     try:
         return args.run(args) or 0
     except Exception as error:

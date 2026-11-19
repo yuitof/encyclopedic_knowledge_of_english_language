@@ -1,4 +1,4 @@
-"""Opt-in client for the Access-protected, fixed-video Workers comparison API."""
+"""Opt-in client for the Access-protected Workers caption API."""
 from email.message import Message
 import ipaddress
 import os
@@ -13,6 +13,7 @@ from requests.cookies import MockRequest, MockResponse
 from transcripts import TranscriptClient, TranscriptRetryNeeded, TranscriptUnavailable
 
 TEST_VIDEO = 'aircAruvnKk'
+VIDEO_ID = re.compile(r'[-_A-Za-z0-9]{11}\Z')
 ROUTE = '/v1/signed-out-comparison/'
 ACCESS_HEADERS = {
     'CF-Access-Client-Id': 'CF_ACCESS_CLIENT_ID',
@@ -117,12 +118,17 @@ class WorkersCaptionClient(TranscriptClient):
     def __init__(self, transport):
         super().__init__()
         self.transport = transport
+        self.video_id = None
 
     def fetch(self, video_id):
-        if video_id != TEST_VIDEO:
-            raise WorkersError('The Workers comparison API supports only its public test video.')
+        if not isinstance(video_id, str) or not VIDEO_ID.fullmatch(video_id):
+            raise WorkersError('Video ID must be exactly 11 YouTube ID characters.')
+        self.video_id = video_id
         self.session.cookies.clear()
-        return super().fetch(video_id)
+        try:
+            return super().fetch(video_id)
+        finally:
+            self.video_id = None
 
     def _request(self, method, url, **kwargs):
         prepared = self.session.prepare_request(requests.Request(method, url, **kwargs))
@@ -139,6 +145,7 @@ class WorkersCaptionClient(TranscriptClient):
             'search': origin.query,
             'host': origin.hostname,
             'body': body.decode('utf-8') if isinstance(body, bytes) else body,
+            'videoId': self.video_id,
         })
         status = response.headers.get('X-Origin-Http', '')
         if status != '200':
@@ -166,7 +173,7 @@ def run(args):
             return
         with WorkersCaptionClient(transport) as client:
             try:
-                result = client.fetch(TEST_VIDEO)
+                result = client.fetch(args.video_id)
             except (TranscriptRetryNeeded, TranscriptUnavailable) as error:
                 raise WorkersError(f'YouTube caption test failed: {error.reason}.') from None
         if result['caption_type'] != 'manual':

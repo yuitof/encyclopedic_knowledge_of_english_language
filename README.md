@@ -24,7 +24,7 @@ Original text uses CC BY-SA 4.0; see `CONTENT-LICENSE.md` and `LICENSE`. Third-p
 
 Use the tracked [agent procedure](AGENTS.md) and [Cloud setup guide](docs/youtube-cloud.md). The workflow refreshes authenticated account history and caches English transcripts outside Git in `.codex/tmp/youtube/`, backed by a private [CloudFormation-managed S3 bucket](infra/youtube-cache/README.md) in `us-west-1` for reuse across tasks. YouTube login is separate from GitHub and AWS authorization, and live Cloud access must be verified during setup. No watch history, bulk transcripts, or session credentials belong in GitHub; session credentials also stay out of S3.
 
-The opt-in [Cloudflare Workers client](docs/service-bridge-workers-client.md) probes the Access-protected Worker and runs its fixed-video signed-out caption test.
+The opt-in [Cloudflare Workers client](docs/service-bridge-workers-client.md) probes the Access-protected Worker and runs its signed-out caption test for a supplied public video ID.
 
 ## X collections and cached sources
 
