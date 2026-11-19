@@ -1,7 +1,6 @@
-"""Read-only, cookie-authenticated Old Reddit HTML transport."""
+"""Shared Old Reddit HTML reads and the explicit proxy transport."""
 import os
 import re
-import sys
 import time
 from urllib.parse import urlencode, urlsplit
 
@@ -31,19 +30,45 @@ def check_response(status, prefix=b''):
         raise RedditError(f'Reddit returned HTTP {status}; cached progress retained.')
 
 
-class Client:
-    def __init__(self, cookies, proxy=None, delay=2.0, direct_local=False):
-        if direct_local and (sys.platform != 'darwin' or proxy):
-            raise RedditError('Direct local mode requires macOS and cannot be combined with a proxy.')
-        if not proxy and not direct_local:
+def listing_query(account, collection, cursor):
+    if not ACCOUNT.fullmatch(account) or collection not in COLLECTIONS or (cursor is not None and not ID.fullmatch(cursor)):
+        raise RedditError('Invalid Reddit account, collection, or cursor.')
+    query = {'limit': 100}
+    if cursor is not None:
+        query['after'] = cursor
+    return query
+
+
+class HTMLClient:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()
+
+    def account(self):
+        _, account = document(self.read('/'))
+        return {'id': account}
+
+    def page(self, account, collection, cursor=None):
+        query = listing_query(account, collection, cursor)
+        return listing(self.read(f'/user/{account}/{collection}/?' + urlencode(query)), account, collection)
+
+    def post(self, url, retrieved_at, account):
+        identifier, canonical = source_url(url)
+        return source(self.read(canonical[len(ORIGIN):] + '?context=0'), identifier, retrieved_at, account)
+
+
+class Client(HTMLClient):
+    def __init__(self, cookies, proxy=None, delay=2.0):
+        if not proxy:
             raise RedditError('Reddit live reads require the private bridge: use bridge -- probe, then bridge -- refresh/get.')
-        if proxy:
-            try:
-                target = urlsplit(proxy)
-                if target.scheme != 'http' or not target.hostname or not target.port or target.username or target.password:
-                    raise ValueError
-            except ValueError:
-                raise RedditError('Invalid Reddit proxy; use the temporary bridge relay or an explicitly authorized HTTP proxy.') from None
+        try:
+            target = urlsplit(proxy)
+            if target.scheme != 'http' or not target.hostname or not target.port or target.username or target.password:
+                raise ValueError
+        except ValueError:
+            raise RedditError('Invalid Reddit proxy; use the temporary bridge relay or an explicitly authorized HTTP proxy.') from None
         self.http = requests.Session()
         # Explicit proxy only. Preserve CA verification even when trust_env is disabled.
         self.http.trust_env = False
@@ -61,7 +86,7 @@ class Client:
         try:
             self.previous = time.monotonic()
             with self.http.get(ORIGIN + path, timeout=(10, 30), allow_redirects=False,
-                               proxies={'http': self.proxy, 'https': self.proxy} if self.proxy else {}, stream=True) as response:
+                               proxies={'http': self.proxy, 'https': self.proxy}, stream=True) as response:
                 prefix = bytearray()
                 if response.status_code == 403:
                     # Read a bounded prefix only; never log or cache error-page contents.
@@ -83,25 +108,3 @@ class Client:
 
     def close(self):
         self.http.close()
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *args):
-        self.close()
-
-    def account(self):
-        _, account = document(self.read('/'))
-        return {'id': account}
-
-    def page(self, account, collection, cursor=None):
-        if not ACCOUNT.fullmatch(account) or collection not in COLLECTIONS or (cursor and not ID.fullmatch(cursor)):
-            raise RedditError('Invalid Reddit account, collection, or cursor.')
-        query = {'limit': 100}
-        if cursor:
-            query['after'] = cursor
-        return listing(self.read(f'/user/{account}/{collection}/?' + urlencode(query)), account, collection)
-
-    def post(self, url, retrieved_at, account):
-        identifier, canonical = source_url(url)
-        return source(self.read(canonical[len(ORIGIN):] + '?context=0'), identifier, retrieved_at, account)

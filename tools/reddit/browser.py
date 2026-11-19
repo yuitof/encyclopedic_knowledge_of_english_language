@@ -5,7 +5,7 @@ import sys
 import time
 from urllib.parse import urlsplit, parse_qs
 
-from api import Client, check_response, validate_path
+from api import HTMLClient, check_response, validate_path
 from auth import DOMAINS
 from pages import ORIGIN, RedditError, source_url
 
@@ -13,7 +13,7 @@ ASSET_HOSTS = {'old.reddit.com', 'www.redditstatic.com'}
 ASSET_TYPES = {'stylesheet', 'script', 'image', 'font'}
 
 
-class BrowserClient(Client):
+class BrowserClient(HTMLClient):
     def __init__(self, cookies, root, proxy=None, delay=2.0, *, factory=None):
         if sys.platform != 'darwin' or proxy:
             raise RedditError('Local Chrome mode requires macOS and cannot use a proxy or the Cloud bridge.')

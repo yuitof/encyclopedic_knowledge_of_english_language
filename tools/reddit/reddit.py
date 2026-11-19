@@ -39,12 +39,15 @@ def selected_account(args):
 def authenticated(args):
     if args.offline:
         raise RedditError('This operation needs Reddit access; omit --offline.')
+    cookies, proxy, delay = state(CACHE), os.environ.get('REDDIT_PROXY'), getattr(args, 'delay', 2.0)
     if getattr(args, 'browser_local', False):
         from browser import BrowserClient
-        client = BrowserClient(state(CACHE), CACHE, proxy=os.environ.get('REDDIT_PROXY'), delay=getattr(args, 'delay', 2.0))
+        client = BrowserClient(cookies, CACHE, proxy=proxy, delay=delay)
+    elif getattr(args, 'direct_local', False):
+        from direct import DirectClient
+        client = DirectClient(cookies, proxy=proxy, delay=delay)
     else:
-        client = Client(state(CACHE), proxy=os.environ.get('REDDIT_PROXY'), delay=getattr(args, 'delay', 2.0),
-                        direct_local=getattr(args, 'direct_local', False))
+        client = Client(cookies, proxy=proxy, delay=delay)
     if getattr(args, 'clients', None) is not None:
         args.clients.callback(client.close)
     try:
@@ -137,7 +140,7 @@ def refresh(args):
                 scan.update(pages=scan['pages'] + 1, cursor=next_cursor, updated_at=now())
                 pages += 1
                 if not next_cursor:
-                    scan.update(status='reachable_end', reason='Reddit returned no next-page link')
+                    scan.update(status='reachable_end', reason='Reddit returned no continuation')
                     collection['latest_post_ids'] = list(scan['post_ids'])
                     collection['last_completed_at'] = now()
                 elif next_cursor == cursor or next_cursor in seen:
@@ -318,7 +321,7 @@ def main():
     parser.add_argument('--account', help='Reddit username selecting/enforcing the account archive')
     parser.add_argument('--offline', action='store_true', help='No Reddit or S3 calls')
     transport = parser.add_mutually_exclusive_group()
-    transport.add_argument('--direct-local', action='store_true', help='Explicit macOS HTTP-client route; no proxy or fallback')
+    transport.add_argument('--direct-local', action='store_true', help='Explicit macOS HTTPS route using JSON listings; no proxy or fallback')
     transport.add_argument('--browser-local', action='store_true', help='Explicit macOS Chrome route with isolated exported cookies')
     commands = parser.add_subparsers(dest='command', required=True)
     p = commands.add_parser('login', help='Export Reddit cookies after explicit local Chrome consent')

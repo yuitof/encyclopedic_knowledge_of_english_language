@@ -1,4 +1,4 @@
-"""Synthetic HTML, cookies and S3 only; no real account data or live requests."""
+"""Synthetic Reddit responses, cookies and S3 only."""
 import contextlib
 import copy
 import gzip
@@ -24,7 +24,8 @@ from api import Client
 from browser import BrowserClient
 from auth import state, login
 from cache import Cache, atomic_json, body, empty_index, merge_indexes
-from pages import RedditError, Unavailable, document, listing, source, source_url, valid_post
+from direct import DirectClient, USER_AGENT
+from pages import RedditError, Unavailable, document, json_listing, listing, source, source_url, valid_post
 from s3_cache import S3Cache
 from cloud_bridge import client as bridge, probe
 from cloud_bridge.transport import BridgeError
@@ -61,6 +62,13 @@ def page(items='', cursor=None, empty=False):
 
 def post(identifier='t3_abc'):
     return source(header() + thing(identifier), identifier, STAMP, 'fixture')
+
+
+def json_page(cursor=None):
+    return {'kind': 'Listing', 'data': {'after': cursor, 'modhash': 'listing-marker', 'children': [
+        {'kind': 't3', 'data': {'name': 't3_abc', 'permalink': URL}},
+        {'kind': 't1', 'data': {'name': 't1_def', 'permalink': URL + 'def/'}},
+    ]}}
 
 
 class PageTests(unittest.TestCase):
@@ -104,6 +112,21 @@ class PageTests(unittest.TestCase):
             with self.subTest(replacement=replacement), self.assertRaises(RedditError):
                 listing(markup.replace('/user/fixture/saved/?after=t3_abc', replacement), 'fixture', 'saved')
 
+    def test_json_listing_preserves_order_and_rejects_unverified_coverage(self):
+        markup = json_page('t1_def')
+        parsed = json_listing(markup)
+        self.assertEqual(list(parsed['members']), ['t3_abc', 't1_def'])
+        self.assertEqual(parsed['members']['t1_def'], URL + 'def/')
+        self.assertEqual(parsed['cursor'], 't1_def')
+        for field, value in [('modhash', ''), ('after', 'bogus'), ('children', [])]:
+            with self.subTest(field=field), self.assertRaises(RedditError):
+                json_listing(dict(markup, data=dict(markup['data'], **{field: value})))
+        self.assertEqual(json_listing(dict(markup, data=dict(markup['data'], children=[], after=None))),
+                         {'members': {}, 'cursor': None})
+        markup['data']['children'][1]['data']['permalink'] = URL + 'mismatch/'
+        with self.assertRaisesRegex(RedditError, 'ID and permalink disagree'):
+            json_listing(markup)
+
     def test_source_urls_are_canonical_and_allowlisted(self):
         self.assertEqual(source_url(URL.replace('old.', 'www.') + '?context=3'), ('t3_abc', URL))
         self.assertEqual(source_url(URL + 'def/')[0], 't1_def')
@@ -139,20 +162,49 @@ class PageTests(unittest.TestCase):
 class TransportTests(unittest.TestCase):
     def test_direct_local_mode_is_explicit_mac_only_and_not_a_proxy_fallback(self):
         with patch.object(sys, 'platform', 'linux'), self.assertRaises(RedditError):
-            Client([COOKIE], direct_local=True)
+            DirectClient([COOKIE])
         with patch.object(sys, 'platform', 'darwin'):
             with self.assertRaises(RedditError):
-                Client([COOKIE], PROXY, direct_local=True)
-            client=Client([COOKIE], direct_local=True)
-        self.addCleanup(client.http.close)
-        with patch.dict(os.environ, {'HTTPS_PROXY':'http://ambient.invalid:9'}), \
-                patch.object(client.http, 'get', side_effect=requests.exceptions.ConnectionError('synthetic')) as get:
-            with self.assertRaises(RedditError):
+                DirectClient([COOKIE], PROXY)
+            client = DirectClient([COOKIE])
+        with patch.dict(os.environ, {'HTTPS_PROXY': 'http://ambient.invalid:9'}), \
+                patch('direct.http.client.HTTPSConnection', side_effect=OSError('synthetic')) as connect:
+            with self.assertRaisesRegex(RedditError, 'no automatic retry or route fallback'):
                 client.account()
-        self.assertEqual(get.call_args.kwargs['proxies'],{})
-        get.assert_called_once()
-        self.assertFalse(client.http.trust_env)
-        self.assertTrue(client.http.verify)
+        connect.assert_called_once()
+        self.assertEqual(connect.call_args.args, ('old.reddit.com',))
+
+    def test_direct_identity_and_json_continuation_keep_cookie_and_origin_scoped(self):
+        cookies = [COOKIE, dict(COOKIE, name='foreign', domain='www.reddit.com'),
+                   dict(COOKIE, name='api_only', path='/api'), dict(COOKIE, name='expired', expires=1)]
+        with patch.object(sys, 'platform', 'darwin'):
+            client = DirectClient(cookies, delay=0)
+        connections = []
+        for payload in [{'data': {'name': 'Fixture'}}, json_page('t1_def'), json_page()]:
+            conn = Mock()
+            conn.getresponse.return_value = Mock(status=200, **{
+                'getheader.return_value': 'application/json; charset=utf-8',
+                'read.return_value': json.dumps(payload).encode(),
+            })
+            connections.append(conn)
+        with patch('direct.http.client.HTTPSConnection', side_effect=connections) as connect:
+            self.assertEqual(client.account(), {'id': 'fixture'})
+            with self.assertRaisesRegex(RedditError, 'differs from the verified identity'):
+                client.page('other', 'saved')
+            page_one = client.page('fixture', 'saved')
+            self.assertIsNone(client.page('fixture', 'saved', page_one['cursor'])['cursor'])
+            cookies.append(dict(COOKIE, path='/user', value='another-session'))
+            with self.assertRaisesRegex(RedditError, 'differs from the verified session'):
+                client.page('fixture', 'saved')
+        for conn, url, cookie in zip(connections, ['/api/me.json', '/user/fixture/saved.json?limit=100&raw_json=1',
+                                                  '/user/fixture/saved.json?limit=100&after=t1_def&raw_json=1'],
+                                     ['reddit_session=synthetic; api_only=synthetic', 'reddit_session=synthetic', 'reddit_session=synthetic']):
+            conn.request.assert_called_once_with('GET', url, headers={
+                'User-Agent': USER_AGENT, 'Accept': 'application/json', 'Cookie': cookie,
+            })
+            conn.set_tunnel.assert_not_called()
+            conn.close.assert_called_once()
+        self.assertEqual([call.args for call in connect.call_args_list], [('old.reddit.com',)] * 3)
 
     def test_network_security_denial_does_not_claim_cookie_expiry(self):
         client=Client([COOKIE],PROXY)

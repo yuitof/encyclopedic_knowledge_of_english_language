@@ -1,8 +1,8 @@
 # Private Reddit collections and source cache
 
-`tools/reddit/` is the Reddit counterpart of the YouTube and X collectors. It reads your own **upvoted posts and saved posts/comments** by default, plus optional downvoted posts, hidden posts, submissions and comments. It reads cookie-authenticated Old Reddit HTML through either the HTTP client or an explicitly selected local Chrome transport. It does not depend on OAuth, PRAW, the public JSON API or Devvit. All collector operations are reads.
+`tools/reddit/` is the Reddit counterpart of the YouTube and X collectors. It reads your own **upvoted posts and saved posts/comments** by default, plus optional downvoted posts, hidden posts, submissions and comments. Direct macOS mode uses cookie-authenticated Old Reddit JSON for identity and listings. It reads individual sources as HTML, as do the separate Chrome and proxy transports. All collector requests are read-only.
 
-Reddit's [registration notice](https://developers.reddit.com/app-registration) says remaining public API access ends in March 2027. [Devvit excludes private voted/saved content](https://developers.reddit.com/docs/capabilities/server/reddit-api). Using website HTML avoids a public API dependency, but cannot guarantee continued website access: Old Reddit, cookie requirements, account restrictions and HTML can change. Challenges and changed pages fail explicitly.
+Reddit's [registration notice](https://developers.reddit.com/app-registration) says remaining public API access ends in March 2027. [Devvit excludes private voted/saved content](https://developers.reddit.com/docs/capabilities/server/reddit-api). The collector uses website routes and a private browser session. Their availability and response formats can change, and challenges or unexpected responses stop the live scan.
 
 ## Install and supply a private session
 
@@ -15,9 +15,9 @@ bash tools/reddit/run.sh login --profile Default
 
 Setup only installs pinned dependencies into ignored `.codex/tmp/reddit/.venv/`; it does not read a browser, sign in, or collect sources. Local `login` asks for consent before reading the selected Chrome profile and saves only unexpired Reddit cookies in `.codex/tmp/reddit/auth/storage-state.json`, with private file permissions. Approve any macOS Keychain prompt yourself. Use `--profile 'Profile 1'` for that exact profile. Agents must obtain explicit authorization for the named profile before using `--authorize-export`. No cookie export is authorized merely by requesting tool development.
 
-In Cloud, privately supply `REDDIT_STORAGE_STATE_JSON` in storage-state format: a `cookies` array containing name, value, domain, path and expires. An unexpired `reddit_session` cookie usable on `old.reddit.com` is required; other Reddit cookies may also be needed. Cookie presence is a configuration check, not proof of authentication. Every network page must contain a recognized signed-in header; the account is derived from that header and checked throughout collection. No passwords, automated login, challenge bypass, account creation, or browser-profile discovery is implemented. Do not paste cookies in chat or put them in Git, S3, build artifacts, or published snapshots.
+In Cloud, privately supply `REDDIT_STORAGE_STATE_JSON` in storage-state format with a `cookies` array containing name, value, domain, path and expires. An unexpired `reddit_session` cookie usable on `old.reddit.com` is required. Other Reddit cookies may also be needed. A live identity check verifies session access. Each HTML page must contain the expected signed-in header. Direct mode verifies the identity through `/api/me.json` and requires a signed-in marker on each JSON listing requested for that identity. Do not paste cookies in chat or put them in Git, S3, build artifacts, or published snapshots.
 
-Account archives use the lowercase Reddit username observed in the header. `--account USERNAME` or `REDDIT_ACCOUNT` selects an existing archive and enforces the expected identity on live reads. This differs from X's numeric account ID. No real username is hard-coded. `doctor` reports configuration without contacting Reddit or AWS.
+Account archives use the verified lowercase Reddit username. `--account USERNAME` or `REDDIT_ACCOUNT` selects an existing archive and enforces the expected identity on live reads. `doctor` reports configuration without contacting Reddit or AWS.
 
 ## Cloud transport
 
@@ -49,9 +49,23 @@ The probe verifies session readiness, unauthenticated private-proxy rejection, m
 
 The bridge passes a temporary `REDDIT_PROXY` only to its child collector. It monitors expiry/heartbeat/tunnel health and requests worker shutdown on completion. Sessions last at most 720 seconds including startup. If terminated, complete source writes and page checkpoints survive; start a new session with `--resume`. Do not copy relay URLs to permanent settings. An independently supplied authorized HTTP proxy can be used through `REDDIT_PROXY`; credentials in that proxy URL are rejected. Plain live commands without an explicit transport fail before making a request. Local origin modes require `--browser-local` or `--direct-local` and macOS; neither is selected automatically after a proxy failure.
 
-## Working local Chrome transport
+## Direct macOS transport
 
-On the Mac, the user explicitly authorized Playwright with installed Google Chrome. Normal Chrome can read Old Reddit with the existing session while the standalone HTTP client receives Reddit's network-security HTTP 403. The verified local collector uses that ordinary browser rendering path:
+Use the existing authorized Reddit session with `--direct-local`:
+
+```bash
+bash tools/reddit/run.sh --direct-local verify
+bash tools/reddit/run.sh --direct-local refresh
+bash tools/reddit/run.sh --direct-local refresh --collections saved --resume
+```
+
+This mode uses Python's HTTPS client with the tested descriptive User-Agent. It verifies the account with `GET /api/me.json` and reads `GET /user/USERNAME/COLLECTION.json`. The collector follows the `data.after` cursor and keeps listing order. Individual post and comment sources still use signed-in HTML and the same normalized cache format. Request paths stay on `old.reddit.com`. The transport requires macOS, refuses `REDDIT_PROXY` and keeps TLS verification enabled. See [Reddit's legacy listing format](https://github.com/reddit-archive/reddit/wiki/JSON#listing) for the response structure.
+
+`verify` reads one page and at most one source per selected collection. It caches verified source content without recording collection coverage. Use `refresh` for a complete scan, or add `--max-pages N` to record bounded partial coverage. The transport flag is global and can also precede `get`.
+
+## Local Chrome transport
+
+If explicitly authorized, the Mac can use Playwright with installed Google Chrome:
 
 ```bash
 bash tools/reddit/setup.sh --browser
@@ -61,13 +75,9 @@ bash tools/reddit/run.sh --browser-local refresh
 bash tools/reddit/run.sh --browser-local refresh --collections upvoted --resume
 ```
 
-`verify` reads the signed-in header, one listing page and at most one source per selected collection. It caches verified source content but records no collection membership/coverage; it is not a full scan. `refresh` runs the normal complete pagination and checkpoint workflow. `--browser-local` is a global option and also works with `get`; cached search/get need no browser flag.
-
 This mode launches a separate visible Chrome profile under ignored `.codex/tmp/reddit/browser/profile/` using `playwright==1.58.0`. It imports only the already authorized Reddit cookies, does not open or control the original Chrome Default profile, and closes the collector browser on completion or error. Install the browser dependency with `setup.sh --browser`; Chrome itself is installed separately. Browser state, temporary files and diagnostic HTML stay private and never sync to S3 or Git.
 
 Chrome's normal sandbox and TLS validation remain enabled. There are no stealth patches, custom browser identity/fingerprint flags, password automation, challenge solvers or automatic retries. Main-frame navigation is restricted to the requested Old Reddit document. Percent-encoding or canonical title-slug changes are accepted only on Old Reddit for the same post/comment ID with the same read-only query scope; login, challenge, different-source and different-origin navigation stops the command. Only necessary GET assets on Old Reddit and `www.redditstatic.com` are allowed, with external embeds, fetch/analytics, mutations and media downloads blocked. The collector does not click spoiler, age, quarantine, login or moderation gates, and does not allow website API calls. A recognized spoiler gate withholds a post body; its visible title is cached with empty body text and `body_status: spoiler_hidden`. Historical self-posts that expose neither body markup nor any expansion control are similarly recorded with `body_status: not_exposed`. This does not invent or infer missing text. Search reports `hidden_bodies` and total `unread_bodies` so an empty result cannot imply those bodies were searched. Other unexpected missing-body structures still fail visibly. Static browser assets are part of normal rendering, not extra collection scans.
-
-`--direct-local` explicitly selects the macOS standalone HTTP client without a proxy, for diagnosis. It still receives the observed network-security 403 and is not the working collection mode. Both local origin modes reject a configured `REDDIT_PROXY`, reject the bridge wrapper, and are unavailable on Cloud/Linux. No route changes silently after failure.
 
 The implementation follows Playwright's first-party [authenticated-state](https://playwright.dev/python/docs/auth), [installed Chrome](https://playwright.dev/python/docs/browsers#google-chrome--microsoft-edge), and [isolated persistent-context](https://playwright.dev/python/docs/api/class-browsertype#browser-type-launch-persistent-context) interfaces. No Chrome Default cookie re-export was needed for this fix.
 
@@ -103,13 +113,13 @@ Search matches literal, case-insensitive text with normalized whitespace across 
 
 ## Coverage and checkpoints
 
-A normal refresh starts at the newest page and follows the website's next link without an arbitrary page cap, including past already cached sources. It requests up to 100 listing entries per page and spaces document/source reads at least two seconds apart by default (`--delay` may increase this, with a minimum of one second). Rate limits stop the whole live operation instead of triggering retries. `--max-pages N` explicitly limits each collection and records partial coverage. Select the incomplete collection(s) with `--collections ... --resume` to continue; a completed or never-started collection is not resumable.
+A normal refresh starts at the newest page and follows the website's continuation cursor without an arbitrary page cap, including past already cached sources. It requests up to 100 listing entries per page and spaces reads at least two seconds apart by default. `--delay` sets the spacing with a one-second minimum. Rate limits stop the whole live operation. `--max-pages N` explicitly limits each collection and records partial coverage. Select incomplete collections with `--collections ... --resume` to continue.
 
 The parser recognizes only top-level listing items; embedded comments/context do not create extra collection membership. Every new source is read through its individual permalink so collapsed listing previews are not mistaken for complete text. A source may explicitly mark a hidden/unexposed body while retaining its visible title; that body remains outside text-search coverage. Saved comments retain `t1_` IDs and posts retain `t3_` IDs. The voted pages expose posts; this is **not** a claim to export all voted comments or Reddit viewing history. Media files, external articles, inbox/messages, subscriptions, moderation feeds and save categories/folders are outside this collector.
 
 Observed membership is archived separately from retrieval success. Sources are atomically written before their index references; page continuations advance only after the page's sources have been saved. Interrupted pages are re-read and completed sources reused. An explicit source 404/410 is recorded as `unavailable` and does not block later items. Other access/schema/network failures remain `retry_needed`, stop live collection and preserve the failed request cursor. Confirmed unavailable sources are not retried on every refresh; use individual `get --refresh` when requested. Previously readable content survives a failed explicit refresh.
 
-The archive keeps the union of observed memberships, even after an item is unsaved/unvoted. `--latest` selects the last scan to reach the website's end and requires `--collection`; it does not silently substitute a newer partial scan. Listings can be capped, filtered or change during pagination. `reachable_end` means there was no further recognized next link, **not lifetime completeness**. Creation/retrieval dates are not save/vote times. Missing items, challenges and partial coverage mean an empty search cannot prove absence.
+The archive keeps the union of observed memberships, even after an item is unsaved/unvoted. `--latest` selects the last scan to reach the website's end and requires `--collection`. Listings can be capped, filtered or change during pagination. `reachable_end` describes the end of the exposed listing. Creation and retrieval dates describe the source and collector activity. Missing items, challenges and partial coverage mean an empty search cannot prove absence.
 
 ## Private cache and S3
 
@@ -130,7 +140,7 @@ The private Reddit S3 stack and optional shared-runtime cache policy were deploy
 bash -n tools/reddit/setup.sh tools/reddit/run.sh infra/reddit-cache/deploy.sh
 ```
 
-Tests use synthetic HTML, cookies, sources and S3. They cover account isolation, source parsing, pagination, checkpoint/resume, unavailable sources, missing-cache reporting, proxy/TLS restrictions, consent, cache-only reads, upload order/integrity and bridge dispatch. Existing X/YouTube tests check the shared-client regression boundary. The server image tests exercise real GOST with networking disabled, including opaque Reddit CONNECT and destination denial. Authenticated HTML parsing and source/S3 writes are verified through local Chrome. The HTTP-client and Cloud route limitations are recorded below.
+Tests use synthetic HTML, JSON, cookies, sources and S3. They cover account isolation, source parsing, pagination, checkpoint/resume, unavailable sources, missing-cache reporting, proxy/TLS restrictions, consent, cache-only reads, upload order/integrity and bridge dispatch. Existing X/YouTube tests check the shared-client regression boundary. The server image tests exercise real GOST with networking disabled, including opaque Reddit CONNECT and destination denial. Live results for direct macOS, Chrome and Cloud are recorded below.
 
 Parser structure is based on Reddit's archived first-party [listing](https://github.com/reddit-archive/reddit/blob/master/r2/r2/templates/listing.html), [printable item](https://github.com/reddit-archive/reddit/blob/master/r2/r2/templates/printable.html), [link](https://github.com/reddit-archive/reddit/blob/master/r2/r2/templates/link.html), and [comment](https://github.com/reddit-archive/reddit/blob/master/r2/r2/templates/comment.html) templates. These historical references are not proof of today's authenticated markup; unexpected markup fails visibly. There is no GitHub Actions or website-build integration. Only requested short verified quotations may later enter notes under `AGENTS.md`.
 
@@ -164,3 +174,7 @@ Client `df1d4e8` adds fixed, credential-free failure categories for the Cloud TC
 The separate empty-manifest S3 test failed with proxy CONNECT HTTP 403 before AWS responded. The bucket's exact regional hostname (`${REDDIT_CACHE_BUCKET}.s3.us-west-1.amazonaws.com`) was absent from both startup and live allowed rules. Conditional manifest initialization/read therefore remains unverified in Cloud. This is a network-policy denial, not S3 AccessDenied or evidence of an IAM/session problem. The required network correction is to add that exact bucket hostname while preserving existing grants and normal AWS routing; do not route S3 through Lambda or broaden to all Internet access. No policy was changed or S3 retry performed during this validation.
 
 The working local Chrome collector remains separate. Cloud live Reddit collection is still blocked by the origin's 403, while Cloud cache reuse additionally needs the bucket hostname grant and a fresh successful S3 test. Local cache/source durability checks remain valid.
+
+## Direct macOS acceptance — 2026-11-19
+
+With an existing authorized session, `--direct-local verify` authenticated and read all six collection routes. It parsed individual upvoted and saved posts and a comment source. A bounded live refresh and resume in an isolated local cache used one item per page to exercise each default feed's continuation and source writes. These checks cover local access and continuation, with separate results above for Cloud and private S3.

@@ -1,4 +1,4 @@
-"""Parse Old Reddit HTML without executing scripts or calling the public JSON API."""
+"""Parse Old Reddit documents and cookie-authenticated JSON listings."""
 import copy
 import re
 from urllib.parse import urljoin, urlsplit, parse_qs
@@ -145,6 +145,41 @@ def listing(markup, account, collection):
         cursor = values[0]
     if not members and (not table.select_one('#noresults, .noresults') or cursor):
         raise RedditError('Unrecognized empty Reddit listing; not assuming an empty collection.')
+    return {'members': members, 'cursor': cursor}
+
+
+def json_account(payload):
+    data = payload.get('data') if isinstance(payload, dict) else None
+    name = data.get('name') if isinstance(data, dict) else None
+    if not isinstance(name, str) or not ACCOUNT.fullmatch(name.lower()):
+        raise RedditError('Signed-in Reddit identity missing from the JSON response.')
+    return name.lower()
+
+
+def json_listing(payload):
+    data = payload.get('data') if isinstance(payload, dict) and payload.get('kind') == 'Listing' else None
+    if not isinstance(data, dict) or not isinstance(data.get('children'), list) or 'after' not in data:
+        raise RedditError('Unrecognized Reddit JSON listing. Coverage remains partial.')
+    # The listing's CSRF token is distinct from the one in /api/me.json.
+    # Its presence is a signed-in response signal, not an account identifier.
+    if not isinstance(data.get('modhash'), str) or not data['modhash'].strip():
+        raise RedditError('Reddit JSON listing is missing its signed-in session marker. Coverage remains partial.')
+    members = {}
+    for child in data['children']:
+        entry = child.get('data') if isinstance(child, dict) else None
+        if not isinstance(entry, dict):
+            raise RedditError('Unrecognized Reddit JSON listing item. Coverage remains partial.')
+        identifier, permalink = entry.get('name'), entry.get('permalink')
+        if (not isinstance(identifier, str) or not ID.fullmatch(identifier)
+                or child.get('kind') != identifier[:2] or not isinstance(permalink, str)):
+            raise RedditError('Reddit JSON listing item is missing a valid ID or permalink.')
+        actual, url = source_url(permalink)
+        if actual != identifier:
+            raise RedditError('Reddit listing ID and permalink disagree.')
+        members[identifier] = url
+    cursor = data['after']
+    if cursor is not None and (not isinstance(cursor, str) or not ID.fullmatch(cursor) or not members):
+        raise RedditError('Reddit JSON listing has an unexpected continuation cursor.')
     return {'members': members, 'cursor': cursor}
 
 
