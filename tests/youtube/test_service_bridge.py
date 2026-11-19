@@ -59,10 +59,16 @@ class BridgeTests(unittest.TestCase):
         connection.close.assert_called_once()
 
     def test_shared_settings_preserve_legacy_and_prefer_shared_values(self):
-        with patch.dict(os.environ, {'YOUTUBE_BRIDGE_FUNCTION': 'legacy'}, clear=True):
-            self.assertEqual(service_bridge.required('FUNCTION'), 'legacy')
-            with patch.dict(os.environ, {'SERVICE_BRIDGE_FUNCTION': 'shared'}):
-                self.assertEqual(service_bridge.required('FUNCTION'), 'shared')
+        for name in ('FUNCTION', 'TABLE'):
+            legacy = f'YOUTUBE_BRIDGE_{name}'
+            shared = f'SERVICE_BRIDGE_{name}'
+            with self.subTest(name=name), patch.dict(os.environ, {legacy: 'legacy'}, clear=True):
+                with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    self.assertEqual(service_bridge.required(name), 'legacy')
+                self.assertEqual(stderr.getvalue(), f'{legacy} is deprecated. Set {shared} instead.\n')
+                with patch.dict(os.environ, {shared: 'shared'}), contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    self.assertEqual(service_bridge.required(name), 'shared')
+                self.assertEqual(stderr.getvalue(), '')
 
     def test_x_child_uses_shared_lifecycle_and_only_x_proxy(self):
         child, jobs, transport = Mock(), Mock(), Mock()

@@ -28,7 +28,7 @@ bash tools/x/run.sh bridge -- get POST_ID_OR_URL
 bash tools/x/run.sh bridge -- folders --refresh
 ```
 
-Set `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions`, or reuse the existing `YOUTUBE_BRIDGE_FUNCTION` / `YOUTUBE_BRIDGE_TABLE` pair. Shared names take precedence. Keep the scoped AWS OIDC identity, private `X_STORAGE_STATE_JSON`, `X_ACCOUNT_ID`, and X cache settings separate. The probe uses no account session/cache. Follow it with an explicitly authorized authenticated command; unsigned success does not prove X will accept the session or AWS egress for account reads.
+Set `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions`. Update older environments that use the deprecated `YOUTUBE_BRIDGE_*` aliases. Keep the scoped AWS OIDC identity, private `X_STORAGE_STATE_JSON`, `X_ACCOUNT_ID`, and X cache settings separate. The probe uses no account session or cache. After it succeeds, run the authorized authenticated command to verify account access.
 
 The wrapper sets a temporary `X_PROXY` for both API and asset requests, monitors the shared session, and requests shutdown on completion. TLS verification remains enabled, and a tunnel failure stops the command without direct fallback. Other hosts, ports, and media downloads remain unsupported. X challenges or authorization failures stay visible. This wrapper does not configure a browser's proxy.
 

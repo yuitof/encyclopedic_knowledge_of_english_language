@@ -25,11 +25,16 @@ WORKFLOWS = {
 
 
 def required(name):
-    # Preserve existing YouTube environments while allowing shared resource names.
-    value = os.environ.get('SERVICE_BRIDGE_' + name, '').strip() or os.environ.get('YOUTUBE_BRIDGE_' + name, '').strip()
-    if not value:
-        raise BridgeError('Missing bridge setting: SERVICE_BRIDGE_' + name + ' (or YOUTUBE_BRIDGE_' + name + ')')
-    return value
+    setting = 'SERVICE_BRIDGE_' + name
+    value = os.environ.get(setting, '').strip()
+    if value:
+        return value
+    legacy_setting = 'YOUTUBE_BRIDGE_' + name
+    legacy_value = os.environ.get(legacy_setting, '').strip()
+    if legacy_value:
+        print(f'{legacy_setting} is deprecated. Set {setting} instead.', file=sys.stderr)
+        return legacy_value
+    raise BridgeError(f'Missing bridge setting: {setting}')
 
 
 def wait_ready(jobs, session_id, timeout):

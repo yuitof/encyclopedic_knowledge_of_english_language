@@ -25,7 +25,7 @@ Direct Reddit access is blocked by the Cloud proxy before origin TLS. Cloud live
 
 The Reddit server extension at `cd00fa2` was deployed on 2026-11-18. Lambda is Active with a successful update. Local tailnet testing verified private authentication, matched egress and origin TLS, but Old Reddit returned **HTTP 403**, both unsigned and with the separately authorized local session. This is an origin response through the bridge, not a CONNECT denial. That bridge test could not establish cookie validity or authenticated HTML parsing; the subsequent local Chrome test below verified the existing session and parsed live sources. Do not retry directly or switch to a browser after bridge failure.
 
-Set the existing `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions`, or their matching stack outputs. Legacy `YOUTUBE_BRIDGE_FUNCTION` / `YOUTUBE_BRIDGE_TABLE` also work. Preserve scoped AWS permissions, built-in VPN configuration, normal AWS/S3 proxy/CA settings, and the private TCP 8443 grant. No new bridge credentials, private Tailscale daemon, or exit node are needed.
+Set `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions`, or their matching stack outputs. Update older environments that use the deprecated `YOUTUBE_BRIDGE_*` aliases. Preserve scoped AWS permissions, built-in VPN configuration, normal AWS/S3 proxy and CA settings, and the private TCP 8443 grant.
 
 Run the entire wrapper in the Cloud outer executor, sharing the network namespace with its relay. Run only one bridge session/workflow at a time:
 

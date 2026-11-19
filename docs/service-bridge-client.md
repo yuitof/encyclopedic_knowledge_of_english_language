@@ -10,7 +10,7 @@ The client reaches Lambda's private CONNECT proxy through Codex Cloud's built-in
 
 1. Deploy the matching `connect-v2` server from the `service-bridge` branch. It publishes private session readiness in DynamoDB.
 2. Configure the environment's built-in Tailscale VPN with a reusable, ephemeral key carrying `tag:codex-cloud`. Keep this credential in the private VPN settings, outside application variables and files. Permit this identity to reach `tag:service-bridge` on `tcp:8443`. The old exit-node/Internet/DNS grants are not required by this client.
-3. Set `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions` (or the matching stack's function ARN/table outputs). Both clients also accept the existing `YOUTUBE_BRIDGE_FUNCTION` and `YOUTUBE_BRIDGE_TABLE` variables; shared names take precedence. Install `bash tools/youtube/setup.sh` and/or `bash tools/x/setup.sh` for the workflows you use. The old `YOUTUBE_EXIT_*` names are replaced; `YOUTUBE_TAILSCALE_AUTH_SECRET_ARN` is no longer read. Remove `setup-tailscale.sh` and manual daemon startup from environment setup instructions.
+3. Set `SERVICE_BRIDGE_FUNCTION=service-bridge` and `SERVICE_BRIDGE_TABLE=service-bridge-sessions` (or the matching stack's function ARN and table outputs). Migrate existing `YOUTUBE_BRIDGE_FUNCTION` and `YOUTUBE_BRIDGE_TABLE` settings to the shared names. The client reads each legacy alias only when its shared counterpart is absent and prints a deprecation warning. Run the setup script for each collector you use. The shared bridge also replaces the old `YOUTUBE_EXIT_*` settings and no longer reads `YOUTUBE_TAILSCALE_AUTH_SECRET_ARN`. Remove `setup-tailscale.sh` and manual daemon startup from environment setup instructions.
 4. Attach the existing scoped AWS identity with permission to invoke that function and create/read/update that session table. Allow `lambda.us-west-1.amazonaws.com` and `dynamodb.us-west-1.amazonaws.com` on the ordinary Cloud network, preserving existing S3/dictionary destinations. Client application access to Secrets Manager and Tailscale enrollment/control hosts is no longer needed for this bridge; preserve any permissions needed by other workflows.
 5. Save and republish the environment, then use a fresh task on `vault`. A connected VPN status alone does not establish private service reachability.
 
@@ -54,7 +54,7 @@ Local validation passed all 74 YouTube-client tests and all 20 X tests. The matc
 
 ## X through the same bridge
 
-The X extension requires deployment of the matching server destination list. The previous YouTube-only image rejects X. It uses the same function/table, `connect-v2` protocol, AWS invocation/session permissions, built-in VPN identity, and private TCP 8443 grant. Existing `YOUTUBE_BRIDGE_*` settings work for both clients; no X-specific bridge credential is needed.
+The X extension requires deployment of the matching server destination list. The previous YouTube-only image rejects X. It uses the shared `SERVICE_BRIDGE_*` settings, `connect-v2` protocol, AWS invocation and session permissions, built-in VPN identity, and private TCP 8443 grant.
 
 Run these commands in the Cloud outer executor after deployment:
 
