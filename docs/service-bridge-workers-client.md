@@ -40,7 +40,7 @@ The probe checks the Worker version marker and requests a public IP observation 
 
 ## Acceptance status
 
-The initial Mac test of this client against Worker server revision `bc6a9f1` verified that missing and invalid credentials return HTTP 403 and the valid token reaches the Worker. The Gateway egress probe succeeded and the fixed test video returned 286 manual English segments. Arbitrary-video support is covered by local contract tests and still needs live acceptance for a second video ID.
+The initial Mac test against Worker server revision `bc6a9f1` verified Access enforcement and the original test video. After arbitrary-video support was deployed, live caption retrieval succeeded for two additional public video IDs, including one drawn from cached history. One history video returned a transient YouTube `VideoAccessRestricted` challenge and succeeded on retry.
 
 ## Interpret failures
 
