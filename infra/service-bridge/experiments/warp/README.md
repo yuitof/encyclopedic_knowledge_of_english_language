@@ -56,6 +56,18 @@ The separate Linux Docker retest reused the restricted x86_64 image and enrolled
 
 Only the Linux Docker test created a registration. The daemon shut down and removed its temporary state, and the test registration, service token and enrollment policy were removed and their absence verified. The test created no AWS resources.
 
+### Consumer WARP and the file-descriptor limit
+
+Consumer WARP on the same official Linux client build reproduced the Zero Trust failure. It registered a free consumer device, accepted Local proxy mode and MASQUE, and reported `Unable` without opening port 40000 at a soft and hard file-descriptor limit of 1,024. Running as root with Docker's default capabilities and the same limit also failed at the forward proxy.
+
+The consumer daemon's detailed diagnostic identified the permission failure in `warp_connection::forward_proxy`. The build attempts to set both the soft and hard file-descriptor limit to 32,768 as it starts the forward proxy. The low-limit run returned `EPERM`. A separate synthetic check under UID 1000 with zero effective capabilities rejected raising a 1,024 hard limit and accepted the same request when the inherited hard limit was 32,768. [Linux resource-limit semantics](https://man7.org/linux/man-pages/man2/getrlimit.2.html)
+
+Changing only Docker's inherited hard limit to 32,768 removed the forward-proxy limit failure and opened port 40000, with a read-only root, soft limit of 1,024, zero effective capabilities and no TUN device. Both the traced and untraced high-limit runs carried an HTTPS request through WARP. The untraced run recorded one certificate-verified Cloudflare trace with `warp=on`, `gateway=off` and a different public IP from the direct route. Twelve other HTTPS attempts reset, closed, or ended early. The CLI stayed in `Connecting`.
+
+The high-limit restricted run also logged socket-marking (`fwmark`) permission failures. A separate test reproduced `EPERM` from `SO_MARK` without capabilities and succeeded with Docker's `NET_RAW` capability in isolation. In a high-limit WARP run as root with Docker's default capabilities, WARP still logged socket-marking errors and stayed in `Connecting`. Two verified HTTPS traces succeeded and eight other requests disconnected or ended early. The exact cause of the intermittent HTTPS failures remains open. [Linux socket options](https://man7.org/linux/man-pages/man7/socket.7.html)
+
+These findings explain why enrollment can succeed while the forward proxy fails at a 1,024 hard limit. AWS documents 1,024 file descriptors for standard Lambda. The earlier Zero Trust Lambda invocation did not record its effective `RLIMIT_NOFILE` or request operands, so the Docker result identifies a likely explanation for the Lambda failure. The consumer tests did not use Zero Trust Gateway or provision AWS resources. The probe confirmed local deletion of the temporary consumer registrations and removal of their state. [AWS Lambda quotas](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html)
+
 ## Gate outcome and production rollback
 
 The real Lambda feasibility gate failed at the tunnel and data path after enrollment. The server integration, Terraform setup and plan, client contract changes, and production deployment remain gated. No signed-out caption comparison, authenticated history check, or Cloud-to-Cloudflare YouTube, X or Reddit acceptance was run. The existing tests cover the deployed direct mode. The unsigned Cloud/VPN outcomes for that mode remain documented in the server guide.
