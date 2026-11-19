@@ -3,19 +3,23 @@ import { CookieJar } from "tough-cookie";
 import { cancel, failure, type Outbound, ProbeError, readText } from "./network";
 
 export const VIDEO_ID = "aircAruvnKk";
+export function validVideoId(value: unknown): value is string {
+  return typeof value === "string" && /^[-_A-Za-z0-9]{11}$/.test(value);
+}
 const ORIGIN = "https://www.youtube.com";
 const PLAYER_CONTEXT = { client: { clientName: "ANDROID", clientVersion: "20.10.38", hl: "en" } };
 const USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " +
   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36";
 
-export function captionUrl(raw: unknown): string {
+export function captionUrl(raw: unknown, videoId: string = VIDEO_ID): string {
+  if (!validVideoId(videoId)) throw new ProbeError("invalid_video_id");
   if (typeof raw !== "string" || raw.length > 16_384 || /[\\\s#]/.test(raw) ||
       !/^https:\/\/(?:www\.)?youtube\.com(?::443)?\/api\/timedtext\?/.test(raw)) {
     throw new ProbeError("invalid_caption_url");
   }
   const url = new URL(raw);
   const videos = url.searchParams.getAll("v");
-  if (videos.length !== 1 || videos[0] !== VIDEO_ID) throw new ProbeError("invalid_caption_url");
+  if (videos.length !== 1 || videos[0] !== videoId) throw new ProbeError("invalid_caption_url");
   if (url.searchParams.getAll("exp").includes("xpe")) throw new ProbeError("proof_token_required");
   return raw;
 }
@@ -164,7 +168,7 @@ export async function captionProbe(send: Outbound, signal: AbortSignal) {
       /^en(?:-[A-Za-z0-9]+)*$/i.test(item?.languageCode) && item.kind === undefined);
     if (!track) throw new ProbeError("manual_english_track_missing");
     stage = "timedtext";
-    const source = await read(captionUrl(track.baseUrl), 4_000_000);
+    const source = await read(captionUrl(track.baseUrl, VIDEO_ID), 4_000_000);
     return { ok: true, statuses, playability, captionType: "manual",
       language: track.languageCode, segments: countSegments(source) };
   } catch (error) {

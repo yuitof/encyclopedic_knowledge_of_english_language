@@ -23,18 +23,18 @@ Requests have no body or query parameters. Unsupported or disabled routes return
 
 Egress budget is ten seconds and 128 bytes. Caption budget is 45 seconds total, with limits of 8 MB watch HTML, 4 MB player JSON, and 4 MB timedtext. The Worker never automatically retries or follows redirects. Caption flow starts with an empty in-memory cookie jar for upstream-issued guest cookies. No client headers are copied into subrequests. Signed caption URLs are used only after validating authority, scheme, port, path and video ID and are omitted from output. No signed URL, response body, cookie, or credential is logged by the Worker.
 
-## Fixed-video comparison relay
+## Signed-out caption relay
 
-Set `COMPARISON_ENABLED` to `true` only during approved Access-protected testing. It defaults to `false`. This interface implements the same fixed-video comparison that succeeded with the signed-out Python caption client. It uses the Gateway binding for every request, has no ordinary egress fallback, and accepts no arbitrary URL or account authorization header.
+Set `COMPARISON_ENABLED` to `true` only during approved Access-protected testing. It defaults to `false`. This interface implements the signed-out requests used by the Python caption client and supports any valid public YouTube video ID supplied by the caller. It uses the Gateway binding for every request, has no ordinary egress fallback, and accepts no arbitrary URL or account authorization header.
 
 | Inbound endpoint | Outbound request | Client envelope |
 | --- | --- | --- |
-| `POST /v1/signed-out-comparison/watch` | GET `www.youtube.com/watch` | `search: "v=aircAruvnKk&hl=en"`, `body: null`. Begin with an empty cookie jar. |
-| `POST /v1/signed-out-comparison/player` | POST `www.youtube.com/youtubei/v1/player` | `search: "key=…"`. Supply the unchanged JSON request as a string with the Android `20.10.38` English context and fixed video ID. |
-| `POST /v1/signed-out-comparison/timedtext` | GET `/api/timedtext` | `host` is `www.youtube.com` or `youtube.com`. Supply the exact signed query from YouTube in `search`, with `body: null`. |
+| `POST /v1/signed-out-comparison/watch` | GET `www.youtube.com/watch` | `videoId` is the 11-character ID. `search` is exactly `v=<videoId>&hl=en`. `body: null`. Begin with an empty cookie jar. |
+| `POST /v1/signed-out-comparison/player` | POST `www.youtube.com/youtubei/v1/player` | `videoId` is the same 11-character ID. `search: "key=…"`. Supply the unchanged JSON request as a string with the Android `20.10.38` English context and matching video ID. |
+| `POST /v1/signed-out-comparison/timedtext` | GET `/api/timedtext` | `videoId` is the same 11-character ID. `host` is `www.youtube.com` or `youtube.com`. Supply the exact signed query from YouTube in `search`, with `body: null`. |
 | `GET /v1/signed-out-comparison/ip` | GET `checkip.amazonaws.com/` | No envelope. Returns JSON with `status` and the observed `ip`. |
 
-Use the same Access headers as the diagnostic API. Each POST envelope includes `headers`. Accepted names are `User-Agent`, `Accept-Language`, `Accept`, `Content-Type`, and `Cookie`. For the comparison use only guest cookies issued during the current run. The Worker returns HTTP 200 for a completed exchange with `X-Origin-Http` giving the upstream status. It returns the upstream text for status 200, discards error and redirect bodies, and returns each origin cookie percent-encoded in `X-Origin-Set-Cookie`. Split merged cookie values on commas before decoding and apply cookies to the original YouTube URL. The Worker sends no `Set-Cookie` on its own hostname. Validation and transport failures use a Worker error response. This temporary API expects textual payloads and does not implement the streaming collector relay below.
+Use the same Access headers as the diagnostic API. Each POST envelope includes `headers`, `search`, `host`, `body`, and `videoId`. Accepted header names are `User-Agent`, `Accept-Language`, `Accept`, `Content-Type`, and `Cookie`. For signed-out caption use only guest cookies issued during the current run. The Worker returns HTTP 200 for a completed exchange with `X-Origin-Http` giving the upstream status. It returns the upstream text for status 200, discards error and redirect bodies, and returns each origin cookie percent-encoded in `X-Origin-Set-Cookie`. Split merged cookie values on commas before decoding and apply cookies to the original YouTube URL. The Worker sends no `Set-Cookie` on its own hostname. It rejects cross-stage video-ID mismatches, malformed IDs, unsupported envelope fields, and signed caption URLs for another video. Validation and transport failures use a Worker error response. This API expects textual payloads and does not implement the streaming collector relay below.
 
 ## Proposed collector relay
 

@@ -3,15 +3,18 @@ import worker from "../src/signed-out-comparison";
 import { VIDEO_ID } from "../src/captions";
 
 const root = "https://bridge.invalid/v1/signed-out-comparison/";
-const watch = { headers: {}, search: "v=" + VIDEO_ID + "&hl=en", body: null };
+const OTHER_VIDEO_ID = "zyxWVU98765";
+const watch = { headers: {}, search: "v=" + VIDEO_ID + "&hl=en", host: "www.youtube.com", body: null, videoId: VIDEO_ID };
 const player = {
   headers: { "content-type": "application/json", cookie: "visitor=synthetic" },
   search: "key=synthetic",
+  host: "www.youtube.com",
   body: JSON.stringify({ videoId: VIDEO_ID, context: {
     client: { clientName: "ANDROID", clientVersion: "20.10.38", hl: "en" },
   } }),
+  videoId: VIDEO_ID,
 };
-const timedtext = { headers: {}, host: "youtube.com", search: "v=" + VIDEO_ID + "&sig=a%2Fb", body: null };
+const timedtext = { headers: {}, host: "youtube.com", search: "v=" + VIDEO_ID + "&sig=a%2Fb", body: null, videoId: VIDEO_ID };
 function request(stage: string, input: unknown) {
   return new Request(root + stage, {
     method: "POST",
@@ -64,13 +67,36 @@ describe("signed-out comparison relay", () => {
       expect.objectContaining({ method: "GET", redirect: "manual" }));
   });
 
+  it("supports any valid public YouTube video ID across all stages", async () => {
+    const otherWatch = { ...watch, search: "v=" + OTHER_VIDEO_ID + "&hl=en", videoId: OTHER_VIDEO_ID };
+    const otherPlayer = { ...player, videoId: OTHER_VIDEO_ID, body: JSON.stringify({
+      videoId: OTHER_VIDEO_ID,
+      context: { client: { clientName: "ANDROID", clientVersion: "20.10.38", hl: "en" } },
+    }) };
+    const otherTimedtext = { ...timedtext, videoId: OTHER_VIDEO_ID,
+      search: "v=" + OTHER_VIDEO_ID + "&sig=a%2Fb" };
+    const send = vi.fn(async () => new Response("ok"));
+    for (const [stage, input] of [["watch", otherWatch], ["player", otherPlayer], ["timedtext", otherTimedtext]]) {
+      expect((await worker.fetch(request(stage, input), environment(send))).status).toBe(200);
+    }
+    expect(send.mock.calls.map(([url]) => url)).toEqual([
+      "https://www.youtube.com/watch?v=" + OTHER_VIDEO_ID + "&hl=en",
+      "https://www.youtube.com/youtubei/v1/player?key=synthetic",
+      "https://youtube.com/api/timedtext?v=" + OTHER_VIDEO_ID + "&sig=a%2Fb",
+    ]);
+  });
+
   it.each([
+    ["watch", { ...watch, videoId: "short" }],
+    ["watch", { ...watch, search: "v=" + OTHER_VIDEO_ID + "&hl=en" }],
     ["timedtext", { ...timedtext, host: "127.0.0.1" }],
     ["timedtext", { ...timedtext, search: timedtext.search + "&v=AAAAAAAAAAA" }],
+    ["timedtext", { ...timedtext, videoId: OTHER_VIDEO_ID }],
     ["watch", { ...watch, headers: { cookie: "preloaded=synthetic" } }],
     ["player", { ...player, headers: { authorization: "Bearer synthetic" } }],
     ["player", { ...player, headers: { "cf-access-client-secret": "synthetic" } }],
     ["player", { ...player, body: '{"videoId":"AAAAAAAAAAA"}' }],
+    ["watch", { ...watch, unsupported: true }],
   ])("rejects forged %s envelopes before egress", async (stage, input) => {
     const send = vi.fn();
     expect((await worker.fetch(request(stage, input), environment(send))).status).toBe(400);
