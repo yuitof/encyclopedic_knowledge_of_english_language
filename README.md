@@ -1,25 +1,9 @@
-# Service bridge
+# Cloudflare service bridge
 
-The `service-bridge` branch contains the AWS Lambda service that exposes a private, session-authenticated CONNECT proxy over Tailscale.
+The `service-bridge-workers` branch develops a standalone Workers service using Cloudflare Access and Workers VPC Gateway egress. The current release contains the [feasibility Worker and rollout procedure](infra/service-bridge-workers/README.md).
 
-- [Server implementation, deployment, and verification](infra/service-bridge/README.md)
-- Lambda build context and CloudFormation templates: `infra/service-bridge/`
-- Server tests: `tests/service_bridge/`
+- [Feasibility findings and test evidence](infra/service-bridge-workers/FEASIBILITY.md)
+- [HTTPS diagnostics API and proposed relay contract](infra/service-bridge-workers/API.md)
+- [Proposed collector integration](infra/service-bridge-workers/VAULT-INTEGRATION.md)
 
-The shared Codex Cloud client, YouTube/X collection tooling, private-cache infrastructure, and English vault are maintained separately on the repository's [`vault` branch](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/tree/vault). The client uses Codex Cloud's built-in Tailscale VPN to reach this service.
-
-Run the offline tests with Python dependencies from `infra/service-bridge/requirements.txt` installed:
-
-```bash
-python -m unittest discover -s tests/service_bridge -v
-```
-
-Build the Lambda image independently of the client:
-
-```bash
-docker build --platform linux/amd64 --provenance=false -f infra/service-bridge/Dockerfile -t service-bridge:test infra/service-bridge
-```
-
-Deployment uses the existing enrollment secret ARN and scoped Cloud runtime role; see the server guide. Deployment and live probes are separate from offline tests. Private runtime data stays under ignored `.codex/tmp/` and must not enter commits or build images.
-
-The previous server branch is retained as [`archive/service-bridge`](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/tree/archive/service-bridge). AWS resource names remain `service-bridge`.
+The AWS Lambda bridge remains on `service-bridge`. Its [server guide](infra/service-bridge/README.md), implementation, and tests are retained here as a reference. Collectors and the private S3 caches live on `vault`. The Workers package builds independently of either branch.

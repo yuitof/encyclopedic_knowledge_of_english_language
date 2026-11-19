@@ -1,0 +1,13 @@
+node_modules/
+.wrangler/
+dist/
+.dev.vars*
+.env*
+terraform/.terraform/
+terraform/*.tfstate*
+terraform/*.tfvars*
+!terraform/*.tfvars.example
+terraform/*.tfplan
+terraform/*.plan
+terraform/crash*.log
+wrangler.acceptance.local.jsonc

@@ -1,0 +1,27 @@
+{
+  "name": "service-bridge-workers",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --outdir dist",
+    "acceptance": "node scripts/acceptance.mjs",
+    "inspect": "node scripts/inspect.mjs"
+  },
+  "dependencies": {
+    "saxes": "6.0.0",
+    "tough-cookie": "6.0.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "1.8.5",
+    "@cloudflare/workers-types": "5.20261119.1",
+    "typescript": "7.0.2",
+    "vitest": "5.1.1",
+    "wrangler": "4.165.0"
+  }
+}

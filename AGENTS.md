@@ -1,20 +1,6 @@
-# Lambda service bridge
+# Cloudflare service bridge
 
-## Scope
-
-- Work on `service-bridge` for the Lambda server. The Cloud client, YouTube workflow, cache infrastructure, notes, and website publishing belong on `vault` or `main`; do not merge those branches into this branch.
-- Read `README.md` and `infra/service-bridge/README.md` before changing the service. Keep the Lambda self-contained in `infra/service-bridge/` with no imports from client code.
-- Maintain compatibility with the documented `connect-v2` session contract. The `vault` client uses Codex Cloud's built-in VPN through `proxy:8088`; it must not launch a separate Tailscale daemon or retrieve a client enrollment key.
-
-## Privacy and service boundaries
-
-- Keep keys, credentials, session records, network identity metadata, logs, and runtime dependencies under ignored `.codex/tmp/`. Never print credentials or commit private runtime data. Do not inspect unrelated browser profiles or export cookies.
-- The worker retrieves only its own Tailscale enrollment key through its AWS role. Preserve the private CONNECT service, session authentication, destination restrictions, origin TLS verification, bounded lifetime, and cleanup.
-- Keep the Docker build context restricted to the allowlisted server files. Do not add website or GitHub Actions publishing to this branch.
-- Use synthetic data for offline tests. Live acceptance may use an unsigned connectivity probe; do not collect watch history, transcripts, or YouTube session credentials merely to test the server.
-
-## Validation and recording changes
-
-- Run the relevant tests under `tests/service_bridge/` and check shell syntax for deployment-script changes. Build the container when build inputs change. Distinguish offline tests, deployed-handler checks, local tailnet acceptance, and built-in Cloud VPN acceptance.
-- Preserve unrelated work. After checking the result, stage only task changes, inspect the staged diff and outgoing commits, then commit locally to `service-bridge` unless the user requests a different workflow. Push only when the user explicitly authorizes it; task editing or commit authorization alone is not push authorization. Never force-push or publish unrelated commits.
-- Keep deployment and validation status accurate in `infra/service-bridge/README.md`. Do not infer Cloud connectivity from a successful local probe.
+- Develop the Cloudflare server on `service-bridge-workers` under `infra/service-bridge-workers/`. Keep the inherited Lambda implementation intact. The `service-bridge` branch owns Lambda and `vault` owns the application, collectors, and caches. Communicate through the documented HTTPS API.
+- Read the [rollout procedure](infra/service-bridge-workers/README.md) and [feasibility report](infra/service-bridge-workers/FEASIBILITY.md) before live work. Obtain approval before deployment, Terraform apply, or any Access or Gateway changes. Keep secrets, plans, state, live logs, and account evidence private outside tracked files. Use synthetic data offline and signed-out requests for caption acceptance.
+- Complete Access, Gateway, and signed-out YouTube acceptance before building the general relay. Keep previews and diagnostics disabled outside the approved acceptance window. Never fall back from the Gateway binding to ordinary egress.
+- Stage only task changes, inspect the staged diff, and commit locally on this branch. Push, merge, client changes on `vault`, and Lambda changes require separate authorization.
