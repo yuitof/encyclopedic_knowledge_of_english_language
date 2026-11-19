@@ -509,6 +509,11 @@ def service_bridge(args):
         raise ValueError(str(error)) from None
 
 
+def workers_bridge(args):
+    from workers import run
+    return run(args)
+
+
 def main():
     os.umask(0o077)
     parser = argparse.ArgumentParser(description=__doc__)
@@ -538,6 +543,9 @@ def main():
     p.add_argument('--ready-timeout', type=int, default=60)
     p.add_argument('arguments', nargs=argparse.REMAINDER)
     p.set_defaults(run=service_bridge)
+    p = sub.add_parser('workers', help='Opt-in Cloudflare Workers Access probe and fixed-video caption test')
+    p.add_argument('operation', choices=('probe', 'captions'))
+    p.set_defaults(run=workers_bridge)
     args = parser.parse_args()
     if getattr(args, 'phrase', 'x').strip() == '':
         parser.error('Phrase must not be empty')
