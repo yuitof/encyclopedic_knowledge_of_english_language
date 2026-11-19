@@ -17,17 +17,17 @@ The code uses HTTPS and standard certificate validation. Gateway may terminate a
 | Check | Result |
 | --- | --- |
 | Branch inspection | Workers branch started at `58ad2ef`, the remote Lambda reference. Collector interface reviewed on `vault` at `70949e2`. |
-| Credentials and inventory | This execution environment had Terraform 1.17.2 (darwin_arm64) and Node 26.7.0. The account ID and read-only token were absent. The inventory script stopped before sending a request. Account eligibility, TLS and current policies remain unverified. |
-| Terraform | Official Cloudflare provider 5.29.0 initialized. Formatting, validation and placeholder-ID planning run locally. The reviewed plan has **2 create, 0 change, 0 destroy**. Account-specific plan and apply are pending. |
+| Credentials and inventory | This execution environment had Terraform 1.17.2 (darwin_arm64) and Node 26.7.0. Wrangler OAuth confirmed the account and could read the deployed Worker and Access application list. Gateway configuration and logging reads returned HTTP 403. TLS inspection and Gateway policy settings remain unverified. |
+| Terraform | Official Cloudflare provider 5.29.0 initialized. Formatting, validation and placeholder-ID planning run locally. The placeholder plan and the reviewed plan for the actual account and deployed Worker each have **2 create, 0 change, 0 destroy**. Apply is pending. |
 | Code | TypeScript check, Wrangler dry-run and 42 local workerd tests passed. Tests cover fixed routing, cancellation and timeouts, synthetic cookies and headers, redirect refusal, payload construction, bounded response reads, sanitized errors, blocked destinations, mock 403 and no ordinary egress fallback for Gateway. |
 | Lambda reference tests | 11 Python tests passed. Seven GOST container integration tests were skipped by the Mac host runner. |
-| Authentication | No deployment or Access app/token creation. Missing/invalid/valid production and preview checks, expiration and revocation are pending. |
+| Authentication | The Worker deployed with `cf1:network` and diagnostics disabled. Cloudflare confirmed that production and preview routes are disabled. No account `workers.dev` subdomain was registered at the time of the check. Access app/token creation and production/preview tests are pending. |
 | Ordinary Workers egress IP | Pending live run. |
 | Gateway Workers egress IP and log source | Pending live run and account log access. |
 | Direct Mac caption baseline | User supplied prior result of **286 manual English segments** for `aircAruvnKk`. No new Mac run was performed. |
 | Ordinary Workers captions | Pending. |
 | Gateway-bound Workers captions | Pending. |
-| Codex Cloud routing | Protected hostname unassigned and exact-host reachability unverified. |
+| Acceptance client | Live testing is scoped to the Mac. The protected hostname is unassigned. |
 | Restricted relay and mock X/Reddit round trips | Gated on independently verified Gateway routing and signed-out caption success. Proposed API and collector mapping documented. |
 
 If Gateway access works for IP observation but captions fail, compare watch/player/timedtext statuses and playability, inspect applicable policies, and preserve the Gateway route choice. If neither caption path succeeds, preserve the measured result and leave migration gated. If ordinary Workers alone succeeds, investigate the Gateway difference before proposing any routing change.
