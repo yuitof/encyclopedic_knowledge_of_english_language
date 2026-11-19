@@ -1,12 +1,12 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "service-bridge-workers",
-  "main": "src/index.ts",
+  "main": "src/signed-out-comparison.ts",
   "compatibility_date": "2026-11-19",
   "workers_dev": false,
   "preview_urls": false,
   "observability": { "enabled": false },
-  "vars": { "DIAGNOSTICS_ENABLED": "false" },
+  "vars": { "DIAGNOSTICS_ENABLED": "false", "COMPARISON_ENABLED": "false" },
   "vpc_networks": [
     { "binding": "EGRESS", "network_id": "cf1:network", "remote": true }
   ]
