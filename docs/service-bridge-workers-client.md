@@ -36,7 +36,7 @@ bash tools/youtube/run.sh workers probe
 bash tools/youtube/run.sh workers captions VIDEO_ID
 ```
 
-The probe checks the Worker version marker and requests a public IP observation over Gateway. The caption test starts with an empty YouTube cookie jar and requests the watch page, InnerTube player, and caption track for the supplied public video ID. It reports the verified segment count with no transcript output or cache write. Omitting the ID uses `aircAruvnKk` for the established test. Run either command only while the test route is enabled.
+The probe checks the Worker version marker and requests a public IP observation over Gateway. The caption test starts with an empty YouTube cookie jar and requests the watch page, InnerTube player, and caption track for the supplied public video ID. It prefers a manual English track and falls back to automatic English captions when no manual track exists. It reports the verified track type and segment count with no transcript output or cache write. Omitting the ID uses `aircAruvnKk` for the established test. Run either command only while the test route is enabled.
 
 ## Acceptance status
 

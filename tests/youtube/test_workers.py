@@ -2,14 +2,15 @@
 import json
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 from urllib.parse import quote
 
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'tools/youtube'))
-from workers import ROUTE, TEST_VIDEO, WorkersCaptionClient, WorkersError, WorkersTransport, worker_origin
+from workers import ROUTE, TEST_VIDEO, WorkersCaptionClient, WorkersError, WorkersTransport, run, worker_origin
 
 
 CONFIG = {
@@ -129,6 +130,24 @@ class WorkersTests(unittest.TestCase):
                         self.assertRaises(WorkersError):
                     captions.fetch(video_id)
                 send.assert_not_called()
+
+    def test_automatic_caption_track_is_accepted(self):
+        transport_context = MagicMock()
+        client_context = MagicMock()
+        client = client_context.__enter__.return_value
+        client.fetch.return_value = {
+            'caption_type': 'automatic',
+            'language': 'en',
+            'segments': [{'start': 0, 'duration': 1, 'text': 'Synthetic'}],
+        }
+        transport_context.__enter__.return_value = MagicMock()
+        with patch('workers.WorkersTransport', return_value=transport_context), \
+                patch('workers.WorkersCaptionClient', return_value=client_context), \
+                patch('builtins.print') as output:
+            run(SimpleNamespace(operation='captions', video_id=OTHER_VIDEO))
+        client.fetch.assert_called_once_with(OTHER_VIDEO)
+        output.assert_called_once_with(
+            'Verified 1 automatic English caption segments (en).')
 
     def test_probe_requires_worker_marker_and_valid_public_ip(self):
         health = response('{"ok":true}', **{'X-Bridge-Version': '1'})

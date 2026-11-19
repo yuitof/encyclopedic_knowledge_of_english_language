@@ -176,6 +176,7 @@ def run(args):
                 result = client.fetch(args.video_id)
             except (TranscriptRetryNeeded, TranscriptUnavailable) as error:
                 raise WorkersError(f'YouTube caption test failed: {error.reason}.') from None
-        if result['caption_type'] != 'manual':
-            raise WorkersError('YouTube returned automatic captions. The test requires a manual English track.')
-        print(f'Verified {len(result["segments"])} manual English caption segments ({result["language"]}).')
+        if result['caption_type'] not in ('manual', 'automatic'):
+            raise WorkersError('Invalid YouTube caption track type.')
+        print(f'Verified {len(result["segments"])} {result["caption_type"]} '
+              f'English caption segments ({result["language"]}).')
