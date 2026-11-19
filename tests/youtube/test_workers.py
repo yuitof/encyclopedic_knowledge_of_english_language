@@ -85,6 +85,21 @@ class WorkersTests(unittest.TestCase):
                     captions.fetch(TEST_VIDEO)
             send.assert_called_once()
 
+    def test_cloud_system_bundle_and_explicit_ca_settings(self):
+        from types import SimpleNamespace
+        for environ, expected in (
+            ({}, '/system/ca.pem'),
+            ({'SSL_CERT_FILE': '/custom/ca.pem'}, '/custom/ca.pem'),
+            ({'SSL_CERT_FILE': '/custom/ca.pem', 'REQUESTS_CA_BUNDLE': '/requests/ca.pem'}, '/requests/ca.pem'),
+        ):
+            with (self.subTest(environ=environ),
+                  patch.dict('os.environ', CONFIG | environ, clear=True),
+                  patch('workers.sys.platform', 'linux'),
+                  patch('workers.ssl.get_default_verify_paths', return_value=SimpleNamespace(cafile='/system/ca.pem')),
+                  WorkersTransport() as transport):
+                settings = transport.session.merge_environment_settings(transport.origin, {}, None, None, None)
+                self.assertEqual(settings['verify'], expected)
+
     def test_does_not_attempt_another_video(self):
         with WorkersTransport() as transport, WorkersCaptionClient(transport) as captions:
             with patch.object(transport.session, 'request') as send, self.assertRaises(WorkersError):

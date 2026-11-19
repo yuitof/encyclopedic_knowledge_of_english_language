@@ -47,9 +47,27 @@ The Mac test of this client against Worker server revision `bc6a9f1` verified th
 | Diagnostic | Meaning |
 | --- | --- |
 | HTTPS proxy connection failed before the Worker responded | Check the Cloud HTTPS proxy and the allowed hostname. A rejected CONNECT never reaches Cloudflare Access. |
-| HTTPS certificate verification failed | Check the trust configuration for the current route. |
+| HTTPS certificate verification failed | Try the unsigned HTTPS check below. Compare the Cloud runtime CA with the bundle used by Requests. |
 | HTTP 401, 403 or redirect before the Worker ran | Check Access and secret delivery. A key can be present in Cloud while substitution or the saved credential still fails. A direct Mac test verifies the actual token separately. |
 | Access verified, then Gateway IP probe failed | The Worker handler was reached. Check the comparison switch and Gateway binding. |
 | YouTube HTTP status or caption error | Access already accepted the request. The failure is at the indicated upstream stage or during caption validation. |
 
 The client sends neither YouTube account credentials nor Access secrets in the YouTube request envelope. It does not fall back to direct YouTube requests. Cloud acceptance remains separate from Mac acceptance. The most recent Cloud test of the earlier standalone harness reached Cloudflare but received HTTP 403 with the configured HTTP secrets. The new client uses the same documented HTTP headers and cannot guarantee successful secret substitution.
+
+### Check a TLS failure in Codex Cloud
+
+From the same executor, send an unsigned request with the configured proxy and certificate verification:
+
+```bash
+curl -sS --max-time 15 -o /dev/null \
+  -w 'CONNECT=%{http_connect} HTTP=%{http_code}\n' \
+  "${SERVICE_BRIDGE_WORKER_URL%/}/v1/health"
+```
+
+A successful CONNECT followed by HTTP 403 means the unsigned request reached Access over HTTPS. If curl reaches Access but an older client fails certificate verification, set `REQUESTS_CA_BUNDLE` for the command to the trusted bundle that curl uses. On Linux, if that bundle is `/etc/ssl/certs/ca-certificates.crt`:
+
+```bash
+REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt bash tools/youtube/run.sh workers probe
+```
+
+The client honors `REQUESTS_CA_BUNDLE` and `CURL_CA_BUNDLE`, then uses `SSL_CERT_FILE` or the Linux system CA bundle when available. Keep TLS verification enabled.

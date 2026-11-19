@@ -3,6 +3,8 @@ from email.message import Message
 import ipaddress
 import os
 import re
+import ssl
+import sys
 from urllib.parse import unquote, urlsplit
 
 import requests
@@ -51,6 +53,13 @@ class WorkersTransport:
             if not re.fullmatch(r'[!-~]+', self.headers[header]):
                 raise WorkersError(f'Set {key} to a service-token value or Cloud HTTP-secret placeholder.')
         self.session = requests.Session()
+        # Requests honors REQUESTS_CA_BUNDLE and CURL_CA_BUNDLE at request time.
+        # Also use the platform CA bundle on Linux, where Cloud installs proxy trust.
+        ca_bundle = os.environ.get('SSL_CERT_FILE')
+        if not ca_bundle and sys.platform.startswith('linux'):
+            ca_bundle = ssl.get_default_verify_paths().cafile
+        if ca_bundle:
+            self.session.verify = ca_bundle
         # Keep the configured HTTPS proxy and trust store for Cloud secret substitution.
         self.session.auth = lambda request: request
 
