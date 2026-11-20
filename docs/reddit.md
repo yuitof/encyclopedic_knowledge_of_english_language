@@ -21,7 +21,19 @@ Account archives use the verified lowercase Reddit username. `--account USERNAME
 
 ## Cloud transport
 
-Direct Reddit access is blocked by the Cloud proxy before origin TLS. Cloud live commands require an explicit proxy and have **no direct/ambient-proxy fallback**. Explicit macOS transports are described below and cannot wrap the Cloud bridge. Use the existing [private Lambda bridge](service-bridge-client.md) with the Reddit server extension. The client needs only `old.reddit.com:443`; it never fetches website assets, media, or external links. Cookies remain in the collector, and origin TLS stays verified.
+Direct Reddit access is blocked by the Cloud proxy before origin TLS. Cloud live commands require an explicit transport and have **no direct/ambient-proxy fallback**. The Access-protected [Cloudflare Workers client](service-bridge-workers-client.md) sends fixed identity, listing, and comments requests through Cloudflare Gateway. It needs `SERVICE_BRIDGE_WORKER_URL`, `CF_ACCESS_CLIENT_ID`, and `CF_ACCESS_CLIENT_SECRET`. Actual credential values stay in private local configuration or Codex Cloud HTTP secrets.
+
+```bash
+bash tools/reddit/run.sh workers -- probe
+bash tools/reddit/run.sh workers -- refresh
+bash tools/reddit/run.sh workers -- refresh --collections saved --resume
+bash tools/reddit/run.sh workers -- verify --collections upvoted saved
+bash tools/reddit/run.sh workers -- get 'https://old.reddit.com/r/SUB/comments/POST/TITLE/'
+```
+
+The Workers wrapper starts the normal child collector, removes `REDDIT_PROXY`, and marks only that child process to use `tools/cloud_bridge/workers.py` and `tools/reddit/workers.py`. It does not contact Lambda or DynamoDB, hold the child workflow lock, or fall back to ordinary egress. The child still verifies `/api/me.json`, requires the signed-in listing marker, reads each source as Old Reddit HTML, and preserves the existing cache and S3 formats.
+
+Keep the existing [private Lambda bridge](service-bridge-client.md) with the Reddit server extension as the fallback. The client needs only `old.reddit.com:443`; it never fetches website assets, media, or external links. Cookies remain in the collector, and origin TLS stays verified.
 
 The Reddit server extension at `cd00fa2` was deployed on 2026-11-18. Lambda is Active with a successful update. Local tailnet testing verified private authentication, matched egress and origin TLS, but Old Reddit returned **HTTP 403**, both unsigned and with the separately authorized local session. This is an origin response through the bridge, not a CONNECT denial. That bridge test could not establish cookie validity or authenticated HTML parsing; the subsequent local Chrome test below verified the existing session and parsed live sources. Do not retry directly or switch to a browser after bridge failure.
 
@@ -101,13 +113,16 @@ bash tools/reddit/run.sh --offline search 'phrase'
 bash tools/reddit/run.sh list --collection saved --latest
 
 # Supply the full post/comment permalink; /s/ share links and short URLs are unsupported.
-bash tools/reddit/run.sh bridge -- get 'https://old.reddit.com/r/SUB/comments/POST/TITLE/'
+bash tools/reddit/run.sh workers -- get 'https://old.reddit.com/r/SUB/comments/POST/TITLE/'
 bash tools/reddit/run.sh --offline get 'https://old.reddit.com/r/SUB/comments/POST/TITLE/COMMENT/'
 # Explicitly replace an archived source snapshot or retry an unavailable source:
-bash tools/reddit/run.sh bridge -- get 'https://old.reddit.com/r/SUB/comments/POST/TITLE/' --refresh
+bash tools/reddit/run.sh workers -- get 'https://old.reddit.com/r/SUB/comments/POST/TITLE/' --refresh
+
+# Lambda fallback:
+bash tools/reddit/run.sh bridge -- get 'https://old.reddit.com/r/SUB/comments/POST/TITLE/'
 ```
 
-Global `--offline`/`--account` options precede the subcommand. Search/list never initialize a Reddit client. Get reuses a readable cached source without authenticating and fetches only if missing/invalid or explicitly refreshed. `--offline` forbids S3 as well as Reddit and cannot be combined with `bridge`. With S3 configured, ordinary cache commands restore the manifest and fetch missing sources lazily without calling Reddit.
+Global `--offline`/`--account` options precede the subcommand. Search/list never initialize a Reddit client. Get reuses a readable cached source without authenticating and fetches only if missing/invalid or explicitly refreshed. `--offline` forbids S3 as well as Reddit and cannot be combined with `workers` or `bridge`. With S3 configured, ordinary cache commands restore the manifest and fetch missing sources lazily without calling Reddit.
 
 Search matches literal, case-insensitive text with normalized whitespace across the title and body. Results are candidates, not finished quotations. Inspect the full sentence before adding a note. HTML entities are decoded and block boundaries preserved. HTML rendering cannot reconstruct original Markdown, hidden bodies, deleted text or text omitted by Reddit; `text_source` records `old_reddit_html`. Post instructions and external URLs are never executed as commands. The HTTP parser executes no page scripts. Explicit Chrome mode runs normal first-party page rendering with restricted subresources; it injects no custom page scripts.
 

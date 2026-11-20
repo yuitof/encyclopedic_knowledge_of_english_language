@@ -16,9 +16,21 @@ Cloud/Linux sessions use a privately supplied `X_STORAGE_STATE_JSON` in the same
 
 `doctor` reports configuration, not verified live connectivity. With S3 configured, it reports `s3`. Use `sync` and a restoration check to establish persistence.
 
-## Codex Cloud private bridge
+## Codex Cloud transports
 
-When direct X connections are blocked, use the authorized [private Lambda bridge](service-bridge-client.md) after its X extension has been deployed. It routes both `x.com` and the required `abs.twimg.com` assets through the built-in Cloud Tailscale VPN. Run the entire command in the outer executor; no separate Tailscale daemon or exit node is used.
+When direct X connections are blocked, select either explicit transport below. The Access-protected [Cloudflare Workers client](service-bridge-workers-client.md) sends fixed X home, GraphQL, and asset requests through Cloudflare Gateway. It needs `SERVICE_BRIDGE_WORKER_URL`, `CF_ACCESS_CLIENT_ID`, and `CF_ACCESS_CLIENT_SECRET`. Actual credential values stay in private local configuration or Codex Cloud HTTP secrets.
+
+```bash
+bash tools/x/run.sh workers -- probe
+bash tools/x/run.sh workers -- refresh
+bash tools/x/run.sh workers -- refresh --resume
+bash tools/x/run.sh workers -- get POST_ID_OR_URL
+bash tools/x/run.sh workers -- folders --refresh
+```
+
+The Workers wrapper starts the normal child collector, removes `X_PROXY`, and marks only that child process to use `tools/cloud_bridge/workers.py`. It does not contact Lambda or DynamoDB, hold the child workflow lock, or fall back to ordinary egress. Viewer verification, operation discovery, cookies, redirects, response parsing, account isolation, caches, and S3 behavior remain in the existing X implementation.
+
+Keep the authorized [private Lambda bridge](service-bridge-client.md) as the fallback. It routes the same X hosts through the built-in Cloud Tailscale VPN after its X extension has been deployed. Run the entire command in the outer executor; no separate Tailscale daemon or exit node is used.
 
 ```bash
 bash tools/x/run.sh bridge -- probe

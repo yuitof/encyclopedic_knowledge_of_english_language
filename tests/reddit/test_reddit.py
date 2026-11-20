@@ -30,6 +30,8 @@ from s3_cache import S3Cache
 from cloud_bridge import client as bridge, probe
 from cloud_bridge.transport import BridgeError
 from cloud_bridge import transport
+from cloud_bridge.workers import RelayResponse
+from workers import WorkersRelayClient
 
 spec = importlib.util.spec_from_file_location('reddit_cli', ROOT / 'tools/reddit/reddit.py')
 cli = importlib.util.module_from_spec(spec)
@@ -265,6 +267,89 @@ class TransportTests(unittest.TestCase):
                     client.account()
                 get.assert_called_once()
                 self.assertFalse(get.call_args.kwargs['allow_redirects'])
+
+    def test_workers_transport_preserves_identity_listing_and_source_semantics(self):
+        transport = Mock()
+        transport.relay.side_effect = [
+            RelayResponse(
+                200,
+                json.dumps({'data': {'name': 'fixture'}}).encode(),
+                'application/json; charset=utf-8',
+                'https://old.reddit.com/api/me.json',
+                [],
+            ),
+            RelayResponse(
+                200,
+                json.dumps(json_page('t1_def')).encode(),
+                'application/json; charset=utf-8',
+                'https://old.reddit.com/user/fixture/saved.json',
+                [],
+            ),
+            RelayResponse(
+                200,
+                (header() + thing()).encode(),
+                'text/html; charset=utf-8',
+                URL,
+                [],
+            ),
+        ]
+        client = WorkersRelayClient([COOKIE], transport, delay=0)
+        try:
+            with patch(
+                'api.Client',
+                side_effect=AssertionError('Proxy client forbidden'),
+            ), patch(
+                'direct.DirectClient',
+                side_effect=AssertionError('Direct client forbidden'),
+            ):
+                self.assertEqual(client.account(), {'id': 'fixture'})
+                parsed = client.page('fixture', 'saved')
+                self.assertEqual(list(parsed['members']), ['t3_abc', 't1_def'])
+                self.assertEqual(parsed['cursor'], 't1_def')
+                parsed_post = client.post(URL, STAMP, 'fixture')
+                self.assertEqual(parsed_post['id'], 't3_abc')
+        finally:
+            client.close()
+        calls = transport.relay.call_args_list
+        self.assertEqual(calls[0].args[:3], ('reddit', 'identity', {}))
+        self.assertEqual(
+            calls[1].args[:3],
+            (
+                'reddit',
+                'listing',
+                {'account': 'fixture', 'collection': 'saved', 'after': None},
+            ),
+        )
+        self.assertEqual(
+            calls[2].args[:3],
+            ('reddit', 'comments', {'permalink': URL}),
+        )
+        for call in calls:
+            self.assertIn(
+                'reddit_session=synthetic',
+                call.kwargs['headers']['Cookie'],
+            )
+            self.assertNotIn(
+                'cf-access-client-secret',
+                {name.lower() for name in call.kwargs['headers']},
+            )
+        transport.close.assert_called_once()
+
+    def test_workers_parser_does_not_hold_child_lock(self):
+        with patch.object(
+            sys,
+            'argv',
+            ['reddit.py', 'workers', '--', 'verify', '--collections', 'saved'],
+        ), patch.object(
+            cli,
+            'lock',
+            side_effect=AssertionError('Only the child collector owns the lock'),
+        ), patch.object(cli, 'service_workers', return_value=4) as workers:
+            self.assertEqual(cli.main(), 4)
+        self.assertEqual(
+            workers.call_args.args[0].arguments,
+            ['--', 'verify', '--collections', 'saved'],
+        )
 
     def test_private_cookie_loading_filters_foreign_and_expired_cookies(self):
         with tempfile.TemporaryDirectory() as root, patch.dict(os.environ, {'REDDIT_STORAGE_STATE_JSON': json.dumps({'cookies': [COOKIE,

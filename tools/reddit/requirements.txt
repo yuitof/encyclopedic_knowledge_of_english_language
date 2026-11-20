@@ -2,3 +2,4 @@
 requests==2.34.2
 beautifulsoup4==4.14.3
 boto3==1.42.0
+truststore==0.10.5

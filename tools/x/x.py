@@ -46,10 +46,27 @@ def selected_account(args):
 def authenticated(args):
     if args.offline:
         raise ValueError('This operation needs X access; omit --offline.')
-    client = Client(state(CACHE), CACHE, atomic_json, proxy=os.environ.get('X_PROXY'))
+    transport = None
+    if os.environ.get('X_TRANSPORT') == 'workers':
+        sys.path.insert(0, str(ROOT / 'tools'))
+        from cloud_bridge.workers import WorkersTransport
+        transport = WorkersTransport()
+    try:
+        client = Client(
+            state(CACHE),
+            CACHE,
+            atomic_json,
+            proxy=None if transport else os.environ.get('X_PROXY'),
+            workers_transport=transport,
+        )
+    except Exception:
+        if transport is not None:
+            transport.close()
+        raise
     account = client.account()
     expected = args.account or os.environ.get('X_ACCOUNT_ID')
     if expected and account['id'] != expected:
+        client.close()
         raise ValueError('Signed-in X identity differs from --account/X_ACCOUNT_ID; refusing cache mixing.')
     atomic_json(CACHE / 'account.json', account)
     return client, account
@@ -299,8 +316,23 @@ def service_bridge(args):
         raise ValueError(str(error)) from None
 
 
+def service_workers(args):
+    if args.offline:
+        raise ValueError('Offline commands do not use the Workers bridge.')
+    sys.path.insert(0, str(ROOT / 'tools'))
+    from cloud_bridge.workers import WorkersError, command
+    try:
+        return command(args, workflow='x')
+    except WorkersError as error:
+        raise ValueError(str(error)) from None
+
+
 def main():
     os.umask(0o077)
+    if os.environ.get('X_TRANSPORT') == 'workers':
+        sys.path.insert(0, str(ROOT / 'tools'))
+        from cloud_bridge.workers import enable_system_trust
+        enable_system_trust()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--account', help='Optional numeric account ID; otherwise use the authenticated/last selected account.')
     parser.add_argument('--offline', action='store_true', help='No X or S3 calls; use local files only.')
@@ -310,6 +342,12 @@ def main():
     p.add_argument('--ready-timeout', type=int, default=60)
     p.add_argument('arguments', nargs=argparse.REMAINDER)
     p.set_defaults(run=service_bridge)
+    p = commands.add_parser(
+        'workers',
+        help='Use the Access-protected Cloudflare Workers relay for live X requests',
+    )
+    p.add_argument('arguments', nargs=argparse.REMAINDER)
+    p.set_defaults(run=service_workers)
     p = commands.add_parser('login', help='Export X-only cookies after explicit local Chrome consent')
     p.add_argument('--profile', default='Default')
     p.add_argument('--authorize-export', action='store_true')
@@ -345,7 +383,7 @@ def main():
     try:
         # The collector subprocess owns the workflow lock. Holding it in the
         # wrapper would prevent that subprocess from starting its command.
-        if args.command == 'bridge':
+        if args.command in ('bridge', 'workers'):
             return args.run(args) or 0
         with lock():
             return args.run(args) or 0

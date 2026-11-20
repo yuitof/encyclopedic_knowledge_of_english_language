@@ -40,7 +40,21 @@ def authenticated(args):
     if args.offline:
         raise RedditError('This operation needs Reddit access; omit --offline.')
     cookies, proxy, delay = state(CACHE), os.environ.get('REDDIT_PROXY'), getattr(args, 'delay', 2.0)
-    if getattr(args, 'browser_local', False):
+    if os.environ.get('REDDIT_TRANSPORT') == 'workers':
+        if getattr(args, 'browser_local', False) or getattr(args, 'direct_local', False):
+            raise RedditError(
+                'Local origin transports cannot wrap the Workers transport.'
+            )
+        sys.path.insert(0, str(ROOT / 'tools'))
+        from cloud_bridge.workers import WorkersTransport
+        from workers import WorkersRelayClient
+        transport = WorkersTransport()
+        try:
+            client = WorkersRelayClient(cookies, transport, delay=delay)
+        except Exception:
+            transport.close()
+            raise
+    elif getattr(args, 'browser_local', False):
         from browser import BrowserClient
         client = BrowserClient(cookies, CACHE, proxy=proxy, delay=delay)
     elif getattr(args, 'direct_local', False):
@@ -315,8 +329,23 @@ def service_bridge(args):
         raise RedditError(str(error)) from None
 
 
+def service_workers(args):
+    if args.offline:
+        raise RedditError('Offline commands do not use the Workers bridge.')
+    sys.path.insert(0, str(ROOT / 'tools'))
+    from cloud_bridge.workers import WorkersError, command
+    try:
+        return command(args, workflow='reddit')
+    except WorkersError as error:
+        raise RedditError(str(error)) from None
+
+
 def main():
     os.umask(0o077)
+    if os.environ.get('REDDIT_TRANSPORT') == 'workers':
+        sys.path.insert(0, str(ROOT / 'tools'))
+        from cloud_bridge.workers import enable_system_trust
+        enable_system_trust()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--account', help='Reddit username selecting/enforcing the account archive')
     parser.add_argument('--offline', action='store_true', help='No Reddit or S3 calls')
@@ -356,9 +385,15 @@ def main():
     p.add_argument('--ready-timeout', type=int, default=60)
     p.add_argument('arguments', nargs=argparse.REMAINDER)
     p.set_defaults(run=service_bridge)
+    p = commands.add_parser(
+        'workers',
+        help='Use the Access-protected Cloudflare Workers relay for live Reddit requests',
+    )
+    p.add_argument('arguments', nargs=argparse.REMAINDER)
+    p.set_defaults(run=service_workers)
     args = parser.parse_args()
     try:
-        if args.command == 'bridge':
+        if args.command in ('bridge', 'workers'):
             return args.run(args) or 0
         with lock(), ExitStack() as clients:
             args.clients = clients

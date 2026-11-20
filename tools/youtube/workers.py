@@ -2,6 +2,7 @@
 from email.message import Message
 import ipaddress
 import os
+from pathlib import Path
 import re
 import ssl
 import sys
@@ -11,6 +12,11 @@ import requests
 from requests.cookies import MockRequest, MockResponse
 
 from transcripts import TranscriptClient, TranscriptRetryNeeded, TranscriptUnavailable
+
+TOOLS_ROOT = Path(__file__).resolve().parents[1]
+if str(TOOLS_ROOT) not in sys.path:
+    sys.path.insert(0, str(TOOLS_ROOT))
+from cloud_bridge.workers import enable_system_trust
 
 TEST_VIDEO = 'aircAruvnKk'
 VIDEO_ID = re.compile(r'[-_A-Za-z0-9]{11}\Z')
@@ -48,6 +54,7 @@ def worker_origin(value):
 
 class WorkersTransport:
     def __init__(self):
+        enable_system_trust()
         self.origin = worker_origin(os.environ.get('SERVICE_BRIDGE_WORKER_URL', ''))
         self.headers = {header: os.environ.get(key, '') for header, key in ACCESS_HEADERS.items()}
         for header, key in ACCESS_HEADERS.items():

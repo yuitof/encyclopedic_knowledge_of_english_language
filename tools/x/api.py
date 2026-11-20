@@ -57,9 +57,13 @@ def initial_state(source):
 
 
 class Client:
-    def __init__(self, cookies, root, atomic, proxy=None):
+    def __init__(self, cookies, root, atomic, proxy=None, workers_transport=None):
         self.root, self.atomic = root, atomic
+        self.workers_transport = workers_transport
         self.http = requests.Session()
+        if proxy and workers_transport is not None:
+            self.http.close()
+            raise XError('Select one explicit X transport.')
         if proxy:
             try:
                 parsed = urlparse(proxy)
@@ -80,16 +84,84 @@ class Client:
         self.csrf = csrf[-1]
         self.ready = False
 
+    def _workers_get(self, url, **kwargs):
+        params = kwargs.pop('params', None)
+        headers = kwargs.pop('headers', None)
+        if kwargs:
+            raise XError('Unsupported X Workers request option.')
+        prepared = self.http.prepare_request(
+            requests.Request('GET', url, params=params, headers=headers or {})
+        )
+        parsed = urlparse(prepared.url)
+        if parsed.hostname == 'abs.twimg.com':
+            operation = 'asset'
+            parameters = {'asset': parsed.path.rsplit('/', 1)[-1]}
+            query = ''
+        elif parsed.hostname == 'x.com' and parsed.path == '/home':
+            operation = 'home'
+            parameters = {}
+            query = ''
+        elif parsed.hostname == 'x.com':
+            match = re.fullmatch(
+                r'/i/api/graphql/([-_A-Za-z0-9]+)/([A-Za-z0-9_]+)',
+                parsed.path,
+            )
+            if match is None or match[2] not in READ_OPERATIONS:
+                raise XError('Refusing unexpected X GraphQL operation.')
+            operation = 'graphql'
+            parameters = {
+                'queryId': match[1],
+                'operationName': match[2],
+            }
+            query = parsed.query
+        else:
+            raise XError('Refusing unexpected X Workers destination.')
+        dispatch_headers = {
+            name: value
+            for name, value in prepared.headers.items()
+            if name.lower() in {
+                'accept',
+                'accept-language',
+                'authorization',
+                'cookie',
+                'referer',
+                'user-agent',
+                'x-client-transaction-id',
+                'x-csrf-token',
+                'x-twitter-active-user',
+                'x-twitter-auth-type',
+                'x-twitter-client-language',
+            }
+        }
+        from cloud_bridge.workers import WorkersError, apply_origin_cookies
+        try:
+            response = self.workers_transport.relay(
+                'x',
+                operation,
+                parameters,
+                query=query,
+                headers=dispatch_headers,
+                url=url,
+            )
+        except WorkersError as error:
+            raise XError(str(error)) from None
+        if parsed.hostname == 'x.com':
+            apply_origin_cookies(self.http, response, url)
+        return response
+
     def get(self, url, **kwargs):
         parsed = urlparse(url)
         if (parsed.scheme != 'https' or parsed.hostname not in ('x.com', 'abs.twimg.com')
                 or parsed.username or parsed.password or parsed.port not in (None, 443)):
             raise XError('Refusing unexpected X asset/API destination.')
-        try:
-            response = self.http.get(url, timeout=(10, 45), allow_redirects=False,
-                **({'proxies': self.http.proxies} if self.http.proxies else {}), **kwargs)
-        except requests.RequestException:
-            raise XError('X network/TLS request failed; local progress retained. Retry later.') from None
+        if self.workers_transport is not None:
+            response = self._workers_get(url, **kwargs)
+        else:
+            try:
+                response = self.http.get(url, timeout=(10, 45), allow_redirects=False,
+                    **({'proxies': self.http.proxies} if self.http.proxies else {}), **kwargs)
+            except requests.RequestException:
+                raise XError('X network/TLS request failed; local progress retained. Retry later.') from None
         if response.status_code == 429:
             reset = response.headers.get('x-rate-limit-reset', '')
             reset = reset if reset.isdigit() else 'unknown'
@@ -203,3 +275,8 @@ class Client:
     def post(self, identifier):
         return self.query('TweetResultByRestId', {'tweetId': identifier, 'withCommunity': True,
                           'includePromotedContent': False, 'withVoice': True})
+
+    def close(self):
+        self.http.close()
+        if self.workers_transport is not None:
+            self.workers_transport.close()

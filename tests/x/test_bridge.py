@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT / 'tools/x'))
 sys.path.insert(0, str(ROOT / 'tools'))
 from api import Client, XError
 from cloud_bridge import client as bridge, probe
+from cloud_bridge.workers import RelayResponse
 spec = importlib.util.spec_from_file_location('x_bridge_cli', ROOT / 'tools/x/x.py')
 cli = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(cli)
@@ -95,6 +96,81 @@ class XBridgeTests(unittest.TestCase):
             self.assertEqual(c.kwargs['proxies']['https'], PROXY)
             self.assertFalse(c.kwargs['allow_redirects'])
         self.assertEqual([r['status'] for r in results], [200,200])
+
+    def test_workers_transport_dispatches_graphql_and_assets_without_direct_fallback(self):
+        transport = Mock()
+        transport.relay.return_value = RelayResponse(
+            200,
+            b'{"data":{"ok":true}}',
+            'application/json',
+            'https://x.com/i/api/graphql/synthetic/Likes',
+            [],
+        )
+        client = Client(
+            [{'name': 'ct0', 'value': 'synthetic', 'domain': '.x.com'}],
+            ROOT,
+            Mock(),
+            workers_transport=transport,
+        )
+        try:
+            with patch.object(
+                client.http,
+                'get',
+                side_effect=AssertionError('Direct X request forbidden'),
+            ):
+                response = client.get(
+                    'https://x.com/i/api/graphql/synthetic/Likes',
+                    params={
+                        'variables': '{"count":1}',
+                        'features': '{}',
+                        'fieldToggles': '{}',
+                    },
+                    headers={'Authorization': 'Bearer synthetic'},
+                )
+                self.assertEqual(response.json()['data']['ok'], True)
+                client.get(
+                    'https://abs.twimg.com/responsive-web/client-web/main.synthetic.js'
+                )
+        finally:
+            client.close()
+        graphql = transport.relay.call_args_list[0]
+        self.assertEqual(
+            graphql.args[:3],
+            (
+                'x',
+                'graphql',
+                {'queryId': 'synthetic', 'operationName': 'Likes'},
+            ),
+        )
+        self.assertIn('variables=', graphql.kwargs['query'])
+        self.assertEqual(
+            graphql.kwargs['headers']['Authorization'],
+            'Bearer synthetic',
+        )
+        self.assertIn('ct0=synthetic', graphql.kwargs['headers']['Cookie'])
+        self.assertNotIn('cf-access-client-secret', {
+            name.lower() for name in graphql.kwargs['headers']
+        })
+        asset = transport.relay.call_args_list[1]
+        self.assertEqual(
+            asset.args,
+            ('x', 'asset', {'asset': 'main.synthetic.js'}),
+        )
+        self.assertNotIn('Cookie', asset.kwargs['headers'])
+        transport.close.assert_called_once()
+
+    def test_workers_parser_does_not_hold_the_child_workflow_lock(self):
+        with patch.object(
+            sys,
+            'argv',
+            ['x.py', '--account', '42', 'workers', '--', 'refresh'],
+        ), patch.object(
+            cli,
+            'lock',
+            side_effect=AssertionError('Only the child collector owns the lock'),
+        ), patch.object(cli, 'service_workers', return_value=3) as workers:
+            self.assertEqual(cli.main(), 3)
+        self.assertEqual(workers.call_args.args[0].account, '42')
 
 
 if __name__ == '__main__':
