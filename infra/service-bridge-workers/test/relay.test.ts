@@ -54,6 +54,16 @@ describe("X and Reddit relay", () => {
     expect(send.mock.calls[0][0]).toContain("/i/api/graphql/abc_123/Bookmarks?");
   });
 
+  it("allows the main X web bundle", async () => {
+    const send = vi.fn(async () => new Response("javascript", {
+      headers: { "content-type": "application/javascript" },
+    }));
+    await relay(request("x/asset", envelope({ asset: "main.synthetic123.js" })), environment(send));
+    expect(send.mock.calls[0][0]).toBe(
+      "https://abs.twimg.com/responsive-web/client-web/main.synthetic123.js",
+    );
+  });
+
   it("builds Reddit listing paths from typed parameters", async () => {
     const send = vi.fn(async () => Response.json({kind: "Listing", data: {children: [], after: null}}));
     await relay(request("reddit/listing", envelope({

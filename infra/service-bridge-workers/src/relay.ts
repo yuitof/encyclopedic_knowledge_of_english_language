@@ -115,7 +115,7 @@ function targetFor(service: string, operation: string, parameters: Record<string
     }
     if (operation === "asset") {
       if (!hasExactKeys(parameters, ["asset"]) || typeof parameters.asset !== "string" ||
-          !/^(?:bundle|shared~|ondemand)[A-Za-z0-9._~-]{1,160}\.js$/.test(parameters.asset) ||
+          !/^(?:main|bundle|shared~|ondemand)[A-Za-z0-9._~-]{1,160}\.js$/.test(parameters.asset) ||
           query !== "") throw new ProbeError("invalid_relay_request");
       return {
         url: `https://abs.twimg.com/responsive-web/client-web/${parameters.asset}`,
