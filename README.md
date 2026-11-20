@@ -6,4 +6,4 @@ The `service-bridge-workers` branch develops a standalone Workers service using 
 - [HTTPS diagnostics API and proposed relay contract](infra/service-bridge-workers/API.md)
 - [Proposed collector integration](infra/service-bridge-workers/VAULT-INTEGRATION.md)
 
-The AWS Lambda bridge remains on `service-bridge`. Its [server guide](infra/service-bridge/README.md), implementation, and tests are retained here as a reference. Collectors and the private S3 caches live on `vault`. The Workers package builds independently of either branch.
+The AWS Lambda bridge remains independently maintained on the `service-bridge` branch and is not copied into this branch. Collectors and the private S3 caches live on `vault`. The Workers package builds independently of either branch.
