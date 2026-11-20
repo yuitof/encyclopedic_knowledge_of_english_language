@@ -30,7 +30,7 @@ bash tools/x/run.sh workers -- folders --refresh
 
 The Workers wrapper starts the normal child collector, removes `X_PROXY`, and marks only that child process to use `tools/cloud_bridge/workers.py`. It does not contact Lambda or DynamoDB, hold the child workflow lock, or fall back to ordinary egress. Viewer verification, operation discovery, cookies, redirects, response parsing, account isolation, caches, and S3 behavior remain in the existing X implementation.
 
-Keep the authorized [private Lambda bridge](service-bridge-client.md) as the fallback. It routes the same X hosts through the built-in Cloud Tailscale VPN after its X extension has been deployed. Run the entire command in the outer executor; no separate Tailscale daemon or exit node is used.
+The authorized [private Lambda bridge](service-bridge-client.md) is deprecated and prints a warning whenever invoked. The current published Cloud environment omits its required settings, so new tasks fail before AWS. Run a fallback only when the user explicitly requests it in the outer executor; no separate Tailscale daemon or exit node is used.
 
 ```bash
 bash tools/x/run.sh bridge -- probe

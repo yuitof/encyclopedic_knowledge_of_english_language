@@ -538,7 +538,7 @@ def main():
     p.set_defaults(run=doctor)
     p = sub.add_parser('sync', help='Merge S3 history and upload only validated cached transcripts; no YouTube calls')
     p.set_defaults(run=sync)
-    p = sub.add_parser('bridge', help='Run probe, refresh, or search through Lambda using the built-in Cloud VPN')
+    p = sub.add_parser('bridge', help='Deprecated: run through Lambda using the built-in Cloud VPN; use workers instead')
     p.add_argument('--session-seconds', type=int, default=720)
     p.add_argument('--ready-timeout', type=int, default=60)
     p.add_argument('arguments', nargs=argparse.REMAINDER)

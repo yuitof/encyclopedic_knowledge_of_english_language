@@ -22,6 +22,10 @@ WORKFLOWS = {
     'x': {'script': 'tools/x/x.py', 'proxies': ('X_PROXY',), 'commands': ('probe', 'refresh', 'get', 'folders')},
     'reddit': {'script': 'tools/reddit/reddit.py', 'proxies': ('REDDIT_PROXY',), 'commands': ('probe', 'refresh', 'get', 'verify')},
 }
+DEPRECATION_WARNING = (
+    'WARNING: The Lambda service-bridge bridge transport is deprecated. '
+    'Use the Cloudflare Workers workers transport instead.'
+)
 
 
 def required(name):
@@ -141,6 +145,7 @@ def run(args, workflow='youtube'):
 
 
 def command(args, workflow='youtube'):
+    print(DEPRECATION_WARNING, file=sys.stderr, flush=True)
     try:
         return run(args, workflow)
     except BridgeError:

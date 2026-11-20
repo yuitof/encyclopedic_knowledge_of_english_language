@@ -1,5 +1,7 @@
 # Cloud client — built-in Tailscale VPN
 
+> **Deprecated:** The Lambda `service-bridge` `bridge` transport is retained only for reference and emergency fallback. Every invocation prints a deprecation warning and directs collectors to the Cloudflare Workers `workers` transport. The current Codex Cloud environment does not provide the Lambda function/table settings, so new tasks fail closed before AWS.
+
 Use the `vault` branch for Cloud tasks. Lambda's self-contained server and deployment templates live on the separate [`service-bridge` branch](https://github.com/yuitof/encyclopedic_knowledge_of_english_language/tree/service-bridge/infra/service-bridge). The client does not import server code, install or launch Tailscale, read enrollment secrets, or select an exit node.
 
 Run the whole wrapper command in the Cloud **outer executor** (using the command tool's approved outer-execution path where required). The raw `proxy:8088` listener is not reachable directly from a separate inner command sandbox, and loopback relays/collector processes must share the same network namespace. Keep the inherited AWS proxy/CA configuration.

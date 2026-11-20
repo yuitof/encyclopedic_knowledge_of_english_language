@@ -70,6 +70,32 @@ class BridgeTests(unittest.TestCase):
                     self.assertEqual(service_bridge.required(name), 'shared')
                 self.assertEqual(stderr.getvalue(), '')
 
+    def test_command_warns_that_lambda_bridge_is_deprecated_before_aws(self):
+        args = types.SimpleNamespace(
+            arguments=['probe'],
+            session_seconds=180,
+            ready_timeout=60,
+        )
+        stderr = io.StringIO()
+        with patch.dict(os.environ, {}, clear=True), \
+                contextlib.redirect_stderr(stderr), \
+                patch.object(
+                    service_bridge.boto3,
+                    'Session',
+                    side_effect=AssertionError('AWS must not be called'),
+                ):
+            with self.assertRaisesRegex(
+                bridge_transport.BridgeError,
+                'Missing bridge setting: SERVICE_BRIDGE_FUNCTION',
+            ):
+                service_bridge.command(args, workflow='x')
+        self.assertEqual(
+            stderr.getvalue().splitlines()[0],
+            service_bridge.DEPRECATION_WARNING,
+        )
+        self.assertIn('deprecated', stderr.getvalue())
+        self.assertIn('Use the Cloudflare Workers workers transport instead', stderr.getvalue())
+
     def test_x_child_uses_shared_lifecycle_and_only_x_proxy(self):
         child, jobs, transport = Mock(), Mock(), Mock()
         child.poll.return_value = 0

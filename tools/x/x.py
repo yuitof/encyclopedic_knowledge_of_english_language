@@ -337,7 +337,7 @@ def main():
     parser.add_argument('--account', help='Optional numeric account ID; otherwise use the authenticated/last selected account.')
     parser.add_argument('--offline', action='store_true', help='No X or S3 calls; use local files only.')
     commands = parser.add_subparsers(dest='command', required=True)
-    p = commands.add_parser('bridge', help='Run probe, refresh, get, or folders through the built-in Cloud VPN and Lambda')
+    p = commands.add_parser('bridge', help='Deprecated: run through the built-in Cloud VPN and Lambda; use workers instead')
     p.add_argument('--session-seconds', type=int, default=720)
     p.add_argument('--ready-timeout', type=int, default=60)
     p.add_argument('arguments', nargs=argparse.REMAINDER)
