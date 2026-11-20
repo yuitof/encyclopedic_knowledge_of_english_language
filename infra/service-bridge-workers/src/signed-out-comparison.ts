@@ -1,6 +1,7 @@
 import worker from "./index";
 import { captionUrl, validVideoId } from "./captions";
 import { cancel, type Env, failure, outbound, readText, upstreamRequest } from "./network";
+import { relay } from "./relay";
 
 const headersAllowed = new Set(["user-agent", "accept-language", "accept", "content-type", "cookie"]);
 const base = { "cache-control": "no-store", "x-bridge-version": "1" };
@@ -10,11 +11,13 @@ const envelopeKeys = new Set(["headers", "search", "host", "body", "videoId"]);
 
 interface ComparisonEnv extends Env {
   COMPARISON_ENABLED?: string;
+  RELAY_ENABLED?: string;
 }
 
 export default {
   async fetch(request: Request, env: ComparisonEnv): Promise<Response> {
     const inbound = new URL(request.url);
+    if (inbound.pathname.startsWith("/v1/relay/")) return relay(request, env);
     if (env.COMPARISON_ENABLED !== "true" || !inbound.pathname.startsWith(path)) {
       return worker.fetch(request, env);
     }

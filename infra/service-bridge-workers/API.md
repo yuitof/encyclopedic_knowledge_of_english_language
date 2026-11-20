@@ -36,6 +36,33 @@ Set `COMPARISON_ENABLED` to `true` only during approved Access-protected testing
 
 Use the same Access headers as the diagnostic API. Each POST envelope includes `headers`, `search`, `host`, `body`, and `videoId`. Accepted header names are `User-Agent`, `Accept-Language`, `Accept`, `Content-Type`, and `Cookie`. For signed-out caption use only guest cookies issued during the current run. The Worker returns HTTP 200 for a completed exchange with `X-Origin-Http` giving the upstream status. It returns the upstream text for status 200, discards error and redirect bodies, and returns each origin cookie percent-encoded in `X-Origin-Set-Cookie`. Split merged cookie values on commas before decoding and apply cookies to the original YouTube URL. The Worker sends no `Set-Cookie` on its own hostname. It rejects cross-stage video-ID mismatches, malformed IDs, unsupported envelope fields, and signed caption URLs for another video. Validation and transport failures use a Worker error response. This API expects textual payloads and does not implement the streaming collector relay below.
 
+## Read-only X and Reddit relay
+
+Set `RELAY_ENABLED` to `true` only with the Worker-level Access policy active. The relay accepts `POST` envelopes only. Every upstream request is a fixed HTTPS `GET` through the Gateway binding, with manual redirects and no ordinary-egress fallback.
+
+```json
+{
+  "parameters": {},
+  "query": "",
+  "headers": {},
+  "body": null
+}
+```
+
+| Endpoint | Fixed upstream request | Parameters and headers |
+| --- | --- | --- |
+| `/v1/relay/x/home` | `GET https://x.com/home` | Empty parameters and query. X header allowlist. |
+| `/v1/relay/x/graphql` | `GET https://x.com/i/api/graphql/{queryId}/{operationName}?…` | `queryId` and an allowlisted read `operationName`. Query keys are limited to `variables`, `features`, and `fieldToggles`. |
+| `/v1/relay/x/asset` | `GET https://abs.twimg.com/responsive-web/client-web/{asset}` | Validated X bundle filename. Cookies are not sent to the asset host. |
+| `/v1/relay/reddit/home` | `GET https://old.reddit.com/` | Empty parameters and query. Reddit header allowlist. |
+| `/v1/relay/reddit/identity` | `GET https://old.reddit.com/api/me.json` | Empty parameters and query. |
+| `/v1/relay/reddit/listing` | `GET https://old.reddit.com/user/{account}/{collection}.json` | Validated account, collection, and optional `t1_`/`t3_` cursor. The Worker adds `limit=100` and `raw_json=1`. |
+| `/v1/relay/reddit/comments` | `GET https://old.reddit.com/...comments.../?context=0` | A validated Reddit post/comment permalink with no query or fragment. |
+
+X operations are `Viewer`, `Likes`, `Bookmarks`, `BookmarkFoldersSlice`, `BookmarkFolderTimeline`, `UserTweets`, `UserTweetsAndReplies`, `UserMedia`, and `TweetResultByRestId`. X request headers are limited to Accept, Accept-Language, Authorization, Cookie, Referer, User-Agent, transaction ID, CSRF, and the documented X client state headers. Reddit accepts only Accept, User-Agent, and Cookie.
+
+The Worker returns HTTP 200 for a completed exchange, the actual upstream status in `X-Origin-Http`, upstream text in the response body, matching `Content-Type`, and origin cookies percent-encoded in repeatable `X-Origin-Set-Cookie` headers. It never returns upstream `Location`, and it does not expose the request's Access credentials to the origin. Request envelopes are limited to 256 KiB and responses to 12 MB. Validation, unsupported operations, unsafe paths, and malformed query keys are rejected before egress. Gateway and timeout failures return a fixed error object.
+
 ## Proposed collector relay
 
 The following interface is reserved for the next phase and may be revised using acceptance evidence. `POST /v1/relay/{operation}` uses the same Access headers and a UTF-8 `application/json` envelope. The public URL path carries only an operation name, so the signed query and upstream credentials can be kept in the HTTPS body.
