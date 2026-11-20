@@ -1,5 +1,7 @@
 # Encyclopedic Knowledge of English Language
 
+![Encyclopedic Knowledge of English Language social preview](site/custom/english-encyclopedia-og.png)
+
 An evolving encyclopedia of the English language.
 
 This repository is where I collect what I discover about English—whether it
