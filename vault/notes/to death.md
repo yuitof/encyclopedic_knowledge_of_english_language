@@ -1,8 +1,10 @@
 ---
 created: "2026-10-24T10:29:20.491642Z"
-modified: "2026-10-24T10:29:33.435734Z"
+modified: "2026-11-22T12:42:22+00:00"
 ---
 **to [[the]] death** (/tə ðə dɛθ/) is a prepositional phrase used adverbially to mean until someone dies. Source: [Merriam-Webster — to the death, sense 1](https://www.merriam-webster.com/dictionary/to%20the%20death).
+
+Compare [[shocked to my core]], where **to** likewise marks the result rather than direction.
 
 ## Examples
 
