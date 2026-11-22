@@ -1,6 +1,6 @@
 ---
 created: "2026-11-22T12:07:12Z"
-modified: "2026-11-22T12:19:42Z"
+modified: "2026-11-22T12:35:42Z"
 ---
 **scrotum** (/ˈskrəʊ.təm/) is the anatomical noun for the external pouch of skin that holds the testes in most male mammals.
 
@@ -13,6 +13,8 @@ The first diagram shows the scrotal skin, dartos, cremasteric muscle and fascia,
 The cross-section labels the scrotal layers and internal structures of the testis.
 
 The informal slang term is [[ball sack]].
+
+Compare: [[No Nut November]], an annual internet challenge involving sexual abstinence and no masturbation during November.
 
 Images: Henry Vandyke Carter, [The scrotum](https://commons.wikimedia.org/wiki/File:Gray1143.png) and [transverse section through the scrotum and testis](https://commons.wikimedia.org/wiki/File:Gray1145.png), *Gray's Anatomy*, public domain.
 
