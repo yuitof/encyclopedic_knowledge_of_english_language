@@ -1,6 +1,6 @@
 ---
-created: "2026-11-22T12:07:12Z"
-modified: "2026-11-22T12:20:05Z"
+created: 2026-11-22T12:07:12Z
+modified: 2026-11-22T12:31:18+00:00
 ---
 **Alani** (/əˈlɑːni/) is the consumer-facing name used by **Alani Nu**, an American wellness company best known for brightly coloured, zero-sugar energy drinks.
 
