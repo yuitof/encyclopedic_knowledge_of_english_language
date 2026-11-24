@@ -1,8 +1,8 @@
 ---
 created: "2026-11-24T10:45:20Z"
-modified: "2026-11-24T10:45:20Z"
+modified: "2026-11-24T12:04:10Z"
 ---
-**jack and coke** (/ˌdʒæk ən ˈkoʊk/), also written **Jack & Coke**, is a mixed drink made by combining Jack Daniel’s Tennessee whiskey with Coca-Cola, usually served over ice. ([Jack Daniel’s — Jack & Coke](https://www.jackdaniels.com/en-gb/recipes/jack-cola))
+**jack and coke** (/ˌdʒæk ən ˈkoʊk/), also written **Jack & Coke**, is a mixed drink made by combining [[jackdaniels|Jack Daniel’s]] Tennessee whiskey with Coca-Cola, usually served over ice. ([Jack Daniel’s — Jack & Coke](https://www.jackdaniels.com/en-gb/recipes/jack-cola))
 
 ![[jack-and-coke-glass.jpg|A Jack and Coke served over ice in a glass]]
 
