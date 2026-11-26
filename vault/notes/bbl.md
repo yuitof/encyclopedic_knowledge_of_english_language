@@ -1,8 +1,10 @@
 ---
 created: "2026-11-26T06:41:35Z"
-modified: "2026-11-26T06:41:35Z"
+modified: "2026-11-26T07:19:29Z"
 ---
 **BBL** (/ˌbiː.biˈel/) is short for **Brazilian butt lift**, a cosmetic operation that uses fat from elsewhere in the body to make the buttocks larger or rounder. ([Cambridge Dictionary](https://dictionary.cambridge.org/dictionary/english/bbl))
+
+The final letter is **L** (/ɛl/) for **lift**. **BBO**, with an **O** (/oʊ/), is a mix-up in this context.
 
 ## Examples
 
