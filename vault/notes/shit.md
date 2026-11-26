@@ -1,6 +1,6 @@
 ---
 created: 2026-07-18T16:08:14.860806Z
-modified: 2026-11-15T06:23:36+00:00
+modified: 2026-11-26T10:38:55+00:00
 ---
 I'm gonna eat shit
 -> I'm gonna eat food
@@ -19,7 +19,8 @@ shit (exclamation)
 - [[holy shit]]
 - give me the strongest shit you got
 - real shit <- ???
-- all the shit I did wrong
+- **all the shit** (/ɔl ðə ʃɪt/) is a vulgar way to say **all the stuff** or **all the [[thing|things]]** you're referring to. **Shit** is uncountable in this sense. [Webster’s New World College Dictionary](https://www.collinsdictionary.com/dictionary/english/shit)
+  - **all the shit I did wrong** means **all my mistakes**. The wording can sound frustrated or self-critical.
 - holy shit
 - [[jackshit]]
 
