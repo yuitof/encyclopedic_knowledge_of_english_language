@@ -1,8 +1,10 @@
 ---
 created: "2026-11-26T14:07:19Z"
-modified: "2026-11-26T14:07:19Z"
+modified: "2026-11-26T17:38:47Z"
 ---
 **mulled wine** (/ˌmʌld ˈwaɪn/) is wine warmed with spices and usually sugar, served as a winter drink. Here, **mulled** means heated with spices and sugar. Common additions include cinnamon, cloves, and orange slices. [Cambridge Dictionary, “mulled wine”](https://dictionary.cambridge.org/dictionary/english/mulled-wine) · [Cambridge Dictionary, “mulled”](https://dictionary.cambridge.org/dictionary/english/mulled)
+
+In England, mulled wine is a traditional drink **at Christmas**. People often serve it at festive gatherings in the weeks leading up to Christmas Day. [English Heritage](https://www.english-heritage.org.uk/christmas/medieval-christmas-food) · [National Trust](https://www.nationaltrust.org.uk/visit/hampshire/mottisfont/eating-and-shopping-at-mottisfont)
 
 ![[mulled-wine-in-glass.jpg|A glass of dark red mulled wine with an orange wedge on the rim]]
 
