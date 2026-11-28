@@ -1,10 +1,12 @@
 ---
 created: "2026-11-28T04:34:42Z"
-modified: "2026-11-28T04:34:42Z"
+modified: "2026-11-28T04:39:27Z"
 ---
 **turn on someone** (/tɝːn ɑːn ˈsʌmwʌn/) is a phrasal verb that means to suddenly become hostile toward someone and attack or criticize them. It can suggest betrayal when that person was an ally. [Oxford Advanced Learner’s Dictionary](https://www.oxfordlearnersdictionaries.com/definition/english/turn-on_1)
 
 **On** introduces the person or group that becomes the target. It also marks the target in expressions such as **an attack on the temple** and **fire on those tanks**.
+
+Compare [[迷惑の on]], where **on** can mark the person negatively affected by an event, as in [[dying on me]].
 
 ## Examples
 
