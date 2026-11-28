@@ -2191,19 +2191,42 @@ test("Graph hover fades opaque node colors and highlights neighbors", async ({
   expect(scales[3].titleOpacity).toBeCloseTo(0.37378, 4);
   expect(scales[4].titleOpacity).toBeCloseTo(1, 8);
   expect(scales[5].titleOpacity).toBeCloseTo(1, 8);
-  // A direction reversal should discard the pending tail, and reduced motion should settle directly.
-  await page.mouse.wheel(0, 300);
-  await expect
-    .poll(() => canvas.evaluate((element) => (element as any).__zoom.k))
-    .toBeLessThan(50);
-  const reversing = await canvas.evaluate(
-    (element) => (element as any).__zoom.k,
+  // Sample and reverse in the same browser frame, while zoom-out is still moving.
+  const zoomAtReversal = await canvas.evaluate((element) => {
+    const graph = element as HTMLCanvasElement & { __zoom: { k: number } };
+    const bounds = graph.getBoundingClientRect();
+    const wheel = (deltaY: number) => {
+      graph.dispatchEvent(
+        new WheelEvent("wheel", {
+          cancelable: true,
+          clientX: bounds.left + bounds.width / 2,
+          clientY: bounds.top + bounds.height / 2,
+          deltaY,
+        }),
+      );
+    };
+    const start = graph.__zoom.k;
+    wheel(300);
+    return new Promise<number>((resolve) => {
+      const reverseAfterMovement = () => {
+        const current = graph.__zoom.k;
+        if (current === start) {
+          requestAnimationFrame(reverseAfterMovement);
+          return;
+        }
+        wheel(-100);
+        resolve(current);
+      };
+      requestAnimationFrame(reverseAfterMovement);
+    });
+  });
+  expect(zoomAtReversal).toBeLessThan(50);
+  expect(zoomAtReversal).toBeGreaterThan(50 * 2 ** (-300 / 500) + 0.01);
+  expect(await settleZoom()).toBeCloseTo(
+    Math.min(50, zoomAtReversal * 2 ** (100 / 500)),
+    5,
   );
-  await page.mouse.wheel(0, -100);
-  await settleZoom();
-  expect(
-    await canvas.evaluate((element) => (element as any).__zoom.k),
-  ).toBeGreaterThan(reversing);
+  // Reduced motion should settle directly.
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.mouse.wheel(0, 500);
   await settleZoom();
